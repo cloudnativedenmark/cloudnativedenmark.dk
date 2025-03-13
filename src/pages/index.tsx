@@ -1,10 +1,11 @@
 import * as React from "react";
 import type { HeadFC, PageProps } from "gatsby";
 import Logo from "../images/logo.svg";
+import Layout from "../components/layout";
 
 const IndexPage: React.FC<PageProps> = () => {
   return (
-    <main>
+    <Layout>
       <div className="relative isolate px-6 pt-14 lg:px-8">
         <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56 flex flex-row">
           <div className="basis-sm p-5">
@@ -13,7 +14,7 @@ const IndexPage: React.FC<PageProps> = () => {
               width={400}
               height="auto"
               loading="eager"
-              alt="Illustration"
+              alt="Cloud Native Denmark"
             />
           </div>
           <div className="basis-xl pt-5">
@@ -27,7 +28,7 @@ const IndexPage: React.FC<PageProps> = () => {
           </div>
         </div>
       </div>
-    </main>
+    </Layout>
   );
 };
 

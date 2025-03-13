@@ -3,7 +3,17 @@ import type { GatsbyConfig } from "gatsby";
 const config: GatsbyConfig = {
   siteMetadata: {
     title: `Cloud Native Denmark`,
-    siteUrl: `https://www.yourdomain.tld`,
+    siteUrl: `https://cloudnativedenmark.dk`,
+    menuLinks: [
+      {
+        name: "Venue",
+        link: "/venue",
+      },
+      {
+        name: "Speakers",
+        link: "/speakers",
+      },
+    ],
   },
   // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
   // If you use VSCode you can also use the GraphQL plugin
