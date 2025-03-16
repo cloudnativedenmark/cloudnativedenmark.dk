@@ -9,16 +9,18 @@ interface HeaderProps {
 const Header = ({ menuLinks }: HeaderProps) => {
   return (
     <header className="safe-paddings transition-200 z-10 transition-colors">
-      <div className="flex items-center justify-between pt-5 pb-2 mx-auto max-w-2xl">
+      <div className="flex items-center justify-between pt-5 pb-2 mx-auto max-w-6xl">
         <div>
-          <img
-            className="ml-2"
-            src={Logo}
-            width={44}
-            height="auto"
-            loading="eager"
-            alt="Cloud Native Denmark"
-          />
+          <Link to="/">
+            <img
+              className="ml-2"
+              src={Logo}
+              width={44}
+              height="auto"
+              loading="eager"
+              alt="Cloud Native Denmark"
+            />
+          </Link>
         </div>
         <nav>
           <ul className="flex">
