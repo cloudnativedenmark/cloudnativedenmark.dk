@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "./header";
-import { useStaticQuery, StaticQuery, graphql } from "gatsby";
+import { useStaticQuery, graphql } from "gatsby";
 import Footer from "./footer";
 
 interface LayoutProps {
@@ -26,7 +26,7 @@ const Layout = ({ children }: LayoutProps) => {
     <React.Fragment>
       <div className="flex min-h-screen flex-col">
         <Header menuLinks={data.site.siteMetadata.menuLinks} />
-        <main>{children}</main>
+        <main className="relative isolate mx-auto max-w-6xl">{children}</main>
         <Footer />
       </div>
     </React.Fragment>
