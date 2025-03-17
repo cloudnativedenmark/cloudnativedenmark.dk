@@ -30,7 +30,7 @@ const IndexPage: React.FC<PageProps> = () => {
           </div>
         </div>
       </section>
-      <section className="mx-auto max-w-4xl text-primary text-4xl text-center font-semibold pt-10">
+      <section className="mx-auto max-w-4xl text-primary text-4xl text-center font-semibold py-10">
         <p>
           On 7th and 8th of October, the Kubernetes and Cloud Native Community
           will gather in Aarhus for a two-day technical conference loaded with
