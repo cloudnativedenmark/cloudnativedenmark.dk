@@ -4,11 +4,20 @@ import { Link } from "gatsby";
 
 interface HeaderProps {
   menuLinks: any;
+  className?: string;
 }
 
-const Header = ({ menuLinks }: HeaderProps) => {
+const defaultClass = "bg-background";
+
+const Header = ({ menuLinks, className }: HeaderProps) => {
+  const headerClass = className || defaultClass;
   return (
-    <header className="safe-paddings transition-200 z-10 transition-colors">
+    <header
+      className={
+        "safe-paddings transition-200 z-10 transition-colors bg-background " +
+        headerClass
+      }
+    >
       <div className="flex items-center justify-between pt-5 pb-2 mx-auto max-w-6xl">
         <div>
           <Link to="/">

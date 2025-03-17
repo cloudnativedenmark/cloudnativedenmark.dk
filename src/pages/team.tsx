@@ -19,24 +19,25 @@ type DataProps = {
   };
 };
 
-/*
-
-name: "Camilla Larsen",
-position: "",
-image: "organizer-cammilla-larsen.jpg",
-linkedin: "camilla-larsen-tux",
-*/
-
 const TeamPage: React.FC<PageProps<DataProps>> = ({
   data: { site },
 }: PageProps<DataProps>) => {
   return (
     <Layout>
-      <section className="pt-24 pb-20">
-        <h1 className="text-6xl font-bold text-primary">Team</h1>
+      <section className="pt-24 pb-20 bg-background ">
+        <div className="mx-auto max-w-6xl text-primary text-center">
+          <h1 className="text-6xl font-bold">Team</h1>
+          <p className="text-2xl font-light mt-8 leading-normal">
+            Cloud Native Denmark is organized by a dedicated committee who are
+            passionate about bringing people together and fostering a sense of
+            community. Our goal is to provide a platform for like-minded
+            individuals from all levels and backgrounds that is dedicated to
+            learning, growth, and diversity.
+          </p>
+        </div>
       </section>
-      <section className="pb-40">
-        <ul className="flex grid grid-cols-4 gap-8">
+      <section className="pb-40 max-w-6xl mx-auto">
+        <ul className="text-primary grid grid-cols-4 gap-8 mt-20">
           {site.siteMetadata.team.map((member, index) => {
             const image = getImage(member.image);
             return (
@@ -48,10 +49,8 @@ const TeamPage: React.FC<PageProps<DataProps>> = ({
                     alt={member.name}
                   />
                 )}
-                <p className="mt-2 text-2xl font-bold text-primary">
-                  {member.name}
-                </p>
-                <p className="mt-2 text-primary">{member.position}</p>
+                <p className="mt-2 text-2xl font-bold">{member.name}</p>
+                <p className="mt-2">{member.position}</p>
                 <p className="mt-2 font-semibold">
                   <a
                     className="text-blue-500"

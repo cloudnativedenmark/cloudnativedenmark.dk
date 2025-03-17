@@ -10,10 +10,10 @@ const config: GatsbyConfig = {
         name: "Venue",
         link: "/venue",
       },
-      {
-        name: "Speakers",
-        link: "/speakers",
-      },
+      //{
+      //  name: "Speakers",
+      //  link: "/speakers",
+      //},
     ],
     team: [
       {

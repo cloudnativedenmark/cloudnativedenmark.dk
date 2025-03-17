@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-    --font-sans:
-        "Plus Jakarta Sans", "Plus Jakarta Sans Fallback", ui-sans-serif,
-        system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-        "Segoe UI Symbol", "Noto Color Emoji";
+    --font-sans: "Plus Jakarta Sans", "Plus Jakarta Sans Fallback",
+        ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --color-primary: #262f59;
+    --color-background: #fdf9f9;
 }

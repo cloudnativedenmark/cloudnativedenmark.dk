@@ -6,8 +6,9 @@ import { Link } from "gatsby";
 
 const Footer = () => {
   return (
-    <footer className="safe-paddings border-t border-gray-200 bg-white">
+    <footer className="safe-paddings border-t border-gray-200 bg-white mt-auto">
       <div className="flex items-center justify-between pt-5 pb-2 mx-auto max-w-6xl">
+        {/*
         <div>
           <img
             className="ml-2"
@@ -18,8 +19,9 @@ const Footer = () => {
             alt="Cloud Native Denmark"
           />
         </div>
+        */}
         <nav className="flex">
-          <ul className="grid grid-cols-2 gap-y-4">
+          <ul className="grid grid-cols-2 gap-y-4 gap-x-4">
             <li>
               <a
                 className="text-primary text-sm font-semibold"
