@@ -15,6 +15,70 @@ const config: GatsbyConfig = {
         link: "/speakers",
       },
     ],
+    team: [
+      {
+        name: "Camilla Larsen",
+        position: "",
+        image: "team/organizer-camilla-larsen.jpg",
+        linkedin: "camilla-larsen-tux",
+      },
+      {
+        name: "Jinhong Brejnholt",
+        position:
+          "Chief Cloud Architect & Global Head of Cloud and Container Platform Engineering @ Saxo Bank A/S",
+        image: "team/organizer-jinhong-brejnholt.jpg",
+        linkedin: "jbrejnholt",
+      },
+      {
+        name: "Kasper Borg Nissen",
+        position: "Developer Relations @ Dash0",
+        image: "team/organizer-kasper-nissen.jpg",
+        linkedin: "kaspernissen",
+      },
+      {
+        name: "Per Hedegaard Christiansen",
+        position: "Chief Container Platform Engineer @ Saxo Bank A/S",
+        image: "team/organizer-per-christiansen.jpg",
+        linkedin: "perhchristiansen",
+      },
+      {
+        name: "Ryan Gough",
+        position: "Senior IT Operations Specialist & DevOps @ JYSK",
+        image: "team/organizer-ryan-gough.jpg",
+        linkedin: "ryanjgough",
+      },
+      {
+        name: "Thor Anker Kvisgård Lange",
+        position: "Team Lead Platform Development @ Netic",
+        image: "team/organizer-thor-lange.jpg",
+        linkedin: "thor-lange-26b388",
+      },
+      {
+        name: "Nikita Hald Sørensen",
+        position:
+          "Communication and event coordinator @ Coding Pirates & Innovation Lab",
+        image: "team/organizer-nikita-hald.jpg",
+        linkedin: "nikitahald",
+      },
+      {
+        name: "Allan Højgaard Jensen",
+        position: "Platform Development Specialist @ Netic",
+        image: "team/organizer-allan.jpg",
+        linkedin: "allanhoejgaardjensen/",
+      },
+      {
+        name: "Søren Boss Jacobsen",
+        position: "Regional Sales Manager @ EDB",
+        image: "team/organizer-soren.jpg",
+        linkedin: "sorenbossjacobsen",
+      },
+      {
+        name: "Mads Høgstedt Danqua",
+        position: "Lead Engineer @ The LEGO Group",
+        image: "team/organizer-mads.jpg",
+        linkedin: "danquah",
+      },
+    ],
   },
   // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
   // If you use VSCode you can also use the GraphQL plugin
