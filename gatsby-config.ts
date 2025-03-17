@@ -3,7 +3,8 @@ import type { GatsbyConfig } from "gatsby";
 const config: GatsbyConfig = {
   siteMetadata: {
     title: `Cloud Native Denmark`,
-    description: "",
+    description:
+      "Cloud Native Denmark shares knowledge about Cloud Native Techonologies and creates community networks in Denmark within this area.",
     siteUrl: `https://cloudnativedenmark.dk`,
     menuLinks: [
       {
