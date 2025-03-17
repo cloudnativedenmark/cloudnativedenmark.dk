@@ -33,13 +33,13 @@ const Header = ({ menuLinks, className }: HeaderProps) => {
         </div>
         <nav>
           <ul className="flex">
-            {menuLinks.map((link: any) => (
+            {/*menuLinks.map((link: any) => (
               <li key={link.name} className="p-1 list-none">
                 <Link to={link.link} className="text-primary-1">
                   {link.name}
                 </Link>
               </li>
-            ))}
+            ))*/}
           </ul>
         </nav>
       </div>

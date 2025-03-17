@@ -72,7 +72,7 @@ const TeamPage: React.FC<PageProps<DataProps>> = ({
 export default TeamPage;
 
 export const Head: HeadFC = ({ location: { pathname } }) => (
-  <SEO pathname={pathname} />
+  <SEO title="Cloud Native Denmark - Team" pathname={pathname} />
 );
 
 export const query = graphql`

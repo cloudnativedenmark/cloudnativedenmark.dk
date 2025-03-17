@@ -207,5 +207,5 @@ const PrivacyPage: React.FC<PageProps> = () => {
 export default PrivacyPage;
 
 export const Head: HeadFC = ({ location: { pathname } }) => (
-  <SEO title="Privacy Policy" pathname={pathname} />
+  <SEO title="Cloud Native Denmark - Privacy Policy" pathname={pathname} />
 );

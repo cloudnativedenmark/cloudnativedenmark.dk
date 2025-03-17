@@ -66,6 +66,7 @@ const Footer = () => {
               <a
                 className="items-center h-full w-full"
                 href="https://www.linkedin.com/company/kubernetes-community-days-denmark"
+                target="_blank"
               >
                 <LinkedIn />
               </a>
@@ -74,6 +75,7 @@ const Footer = () => {
               <a
                 className="items-center h-full w-full"
                 href="https://www.youtube.com/@CloudNativeNordics"
+                target="_blank"
               >
                 <Youtube />
               </a>
