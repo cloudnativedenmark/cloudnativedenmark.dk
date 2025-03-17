@@ -37,11 +37,11 @@ const TeamPage: React.FC<PageProps<DataProps>> = ({
         </div>
       </section>
       <section className="pb-40 max-w-6xl mx-auto">
-        <ul className="text-primary grid grid-cols-4 gap-8 mt-20">
+        <ul className="text-primary grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-20 justify-items-center">
           {site.siteMetadata.team.map((member, index) => {
             const image = getImage(member.image);
             return (
-              <li className="flex-col" key={index}>
+              <li className="flex-col w-60 md:w-full" key={index}>
                 {image && (
                   <GatsbyImage
                     className="w-60"
