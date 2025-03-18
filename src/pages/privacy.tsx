@@ -7,7 +7,7 @@ const PrivacyPage: React.FC<PageProps> = () => {
   return (
     <Layout headerClassName="bg-white">
       <div className="mx-auto max-w-6xl">
-        <div className="text-primary text-base font-sans mx-28 pb-12">
+        <div className="text-primary text-base font-sans mx-2 md:mx-28 pb-12">
           <h1 className="text-4xl font-bold pt-24">Privacy Policy</h1>
           <p className="mt-16">
             This Privacy Policy applies only to our online activities and is
