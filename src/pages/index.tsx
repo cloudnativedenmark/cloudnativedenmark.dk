@@ -10,7 +10,7 @@ const IndexPage: React.FC<PageProps> = () => {
       <section className="bg-background">
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-row px-6 pt-14 py-24">
-            <div className="basis-sm p-5">
+            <div className="hidden sm:block basis-sm p-5">
               <img
                 src={Logo}
                 width={400}

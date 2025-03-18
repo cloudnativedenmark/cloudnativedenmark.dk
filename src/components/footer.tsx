@@ -7,7 +7,7 @@ import { Link } from "gatsby";
 const Footer = () => {
   return (
     <footer className="safe-paddings border-t border-gray-200 bg-white mt-auto">
-      <div className="flex items-center justify-between pt-5 pb-2 mx-auto max-w-6xl">
+      <div className="flex flex-col md:flex-row gap-y-12 justify-between pt-5 pb-2 mx-2 md:mx-auto max-w-6xl">
         {/*
         <div>
           <img
@@ -20,8 +20,8 @@ const Footer = () => {
           />
         </div>
         */}
-        <nav className="flex">
-          <ul className="grid grid-cols-2 gap-y-4 gap-x-4">
+        <nav>
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-4">
             <li>
               <a
                 className="text-primary text-sm font-semibold"
@@ -56,7 +56,7 @@ const Footer = () => {
         </nav>
         <div>
           <a
-            className="font-semibold transition-colors duration-200 text-primary"
+            className="text-sm font-semibold transition-colors duration-200 text-primary"
             href="mailto:contact@cloudnativedenmark.dk"
           >
             contact@cloudnativedenmark.dk
