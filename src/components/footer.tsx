@@ -65,7 +65,7 @@ const Footer = () => {
             <li className="h-9 w-9">
               <a
                 className="items-center h-full w-full"
-                href="https://www.linkedin.com/company/kubernetes-community-days-denmark"
+                href="https://www.linkedin.com/company/cloud-native-denmark"
                 target="_blank"
               >
                 <LinkedIn />
