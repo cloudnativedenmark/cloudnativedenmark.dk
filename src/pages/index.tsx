@@ -26,6 +26,15 @@ const IndexPage: React.FC<PageProps> = () => {
               <p className="mt-8 text-lg font-medium text-pretty text-primary sm:text-xl/8">
                 KCD Denmark will return as <b>Cloud Native Denmark</b> in 2025.
               </p>
+              <p className="mt-10">
+                <a
+                  className="bg-blue-900 text-white h-14 rounded-3xl px-20 py-2 text-xl font-bold leading-none shadow-[0_15px_40px_#999999] hover:bg-blue-700 hover:shadow-[0px_15px_30px_#adadad]"
+                  href="https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark/"
+                  target="_blank"
+                >
+                  Get your ticket
+                </a>
+              </p>
             </div>
           </div>
         </div>
