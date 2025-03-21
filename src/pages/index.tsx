@@ -7,6 +7,7 @@ import Logo from "../images/logo.svg";
 const IndexPage: React.FC<PageProps> = () => {
   return (
     <Layout>
+      {/* HERO */}
       <section className="bg-background">
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-row px-6 pt-14 py-24">
@@ -46,6 +47,34 @@ const IndexPage: React.FC<PageProps> = () => {
           exciting talks and plenty of opportunities for growing and networking.
         </p>
       </section>
+      {/* HERO */}
+
+      {/* SPONSORS */}
+      <section className="safe-paddings relative bg-white sm:pb-16">
+        <div className="mx-auto max-w-6xl text-center text-primary">
+          <h2 className="text-6xl font-bold leading-denser" id="sponsors">
+            Sponsors
+          </h2>
+          <p className="text-lg font-medium text-pretty text-primary sm:text-xl/8 mx-auto mt-5 max-w-[800px] leading-normal">
+            If you’re interested in becoming a sponsor, please contact&nbsp;
+            <a
+              className="font-semibold"
+              href="mailto:contact@cloudnativedenmark.dk"
+            >
+              sponsor@cloudnativedenmark.dk
+            </a>
+            &nbsp;or view our&nbsp;
+            <a
+              className="font-semibold"
+              href="https://www.canva.com/design/DAF5X4WiO6I/6bgxDDraWrQzTfyTYtINmQ/view"
+              target="_blank"
+            >
+              prospectus
+            </a>
+          </p>
+        </div>
+      </section>
+      {/* SPONSORS */}
     </Layout>
   );
 };
