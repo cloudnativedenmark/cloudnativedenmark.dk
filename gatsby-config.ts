@@ -98,6 +98,7 @@ const config: GatsbyConfig = {
     "gatsby-plugin-mdx",
     "gatsby-plugin-sharp",
     "gatsby-transformer-sharp",
+    "gatsby-transformer-yaml",
     {
       resolve: "gatsby-source-filesystem",
       options: {
@@ -113,6 +114,13 @@ const config: GatsbyConfig = {
         path: "./src/pages/",
       },
       __key: "pages",
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        path: `./src/data/`,
+      },
+      __key: "data",
     },
   ],
 };

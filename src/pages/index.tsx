@@ -1,10 +1,28 @@
 import * as React from "react";
-import type { HeadFC, PageProps } from "gatsby";
+import { type HeadFC, type PageProps, graphql } from "gatsby";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import Logo from "../images/logo.svg";
+import { GatsbyImage, getImage } from "gatsby-plugin-image";
 
-const IndexPage: React.FC<PageProps> = () => {
+interface Sponsor {
+  title: string;
+  url: string;
+  scale: string;
+  logo: {
+    publicURL: string;
+  };
+}
+
+type DataProps = {
+  allCommunityYaml: {
+    nodes: Sponsor[];
+  };
+};
+
+const IndexPage: React.FC<PageProps<DataProps>> = ({
+  data: { allCommunityYaml },
+}) => {
   return (
     <Layout>
       {/* HERO */}
@@ -73,6 +91,39 @@ const IndexPage: React.FC<PageProps> = () => {
             </a>
           </p>
         </div>
+        <ul>
+          <li>
+            <p className="text-center text-2xl font-bold uppercase leading-normal text-primary-1">
+              Community Sponsors
+            </p>
+            <ul className="mt-10 mb-[70px] flex flex-wrap justify-center gap-x-8 xl:gap-y-6">
+              {allCommunityYaml.nodes.map((sponsor, index) => {
+                return (
+                  <li
+                    key={index}
+                    className="flex items-center justify-center min-w-[384px] min-h-[122px] sm:min-w-[320px] sm:min-h-[115px] xs:min-w-fit xs:max-w-full"
+                  >
+                    <a
+                      href={sponsor.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex h-full w-fit items-center justify-center"
+                    >
+                      {sponsor.logo && (
+                        <img
+                          className="h-auto xs:max-w-full max-w-[330px] sm:min-w-[70%]  scale-[0.7]"
+                          src={sponsor.logo.publicURL}
+                          width={sponsor.scale}
+                          alt={sponsor.title}
+                        />
+                      )}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </li>
+        </ul>
       </section>
       {/* SPONSORS */}
     </Layout>
@@ -84,3 +135,19 @@ export default IndexPage;
 export const Head: HeadFC = ({ location: { pathname } }) => (
   <SEO pathname={pathname} />
 );
+
+export const query = graphql`
+  query Sponsors {
+    allCommunityYaml {
+      nodes {
+        id
+        title
+        url
+        logo {
+          publicURL
+        }
+        scale
+      }
+    }
+  }
+`;
