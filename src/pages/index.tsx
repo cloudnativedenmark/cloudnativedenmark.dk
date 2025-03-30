@@ -76,14 +76,14 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
           <p className="text-lg font-medium text-pretty text-primary sm:text-xl/8 mx-auto mt-5 max-w-[800px] leading-normal">
             If you’re interested in becoming a sponsor, please contact&nbsp;
             <a
-              className="font-semibold"
+              className="font-semibold text-blue-900"
               href="mailto:contact@cloudnativedenmark.dk"
             >
               sponsor@cloudnativedenmark.dk
             </a>
             &nbsp;or view our&nbsp;
             <a
-              className="font-semibold"
+              className="font-semibold text-blue-900"
               href="https://www.canva.com/design/DAF5X4WiO6I/6bgxDDraWrQzTfyTYtINmQ/view"
               target="_blank"
             >
@@ -91,9 +91,9 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
             </a>
           </p>
         </div>
-        <ul>
+        <ul className="mt-16">
           <li>
-            <p className="text-center text-2xl font-bold uppercase leading-normal text-primary-1">
+            <p className="text-center text-2xl font-semibold uppercase leading-normal text-primary-1">
               Community Sponsors
             </p>
             <ul className="mt-10 mb-[70px] flex flex-wrap justify-center gap-x-8 xl:gap-y-6">
@@ -111,7 +111,7 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
                     >
                       {sponsor.logo && (
                         <img
-                          className="h-auto xs:max-w-full max-w-[330px] sm:min-w-[70%]  scale-[0.7]"
+                          className="h-auto max-h-[130px] xs:max-w-full max-w-[330px] sm:min-w-[70%] scale-[0.7]"
                           src={sponsor.logo.publicURL}
                           width={sponsor.scale}
                           alt={sponsor.title}
