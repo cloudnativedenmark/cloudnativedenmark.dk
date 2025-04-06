@@ -84,7 +84,7 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
             &nbsp;or view our&nbsp;
             <a
               className="font-semibold text-blue-900"
-              href="https://www.canva.com/design/DAF5X4WiO6I/6bgxDDraWrQzTfyTYtINmQ/view"
+              href="https://cloudnativedenmark2025.my.canva.site/"
               target="_blank"
             >
               prospectus
