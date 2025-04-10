@@ -38,7 +38,7 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
                 alt="Cloud Native Denmark"
               />
             </div>
-            div className="basis-xl pl-4 pt-20">
+            <div className="basis-xl pl-4 pt-20">
               <h1 className="text-5xl font-semibold tracking-tight text-balance text-primary sm:text-7xl">
                 Cloud Native Denmark 2025
               </h1>
