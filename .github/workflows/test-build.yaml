@@ -1,4 +1,4 @@
-# Build and deploy website
+# Verify we can build the site.
 name: Test build
 
 on:
