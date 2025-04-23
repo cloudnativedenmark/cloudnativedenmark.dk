@@ -18,10 +18,19 @@ type DataProps = {
   allCommunityYaml: {
     nodes: Sponsor[];
   };
+  allGoldYaml: {
+    nodes: Sponsor[];
+  };
+  allPlatinumYaml: {
+    nodes: Sponsor[];
+  };
+  allPartnerYaml: {
+    nodes: Sponsor[];
+  };
 };
 
 const IndexPage: React.FC<PageProps<DataProps>> = ({
-  data: { allCommunityYaml },
+  data: { allCommunityYaml, allGoldYaml, allPlatinumYaml, allPartnerYaml },
 }) => {
   return (
     <Layout>
@@ -102,6 +111,77 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
             </a>
           </p>
         </div>
+
+        <ul className="mt-16">
+          <li>
+            <p className="text-center text-2xl font-semibold uppercase leading-normal text-primary-1">
+              Platinum Sponsors
+            </p>
+            <ul className="mt-10 mb-[70px] flex flex-wrap justify-center gap-x-8 xl:gap-y-6">
+              {allPlatinumYaml.nodes.map((sponsor, index) => {
+                return (
+                  <li
+                    key={index}
+                    className="flex items-center justify-center min-w-[384px] min-h-[122px] sm:min-w-[320px] sm:min-h-[115px] xs:min-w-fit xs:max-w-full"
+                  >
+                    <a
+                      href={sponsor.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex h-full w-fit items-center justify-center"
+                    >
+                      {sponsor.logo && (
+                        <img
+                          className="h-auto max-h-[130px] xs:max-w-full max-w-[330px] sm:min-w-[70%] scale-[0.9]"
+                          src={sponsor.logo.publicURL}
+                          width={sponsor.scale}
+                          alt={sponsor.title}
+                        />
+                      )}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </li>
+        </ul>
+
+
+
+        <ul className="mt-16">
+          <li>
+            <p className="text-center text-2xl font-semibold uppercase leading-normal text-primary-1">
+              Gold Sponsors
+            </p>
+            <ul className="mt-10 mb-[70px] flex flex-wrap justify-center gap-x-8 xl:gap-y-6">
+              {allGoldYaml.nodes.map((sponsor, index) => {
+                return (
+                  <li
+                    key={index}
+                    className="flex items-center justify-center min-w-[384px] min-h-[122px] sm:min-w-[320px] sm:min-h-[115px] xs:min-w-fit xs:max-w-full"
+                  >
+                    <a
+                      href={sponsor.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex h-full w-fit items-center justify-center"
+                    >
+                      {sponsor.logo && (
+                        <img
+                          className="h-auto max-h-[130px] xs:max-w-full max-w-[330px] sm:min-w-[70%] scale-[0.8]"
+                          src={sponsor.logo.publicURL}
+                          width={sponsor.scale}
+                          alt={sponsor.title}
+                        />
+                      )}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </li>
+        </ul>
+
         <ul className="mt-16">
           <li>
             <p className="text-center text-2xl font-semibold uppercase leading-normal text-primary-1">
@@ -122,7 +202,7 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
                     >
                       {sponsor.logo && (
                         <img
-                          className="h-auto max-h-[130px] xs:max-w-full max-w-[330px] sm:min-w-[70%] scale-[0.7]"
+                          className="h-auto max-h-[130px] xs:max-w-full max-w-[330px] sm:min-w-[70%] scale-[0.6]"
                           src={sponsor.logo.publicURL}
                           width={sponsor.scale}
                           alt={sponsor.title}
@@ -135,6 +215,44 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
             </ul>
           </li>
         </ul>
+
+
+
+        <ul className="mt-16">
+          <li>
+            <p className="text-center text-2xl font-semibold uppercase leading-normal text-primary-1">
+              Partners & Media
+            </p>
+            <ul className="mt-10 mb-[70px] flex flex-wrap justify-center gap-x-8 xl:gap-y-6">
+              {allPartnerYaml.nodes.map((sponsor, index) => {
+                return (
+                  <li
+                    key={index}
+                    className="flex items-center justify-center min-w-[384px] min-h-[122px] sm:min-w-[320px] sm:min-h-[115px] xs:min-w-fit xs:max-w-full"
+                  >
+                    <a
+                      href={sponsor.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex h-full w-fit items-center justify-center"
+                    >
+                      {sponsor.logo && (
+                        <img
+                          className="h-auto max-h-[130px] xs:max-w-full max-w-[330px] sm:min-w-[70%] scale-[0.6]"
+                          src={sponsor.logo.publicURL}
+                          width={sponsor.scale}
+                          alt={sponsor.title}
+                        />
+                      )}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </li>
+        </ul>
+
+
       </section>
       {/* SPONSORS */}
     </Layout>
@@ -160,5 +278,43 @@ export const query = graphql`
         scale
       }
     }
-  }
+
+    allGoldYaml {
+      nodes {
+        id
+        title
+        url
+        logo {
+          publicURL
+        }
+        scale
+      }
+    }
+
+    allPlatinumYaml {
+      nodes {
+        id
+        title
+        url
+        logo {
+          publicURL
+        }
+        scale
+      }
+    }
+      
+    allPartnerYaml {
+      nodes {
+        id
+        title
+        url
+        logo {
+          publicURL
+        }
+        scale
+      }
+    }
+
+
+}
 `;
