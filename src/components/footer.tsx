@@ -74,7 +74,7 @@ const Footer = () => {
             <li className="h-9 w-9">
               <a
                 className="items-center h-full w-full"
-                href="https://www.youtube.com/@CloudNativeNordics"
+                href="https://www.youtube.com/@CloudNativeNordics/videos"
                 target="_blank"
               >
                 <Youtube />
