@@ -44,7 +44,7 @@ const config: GatsbyConfig = {
       },
       {
         name: "Ryan Gough",
-        position: "Senior IT Operations Specialist & DevOps @ JYSK",
+        position: "Technical Product Owner @ JYSK",
         image: "team/organizer-ryan-gough.jpg",
         linkedin: "ryanjgough",
       },
@@ -79,6 +79,12 @@ const config: GatsbyConfig = {
         image: "team/organizer-mads.jpg",
         linkedin: "danquah",
       },
+      {
+        name: "Aditya Sundaramurthy",
+        position: "Platform Engineer @ Novo Nordisk",
+        image: "team/organizer-aditya.jpg",
+        linkedin: "aditya-sundaramurthy",
+      }
     ],
   },
   // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
