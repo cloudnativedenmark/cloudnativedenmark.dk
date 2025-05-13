@@ -1,9 +1,14 @@
-<svg enable-background="new 0 0 427.2 168.3" id="mft-logo" width="4272" height="1683" viewBox="0 0 427.2 168.3" xmlns="http://www.w3.org/2000/svg">
-<g fill="#ff8c3d">
-<g fill="#122e38">
-<polygon id="mft-logo-path-1" points="0 0 42.88 0 74.81 74.64 106.75 0 151.04 0 151.04 118.22 121.92 118.22 121.92 30.17 84.34 118.22 64.58 118.22 27.88 32.29 27.88 118.22 0 118.22 0 0"></polygon>
-<polygon id="mft-logo-path-2" points="205.56 118.22 176.44 118.22 176.44 0 292.88 0 292.88 25.41 205.56 25.41 205.56 118.22"></polygon>
-<polygon id="mft-logo-path-3" points="358.69 25.41 318.28 25.41 318.28 0 428.21 0 428.21 25.41 387.8 25.41 387.8 118.22 358.69 118.22 358.69 25.41"></polygon>
-<polygon id="mft-logo-path-4" points="241.14 77.38 221.7 77.38 221.96 50.76 267.76 50.76 241.14 77.38"></polygon>
-</g>
-</g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="LOGO" xmlns="http://www.w3.org/2000/svg" width="720" height="280" viewBox="400 300 1120 580">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ff8c3d;
+      }
+    </style>
+  </defs>
+  <path class="cls-1" d="M526.9,419.92h86.85l64.69,151.19,64.69-151.19h89.71v239.47h-58.97v-178.35l-76.13,178.35h-40.03l-74.34-174.06v174.06h-56.47v-239.47Z"/>
+  <path class="cls-1" d="M943.29,659.39h-58.97v-239.47h235.85v51.47h-176.88v188Z"/>
+  <path class="cls-1" d="M1253.48,471.39h-81.85v-51.47h222.67v51.47h-81.85v188h-58.97v-188Z"/>
+  <polygon class="cls-1" points="1015.36 576.67 975.98 576.67 976.52 522.73 1069.3 522.73 1015.36 576.67"/>
+</svg>
