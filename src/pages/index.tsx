@@ -3,7 +3,6 @@ import { type HeadFC, type PageProps, graphql } from "gatsby";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import Logo from "../images/logo.svg";
-import { GatsbyImage, getImage } from "gatsby-plugin-image";
 
 interface Sponsor {
   title: string;
@@ -21,6 +20,9 @@ type DataProps = {
   allGoldYaml: {
     nodes: Sponsor[];
   };
+  allBronzeYaml: {
+    nodes: Sponsor[];
+  };
   allPlatinumYaml: {
     nodes: Sponsor[];
   };
@@ -29,8 +31,30 @@ type DataProps = {
   };
 };
 
+const SponsorSection: React.FC<{ sponsors: Sponsor[]; title: string }> = ({
+  sponsors,
+  title,
+}) => (
+  <ul className="mt-16">
+    <li>
+      <p className="text-center text-2xl font-semibold uppercase leading-normal text-primary-1">
+        {title}
+      </p>
+      <ul className="mt-10 mb-[70px] flex flex-wrap justify-center gap-x-8 xl:gap-y-6">
+        {sponsors.map((sponsor, index) => (
+          <li key={index} className="flex items-center justify-center min-w-[384px] min-h-[122px] sm:min-w-[320px] sm:min-h-[115px] xs:min-w-fit xs:max-w-full">
+            <a href={sponsor.url} target="_blank" rel="noreferrer" className="flex h-full w-fit items-center justify-center">
+              {sponsor.logo && <img className="h-auto max-h-[130px] xs:max-w-full max-w-[330px] sm:min-w-[70%] scale-[0.8]" src={sponsor.logo.publicURL} width={sponsor.scale} alt={sponsor.title} />}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </li>
+  </ul>
+);
+
 const IndexPage: React.FC<PageProps<DataProps>> = ({
-  data: { allCommunityYaml, allGoldYaml, allPlatinumYaml, allPartnerYaml },
+  data: { allCommunityYaml, allGoldYaml, allBronzeYaml, allPlatinumYaml, allPartnerYaml },
 }) => {
   return (
     <Layout>
@@ -112,147 +136,11 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
           </p>
         </div>
 
-        <ul className="mt-16">
-          <li>
-            <p className="text-center text-2xl font-semibold uppercase leading-normal text-primary-1">
-              Platinum Sponsors
-            </p>
-            <ul className="mt-10 mb-[70px] flex flex-wrap justify-center gap-x-8 xl:gap-y-6">
-              {allPlatinumYaml.nodes.map((sponsor, index) => {
-                return (
-                  <li
-                    key={index}
-                    className="flex items-center justify-center min-w-[384px] min-h-[122px] sm:min-w-[320px] sm:min-h-[115px] xs:min-w-fit xs:max-w-full"
-                  >
-                    <a
-                      href={sponsor.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex h-full w-fit items-center justify-center"
-                    >
-                      {sponsor.logo && (
-                        <img
-                          className="h-auto max-h-[130px] xs:max-w-full max-w-[330px] sm:min-w-[70%] scale-[0.9]"
-                          src={sponsor.logo.publicURL}
-                          width={sponsor.scale}
-                          alt={sponsor.title}
-                        />
-                      )}
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
-          </li>
-        </ul>
-
-
-
-        <ul className="mt-16">
-          <li>
-            <p className="text-center text-2xl font-semibold uppercase leading-normal text-primary-1">
-              Gold Sponsors
-            </p>
-            <ul className="mt-10 mb-[70px] flex flex-wrap justify-center gap-x-8 xl:gap-y-6">
-              {allGoldYaml.nodes.map((sponsor, index) => {
-                return (
-                  <li
-                    key={index}
-                    className="flex items-center justify-center min-w-[384px] min-h-[122px] sm:min-w-[320px] sm:min-h-[115px] xs:min-w-fit xs:max-w-full"
-                  >
-                    <a
-                      href={sponsor.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex h-full w-fit items-center justify-center"
-                    >
-                      {sponsor.logo && (
-                        <img
-                          className="h-auto max-h-[130px] xs:max-w-full max-w-[330px] sm:min-w-[70%] scale-[0.8]"
-                          src={sponsor.logo.publicURL}
-                          width={sponsor.scale}
-                          alt={sponsor.title}
-                        />
-                      )}
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
-          </li>
-        </ul>
-
-        <ul className="mt-16">
-          <li>
-            <p className="text-center text-2xl font-semibold uppercase leading-normal text-primary-1">
-              Community Sponsors
-            </p>
-            <ul className="mt-10 mb-[70px] flex flex-wrap justify-center gap-x-8 xl:gap-y-6">
-              {allCommunityYaml.nodes.map((sponsor, index) => {
-                return (
-                  <li
-                    key={index}
-                    className="flex items-center justify-center min-w-[384px] min-h-[122px] sm:min-w-[320px] sm:min-h-[115px] xs:min-w-fit xs:max-w-full"
-                  >
-                    <a
-                      href={sponsor.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex h-full w-fit items-center justify-center"
-                    >
-                      {sponsor.logo && (
-                        <img
-                          className="h-auto max-h-[130px] xs:max-w-full max-w-[330px] sm:min-w-[70%] scale-[0.6]"
-                          src={sponsor.logo.publicURL}
-                          width={sponsor.scale}
-                          alt={sponsor.title}
-                        />
-                      )}
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
-          </li>
-        </ul>
-
-
-
-        <ul className="mt-16">
-          <li>
-            <p className="text-center text-2xl font-semibold uppercase leading-normal text-primary-1">
-              Partners & Media
-            </p>
-            <ul className="mt-10 mb-[70px] flex flex-wrap justify-center gap-x-8 xl:gap-y-6">
-              {allPartnerYaml.nodes.map((sponsor, index) => {
-                return (
-                  <li
-                    key={index}
-                    className="flex items-center justify-center min-w-[384px] min-h-[122px] sm:min-w-[320px] sm:min-h-[115px] xs:min-w-fit xs:max-w-full"
-                  >
-                    <a
-                      href={sponsor.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex h-full w-fit items-center justify-center"
-                    >
-                      {sponsor.logo && (
-                        <img
-                          className="h-auto max-h-[130px] xs:max-w-full max-w-[330px] sm:min-w-[70%] scale-[0.6]"
-                          src={sponsor.logo.publicURL}
-                          width={sponsor.scale}
-                          alt={sponsor.title}
-                        />
-                      )}
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
-          </li>
-        </ul>
-
-
+        <SponsorSection sponsors={allPlatinumYaml.nodes} title="Platinum Sponsors" />
+        <SponsorSection sponsors={allGoldYaml.nodes} title="Gold Sponsors" />
+        <SponsorSection sponsors={allBronzeYaml.nodes} title="Bronze Sponsors" />
+        <SponsorSection sponsors={allCommunityYaml.nodes} title="Community Sponsors" />
+        <SponsorSection sponsors={allPartnerYaml.nodes} title="Partners & Media" />
       </section>
       {/* SPONSORS */}
     </Layout>
@@ -280,6 +168,18 @@ export const query = graphql`
     }
 
     allGoldYaml {
+      nodes {
+        id
+        title
+        url
+        logo {
+          publicURL
+        }
+        scale
+      }
+    }
+
+    allBronzeYaml {
       nodes {
         id
         title
