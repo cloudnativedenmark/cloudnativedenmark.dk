@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "../images/logo.svg";
 import { Link } from "gatsby";
 
@@ -7,22 +7,38 @@ interface HeaderProps {
   className?: string;
 }
 
-const defaultClass = "bg-background";
+const defaultClass = "";
 
 const Header = ({ menuLinks, className }: HeaderProps) => {
   const headerClass = className || defaultClass;
+  const [showLogo, setShowLogo] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show logo when scrolled past hero section (roughly 600px)
+      setShowLogo(window.scrollY > 600);
+    };
+
+    // Check if window is available (for SSR compatibility)
+    if (typeof window !== 'undefined') {
+      // Set initial state
+      handleScroll();
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
   return (
     <header
       className={
-        "safe-paddings transition-200 z-10 transition-colors bg-background " +
+        "safe-paddings transition-200 z-50 transition-colors sticky top-0 " +
         headerClass
       }
+      style={{ backgroundColor: 'white' }}
     >
-      <div className="flex items-center justify-between pt-5 pb-2 mx-auto max-w-6xl">
-        <div>
+      <div className="flex items-center justify-between pt-5 pb-2 w-full px-4">
+        <div className={`transition-opacity duration-300 ${showLogo ? 'opacity-100' : 'opacity-0'}`}>
           <Link to="/">
             <img
-              className="ml-2"
               src={Logo}
               width={44}
               height="auto"
@@ -31,16 +47,10 @@ const Header = ({ menuLinks, className }: HeaderProps) => {
             />
           </Link>
         </div>
-        <nav>
-          <ul className="flex">
-            {/*menuLinks.map((link: any) => (
-              <li key={link.name} className="p-1 list-none">
-                <Link to={link.link} className="text-primary-1">
-                  {link.name}
-                </Link>
-              </li>
-            ))*/}
-          </ul>
+        <nav className="mr-4">
+          <Link to="/team" className="text-gray-800 hover:text-gray-600 text-sm font-semibold">
+            Team
+          </Link>
         </nav>
       </div>
     </header>
