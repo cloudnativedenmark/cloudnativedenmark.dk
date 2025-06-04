@@ -3,8 +3,6 @@ import { type HeadFC, type PageProps, graphql } from "gatsby";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import Logo from "../images/logo.svg";
-import HeroImage from "../images/kcddenmark24.jpg";
-import { StaticImage } from "gatsby-plugin-image";
 import SavVaerketLogo from "../images/sav-vaerket-logo.png";
 import CodingPiratesLogo from "../images/coding-pirates-logo.png";
 
@@ -106,20 +104,14 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <a
-                  className="inline-flex items-center justify-center text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200"
-                  style={{ backgroundColor: '#0026ce' }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#001ba0'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0026ce'}
+                  className="inline-flex items-center justify-center text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200 bg-background hover:bg-hover"
                   href="https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark/"
                   target="_blank"
                 >
                   Get your tickets
                 </a>
                 <a
-                  className="inline-flex items-center justify-center text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200"
-                  style={{ backgroundColor: '#0026ce' }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#001ba0'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0026ce'}
+                  className="inline-flex items-center justify-center text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200 bg-background hover:bg-hover"
                   href="https://sessionize.com/cloud-native-denmark-2025/"
                   target="_blank"
                 >
@@ -130,7 +122,7 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
           </div>
         </div>
       </section>
-      <section className="relative" style={{ backgroundColor: '#11347e', marginTop: '-80px' }}>
+      <section className="relative bg-background-dark" style={{ marginTop: '-80px' }}>
         <div className="relative z-10 mx-auto max-w-4xl px-6 py-20">
           <p className="text-white text-2xl lg:text-3xl text-center font-medium leading-relaxed">
             Join us in Aarhus on October 7–8, as the Kubernetes and Cloud Native community comes together for a two-day technical conference packed with inspiring talks, hands-on insights, and great opportunities to connect and grow.
@@ -172,7 +164,7 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
       </section>
 
       {/* LAST YEAR'S EVENT */}
-      <section className="py-16" style={{ backgroundColor: '#0026ce' }}>
+      <section className="py-16 bg-background">
         <div className="mx-auto max-w-6xl px-6">
           <h2 className="text-4xl lg:text-5xl font-bold text-center text-white mb-8">
             Recap last years event
@@ -204,7 +196,7 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
       {/* LAST YEAR'S EVENT */}
 
       {/* MISSION */}
-      <section className="py-16" style={{ backgroundColor: '#d7dff4' }}>
+      <section className="py-16 bg-background-light">
         <div className="mx-auto max-w-6xl px-6">
           <h2 className="text-4xl lg:text-5xl font-bold text-center text-gray-900 mb-12">
             Mission

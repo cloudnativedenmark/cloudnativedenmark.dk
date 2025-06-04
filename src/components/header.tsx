@@ -3,7 +3,10 @@ import Logo from "../images/logo.svg";
 import { Link } from "gatsby";
 
 interface HeaderProps {
-  menuLinks: any;
+  menuLinks: {
+    name: string;
+   link: string;
+  }[];
   className?: string;
 }
 
@@ -27,6 +30,7 @@ const Header = ({ menuLinks, className }: HeaderProps) => {
       return () => window.removeEventListener('scroll', handleScroll);
     }
   }, []);
+
   return (
     <header
       className={
@@ -48,9 +52,11 @@ const Header = ({ menuLinks, className }: HeaderProps) => {
           </Link>
         </div>
         <nav className="mr-4">
-          <Link to="/team" className="text-gray-800 hover:text-gray-600 text-sm font-semibold">
-            Team
+          {menuLinks.map((link) => (
+          <Link to={link.link}  className="text-gray-800 hover:text-gray-600 text-base font-semibold">
+            {link.name}
           </Link>
+          ))}
         </nav>
       </div>
     </header>
