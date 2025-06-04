@@ -6,7 +6,7 @@ import { Link } from "gatsby";
 
 const Footer = () => {
   return (
-    <footer className="safe-paddings mt-auto" style={{ backgroundColor: '#11347e' }}>
+    <footer className="safe-paddings mt-auto bg-background-dark">
       <div className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex flex-col md:flex-row gap-y-12 justify-between">
         {/*
