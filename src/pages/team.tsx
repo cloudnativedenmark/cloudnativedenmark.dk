@@ -24,7 +24,7 @@ const TeamPage: React.FC<PageProps<DataProps>> = ({
 }: PageProps<DataProps>) => {
   return (
     <Layout>
-      <section className="pt-24 pb-20" style={{ backgroundColor: '#11347e' }}>
+      <section className="pt-24 pb-20 bg-background-dark">
         <div className="mx-auto max-w-6xl text-white text-center px-6">
           <h1 className="text-6xl font-bold">Team</h1>
           <p className="text-2xl font-light mt-8 leading-normal">
