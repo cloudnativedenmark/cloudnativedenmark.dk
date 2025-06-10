@@ -70,8 +70,8 @@ const config: GatsbyConfig = {
         linkedin: "sorenbossjacobsen",
       },
       {
-        name: "Mads Høgstedt Danqua",
-        position: "Lead Engineer @ The LEGO Group",
+        name: "Mads Høgstedt Danquah",
+        position: "Lead Engineer @ the LEGO Group",
         image: "team/organizer-mads.jpg",
         linkedin: "danquah",
       },
