@@ -111,13 +111,6 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
                 >
                   Get your tickets
                 </a>
-                <a
-                  className="inline-flex items-center justify-center text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200 bg-background hover:bg-hover"
-                  href="https://sessionize.com/cloud-native-denmark-2025/"
-                  target="_blank"
-                >
-                  Submit a talk
-                </a>
               </div>
             </div>
           </div>
