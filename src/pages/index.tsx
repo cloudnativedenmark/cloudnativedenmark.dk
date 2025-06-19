@@ -201,10 +201,17 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
           </h2>
           <div className="mx-auto max-w-4xl text-center mb-12">
             <p className="text-lg lg:text-xl text-white leading-relaxed">
-              In 2024, we hosted Kubernetes Community Days Denmark at the Bella
-              Center in Copenhagen, bringing together over 500 attendees for two
-              packed days of technical talks, community connection, and cloud
-              native inspiration.
+              In 2024, we hosted
+              <a
+                href="https://2024.kcddenmark.dk/"
+                target="_blank"
+                style={{ textDecoration: "underline dotted" }}
+              >
+                Kubernetes Community Days Denmark
+              </a>
+              at the Bella Center in Copenhagen, bringing together over 500
+              attendees for two packed days of technical talks, community
+              connection, and cloud native inspiration.
             </p>
             <p className="text-lg lg:text-xl text-white leading-relaxed mt-6">
               While we're not running under the official KCD banner this year
