@@ -2,6 +2,7 @@ import * as React from "react";
 import { type HeadFC, type PageProps, graphql } from "gatsby";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
+import { useSessionizeSpeakers } from "../hooks/use-sessionize";
 import Logo from "../images/logo.svg";
 import { StaticImage } from "gatsby-plugin-image";
 
@@ -78,6 +79,22 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
     allPartnerYaml,
   },
 }) => {
+  const { speakers } = useSessionizeSpeakers();
+  const [isExpanded, setIsExpanded] = React.useState(false);
+
+  const sortedSpeakers = React.useMemo(() => {
+    return [...speakers].sort((a, b) => {
+      if (a.isTopSpeaker && !b.isTopSpeaker) return -1;
+      if (!a.isTopSpeaker && b.isTopSpeaker) return 1;
+      return a.fullName.localeCompare(b.fullName);
+    });
+  }, [speakers]);
+
+  const initialSpeakersToShow = 4;
+  const speakersToShow = isExpanded
+    ? sortedSpeakers
+    : sortedSpeakers.slice(0, initialSpeakersToShow);
+
   return (
     <Layout>
       {/* HERO */}
@@ -193,6 +210,47 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
         </div>
       </section>
 
+      {/* SPEAKERS */}
+      {speakers.length > 0 && (
+        <section className="py-16 bg-white">
+          <div className="mx-auto max-w-6xl px-6 text-center">
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-12">
+              Speakers
+            </h2>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-12 justify-items-center">
+              {speakersToShow.map((speaker) => (
+                <li
+                  key={speaker.id}
+                  className="flex flex-col items-center w-60"
+                >
+                  <img
+                    className="w-48 h-48 rounded-full object-cover mx-auto shadow-lg"
+                    src={speaker.profilePicture}
+                    alt={speaker.fullName}
+                  />
+                  <p className="mt-4 text-xl font-bold text-gray-900">
+                    {speaker.fullName}
+                  </p>
+                  <p className="mt-1 text-base text-gray-600 h-12">
+                    {speaker.tagLine}
+                  </p>
+                </li>
+              ))}
+            </ul>
+            {sortedSpeakers.length > initialSpeakersToShow && (
+              <div className="mt-12">
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="inline-flex items-center justify-center text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200 bg-background hover:bg-hover"
+                >
+                  {isExpanded ? "Show Less" : "Show More Speakers"}
+                </button>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
       {/* LAST YEAR'S EVENT */}
       <section className="py-16 bg-background">
         <div className="mx-auto max-w-6xl px-6">
@@ -201,14 +259,12 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
           </h2>
           <div className="mx-auto max-w-4xl text-center mb-12">
             <p className="text-lg lg:text-xl text-white leading-relaxed">
-              In 2024, we hosted
+              In 2024, we hosted&nbsp;
               <a
                 href="https://2024.kcddenmark.dk/"
                 target="_blank"
                 style={{ textDecoration: "underline dotted" }}
-              >
-                Kubernetes Community Days Denmark
-              </a>
+              >Kubernetes Community Days Denmark</a>&nbsp;
               at the Bella Center in Copenhagen, bringing together over 500
               attendees for two packed days of technical talks, community
               connection, and cloud native inspiration.
