@@ -12,7 +12,7 @@ const SessionCard: React.FC<{ session: Session }> = ({ session }) => {
   if (session.isServiceSession) {
     return (
       <div className="bg-gray-100 p-4 h-full flex items-center justify-center text-center rounded-lg border border-gray-200">
-        <h3 className="font-bold text-lg text-gray-700">{session.name}</h3>
+        <h3 className="font-bold text-lg text-gray-700">{session.title}</h3>
       </div>
     );
   }
@@ -20,7 +20,7 @@ const SessionCard: React.FC<{ session: Session }> = ({ session }) => {
   return (
     <div className="bg-blue-50 hover:bg-blue-100 p-3 h-full flex flex-col justify-between rounded-lg shadow-sm border border-blue-200 transition-colors duration-200">
       <div>
-        <h3 className="font-bold text-md text-primary">{session.name}</h3>
+        <h3 className="font-bold text-md text-primary">{session.title}</h3>
         {session.speakers && session.speakers.length > 0 && (
           <p className="text-sm text-gray-600 mt-2">
             <em>{session.speakers.map((s) => s.fullName).join(", ")}</em>
@@ -43,11 +43,7 @@ const SchedulePage: React.FC<PageProps> = () => {
   };
 
   const formatTime = (timeString: string) => {
-    return new Date(timeString).toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
+    return timeString.substring(0, timeString.lastIndexOf(':'))
   };
 
   return (
@@ -94,9 +90,9 @@ const SchedulePage: React.FC<PageProps> = () => {
 
                 {/* Time Slots */}
                 {day.timeSlots.flatMap((timeSlot) => {
-                  const serviceSession =
+                  const plenumSession =
                     timeSlot.rooms.length === 1 &&
-                    timeSlot.rooms[0].session.isServiceSession
+                    timeSlot.rooms[0].session.isPlenumSession
                       ? timeSlot.rooms[0].session
                       : null;
 
@@ -109,11 +105,11 @@ const SchedulePage: React.FC<PageProps> = () => {
                     </div>
                   );
 
-                  if (serviceSession) {
+                  if (plenumSession) {
                     return [
                       timeCell,
                       <div key={`${timeSlot.slotStart}-session`} className="bg-white p-1" style={{ gridColumn: `span ${day.rooms.length}` }}>
-                        <SessionCard session={serviceSession} />
+                        <SessionCard session={plenumSession} />
                       </div>,
                     ];
                   }
