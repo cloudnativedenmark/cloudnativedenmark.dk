@@ -1,9 +1,14 @@
 import * as React from "react";
-import { type Session } from "../hooks/use-sessionize";
+import { type Session, type Speaker } from "../hooks/use-sessionize";
 
-const SessionModal: React.FC<{ session: Session; onClose: () => void }> = ({
+const SessionModal: React.FC<{
+  session: Session;
+  onClose: () => void;
+  onSpeakerClick: (speaker: Speaker) => void;
+}> = ({
   session,
   onClose,
+  onSpeakerClick,
 }) => {
   const starts = new Date(session.startsAt);
   const ends = new Date(session.endsAt);
@@ -64,7 +69,11 @@ const SessionModal: React.FC<{ session: Session; onClose: () => void }> = ({
               <h3 className="text-xl font-bold text-gray-800 mb-3">Speakers</h3>
               <div className="flex flex-wrap gap-6">
                 {session.speakers.map((speaker) => (
-                  <div key={speaker.id} className="flex items-center gap-3">
+                  <div
+                    key={speaker.id}
+                    className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+                    onClick={() => onSpeakerClick(speaker)}
+                  >
                     <img src={speaker.profilePicture} alt={speaker.fullName} className="w-16 h-16 rounded-full object-cover shadow-md" />
                     <span className="font-semibold text-gray-700">{speaker.fullName}</span>
                   </div>

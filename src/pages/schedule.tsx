@@ -2,8 +2,9 @@ import * as React from "react";
 import { type HeadFC, type PageProps } from "gatsby";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
-import { useSessionizeSchedule, type Session } from "../hooks/use-sessionize";
+import { useSessionizeSchedule, type Session, type Speaker } from "../hooks/use-sessionize";
 import SessionModal from "../components/session_modal";
+import SpeakerModal from "../components/speaker_modal";
 
 const SessionCard: React.FC<{ session: Session; onClick?: () => void }> = ({
   session,
@@ -41,6 +42,7 @@ const SessionCard: React.FC<{ session: Session; onClick?: () => void }> = ({
 const SchedulePage: React.FC<PageProps> = () => {
   const { schedule } = useSessionizeSchedule();
   const [selectedSession, setSelectedSession] = React.useState<Session | null>(null);
+  const [selectedSpeaker, setSelectedSpeaker] = React.useState<Speaker | null>(null);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -139,7 +141,14 @@ const SchedulePage: React.FC<PageProps> = () => {
         </div>
       </section>
       {selectedSession && (
-        <SessionModal session={selectedSession} onClose={() => setSelectedSession(null)} />
+        <SessionModal
+          session={selectedSession}
+          onClose={() => setSelectedSession(null)}
+          onSpeakerClick={(speaker) => setSelectedSpeaker(speaker)}
+        />
+      )}
+      {selectedSpeaker && (
+        <SpeakerModal speaker={selectedSpeaker} onClose={() => setSelectedSpeaker(null)} />
       )}
     </Layout>
   );
