@@ -2,7 +2,8 @@ import * as React from "react";
 import { type HeadFC, type PageProps, graphql } from "gatsby";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
-import { useSessionizeSpeakers } from "../hooks/use-sessionize";
+import { useSessionizeSpeakers, type Speaker } from "../hooks/use-sessionize";
+import SpeakerModal from "../components/speaker_modal";
 import Logo from "../images/logo.svg";
 import { StaticImage } from "gatsby-plugin-image";
 
@@ -81,6 +82,7 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
 }) => {
   const { speakers } = useSessionizeSpeakers();
   const [isExpanded, setIsExpanded] = React.useState(false);
+  const [selectedSpeaker, setSelectedSpeaker] = React.useState<Speaker | null>(null);
 
   const sortedSpeakers = React.useMemo(() => {
     return [...speakers].sort((a, b) => {
@@ -221,7 +223,8 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
               {speakersToShow.map((speaker) => (
                 <li
                   key={speaker.id}
-                  className="flex flex-col items-center w-60"
+                  className="flex flex-col items-center w-60 cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={() => setSelectedSpeaker(speaker)}
                 >
                   <img
                     className="w-48 h-48 rounded-full object-cover mx-auto shadow-lg"
@@ -374,6 +377,10 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
         />
       </section>
       {/* SPONSORS */}
+
+      {selectedSpeaker && (
+        <SpeakerModal speaker={selectedSpeaker} onClose={() => setSelectedSpeaker(null)} />
+      )}
     </Layout>
   );
 };

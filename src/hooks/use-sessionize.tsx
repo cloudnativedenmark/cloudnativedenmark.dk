@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react';
 
 const SESSIONIZE_ID = 'ri9gml9f' // 'ri9gml9f'; // TEST ID: jl4ktls0
 
+export interface SpeakerSession {
+  id: number;
+  name: string;
+}
+
 export interface Speaker {
   id: string;
   name: string;
@@ -12,7 +17,7 @@ export interface Speaker {
   tagLine: string;
   profilePicture: string;
   isTopSpeaker: boolean;
-  sessions: Session[];
+  sessions: SpeakerSession[];
 }
 
 export interface Session {
