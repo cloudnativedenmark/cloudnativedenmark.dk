@@ -53,7 +53,7 @@ const Header = ({ menuLinks, className }: HeaderProps) => {
         </div>
         <nav className="mr-4">
           {menuLinks.map((link) => (
-          <Link key={link.name} to={link.link} className="text-gray-800 hover:text-gray-600 text-base font-semibold">
+          <Link key={link.name} to={link.link} className="text-gray-800 hover:text-gray-600 text-base font-semibold pl-4">
             {link.name}
           </Link>
           ))}

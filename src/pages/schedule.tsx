@@ -76,68 +76,92 @@ const SchedulePage: React.FC<PageProps> = () => {
             </div>
           )}
 
-          {schedule.map((day) => (
-            <div key={day.date} className="mb-16">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-                {formatDate(day.date)}
-              </h2>
-              <div
-                className="grid gap-px bg-gray-200 border border-gray-200 rounded-lg overflow-hidden"
-                style={{
-                  gridTemplateColumns: `minmax(80px, 0.5fr) repeat(${day.rooms.length}, 1fr)`,
-                }}
-              >
-                {/* Header Row */}
-                <div className="bg-gray-100 p-4 font-bold text-center">Time</div>
-                {day.rooms.map((room) => (
-                  <div
-                    key={room.id}
-                    className="bg-gray-100 p-4 font-bold text-center"
-                  >
-                    {room.name}
-                  </div>
-                ))}
-
-                {/* Time Slots */}
-                {day.timeSlots.flatMap((timeSlot) => {
-                  const plenumSession =
-                    timeSlot.rooms.length === 1 &&
-                    timeSlot.rooms[0].session.isPlenumSession
-                      ? timeSlot.rooms[0].session
-                      : null;
-
-                  const timeCell = (
+          {schedule.map((day) => {
+            const renderedSessions = new Map<string,Set<number>>();
+            return (
+              <div key={day.date} className="mb-16">
+                <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+                  {formatDate(day.date)}
+                </h2>
+                <div
+                  className="grid gap-px bg-gray-200 border border-gray-200 rounded-lg overflow-hidden"
+                  style={{
+                    gridTemplateColumns: `minmax(80px, 0.5fr) repeat(${day.rooms.length}, 1fr)`,
+                  }}
+                >
+                  {/* Header Row */}
+                  <div className="bg-gray-100 p-4 font-bold text-center">Time</div>
+                  {day.rooms.map((room) => (
                     <div
-                      key={`${timeSlot.slotStart}-time`}
-                      className="bg-white p-4 text-center font-semibold flex items-center justify-center"
+                      key={room.id}
+                      className="bg-gray-100 p-4 font-bold text-center"
                     >
-                      {formatTime(timeSlot.slotStart)}
+                      {room.name}
                     </div>
-                  );
+                  ))}
 
-                  if (plenumSession) {
-                    return [
-                      timeCell,
-                      <div key={`${timeSlot.slotStart}-session`} className="bg-white p-1" style={{ gridColumn: `span ${day.rooms.length}` }}>
-                        <SessionCard session={plenumSession} onClick={() => setSelectedSession(plenumSession)} />
-                      </div>,
-                    ];
-                  }
+                  {/* Time Slots */}
+                  {day.timeSlots.flatMap((timeSlot, timeSlotIndex) => {
+                    const plenumSession =
+                      timeSlot.rooms.length === 1 &&
+                      timeSlot.rooms[0].session.isPlenumSession
+                        ? timeSlot.rooms[0].session
+                        : null;
 
-                  const sessionCells = day.rooms.map((room) => {
-                    const sessionForRoom = timeSlot.rooms.find((r) => r.id === room.id)?.session;
-                    return (
-                      <div key={`${timeSlot.slotStart}-${room.id}`} className="bg-white p-1">
-                        {sessionForRoom && <SessionCard session={sessionForRoom} onClick={() => setSelectedSession(sessionForRoom)} />}
+                    if (plenumSession) {
+                      const concurrent = renderedSessions.get(timeSlot.slotStart)?.size || 0
+                      return [
+                        <div key={`${timeSlot.slotStart}-time`} className="bg-white p-4 text-center font-semibold flex items-center justify-center">
+                          {formatTime(timeSlot.slotStart)}
+                        </div>,
+                        <div key={`${timeSlot.slotStart}-session`} className="bg-white p-1" style={{ gridColumn: `span ${day.rooms.length - concurrent}` }}>
+                          <SessionCard session={plenumSession} onClick={() => setSelectedSession(plenumSession)} />
+                        </div>,
+                      ];
+                    }
+
+                    const timeCell = (
+                      <div key={`${timeSlot.slotStart}-time`} className="bg-white p-4 text-center font-semibold flex items-center justify-center">
+                        {formatTime(timeSlot.slotStart)}
                       </div>
                     );
-                  });
 
-                  return [timeCell, ...sessionCells];
-                })}
+                    const sessionCells = day.rooms.flatMap((room) => {
+                      // This room already has a continued session for the timeslot
+                      if (renderedSessions.get(timeSlot.slotStart)?.has(room.id)) {
+                        return [];
+                      }
+
+                      // Nothing happens in the room at this time
+                      const sessionForRoom = timeSlot.rooms.find((r) => r.id === room.id)?.session;
+                      if (!sessionForRoom || !sessionForRoom.id) {
+                        return [<div key={`${timeSlot.slotStart}-${room.id}`} className="bg-white p-1" />];
+                      }
+
+                      // A session is schedules for this timeslot
+                      let rowSpan = 1;
+                      const ends = new Date(sessionForRoom.endsAt);
+                      for (let i = timeSlotIndex + 1; i < day.timeSlots.length; i++) {
+                        const slotStart = new Date(day.timeSlots[i].rooms[0].session.startsAt);
+                        if (slotStart < ends) {
+                          rowSpan++;
+                          if (!renderedSessions.has(day.timeSlots[i].slotStart)) {
+                            renderedSessions.set(day.timeSlots[i].slotStart, new Set());
+                          }
+                          renderedSessions.get(day.timeSlots[i].slotStart)?.add(room.id);
+                        } else {
+                          break;
+                        }
+                      }
+                      return [<div key={`${timeSlot.slotStart}-${room.id}`} className="bg-white p-1" style={{ gridRow: `span ${rowSpan}` }}><SessionCard session={sessionForRoom} onClick={() => setSelectedSession(sessionForRoom)} /></div>];
+                    });
+
+                    return [timeCell, ...sessionCells];
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
       {selectedSession && (
