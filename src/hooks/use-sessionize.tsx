@@ -126,6 +126,8 @@ export const useSessionizeSchedule = () => {
             if (qa !== undefined) {
               room.session.slideDeck = qa.answer;
             }
+            room.session.title = session.title;
+            room.session.description = session.description;
             room.session.video = session.recordingUrl;
           }
 
