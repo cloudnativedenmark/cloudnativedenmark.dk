@@ -44,6 +44,37 @@ const SchedulePage: React.FC<PageProps> = () => {
   const [selectedSession, setSelectedSession] = React.useState<Session | null>(null);
   const [selectedSpeaker, setSelectedSpeaker] = React.useState<Speaker | null>(null);
 
+  React.useEffect(() => {
+    if (schedule.length > 0 && typeof window !== "undefined") {
+      const hash = window.location.hash;
+      if (hash) {
+        const sessionId = hash.substring(1);
+        if (sessionId) {
+          const allSessions = schedule.flatMap((day) =>
+            day.timeSlots.flatMap((ts) => ts.rooms.map((r) => r.session))
+          );
+          const session = allSessions.find((s) => s.id === sessionId);
+          if (session) {
+            setSelectedSession(session);
+          }
+        }
+      }
+    }
+  }, [schedule]);
+
+  const handleSessionClick = (session: Session) => {
+    if (session && session.id) {
+      setSelectedSession(session);
+      window.history.pushState(null, "", `#${session.id}`);
+    }
+  };
+
+  const handleCloseSessionModal = () => {
+    setSelectedSession(null);
+    setSelectedSpeaker(null);
+    window.history.pushState(null, "", window.location.pathname + window.location.search);
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       weekday: "long",
@@ -115,7 +146,7 @@ const SchedulePage: React.FC<PageProps> = () => {
                           {formatTime(timeSlot.slotStart)}
                         </div>,
                         <div key={`${timeSlot.slotStart}-session`} className="bg-white p-1" style={{ gridColumn: `span ${day.rooms.length - concurrent}` }}>
-                          <SessionCard session={plenumSession} onClick={() => setSelectedSession(plenumSession)} />
+                          <SessionCard session={plenumSession} onClick={() => handleSessionClick(plenumSession)} />
                         </div>,
                       ];
                     }
@@ -153,7 +184,7 @@ const SchedulePage: React.FC<PageProps> = () => {
                           break;
                         }
                       }
-                      return [<div key={`${timeSlot.slotStart}-${room.id}`} className="bg-white p-1" style={{ gridRow: `span ${rowSpan}` }}><SessionCard session={sessionForRoom} onClick={() => setSelectedSession(sessionForRoom)} /></div>];
+                      return [<div key={`${timeSlot.slotStart}-${room.id}`} className="bg-white p-1" style={{ gridRow: `span ${rowSpan}` }}><SessionCard session={sessionForRoom} onClick={() => handleSessionClick(sessionForRoom)} /></div>];
                     });
 
                     return [timeCell, ...sessionCells];
@@ -167,7 +198,7 @@ const SchedulePage: React.FC<PageProps> = () => {
       {selectedSession && (
         <SessionModal
           session={selectedSession}
-          onClose={() => setSelectedSession(null)}
+          onClose={handleCloseSessionModal}
           onSpeakerClick={(speaker) => setSelectedSpeaker(speaker)}
         />
       )}
