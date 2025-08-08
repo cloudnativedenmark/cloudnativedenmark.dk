@@ -15,7 +15,7 @@ export interface Speaker {
   fullName: string;
   bio: string;
   tagLine: string;
-  profilePicture: string;
+  profilePicture: string | null;
   isTopSpeaker: boolean;
   sessions: SpeakerSession[];
 }
@@ -71,8 +71,8 @@ export const useSessionizeSpeakers = () => {
 
   const fetchSpeakers = async () => {
     const response = await fetch(`https://sessionize.com/api/v2/${SESSIONIZE_ID}/view/Speakers`);
-    const data = await response.json();
-    setSpeakers(data);
+    const data: Speaker[] = await response.json();
+    setSpeakers(data.filter(speaker => speaker.profilePicture !== null));
   };
 
   useEffect(() => {
