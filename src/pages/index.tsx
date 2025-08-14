@@ -43,7 +43,7 @@ const SponsorSection: React.FC<{ sponsors: Sponsor[]; title: string }> = ({
       <p className="text-center text-2xl font-semibold uppercase leading-normal text-primary-1">
         {title}
       </p>
-      <ul className="mt-10 mb-[70px] flex flex-wrap justify-center gap-x-8 xl:gap-y-6">
+      <ul className="mt-8 mb-[80px] flex flex-wrap justify-center gap-x-8 xl:gap-y-6">
         {sponsors.map((sponsor, index) => (
           <li
             key={index}
