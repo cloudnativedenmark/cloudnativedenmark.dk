@@ -16,6 +16,15 @@ interface Sponsor {
   };
 }
 
+interface Hotel {
+  title: string;
+  url: string;
+  description: string;
+  logo: {
+    publicURL: string;
+  };
+}
+
 type DataProps = {
   allCommunityYaml: {
     nodes: Sponsor[];
@@ -31,6 +40,9 @@ type DataProps = {
   };
   allPartnerYaml: {
     nodes: Sponsor[];
+  };
+  allHotelsYaml: {
+    nodes: Hotel[];
   };
 };
 
@@ -78,6 +90,7 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
     allBronzeYaml,
     allPlatinumYaml,
     allPartnerYaml,
+    allHotelsYaml,
   },
 }) => {
   const { speakers } = useSessionizeSpeakers();
@@ -212,6 +225,54 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
         </div>
       </section>
 
+      {/* ACCOMMODATION */}
+      {allHotelsYaml.nodes.length > 0 && (
+        <section className="py-16 bg-gray-100">
+          <div className="mx-auto max-w-6xl px-6">
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-8 text-center">
+              Hotel Accommodation
+            </h2>
+            <p className="text-lg text-gray-700 mx-auto mb-12 max-w-[600px] leading-relaxed text-center">
+              We have partnered with the following hotels to offer special rates
+              for conference attendees. Booking codes will be send to your email when
+              registering for a ticket.
+            </p>
+            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {allHotelsYaml.nodes.map((hotel, index) => (
+                <li
+                  key={index}
+                  className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-md"
+                >
+                  {hotel.logo && (
+                    <a
+                      href={hotel.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-center h-20 mb-4"
+                    >
+                      <img
+                        className="max-h-full max-w-full"
+                        src={hotel.logo.publicURL}
+                        alt={hotel.title}
+                      />
+                    </a>
+                  )}
+                  <h3 className="text-xl font-bold text-gray-900">
+                    {hotel.title}
+                  </h3>
+                  <p className="text-gray-600 mt-2 flex-grow">
+                    {hotel.description}
+                  </p>
+                  <a href={hotel.url} target="_blank" rel="noreferrer" className="mt-4 inline-block text-white font-semibold py-2 px-6 rounded-full transition-colors duration-200 bg-background hover:bg-hover">
+                    Book Now
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
+
       {/* SPEAKERS */}
       {speakers.length > 0 && (
         <section className="py-16 bg-white">
@@ -225,12 +286,13 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
                   key={speaker.id}
                   className="flex flex-col items-center w-60 cursor-pointer hover:opacity-80 transition-opacity"
                   onClick={() => setSelectedSpeaker(speaker)}
-                >
+                > {speaker.profilePicture && (
                   <img
                     className="w-48 h-48 rounded-full object-cover mx-auto shadow-lg"
                     src={speaker.profilePicture}
                     alt={speaker.fullName}
                   />
+                  )}
                   <p className="mt-4 text-xl font-bold text-gray-900">
                     {speaker.fullName}
                   </p>
@@ -392,7 +454,7 @@ export const Head: HeadFC = ({ location: { pathname } }) => (
 );
 
 export const query = graphql`
-  query Sponsors {
+  query IndexPageQuery {
     allCommunityYaml {
       nodes {
         id
@@ -450,6 +512,18 @@ export const query = graphql`
           publicURL
         }
         scale
+      }
+    }
+
+    allHotelsYaml {
+      nodes {
+        id
+        title
+        url
+        description
+        logo {
+          publicURL
+        }
       }
     }
   }
