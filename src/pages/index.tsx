@@ -362,8 +362,44 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
       </section>
       {/* LAST YEAR'S EVENT */}
 
+      {/* MERCHANDISE */}
+      <section className="py-16 bg-white">
+        <div className="mx-auto max-w-6xl px-6 text-center">
+          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-12">
+            Official Merchandise
+          </h2>
+          <div className="mx-auto max-w-4xl text-center mb-12">
+            <p className="text-lg lg:text-xl text-gray-800 leading-relaxed mb-6">
+              Unable to attend? You can still get your hands on our exclusive
+              conference merchandise! Order now and have a colleague pick it up
+              for you at the event.
+            </p>
+            <p className="text-lg lg:text-xl text-gray-700 leading-relaxed">
+              For large orders, shipping is possible. Please contact us at{" "}
+              <a
+                href="mailto:contact@cloudnativedenmark.dk"
+                className="font-semibold text-blue-600 hover:text-blue-800"
+              >
+                contact@cloudnativedenmark.dk
+              </a>{" "}
+              for more information.
+            </p>
+          </div>
+          <div className="flex justify-center">
+            <a
+              className="inline-flex items-center justify-center text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200 bg-background hover:bg-hover"
+              href="https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark/?extras_flow=true"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Order Merch
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* MISSION */}
-      <section className="py-16 bg-background-light">
+      <section className="py-16 bg-gray-100">
         <div className="mx-auto max-w-6xl px-6">
           <h2 className="text-4xl lg:text-5xl font-bold text-center text-gray-900 mb-12">
             Mission
