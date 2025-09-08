@@ -95,7 +95,9 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
 }) => {
   const { speakers } = useSessionizeSpeakers();
   const [isExpanded, setIsExpanded] = React.useState(false);
-  const [selectedSpeaker, setSelectedSpeaker] = React.useState<Speaker | null>(null);
+  const [selectedSpeaker, setSelectedSpeaker] = React.useState<Speaker | null>(
+    null,
+  );
 
   const sortedSpeakers = React.useMemo(() => {
     return [...speakers].sort((a, b) => {
@@ -234,10 +236,10 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
             </h2>
             <p className="text-lg text-gray-700 mx-auto mb-12 max-w-[600px] leading-relaxed text-center">
               We have partnered with the following hotels to offer special rates
-              for conference attendees. Booking codes will be send to your email when
-              registering for a ticket.
+              for conference attendees. Booking codes will be send to your email
+              when registering for a ticket.
             </p>
-            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
               {allHotelsYaml.nodes.map((hotel, index) => (
                 <li
                   key={index}
@@ -263,7 +265,12 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
                   <p className="text-gray-600 mt-2 flex-grow">
                     {hotel.description}
                   </p>
-                  <a href={hotel.url} target="_blank" rel="noreferrer" className="mt-4 inline-block text-white font-semibold py-2 px-6 rounded-full transition-colors duration-200 bg-background hover:bg-hover">
+                  <a
+                    href={hotel.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-4 inline-block text-white font-semibold py-2 px-6 rounded-full transition-colors duration-200 bg-background hover:bg-hover"
+                  >
                     Book Now
                   </a>
                 </li>
@@ -286,12 +293,14 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
                   key={speaker.id}
                   className="flex flex-col items-center w-60 cursor-pointer hover:opacity-80 transition-opacity"
                   onClick={() => setSelectedSpeaker(speaker)}
-                > {speaker.profilePicture && (
-                  <img
-                    className="w-48 h-48 rounded-full object-cover mx-auto shadow-lg"
-                    src={speaker.profilePicture}
-                    alt={speaker.fullName}
-                  />
+                >
+                  {" "}
+                  {speaker.profilePicture && (
+                    <img
+                      className="w-48 h-48 rounded-full object-cover mx-auto shadow-lg"
+                      src={speaker.profilePicture}
+                      alt={speaker.fullName}
+                    />
                   )}
                   <p className="mt-4 text-xl font-bold text-gray-900">
                     {speaker.fullName}
@@ -329,9 +338,11 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
                 href="https://2024.kcddenmark.dk/"
                 target="_blank"
                 style={{ textDecoration: "underline dotted" }}
-              >Kubernetes Community Days Denmark</a>&nbsp;
-              at the Bella Center in Copenhagen, bringing together over 500
-              attendees for two packed days of technical talks, community
+              >
+                Kubernetes Community Days Denmark
+              </a>
+              &nbsp; at the Bella Center in Copenhagen, bringing together over
+              500 attendees for two packed days of technical talks, community
               connection, and cloud native inspiration.
             </p>
             <p className="text-lg lg:text-xl text-white leading-relaxed mt-6">
@@ -477,7 +488,10 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
       {/* SPONSORS */}
 
       {selectedSpeaker && (
-        <SpeakerModal speaker={selectedSpeaker} onClose={() => setSelectedSpeaker(null)} />
+        <SpeakerModal
+          speaker={selectedSpeaker}
+          onClose={() => setSelectedSpeaker(null)}
+        />
       )}
     </Layout>
   );
