@@ -7,7 +7,7 @@ const ConvinceYourBossPage: React.FC<PageProps> = () => {
   return (
     <Layout>
       <section className="bg-white py-16">
-        <div className="mx-auto max-w-4xl px-6 text-justify">
+        <div className="mx-auto max-w-4xl px-6 text-left sm:text-justify">
           <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-8">
             Convince Your Boss
           </h1>
@@ -200,7 +200,7 @@ const ConvinceYourBossPage: React.FC<PageProps> = () => {
             respectful of your manager's time, and focused purely on value,
             while referencing the detailed budget you have prepared.
           </p>
-          <div className="bg-gray-100 rounded-lg p-6">
+          <div className="bg-gray-100 rounded-lg p-6 text-left">
             <pre className="whitespace-pre-wrap text-gray-800">
               <code>
                 <strong>
