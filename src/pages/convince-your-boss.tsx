@@ -6,7 +6,7 @@ import SEO from "../components/seo";
 const ConvinceYourBossPage: React.FC<PageProps> = () => {
   return (
     <Layout>
-      <section className="bg-white py-16">
+      <section className="bg-white py-8">
         <div className="mx-auto max-w-4xl px-6 text-left sm:text-justify">
           <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-8">
             Convince Your Boss

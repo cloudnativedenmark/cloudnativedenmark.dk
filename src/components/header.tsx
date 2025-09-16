@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Logo from "../images/logo.svg";
 import { Link } from "gatsby";
 import { useLocation } from "@gatsbyjs/reach-router";
+import HamburgerMenu from "../images/hamburger-menu.inline.svg";
+import CloseMenu from "../images/close-menu.inline.svg";
 
 interface HeaderProps {
   menuLinks: {
@@ -16,6 +18,7 @@ const defaultClass = "";
 const Header = ({ menuLinks, className }: HeaderProps) => {
   const headerClass = className || defaultClass;
   const [showLogo, setShowLogo] = useState(false);
+  const [isMenuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const isHomePage = location.pathname === "/";
 
@@ -34,13 +37,23 @@ const Header = ({ menuLinks, className }: HeaderProps) => {
     }
   }, [isHomePage]);
 
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? "hidden" : "unset";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMenuOpen]);
+
+  const toggleMenu = () => {
+    setMenuOpen(!isMenuOpen);
+  };
+
   return (
     <header
       className={
-        "safe-paddings transition-200 z-50 transition-colors sticky top-0 " +
-        headerClass
+        "bg-white safe-paddings transition-200 z-50 transition-colors sticky top-0" +
+        (isMenuOpen ? " h-screen flex flex-col" : "")
       }
-      style={{ backgroundColor: "white" }}
     >
       <div className="flex items-center justify-between p-4 w-full">
         <div
@@ -58,7 +71,7 @@ const Header = ({ menuLinks, className }: HeaderProps) => {
             />
           </Link>
         </div>
-        <nav className="mr-4">
+        <nav className="hidden md:flex mr-4">
           {menuLinks.map((link) => (
             <Link
               key={link.name}
@@ -69,7 +82,28 @@ const Header = ({ menuLinks, className }: HeaderProps) => {
             </Link>
           ))}
         </nav>
+        <div className="md:hidden">
+          <button onClick={toggleMenu}>
+            {isMenuOpen ? <CloseMenu /> : <HamburgerMenu />}
+          </button>
+        </div>
       </div>
+      {isMenuOpen && (
+        <div className="md:hidden flex-grow">
+          <nav className="flex flex-col items-center justify-top h-full">
+            {menuLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.link}
+                className="text-gray-800 hover:text-gray-600 text-2xl font-semibold my-4"
+                onClick={toggleMenu}
+              >
+                {link.name}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      )}
     </header>
   );
 };
