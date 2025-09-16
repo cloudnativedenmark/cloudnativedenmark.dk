@@ -5,10 +5,9 @@ import Footer from "./footer";
 
 interface LayoutProps {
   children: React.ReactNode;
-  headerClassName?: string;
 }
 
-const Layout = ({ children, headerClassName }: LayoutProps) => {
+const Layout = ({ children }: LayoutProps) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -25,10 +24,7 @@ const Layout = ({ children, headerClassName }: LayoutProps) => {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Header
-        className={headerClassName}
-        menuLinks={data.site.siteMetadata.menuLinks}
-      />
+      <Header menuLinks={data.site.siteMetadata.menuLinks} />
       <main className="relative isolate grow">{children}</main>
       <Footer />
     </div>

@@ -10,13 +10,9 @@ interface HeaderProps {
     name: string;
     link: string;
   }[];
-  className?: string;
 }
 
-const defaultClass = "";
-
-const Header = ({ menuLinks, className }: HeaderProps) => {
-  const headerClass = className || defaultClass;
+const Header = ({ menuLinks }: HeaderProps) => {
   const [showLogo, setShowLogo] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
