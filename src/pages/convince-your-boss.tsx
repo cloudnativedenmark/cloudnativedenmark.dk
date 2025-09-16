@@ -65,7 +65,7 @@ const ConvinceYourBossPage: React.FC<PageProps> = () => {
           </h2>
           <p className="text-lg text-gray-700 mb-6 leading-relaxed">
             The true value of this conference's ecosystem comes from its
-            official partners and a unique location. Aarchus is the Danish
+            official partners and a unique location. Aarhus is the Danish
             technological epicenter - a buzzing hub home to hundreds of
             companies and start-ups. The event brings together the major global
             and local players who define the tech industry in the Nordics.
