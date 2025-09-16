@@ -90,7 +90,7 @@ const Header = ({ menuLinks, className }: HeaderProps) => {
       </div>
       {isMenuOpen && (
         <div className="md:hidden flex-grow">
-          <nav className="flex flex-col items-center justify-top h-full">
+          <nav className="flex flex-col items-center justify-start h-full">
             {menuLinks.map((link) => (
               <Link
                 key={link.name}
