@@ -145,7 +145,7 @@ const ConvinceYourBossPage: React.FC<PageProps> = () => {
                   <strong>Per Diem (2 days):</strong> DKK 700.00
                 </li>
                 <li className="font-bold mt-4">
-                  Total: approx. DKK 5,364.00 – 5,814.00
+                  Total: ~ DKK 5,364.00 – 5,814.00
                 </li>
               </ul>
             </div>
@@ -165,10 +165,10 @@ const ConvinceYourBossPage: React.FC<PageProps> = () => {
                   2,790.00
                 </li>
                 <li>
-                  <strong>Per Diems (2 people, 2 days):</strong> DKK 1,400.00
+                  <strong>Per Diems (2 days):</strong> DKK 1,400.00
                 </li>
                 <li className="font-bold mt-4">
-                  Total: approx. DKK 7,478.00 – 8,378.00
+                  Total: ~ DKK 7,478.00 – 8,378.00
                 </li>
               </ul>
             </div>
@@ -237,9 +237,8 @@ const ConvinceYourBossPage: React.FC<PageProps> = () => {
                 <br />
                 <br />
                 The total estimated investment is [Insert Total from Scenario 1
-                or 2, e.g., approx. DKK 5,364.00]. I have a full itemized cost
-                breakdown prepared (including all travel, per diem, and hotel
-                details) that I can send over.
+                or 2]. I have a full itemized cost breakdown prepared (including
+                all travel, per diem, and hotel details) that I can send over.
                 <br />
                 <br />
                 Can we please discuss this next week when you have time?
