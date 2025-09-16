@@ -5,7 +5,7 @@ import SEO from "../components/seo";
 
 const PrivacyPage: React.FC<PageProps> = () => {
   return (
-    <Layout headerClassName="bg-white">
+    <Layout>
       <div className="mx-auto max-w-6xl">
         <div className="text-primary text-base font-sans mx-2 md:mx-28 pb-12">
           <h1 className="text-4xl font-bold pt-24">Privacy Policy</h1>

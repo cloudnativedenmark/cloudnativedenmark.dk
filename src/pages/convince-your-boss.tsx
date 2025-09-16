@@ -65,15 +65,14 @@ const ConvinceYourBossPage: React.FC<PageProps> = () => {
           </h2>
           <p className="text-lg text-gray-700 mb-6 leading-relaxed">
             The true value of this conference's ecosystem comes from its
-            official partners and a unique location. Aarchus is a Danish
-            technological epicenter - a buzzing technological hub, home to
-            hundreds of companies and startus. The event brings together the
-            major global and local players who define the tech industry in the
-            Nordics. Attending gives you direct access to global cloud-native
-            leaders. Top-tier sponsors include international giants like AWS,
-            Red Hat, SUSE, EDB, and Akamai. This is a unique opportunity to talk
-            directly with the engineers from the core technology companies we
-            rely on.
+            official partners and a unique location. Aarhus is the Danish
+            technological epicenter - a buzzing hub home to hundreds of
+            companies and start-ups. The event brings together the major global
+            and local players who define the tech industry in the Nordics.
+            Attending gives you direct access to global cloud-native leaders.
+            Top-tier sponsors include international giants like AWS, Red Hat,
+            SUSE, EDB, and Akamai. This is a unique opportunity to talk directly
+            with the engineers from the core technology companies we rely on.
           </p>
           <p className="text-lg text-gray-700 mb-6 leading-relaxed">
             Furthermore, the conference is deeply embedded in the Danish tech
