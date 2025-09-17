@@ -2,7 +2,11 @@ import * as React from "react";
 import { type HeadFC, type PageProps } from "gatsby";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
-import { useSessionizeSchedule, type Session, type Speaker } from "../hooks/use-sessionize";
+import {
+  useSessionizeSchedule,
+  type Session,
+  type Speaker,
+} from "../hooks/use-sessionize";
 import SessionModal from "../components/session_modal";
 import SpeakerModal from "../components/speaker_modal";
 
@@ -16,8 +20,10 @@ const SessionCard: React.FC<{ session: Session; onClick?: () => void }> = ({
 
   if (session.isServiceSession) {
     return (
-      <div className="bg-gray-100 p-4 h-full flex items-center justify-center text-center rounded-lg border border-gray-200">
-        <h3 className="font-bold text-lg text-gray-700">{session.title || session.name}</h3>
+      <div className="bg-gray-100 p-4 h-full flex items-center justify-center text-center rounded-lg border border-gray-300">
+        <h3 className="font-bold text-lg text-gray-700">
+          {session.title || session.name}
+        </h3>
       </div>
     );
   }
@@ -28,7 +34,9 @@ const SessionCard: React.FC<{ session: Session; onClick?: () => void }> = ({
       onClick={onClick}
     >
       <div>
-        <h3 className="font-bold text-md text-primary">{session.title || session.name}</h3>
+        <h3 className="font-bold text-md text-primary">
+          {session.title || session.name}
+        </h3>
         {session.speakers && session.speakers.length > 0 && (
           <p className="text-sm text-gray-600 mt-2">
             <em>{session.speakers.map((s) => s.fullName).join(", ")}</em>
@@ -41,8 +49,12 @@ const SessionCard: React.FC<{ session: Session; onClick?: () => void }> = ({
 
 const SchedulePage: React.FC<PageProps> = () => {
   const { schedule } = useSessionizeSchedule();
-  const [selectedSession, setSelectedSession] = React.useState<Session | null>(null);
-  const [selectedSpeaker, setSelectedSpeaker] = React.useState<Speaker | null>(null);
+  const [selectedSession, setSelectedSession] = React.useState<Session | null>(
+    null
+  );
+  const [selectedSpeaker, setSelectedSpeaker] = React.useState<Speaker | null>(
+    null
+  );
 
   React.useEffect(() => {
     if (schedule.length > 0 && typeof window !== "undefined") {
@@ -72,7 +84,11 @@ const SchedulePage: React.FC<PageProps> = () => {
   const handleCloseSessionModal = () => {
     setSelectedSession(null);
     setSelectedSpeaker(null);
-    window.history.pushState(null, "", window.location.pathname + window.location.search);
+    window.history.pushState(
+      null,
+      "",
+      window.location.pathname + window.location.search
+    );
   };
 
   const formatDate = (dateString: string) => {
@@ -84,7 +100,7 @@ const SchedulePage: React.FC<PageProps> = () => {
   };
 
   const formatTime = (timeString: string) => {
-    return timeString.substring(0, timeString.lastIndexOf(':'))
+    return timeString.substring(0, timeString.lastIndexOf(":"));
   };
 
   return (
@@ -99,7 +115,7 @@ const SchedulePage: React.FC<PageProps> = () => {
         </div>
       </section>
 
-      <section className="py-16 bg-white">
+      <section className="py-12 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {schedule.length === 0 && (
             <div className="text-center">
@@ -107,21 +123,50 @@ const SchedulePage: React.FC<PageProps> = () => {
             </div>
           )}
 
+          {schedule.length > 0 && (
+            <div className="flex justify-center space-x-4">
+              {schedule.map((day) => (
+                <button
+                  key={day.date}
+                  onClick={() => {
+                    const element = document.getElementById(day.date);
+                    if (element) {
+                      const elementPosition =
+                        element.getBoundingClientRect().top;
+                      const offsetPosition =
+                        elementPosition + window.pageYOffset - 76;
+
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth",
+                      });
+                    }
+                  }}
+                  className="bg-background hover:bg-hover text-white text-l font-semibold py-3 px-6 rounded-full transition-colors duration-200"
+                >
+                  {formatDate(day.date)}
+                </button>
+              ))}
+            </div>
+          )}
+
           {schedule.map((day) => {
-            const renderedSessions = new Map<string,Set<number>>();
+            const renderedSessions = new Map<string, Set<number>>();
             return (
-              <div key={day.date} className="mb-16">
-                <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+              <div key={day.date} id={day.date} className="mb-16">
+                <h2 className="text-3xl font-bold text-gray-900 my-8 text-center">
                   {formatDate(day.date)}
                 </h2>
                 <div
-                  className="grid gap-px bg-gray-200 border border-gray-200 rounded-lg overflow-hidden"
+                  className="hidden md:grid gap-px bg-gray-200 border border-gray-300 rounded-lg overflow-hidden"
                   style={{
                     gridTemplateColumns: `minmax(80px, 0.5fr) repeat(${day.rooms.length}, 1fr)`,
                   }}
                 >
                   {/* Header Row */}
-                  <div className="bg-gray-100 p-4 font-bold text-center">Time</div>
+                  <div className="bg-gray-100 p-4 font-bold text-center">
+                    Time
+                  </div>
                   {day.rooms.map((room) => (
                     <div
                       key={room.id}
@@ -140,55 +185,131 @@ const SchedulePage: React.FC<PageProps> = () => {
                         : null;
 
                     if (plenumSession) {
-                      const concurrent = renderedSessions.get(timeSlot.slotStart)?.size || 0
+                      const concurrent =
+                        renderedSessions.get(timeSlot.slotStart)?.size || 0;
                       return [
-                        <div key={`${timeSlot.slotStart}-time`} className="bg-white p-4 text-center font-semibold flex items-center justify-center">
+                        <div
+                          key={`${timeSlot.slotStart}-time`}
+                          className="bg-white p-4 text-center font-semibold flex items-center justify-center"
+                        >
                           {formatTime(timeSlot.slotStart)}
                         </div>,
-                        <div key={`${timeSlot.slotStart}-session`} className="bg-white p-1" style={{ gridColumn: `span ${day.rooms.length - concurrent}` }}>
-                          <SessionCard session={plenumSession} onClick={() => handleSessionClick(plenumSession)} />
+                        <div
+                          key={`${timeSlot.slotStart}-session`}
+                          className="bg-white p-1"
+                          style={{
+                            gridColumn: `span ${day.rooms.length - concurrent}`,
+                          }}
+                        >
+                          <SessionCard
+                            session={plenumSession}
+                            onClick={() => handleSessionClick(plenumSession)}
+                          />
                         </div>,
                       ];
                     }
 
                     const timeCell = (
-                      <div key={`${timeSlot.slotStart}-time`} className="bg-white p-4 text-center font-semibold flex items-center justify-center">
+                      <div
+                        key={`${timeSlot.slotStart}-time`}
+                        className="bg-white p-4 text-center font-semibold flex items-center justify-center"
+                      >
                         {formatTime(timeSlot.slotStart)}
                       </div>
                     );
 
                     const sessionCells = day.rooms.flatMap((room) => {
                       // This room already has a continued session for the timeslot
-                      if (renderedSessions.get(timeSlot.slotStart)?.has(room.id)) {
+                      if (
+                        renderedSessions.get(timeSlot.slotStart)?.has(room.id)
+                      ) {
                         return [];
                       }
 
                       // Nothing happens in the room at this time
-                      const sessionForRoom = timeSlot.rooms.find((r) => r.id === room.id)?.session;
+                      const sessionForRoom = timeSlot.rooms.find(
+                        (r) => r.id === room.id
+                      )?.session;
                       if (!sessionForRoom || !sessionForRoom.id) {
-                        return [<div key={`${timeSlot.slotStart}-${room.id}`} className="bg-white p-1" />];
+                        return [
+                          <div
+                            key={`${timeSlot.slotStart}-${room.id}`}
+                            className="bg-white p-1"
+                          />,
+                        ];
                       }
 
                       // A session is schedules for this timeslot
                       let rowSpan = 1;
                       const ends = new Date(sessionForRoom.endsAt);
-                      for (let i = timeSlotIndex + 1; i < day.timeSlots.length; i++) {
-                        const slotStart = new Date(day.timeSlots[i].rooms[0].session.startsAt);
+                      for (
+                        let i = timeSlotIndex + 1;
+                        i < day.timeSlots.length;
+                        i++
+                      ) {
+                        const slotStart = new Date(
+                          day.timeSlots[i].rooms[0].session.startsAt
+                        );
                         if (slotStart < ends) {
                           rowSpan++;
-                          if (!renderedSessions.has(day.timeSlots[i].slotStart)) {
-                            renderedSessions.set(day.timeSlots[i].slotStart, new Set());
+                          if (
+                            !renderedSessions.has(day.timeSlots[i].slotStart)
+                          ) {
+                            renderedSessions.set(
+                              day.timeSlots[i].slotStart,
+                              new Set()
+                            );
                           }
-                          renderedSessions.get(day.timeSlots[i].slotStart)?.add(room.id);
+                          renderedSessions
+                            .get(day.timeSlots[i].slotStart)
+                            ?.add(room.id);
                         } else {
                           break;
                         }
                       }
-                      return [<div key={`${timeSlot.slotStart}-${room.id}`} className="bg-white p-1" style={{ gridRow: `span ${rowSpan}` }}><SessionCard session={sessionForRoom} onClick={() => handleSessionClick(sessionForRoom)} /></div>];
+                      return [
+                        <div
+                          key={`${timeSlot.slotStart}-${room.id}`}
+                          className="bg-white p-1"
+                          style={{ gridRow: `span ${rowSpan}` }}
+                        >
+                          <SessionCard
+                            session={sessionForRoom}
+                            onClick={() => handleSessionClick(sessionForRoom)}
+                          />
+                        </div>,
+                      ];
                     });
 
                     return [timeCell, ...sessionCells];
                   })}
+                </div>
+                <div className="md:hidden">
+                  {day.timeSlots.map((timeSlot) => (
+                    <div key={timeSlot.slotStart} className="mb-8">
+                      <h3 className="text-xl font-semibold text-gray-800 mb-4 bg-gray-100 p-3 rounded-t-lg border-b border-gray-200">
+                        {formatTime(timeSlot.slotStart)}
+                      </h3>
+                      <div className="space-y-4">
+                        {timeSlot.rooms.map((room) => (
+                          <div
+                            key={room.id}
+                            className="bg-white p-1 rounded-lg shadow-sm border border-gray-300"
+                          >
+                            <div className="p-3">
+                              <p className="font-bold text-gray-600">
+                                {room.name}
+                              </p>
+                            </div>
+                            <SessionCard
+                              session={room.session}
+                              onClick={() => handleSessionClick(room.session)}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             );
@@ -203,7 +324,10 @@ const SchedulePage: React.FC<PageProps> = () => {
         />
       )}
       {selectedSpeaker && (
-        <SpeakerModal speaker={selectedSpeaker} onClose={() => setSelectedSpeaker(null)} />
+        <SpeakerModal
+          speaker={selectedSpeaker}
+          onClose={() => setSelectedSpeaker(null)}
+        />
       )}
     </Layout>
   );
