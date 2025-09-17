@@ -75,7 +75,7 @@ const SpeakerModal: React.FC<{ speaker: Speaker; onClose: () => void }> = ({
               </div>
             )}
           </div>
-          <div className="px-8 py-4 sm:pb-6 text-center bg-white flex-shrink-0 relative">
+          <div className="p-4 pb-8 text-center bg-white flex-shrink-0 relative">
             <div className="absolute bottom-full left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
             <button
               onClick={onClose}
