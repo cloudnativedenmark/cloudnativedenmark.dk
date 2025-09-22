@@ -12,7 +12,7 @@ const PrivacyPage: React.FC<PageProps> = () => {
           <p className="mt-16">
             This Privacy Policy applies only to our online activities and is
             valid for visitors to our website with regards to the information
-            that they shared and/or collected in kcddenmark.dk. This policy is
+            that they shared and/or collected in cloudnativedenmark.dk. This policy is
             not applicable to any information collected offline or via channels
             other than this website.
           </p>
@@ -82,14 +82,14 @@ const PrivacyPage: React.FC<PageProps> = () => {
           <p>
             Third-party ad servers or ad networks use technologies like cookies,
             JavaScript, or Web Beacons that are used in their respective
-            advertisements and links that appear on kcddenmark.dk, which are
+            advertisements and links that appear on cloudnativedenmark.dk, which are
             sent directly to users' browsers. They automatically receive your IP
             address when this occurs. These technologies are used to measure the
             effectiveness of their advertising campaigns and/or to personalize
             the advertising content that you see on websites that you visit.
           </p>
           <p>
-            Note that kcddenmark.dk has no access to or control over these
+            Note that cloudnativedenmark.dk has no access to or control over these
             cookies that are used by third-party advertisers.
           </p>
           <h2 className="mt-8 mb-4 text-2xl">Third Party Privacy Policies</h2>
@@ -198,6 +198,68 @@ const PrivacyPage: React.FC<PageProps> = () => {
             Our Privacy Policy was created with the help of the Privacy Policy
             Generator.
           </p>
+          <h2 className="mt-8 mb-4 text-2xl">Policy for the ticket Purchase</h2>
+          <p>
+            At Cloud Native Denmark, we select a ticket provider which
+            values the protection of your personal information so that you can use our
+            ticketing system with confidence, knowing that your personal information
+            is kept secure and private.
+          </p>
+          <p>
+            The chosen ticketing provider has created a privacy policy that describes
+            how they collect, use, and protect your personal information. You can read
+            and learn more about how they work to ensure your privacy at <a href="https://ticketbutler.io/privacy-policy/">https://ticketbutler.io/privacy-policy/</a>.
+          </p>
+          <h2 className="mt-8 mb-4 text-2xl">Policy for participants during Cloud Native Denmark Events</h2>
+          <p>
+            Cloud Native Denmark is the data controller of the processing
+            of your personal data in relation to the personal data given to us when we
+            deliver our products to you.
+          </p>
+          <h2 className="mt-8 mb-4 text-2xl">Purpose of treatment of personal data</h2>
+          <p>
+            The main purpose of the processing of personal data is to be able to enter into contracts
+            with you and provide you with our products and services. An additional purpose also entails
+            the compliance with legal requirements stemming from Anti Money Laundering- and Bookkeeping rulesets.
+          </p>
+          <h2 className="mt-8 mb-4 text-2xl">Legal grounds for treatment</h2>
+          <p>The processing of your personal data is a necessity for Cloud Native Denmark being able to enter into contracts with you.</p>       
+          <p dir="auto">After the provision of services and products, the processing will furthermore be necessary for Cloud Native Denmark's legitimate interest in being able to assess, ascertain or defend current and future legal ramifications.</p>
+          <p dir="auto">Finally, the processing of your personal data is done in accordance with legal requirements stemming from The Anti Money Laundering- and Bookkeeping Acts.</p>
+          <h2 className="mt-8 mb-4 text-2xl">Categories of recipients</h2>
+          <p dir="auto">Your personal data is passed on to collaborative partners, hereunder but not limited to, financial institutions, accountants, attorneys, and data processors.</p>
+          <h2 className="mt-8 mb-4 text-2xl">Categories of recipients in third countries</h2>
+          <p dir="auto">Your personal data is transferred to third countries. A third country is a country outside EU/EES, for instance USA. The data is not transferred to international organizations. An international organization is for instance UN, EU or NATO.</p>
+          <h2 className="mt-8 mb-4 text-2xl" dir="auto">Time frame for storage</h2>
+          <p dir="auto">Your personal data is ordinarily stored five years after the end of the contract.</p>
+          <h2 className="mt-8 mb-4 text-2xl" dir="auto">Obligations</h2>
+          <p dir="auto">Submission of your personal data is a prerequisite for us to be able to do business with you.</p>
+          <h2 className="mt-8 mb-4 text-2xl" dir="auto">Rights</h2>
+          <p dir="auto">Under the General Data Protection Regulation you have a number of rights in relation to the processing of your personal data.
+If you wish to make use of your rights, please turn to us through <a href="mailto:privacy@cloudnativedenmark.dk">privacy@cloudnativedenmark.dk</a></p>
+          <h2 className="mt-8 mb-4 text-2xl" dir="auto">Right of access</h2>
+          <p dir="auto">You have the right to access the personal data we process on your behalf, as well as to receive a copy of the data.</p>
+          <h2 className="mt-8 mb-4 text-2xl" dir="auto">Right of rectification</h2>
+          <p dir="auto">You have the right to have incorrect data about yourself rectified.</p>
+          <h2 className="mt-8 mb-4 text-2xl" dir="auto">Right to erasure</h2>
+          <p dir="auto">In special cases you have the right to request erasure of your personal data.</p>
+          <h2 className="mt-8 mb-4 text-2xl" dir="auto">Right to restriction of processing</h2>
+          <p dir="auto">In particular cases you have the right to restrict the processing of your personal data. If you have the right to restricted processing, we cannot process your personal data, unless it is for storage, with your consent or for the establishment, exercise or defense of a legal obligation or to protect a person or important public interests of the European Union or of a Member State.</p>
+          <h2 className="mt-8 mb-4 text-2xl" dir="auto">Right to objection</h2>
+          <p dir="auto">In specific situations, you have the right to object to our processing of your personal data.</p>
+          <h2 className="mt-8 mb-4 text-2xl" dir="auto">Right to data portability</h2>
+          <p dir="auto">Under certain circumstances, you have the right to receive your own personal data in a structured, commonly used and machine-readable format, as well as to transfer this data from one controller to another without hindrance.</p>
+          <h2 className="mt-8 mb-4 text-2xl" dir="auto">Supervisory authority</h2>
+          <p dir="auto">You can read more about your actual rights in the Danish supervisory authority Datatilsynet guide which you can find on <a href="http://www.datatilsynet.dk" rel="nofollow">www.datatilsynet.dk</a> where you also can file a complaint.</p>
+          <h2 className="mt-8 mb-4 text-2xl" dir="auto">Changes to the Policy for participants during Cloud Native Denmark Event</h2>
+          <p dir="auto">We may update our Privacy Policy for participants from time to time. Thus, we advise you to review this page periodically for any changes.
+We will notify you of any changes by posting the new Privacy Policy on this page.
+These changes are effective immediately, after they are posted on this page.
+Our Privacy Policy was created with the help of the Privacy Policy Generator and is inspired from policies derived from collaboration partners.</p>
+          <h2 className="mt-8 mb-4 text-2xl" dir="auto">Contact Information</h2>
+          <p dir="auto">In case of inquiries regarding Cloud Native Denmark's processing of your personal data in relation to your transactions with us, you are welcome to direct your questions through the same channel you originally communicated with us or please contact us through <a href="mailto:privacy@cloudnativedenmark.dk">privacy@cloudnativedenmark.dk</a></p>
+          
+          
         </div>
       </div>
     </Layout>
