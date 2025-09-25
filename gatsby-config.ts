@@ -88,7 +88,13 @@ const config: GatsbyConfig = {
         position: "Platform Engineer @ Novo Nordisk",
         image: "team/organizer-aditya.jpg",
         linkedin: "aditya-sundaramurthy",
-      }
+      },
+      {
+        name: "Aleksander Nowak",
+        position: "Senior Platform Engineer @ ZeroNorth",
+        image: "team/organizer-alek.jpg",
+        linkedin: "aleknowak",
+      },
     ],
   },
   // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
