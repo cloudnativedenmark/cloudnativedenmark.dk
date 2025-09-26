@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useStaticQuery, type HeadFC, type PageProps, graphql } from "gatsby";
+import { type HeadFC, type PageProps, graphql } from "gatsby";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
