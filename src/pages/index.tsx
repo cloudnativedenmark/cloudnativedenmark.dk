@@ -1,5 +1,5 @@
 import * as React from "react";
-import { type HeadFC, type PageProps, graphql } from "gatsby";
+import { Link, type HeadFC, type PageProps, graphql } from "gatsby";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import { useSessionizeSpeakers, type Speaker } from "../hooks/use-sessionize";
@@ -96,7 +96,7 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
   const { speakers } = useSessionizeSpeakers();
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [selectedSpeaker, setSelectedSpeaker] = React.useState<Speaker | null>(
-    null,
+    null
   );
 
   const sortedSpeakers = React.useMemo(() => {
@@ -223,6 +223,14 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
                 title="Savværket Location"
               ></iframe>
             </div>
+          </div>
+          <div className="mt-12">
+            <Link
+              to="/venue-plan"
+              className="inline-flex items-center justify-center text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200 bg-background hover:bg-hover"
+            >
+              See Venue Plan
+            </Link>
           </div>
         </div>
       </section>
