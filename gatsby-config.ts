@@ -12,6 +12,10 @@ const config: GatsbyConfig = {
         link: "/schedule",
       },
       {
+        name: "Venue Plan",
+        link: "/venue-plan",
+      },
+      {
         name: "Convince Your Boss",
         link: "/convince-your-boss",
       },
