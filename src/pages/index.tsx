@@ -140,10 +140,10 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <a
                   className="inline-flex items-center justify-center text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200 bg-background hover:bg-hover"
-                  href="https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark/"
+                  href="schedule/"
                   target="_blank"
                 >
-                  Get your tickets
+                  Schedule
                 </a>
               </div>
             </div>
