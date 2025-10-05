@@ -95,7 +95,7 @@ const config: GatsbyConfig = {
       },
       {
         name: "Aleksander Nowak",
-        position: "Senior Platform Engineer @ ZeroNorth",
+        position: "Senior Platform Engineer @ wawa fertility",
         image: "team/organizer-alek.jpg",
         linkedin: "aleknowak",
       },
