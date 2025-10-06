@@ -2,7 +2,8 @@ import * as React from "react";
 import { type HeadFC, type PageProps } from "gatsby";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
-import VenueMap from "../images/savvaerket.svg";
+import SavvaerketMap from "../images/savvaerket.svg";
+import KlingenMap from "../images/klingen.svg";
 
 const VenuePage: React.FC<PageProps> = () => {
   return (
@@ -16,10 +17,19 @@ const VenuePage: React.FC<PageProps> = () => {
         </div>
       </section>
 
-      <section className="pt-8 py-16 bg-white">
-        <div className="mx-auto max-w-6xl px-6 text-center">
+      <section className="pt-8 bg-white">
+        <div className="mx-auto max-w-6xl text-center">
           <div className="w-full">
-            <img src={VenueMap} alt="Venue Map" className="w-full h-auto" />
+            <img
+              src={SavvaerketMap}
+              alt="Savvaerket Map"
+              className="w-full h-auto"
+            />
+          </div>
+        </div>
+        <div className="mx-auto max-w-6xl text-center">
+          <div className="w-full">
+            <img src={KlingenMap} alt="Klingen Map" className="w-full h-auto" />
           </div>
         </div>
       </section>
