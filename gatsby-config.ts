@@ -64,8 +64,7 @@ const config: GatsbyConfig = {
       },
       {
         name: "Nikita Hald Sørensen",
-        position:
-          "Communication and event coordinator @ Coding Pirates & Innovation Lab",
+        position: "OPEN TO WORK ✨",
         image: "team/organizer-nikita-hald.jpg",
         linkedin: "nikitahald",
       },
