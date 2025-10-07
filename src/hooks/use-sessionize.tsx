@@ -37,6 +37,7 @@ export interface Session {
 
   slideDeck: string;
   video: string;
+  rate: string;
 }
 
 export interface QuestionAnswer {
@@ -127,9 +128,13 @@ export const useSessionizeSchedule = () => {
 
           const session = sessions[0].sessions.find((s) => room.session.id === s.id);
           if (session !== undefined) {
-            const qa = session.questionAnswers.find((q) => q.id === 88726);
-            if (qa !== undefined) {
-              room.session.slideDeck = qa.answer;
+            const slides = session.questionAnswers.find((q) => q.id === 99194);
+            if (slides !== undefined) {
+              room.session.slideDeck = slides.answer;
+            }
+            const rate = session.questionAnswers.find((q) => q.id === 112538);
+            if (rate !== undefined) {
+              room.session.rate = rate.answer;
             }
             room.session.title = session.title;
             room.session.description = session.description;

@@ -104,7 +104,7 @@ const SessionModal: React.FC<{
             )}
           </div>
 
-          <div className="p-4 pb-8 text-center bg-white flex-shrink-0 relative">
+          <div className="p-4 pb-8 text-center bg-white flex-shrink-0 relative flex justify-center gap-4">
             <div className="absolute bottom-full left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
             <button
               onClick={onClose}
@@ -112,6 +112,16 @@ const SessionModal: React.FC<{
             >
               Back to Schedule
             </button>
+            {session.rate && (
+              <a
+                href={session.rate}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-background hover:bg-hover text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200"
+              >
+                Rate Session
+              </a>
+            )}
           </div>
         </div>
       </div>
