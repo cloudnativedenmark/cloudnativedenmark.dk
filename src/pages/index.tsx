@@ -313,7 +313,7 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
                   <p className="mt-4 text-xl font-bold text-gray-900">
                     {speaker.fullName}
                   </p>
-                  <p className="mt-1 text-base text-gray-600 h-12">
+                  <p className="mt-1 text-base text-gray-600 h-24">
                     {speaker.tagLine}
                   </p>
                 </li>
