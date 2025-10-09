@@ -235,7 +235,7 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
         </div>
       </section>
 
-      {/* ACCOMMODATION */}
+      {/* ACCOMMODATION
       {allHotelsYaml.nodes.length > 0 && (
         <section className="py-16 bg-gray-100">
           <div className="mx-auto max-w-6xl px-6">
@@ -287,6 +287,7 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
           </div>
         </section>
       )}
+      */}
 
       {/* SPEAKERS */}
       {speakers.length > 0 && (

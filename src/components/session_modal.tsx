@@ -112,16 +112,6 @@ const SessionModal: React.FC<{
             >
               Back to Schedule
             </button>
-            {session.rate && (
-              <a
-                href={session.rate}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-background hover:bg-hover text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200"
-              >
-                Rate Session
-              </a>
-            )}
           </div>
         </div>
       </div>
