@@ -141,7 +141,6 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
                 <a
                   className="inline-flex items-center justify-center text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200 bg-background hover:bg-hover"
                   href="schedule/"
-                  target="_blank"
                 >
                   Schedule
                 </a>
