@@ -10,7 +10,6 @@ import Dropdown from "../components/dropdown";
 
 const sessionizeEvents = {
   "2025": { id: "ri9gml9f", name: "CND 2025 Aarhus", location: "Aarhus" },
-  "2024": { id: "cg322q6k", name: "KCD Denmark 2024", location: "Copenhagen" },
 };
 
 const ArchivePage: React.FC<PageProps> = () => {
