@@ -53,15 +53,9 @@ const ArchivePage: React.FC<PageProps> = () => {
   const fuse = useMemo(
     () =>
       new Fuse(archivedSessions, {
-        keys: [
-          "title",
-          "description",
-          "speakers.fullName",
-          "event",
-          "year",
-          "location",
-        ],
+        keys: ["title", "description", "speakers.fullName"],
         threshold: 0.3,
+        ignoreLocation: true,
       }),
     [archivedSessions]
   );
