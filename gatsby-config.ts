@@ -23,6 +23,10 @@ const config: GatsbyConfig = {
         name: "Team",
         link: "/team",
       },
+      {
+        name: "Archive",
+        link: "/archive",
+      },
     ],
     team: [
       {
