@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-const SESSIONIZE_ID = 'ri9gml9f' // 'ri9gml9f'; // TEST ID: jl4ktls0
+export const MainSessionizeId = "ri9gml9f"; // 'ri9gml9f'; // TEST ID: jl4ktls0
 
 export interface SpeakerSession {
   id: number;
   name: string;
 }
-
 export interface Speaker {
   id: string;
   name: string;
@@ -19,7 +18,6 @@ export interface Speaker {
   isTopSpeaker: boolean;
   sessions: SpeakerSession[];
 }
-
 export interface Session {
   id: string;
   name: string;
@@ -39,85 +37,105 @@ export interface Session {
   video: string;
   rate: string;
 }
-
 export interface QuestionAnswer {
   id: number;
   answer: string;
 }
-
 export interface GridEntry {
   date: string;
   rooms: Room[];
   timeSlots: TimeSlot[];
 }
-
 export interface Room {
   id: number;
   name: string;
   sessions: Session[];
   session: Session;
 }
-
 export interface TimeSlot {
   slotStart: string;
   rooms: Room[];
 }
-
 export interface SessionList {
   sessions: Session[];
 }
-
-export const useSessionizeSpeakers = () => {
+export const useSessionizeSpeakers = (
+  sessionId: string = MainSessionizeId
+) => {
   const [speakers, setSpeakers] = useState<Speaker[]>([]);
 
   const fetchSpeakers = async () => {
-    const response = await fetch(`https://sessionize.com/api/v2/${SESSIONIZE_ID}/view/Speakers`);
+    const response = await fetch(
+      `https://sessionize.com/api/v2/${sessionId}/view/Speakers`
+    );
     const data: Speaker[] = await response.json();
-    setSpeakers(data.filter(speaker => speaker.profilePicture !== null));
+    setSpeakers(data.filter((speaker) => speaker.profilePicture !== null));
   };
 
   useEffect(() => {
-    fetchSpeakers();
-  }, []);
+    if (sessionId) {
+      fetchSpeakers();
+    }
+  }, [sessionId]);
 
   return { speakers };
 };
-
-export const useSessionizeSchedule = () => {
+export const useSessionizeSchedule = (
+  sessionId: string = MainSessionizeId
+) => {
   const [grid, setGrid] = useState<GridEntry[]>([]);
   const [speakers, setSpeakers] = useState<Speaker[]>([]);
   const [schedule, setSchedule] = useState<GridEntry[]>([]);
   const [sessions, setSessions] = useState<SessionList[]>([]);
 
   const fetchGrid = async () => {
-    const response = await fetch(`https://sessionize.com/api/v2/${SESSIONIZE_ID}/view/Grid`);
+    const response = await fetch(
+      `https://sessionize.com/api/v2/${sessionId}/view/Grid`
+    );
     const data = await response.json();
     setGrid(data);
   };
 
   const fetchSpeakers = async () => {
-    const response = await fetch(`https://sessionize.com/api/v2/${SESSIONIZE_ID}/view/Speakers`);
+    const response = await fetch(
+      `https://sessionize.com/api/v2/${sessionId}/view/Speakers`
+    );
     const data = await response.json();
     setSpeakers(data);
   };
 
   const fetchSessions = async () => {
-    const response = await fetch(`https://sessionize.com/api/v2/${SESSIONIZE_ID}/view/Sessions`);
+    const response = await fetch(
+      `https://sessionize.com/api/v2/${sessionId}/view/Sessions`
+    );
     const data = await response.json();
     setSessions(data);
   };
 
   useEffect(() => {
-    fetchGrid();
-  }, []);
+    if (sessionId) {
+      fetchGrid();
+    }
+  }, [sessionId]);
   useEffect(() => {
-    fetchSpeakers();
-  }, []);
+    if (sessionId) {
+      fetchSpeakers();
+    }
+  }, [sessionId]);
   useEffect(() => {
-    fetchSessions();
-  }, []);
+    if (sessionId) {
+      fetchSessions();
+    }
+  }, [sessionId]);
   useEffect(() => {
-    if (grid.length === 0 || speakers.length === 0 || sessions.length === 0) return;
+    if (
+      grid.length === 0 ||
+      speakers.length === 0 ||
+      sessions.length === 0
+    ) {
+      setSchedule([]);
+      return;
+    }
     const schedule = grid.map((entry) => {
       const timeSlots = entry.timeSlots.map((timeSlot) => {
         const rooms = timeSlot.rooms.map((room) => {
@@ -126,7 +144,9 @@ export const useSessionizeSchedule = () => {
           });
           room.session.speakers = sessionSpeakers.filter((s) => s !== undefined);
 
-          const session = sessions[0].sessions.find((s) => room.session.id === s.id);
+          const session = sessions[0].sessions.find(
+            (s) => room.session.id === s.id
+          );
           if (session !== undefined) {
             const slides = session.questionAnswers.find((q) => q.id === 99194);
             if (slides !== undefined) {

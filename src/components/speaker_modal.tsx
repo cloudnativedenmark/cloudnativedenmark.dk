@@ -81,7 +81,7 @@ const SpeakerModal: React.FC<{ speaker: Speaker; onClose: () => void }> = ({
               onClick={onClose}
               className="bg-background hover:bg-hover text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200"
             >
-              Back to Talk
+              Back
             </button>
           </div>
         </div>

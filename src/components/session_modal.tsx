@@ -102,23 +102,6 @@ const SessionModal: React.FC<{
                 />
               </div>
             )}
-
-            {session.video && (
-              <div className="mt-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-3">
-                  Recording
-                </h3>
-                <div className="aspect-w-16 aspect-h-9">
-                  <iframe
-                    src={session.video}
-                    title={session.title || session.name}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                    className="w-full h-full rounded-lg"
-                  ></iframe>
-                </div>
-              </div>
-            )}
           </div>
 
           <div className="p-4 pb-8 text-center bg-white flex-shrink-0 relative flex justify-center gap-4">
@@ -129,15 +112,6 @@ const SessionModal: React.FC<{
             >
               Back to Schedule
             </button>
-            {session.slideDeck && (
-              <a
-                href={session.slideDeck}
-                rel="noopener noreferrer"
-                className="bg-background hover:bg-hover text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200"
-              >
-                Presentation
-              </a>
-            )}
           </div>
         </div>
       </div>
