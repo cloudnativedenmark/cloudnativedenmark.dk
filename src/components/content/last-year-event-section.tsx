@@ -1,22 +1,20 @@
 import React from "react"
 import Section from "../ui/section"
-import Container from "../ui/container"
 import VideoEmbed from "./video-embed"
 import ExternalLink from "../ui/external-link"
 
 const LastYearEventSection: React.FC = () => {
   return (
-    <Section variant="dark">
-      <Container>
+    <Section className="bg-background-dark">
+      <div>
         <h2 className="text-4xl lg:text-5xl font-bold text-center text-white mb-8">
           Recap last years event
         </h2>
         <div className="mx-auto max-w-4xl text-center mb-12">
-          <p className="text-lg lg:text-xl text-white leading-relaxed">
+          <p className="text-lg lg:text-xl text-white">
             In 2024, we hosted{" "}
             <ExternalLink
               href="https://2024.kcddenmark.dk/"
-              variant="inline"
               className="text-white underline decoration-dotted hover:text-gray-200"
             >
               Kubernetes Community Days Denmark
@@ -34,11 +32,11 @@ const LastYearEventSection: React.FC = () => {
           </p>
         </div>
         <VideoEmbed
-          src="https://www.youtube.com/embed/eqqHVjg7FaU"
+          src="https://www.youtube-nocookie.com/embed/eqqHVjg7FaU"
           title="KCD Denmark 2024 Highlights"
           maxWidth="4xl"
         />
-      </Container>
+      </div>
     </Section>
   )
 }

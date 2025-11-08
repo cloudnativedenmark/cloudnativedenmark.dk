@@ -1,10 +1,10 @@
 # Dependencies
 node_modules/
 
-# Gatsby
+# Vite
+dist/
+.vite/
 .cache/
-public/
-src/gatsby-types.d.ts
 
 # Yarn v4 (Berry)
 .yarn/

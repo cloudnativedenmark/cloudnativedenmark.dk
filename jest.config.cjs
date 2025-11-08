@@ -14,22 +14,17 @@ module.exports = {
   collectCoverageFrom: [
     "src/**/*.{ts,tsx}",
     "!src/**/*.d.ts",
-    "!src/pages/**/*",
-    "!src/templates/**/*"
+    "!src/pages/**/*"
   ],
   coveragePathIgnorePatterns: [
     "/node_modules/",
-    "/public/",
-    "/.cache/",
+    "/dist/",
     "/coverage/"
   ],
-  testPathIgnorePatterns: ["/node_modules/", "/.cache/", "/public/"],
+  testPathIgnorePatterns: ["/node_modules/", "/dist/"],
   transformIgnorePatterns: [
-    "node_modules/(?!(gatsby|gatsby-script|gatsby-link)/)"
+    "node_modules/(?!(react-router-dom)/)"
   ],
-  globals: {
-    __PATH_PREFIX__: "",
-  },
   testEnvironmentOptions: {
     url: "http://localhost"
   },

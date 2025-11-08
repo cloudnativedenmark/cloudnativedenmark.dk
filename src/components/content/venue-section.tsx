@@ -1,23 +1,22 @@
 import React from "react"
-import { Link } from "gatsby"
-import { StaticImage } from "gatsby-plugin-image"
+import { Link } from "react-router-dom"
 import Section from "../ui/section"
-import Container from "../ui/container"
 import Button from "../ui/button"
 
 const VenueSection: React.FC = () => {
   return (
-    <Section variant="default">
-      <Container centerContent>
+    <Section className="bg-white">
+      <div className="text-center">
         <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-12">
           Venue
         </h2>
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-12">
+        <div className="flex flex-col lg:flex-row items-center justify-evenly gap-12">
           <div className="flex flex-col items-center">
-            <StaticImage
-              src="../../images/sav-vaerket-logo.png"
+            <img
+              src="/images/sav-vaerket-logo.png"
               alt="Savværket"
               className="w-32 h-32 mb-4"
+              loading="lazy"
             />
             <p className="text-xl font-semibold text-gray-800 mb-2">
               Savværket
@@ -40,10 +39,10 @@ const VenueSection: React.FC = () => {
         </div>
         <div className="mt-12">
           <Link to="/venue-plan">
-            <Button size="large">See Venue Plan</Button>
+            <Button>See Venue Plan</Button>
           </Link>
         </div>
-      </Container>
+      </div>
     </Section>
   )
 }

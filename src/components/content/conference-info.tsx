@@ -1,6 +1,5 @@
 import React from "react"
 import Section from "../ui/section"
-import Container from "../ui/container"
 
 interface ConferenceInfoProps {
   title: string
@@ -16,8 +15,8 @@ const ConferenceInfo: React.FC<ConferenceInfoProps> = ({
   const textColorClass = variant === "dark" ? "text-white" : "text-gray-800"
 
   return (
-    <Section variant={variant === "dark" ? "dark" : "default"}>
-      <Container centerContent>
+    <Section className={variant === "dark" ? "bg-background-dark" : "bg-white"}>
+      <div className="text-center">
         <h2
           className={`text-4xl lg:text-5xl font-bold ${textColorClass} mb-12`}
         >
@@ -28,7 +27,7 @@ const ConferenceInfo: React.FC<ConferenceInfoProps> = ({
         >
           {description}
         </p>
-      </Container>
+      </div>
     </Section>
   )
 }

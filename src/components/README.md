@@ -132,7 +132,7 @@ Components use variant props to adapt to different contexts:
 - **Code Splitting**: Components can be lazy-loaded when needed
 - **Tree Shaking**: Barrel exports allow for optimal bundling
 - **Memoization**: Components use React.memo where appropriate
-- **Image Optimization**: Integration with Gatsby's image optimization
+- **Asset Optimization**: Integration with Vite's asset optimization
 
 ## Testing Strategy
 

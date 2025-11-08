@@ -1,28 +1,27 @@
-import * as React from "react"
-import { type HeadFC, type PageProps } from "gatsby"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
+import React from "react"
+import { useLocation } from "react-router-dom"
+import SEOHead from "../components/seo-head"
 import PageHeader from "../components/layout/page-header"
 import VenueMap from "../components/content/venue-map"
 import SavvaerketMap from "../images/savvaerket.svg"
 import KlingenMap from "../images/klingen.svg"
 
-const VenuePage: React.FC<PageProps> = () => {
+const VenuePage: React.FC = () => {
+  const location = useLocation()
   const maps = [
     {
       src: SavvaerketMap,
       alt: "Savvaerket Map",
-      title: "Savværket Floor Plan",
     },
     {
       src: KlingenMap,
       alt: "Klingen Map",
-      title: "Klingen Floor Plan",
     },
   ]
 
   return (
-    <Layout>
+    <>
+      <SEOHead title="Venue Plan" pathname={location.pathname} />
       <PageHeader
         title="Venue Plan"
         description="Find your way around the conference."
@@ -30,12 +29,8 @@ const VenuePage: React.FC<PageProps> = () => {
         size="large"
       />
       <VenueMap maps={maps} />
-    </Layout>
+    </>
   )
 }
 
 export default VenuePage
-
-export const Head: HeadFC = ({ location: { pathname } }) => (
-  <SEO pathname={pathname} title="Venue Plan" />
-)

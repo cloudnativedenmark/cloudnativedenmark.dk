@@ -116,22 +116,12 @@ export default [
     },
   },
   
-  // Override for Gatsby files
-  {
-    files: ['gatsby-*.ts', 'gatsby-*.js'],
-    rules: {
-      '@typescript-eslint/no-var-requires': 'off',
-    },
-  },
-  
   // Ignore patterns
   {
     ignores: [
       'node_modules/',
       'public/',
-      '.cache/',
-      'gatsby-config.ts',
-      'gatsby-node.ts',
+      'dist/',
       '**/*.d.ts',
     ],
   },

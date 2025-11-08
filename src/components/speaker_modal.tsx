@@ -1,5 +1,6 @@
 import * as React from "react"
 import { type Speaker } from "../hooks/use-sessionize"
+import Button from "./ui/button"
 
 const SpeakerModal: React.FC<{ speaker: Speaker; onClose: () => void }> = ({
   speaker,
@@ -77,12 +78,9 @@ const SpeakerModal: React.FC<{ speaker: Speaker; onClose: () => void }> = ({
           </div>
           <div className="p-4 pb-8 text-center bg-white flex-shrink-0 relative">
             <div className="absolute bottom-full left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
-            <button
-              onClick={onClose}
-              className="bg-background hover:bg-hover text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200"
-            >
+            <Button onClick={onClose} variant="primary">
               Back
-            </button>
+            </Button>
           </div>
         </div>
       </div>

@@ -1,6 +1,8 @@
 import React from "react"
 import { type Session, type Speaker } from "../hooks/use-sessionize"
 import { formatDateTimeDetailed } from "../utils/time-formatting"
+import ExternalLink from "./ui/external-link"
+import Button from "./ui/button"
 
 interface ArchiveSessionProps {
   session: Session & {
@@ -49,39 +51,25 @@ const ArchiveSession: React.FC<ArchiveSessionProps> = ({
 
       <div className="mt-6 flex gap-4">
         {session.video ? (
-          <a
-            href={session.video}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center text-white font-semibold py-3 px-6 rounded-full text-md transition-colors duration-200 bg-background hover:bg-hover"
-          >
-            Video
-          </a>
+          <ExternalLink href={session.video}>
+            <Button variant="primary">Video</Button>
+          </ExternalLink>
         ) : (
-          <button
-            disabled
-            className="inline-flex items-center justify-center text-gray-500 font-semibold py-2 px-6 rounded-full text-md transition-colors duration-200 bg-gray-200 cursor-not-allowed"
-          >
+          <Button variant="primary" disabled>
             Video
-          </button>
+          </Button>
         )}
 
         {session.slideDeck ? (
-          <a
+          <ExternalLink
             href={`https://docs.google.com/gview?url=${session.slideDeck}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center text-white font-semibold py-2 px-6 rounded-full text-md transition-colors duration-200 bg-background hover:bg-hover"
           >
-            Slides
-          </a>
+            <Button variant="primary">Slides</Button>
+          </ExternalLink>
         ) : (
-          <button
-            disabled
-            className="inline-flex items-center justify-center text-gray-500 font-semibold py-2 px-6 rounded-full text-md transition-colors duration-200 bg-gray-200 cursor-not-allowed"
-          >
+          <Button variant="primary" disabled>
             Slides
-          </button>
+          </Button>
         )}
       </div>
     </div>

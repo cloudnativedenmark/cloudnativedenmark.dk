@@ -4,12 +4,7 @@ import TeamMember from "./team-member"
 interface TeamMemberData {
   name: string
   position: string
-  image: {
-    publicURL: string
-    childImageSharp?: {
-      gatsbyImageData: import("gatsby-plugin-image").IGatsbyImageData
-    }
-  }
+  image: string
   linkedin?: string
 }
 

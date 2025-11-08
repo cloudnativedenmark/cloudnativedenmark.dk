@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from "react"
 import { type Speaker } from "../../hooks/use-sessionize"
 import Section from "../ui/section"
-import Container from "../ui/container"
 import Button from "../ui/button"
 import SpeakerList from "../speaker-list"
 
@@ -35,8 +34,8 @@ const SpeakersSection: React.FC<SpeakersSectionProps> = ({
   }
 
   return (
-    <Section variant="default">
-      <Container centerContent>
+    <Section className="bg-white">
+      <div className="text-center">
         <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-12">
           Speakers
         </h2>
@@ -48,12 +47,12 @@ const SpeakersSection: React.FC<SpeakersSectionProps> = ({
         />
         {sortedSpeakers.length > initialSpeakersToShow && (
           <div className="mt-12">
-            <Button onClick={() => setIsExpanded(!isExpanded)} size="large">
+            <Button onClick={() => setIsExpanded(!isExpanded)}>
               {isExpanded ? "Show Less" : "Show More Speakers"}
             </Button>
           </div>
         )}
-      </Container>
+      </div>
     </Section>
   )
 }

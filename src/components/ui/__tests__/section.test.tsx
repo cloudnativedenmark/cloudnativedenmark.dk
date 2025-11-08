@@ -32,89 +32,49 @@ describe("Section", () => {
     })
   })
 
-  describe("variants", () => {
-    it("should apply default variant classes", () => {
-      render(<Section>Content</Section>)
+  describe("background styling via className", () => {
+    it("should apply white background class", () => {
+      render(<Section className="bg-white">Content</Section>)
       const section = screen.getByText("Content").closest("section")
       expect(section).toHaveClass("bg-white")
     })
 
-    it("should apply dark variant classes", () => {
-      render(<Section variant="dark">Content</Section>)
+    it("should apply dark background class", () => {
+      render(<Section className="bg-background-dark">Content</Section>)
       const section = screen.getByText("Content").closest("section")
       expect(section).toHaveClass("bg-background-dark")
     })
 
-    it("should apply light variant classes", () => {
-      render(<Section variant="light">Content</Section>)
-      const section = screen.getByText("Content").closest("section")
-      expect(section).toHaveClass("bg-gray-50")
-    })
-
-    it("should apply gray variant classes", () => {
-      render(<Section variant="gray">Content</Section>)
+    it("should apply gray background class", () => {
+      render(<Section className="bg-gray-100">Content</Section>)
       const section = screen.getByText("Content").closest("section")
       expect(section).toHaveClass("bg-gray-100")
     })
   })
 
-  describe("spacing", () => {
-    it("should apply default padding classes", () => {
-      render(<Section>Content</Section>)
+  describe("spacing via className", () => {
+    it("should apply padding classes", () => {
+      render(<Section className="py-16 px-12">Content</Section>)
       const section = screen.getByText("Content").closest("section")
       expect(section).toHaveClass("py-16", "px-12")
     })
 
-    it("should apply custom paddingY", () => {
-      render(<Section paddingY="small">Content</Section>)
+    it("should apply small padding classes", () => {
+      render(<Section className="py-8">Content</Section>)
       const section = screen.getByText("Content").closest("section")
       expect(section).toHaveClass("py-8")
     })
 
-    it("should apply custom paddingX", () => {
-      render(<Section paddingX="none">Content</Section>)
-      const section = screen.getByText("Content").closest("section")
-      expect(section).toHaveClass("px-0")
-    })
-
-    it("should apply none spacing correctly", () => {
-      render(
-        <Section paddingY="none" paddingX="none">
-          Content
-        </Section>
-      )
+    it("should apply no padding classes", () => {
+      render(<Section className="py-0 px-0">Content</Section>)
       const section = screen.getByText("Content").closest("section")
       expect(section).toHaveClass("py-0", "px-0")
     })
 
-    it("should apply xlarge spacing correctly", () => {
-      render(
-        <Section paddingY="xlarge" paddingX="xlarge">
-          Content
-        </Section>
-      )
+    it("should apply large padding classes", () => {
+      render(<Section className="py-20 px-20">Content</Section>)
       const section = screen.getByText("Content").closest("section")
       expect(section).toHaveClass("py-20", "px-20")
-    })
-  })
-
-  describe("spacing values", () => {
-    it("should apply small spacing", () => {
-      render(<Section paddingY="small">Content</Section>)
-      const section = screen.getByText("Content").closest("section")
-      expect(section).toHaveClass("py-8")
-    })
-
-    it("should apply medium spacing", () => {
-      render(<Section paddingY="medium">Content</Section>)
-      const section = screen.getByText("Content").closest("section")
-      expect(section).toHaveClass("py-12")
-    })
-
-    it("should apply large spacing", () => {
-      render(<Section paddingY="large">Content</Section>)
-      const section = screen.getByText("Content").closest("section")
-      expect(section).toHaveClass("py-16")
     })
   })
 
@@ -122,10 +82,7 @@ describe("Section", () => {
     it("should combine all props correctly", () => {
       render(
         <Section
-          variant="dark"
-          paddingY="small"
-          paddingX="medium"
-          className="custom-class"
+          className="bg-background-dark py-8 px-12 custom-class"
           id="test-section"
         >
           Content
@@ -134,40 +91,23 @@ describe("Section", () => {
 
       const section = screen.getByText("Content").closest("section")
       expect(section).toHaveClass(
-        "bg-background-dark", // variant
-        "py-8", // paddingY small
-        "px-12", // paddingX medium
-        "custom-class" // custom className
+        "bg-background-dark",
+        "py-8",
+        "px-12",
+        "custom-class"
       )
       expect(section).toHaveAttribute("id", "test-section")
-    })
-
-    it("should handle custom className alongside generated classes", () => {
-      render(
-        <Section variant="gray" className="border-t custom-padding">
-          Content
-        </Section>
-      )
-
-      const section = screen.getByText("Content").closest("section")
-      expect(section).toHaveClass(
-        "bg-gray-100", // variant class
-        "py-16", // default paddingY
-        "px-12", // default paddingX
-        "border-t", // custom class
-        "custom-padding" // custom class
-      )
     })
   })
 
   describe("accessibility", () => {
-    it("should be a semantic section element", () => {
+    it("should have section role", () => {
       render(<Section>Content</Section>)
       const section = screen.getByText("Content").closest("section")
-      expect(section?.tagName).toBe("SECTION")
+      expect(section).toBeInTheDocument()
     })
 
-    it("should support custom id for accessibility", () => {
+    it("should support custom id for navigation", () => {
       render(<Section id="main-content">Content</Section>)
       const section = screen.getByText("Content").closest("section")
       expect(section).toHaveAttribute("id", "main-content")

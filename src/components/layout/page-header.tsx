@@ -1,6 +1,5 @@
 import React from "react"
 import Section from "../ui/section"
-import Container from "../ui/container"
 
 interface PageHeaderProps {
   title: string
@@ -28,8 +27,10 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   const textColorClasses = variant === "dark" ? "text-white" : "text-gray-900"
 
   return (
-    <Section variant={variant} paddingY="large" className="pt-24 pb-12">
-      <Container centerContent>
+    <Section
+      className={`${variant === "dark" ? "bg-background-dark" : "bg-white"} pt-20 pb-8 sm:pt-24 sm:pb-12 lg:pt-24 lg:pb-12`}
+    >
+      <div className="text-center">
         <h1
           className={`${titleSizeClasses[size]} font-bold ${textColorClasses} mb-4`}
         >
@@ -42,7 +43,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             {description}
           </p>
         )}
-      </Container>
+      </div>
     </Section>
   )
 }

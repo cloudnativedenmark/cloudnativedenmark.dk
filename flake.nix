@@ -41,7 +41,7 @@
             echo "  yarn develop       # Start development server"
             echo "  yarn build         # Build for production"
             echo "  yarn serve         # Serve production build locally"
-            echo "  yarn clean         # Clean Gatsby cache"
+            echo "  yarn clean         # Clean Vite cache and dist directory"
             echo "  yarn typecheck     # Run TypeScript type checking"
             echo "  yarn format        # Check code formatting with Prettier"
             echo "  yarn format:fix    # Fix code formatting with Prettier"
@@ -59,7 +59,6 @@
           NODE_ENV = "development";
 
           # Prevent npm/yarn from sending telemetry
-          GATSBY_TELEMETRY_DISABLED = "1";
           YARN_ENABLE_TELEMETRY = "0";
           NPM_CONFIG_FUND = "false";
           NPM_CONFIG_AUDIT = "false";

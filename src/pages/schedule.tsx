@@ -1,7 +1,6 @@
-import * as React from "react"
-import { type HeadFC, type PageProps } from "gatsby"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
+import React from "react"
+import { useLocation } from "react-router-dom"
+import SEOHead from "../components/seo-head"
 import { useSessionizeSchedule } from "../hooks/use-sessionize"
 import { useModalManagement } from "../hooks/use-modal-management"
 import { formatDate, formatTime } from "../utils/time-formatting"
@@ -9,7 +8,8 @@ import SessionCard from "../components/session-card"
 import SessionModal from "../components/session_modal"
 import SpeakerModal from "../components/speaker_modal"
 
-const SchedulePage: React.FC<PageProps> = () => {
+const SchedulePage: React.FC = () => {
+  const location = useLocation()
   const { schedule } = useSessionizeSchedule()
   const {
     selectedSession,
@@ -21,7 +21,8 @@ const SchedulePage: React.FC<PageProps> = () => {
   } = useModalManagement({ schedule })
 
   return (
-    <Layout>
+    <>
+      <SEOHead title="Schedule" pathname={location.pathname} />
       <section className="pt-24 pb-12 bg-background-dark">
         <div className="mx-auto max-w-6xl text-white text-center px-6">
           <h1 className="text-6xl font-bold">Schedule</h1>
@@ -249,12 +250,8 @@ const SchedulePage: React.FC<PageProps> = () => {
           onClose={handleCloseSpeakerModal}
         />
       )}
-    </Layout>
+    </>
   )
 }
 
 export default SchedulePage
-
-export const Head: HeadFC = ({ location: { pathname } }) => (
-  <SEO title="Cloud Native Denmark - Schedule" pathname={pathname} />
-)

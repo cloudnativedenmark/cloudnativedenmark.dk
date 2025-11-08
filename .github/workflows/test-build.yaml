@@ -8,25 +8,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: "22"
-          cache: "yarn"
+          node-version: "24"
 
-      - name: Verify lock file is up to date
-        run: |
-          yarn install --frozen-lockfile --check-files
-          if [ -n "$(git status --porcelain yarn.lock)" ]; then
-            echo "yarn.lock is not up to date. Please run 'yarn install' and commit the changes."
-            exit 1
-          fi
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Yarn Berry
+        run: corepack prepare yarn@4.9.1 --activate
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Run TypeScript type checking
         run: yarn typecheck

@@ -1,5 +1,5 @@
 import React from "react"
-import { Link } from "gatsby"
+import { Link } from "react-router-dom"
 import SocialLinks from "./content/social-links"
 import ExternalLink from "./ui/external-link"
 
@@ -13,8 +13,7 @@ const Footer = () => {
               <li>
                 <ExternalLink
                   href="https://events.linuxfoundation.org/about/code-of-conduct/"
-                  variant="inline"
-                  className="text-white hover:text-gray-200 text-sm font-semibold"
+                  className="text-white hover:text-gray-200 text-sm font-semibold underline"
                 >
                   Code of Conduct
                 </ExternalLink>
@@ -32,9 +31,8 @@ const Footer = () => {
           <div>
             <ExternalLink
               href="mailto:contact@cloudnativedenmark.dk"
-              variant="inline"
               openInNewTab={false}
-              className="text-sm font-semibold transition-colors duration-200 text-white hover:text-gray-200"
+              className="text-sm font-semibold transition-colors duration-200 text-white hover:text-gray-200 underline"
             >
               contact@cloudnativedenmark.dk
             </ExternalLink>

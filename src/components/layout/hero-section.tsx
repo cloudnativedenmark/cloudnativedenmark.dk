@@ -1,7 +1,6 @@
 import React from "react"
-import { Link } from "gatsby"
+import { Link } from "react-router-dom"
 import Section from "../ui/section"
-import Container from "../ui/container"
 import Button from "../ui/button"
 
 interface HeroSectionProps {
@@ -37,15 +36,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   backgroundElement,
 }) => {
   return (
-    <Section
-      variant="default"
-      paddingX="none"
-      className="relative overflow-hidden bg-white pb-0"
-    >
-      <Container className="relative z-10 pt-16 pb-16">
+    <Section className="bg-white relative overflow-hidden p-0!">
+      <div className="relative z-10 pt-16 pb-16">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
           {logo && (
-            <div className="flex-1 lg:order-1">
+            <div className="flex-1 lg:order-1 flex justify-center">
               <img
                 src={logo.src}
                 width={logo.width || 300}
@@ -79,11 +74,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Button size="large">{primaryAction.text}</Button>
+                      <Button>{primaryAction.text}</Button>
                     </a>
                   ) : (
                     <Link to={primaryAction.href}>
-                      <Button size="large">{primaryAction.text}</Button>
+                      <Button>{primaryAction.text}</Button>
                     </Link>
                   ))}
                 {secondaryAction &&
@@ -93,13 +88,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Button variant="secondary" size="large">
+                      <Button variant="secondary">
                         {secondaryAction.text}
                       </Button>
                     </a>
                   ) : (
                     <Link to={secondaryAction.href}>
-                      <Button variant="secondary" size="large">
+                      <Button variant="secondary">
                         {secondaryAction.text}
                       </Button>
                     </Link>
@@ -108,7 +103,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             )}
           </div>
         </div>
-      </Container>
+      </div>
       {backgroundElement && (
         <div className="opacity-100 min-w-xl">{backgroundElement}</div>
       )}

@@ -53,9 +53,9 @@ Choose one of the following development environments:
 
    Your site will be running at `http://localhost:8000`
 
-5. **View GraphQL explorer**
+5. **Open your browser**
 
-   Open `http://localhost:8000/___graphql` to explore the site's data layer
+   Your site will be running at `http://localhost:8000` with hot module replacement
 
 ## 📋 Available Scripts
 
@@ -64,7 +64,7 @@ Choose one of the following development environments:
 | `yarn develop`       | Start development server            |
 | `yarn build`         | Build for production                |
 | `yarn serve`         | Serve production build locally      |
-| `yarn clean`         | Clean Gatsby cache                  |
+| `yarn clean`         | Clean Vite cache and dist directory |
 | `yarn typecheck`     | Run TypeScript type checking        |
 | `yarn format`        | Check code formatting with Prettier |
 | `yarn format:fix`    | Fix code formatting with Prettier   |
@@ -76,14 +76,15 @@ Choose one of the following development environments:
 
 ## 🏗️ Tech Stack
 
-- **Framework**: [Gatsby v5](https://www.gatsbyjs.com/) - Static site generator
+- **Build Tool**: [Vite v5](https://vitejs.dev/) - Next generation frontend tooling
+- **Framework**: [React 18](https://reactjs.org/) - Component-based UI library
+- **Routing**: [React Router v6](https://reactrouter.com/) - Client-side routing
 - **Runtime**: [Node.js 24](https://nodejs.org/) - JavaScript runtime
 - **Package Manager**: [Yarn v4 (Berry)](https://yarnpkg.com/) - Fast, reliable package manager
 - **Language**: [TypeScript](https://www.typescriptlang.org/) - Type-safe JavaScript
-- **UI Library**: [React 18](https://reactjs.org/) - Component-based UI
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) - Utility-first CSS
-- **Data**: [GraphQL](https://graphql.org/) + [Sessionize API](https://sessionize.com/)
-- **Images**: [Gatsby Image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/) - Optimized images
+- **Data**: [Sessionize API](https://sessionize.com/) + YAML files for static content
+- **SEO**: [React Helmet Async](https://github.com/staylor/react-helmet-async) - Document head management
 - **Development Environment**: [Nix](https://nixos.org/) - Reproducible development environments
 - **Deployment**: [GitHub Pages](https://pages.github.com/) - Continuous deployment
 
@@ -101,14 +102,14 @@ src/components/
 
 ### Data Sources
 
-- **Static Content**: YAML files in `src/data/` (sponsors, team, hotels)
+- **Static Content**: YAML files in `public/data/` (sponsors, hotels) and embedded data (team)
 - **Conference Data**: Sessionize API integration for speakers and schedule
-- **Site Metadata**: Configured in `gatsby-config.ts`
+- **Data Loading**: Custom utilities in `src/utils/data-loader.ts` for YAML parsing
 
 ### Key Features
 
 - 📱 **Responsive Design**: Mobile-first approach with Tailwind CSS
-- ⚡ **Performance**: Optimized images, code splitting, and static generation
+- ⚡ **Performance**: Vite's fast HMR, code splitting, and optimized bundling
 - 🎯 **SEO**: Meta tags, structured data, and sitemap generation
 - 🔍 **Search**: Fuzzy search for sessions and speakers using Fuse.js
 - 📅 **Event Management**: Dynamic conference schedule and speaker profiles
@@ -128,10 +129,10 @@ Configuration is managed in `src/hooks/use-sessionize.tsx`.
 
 ### Content Management
 
-- **Team Data**: Embedded in `gatsby-config.ts` site metadata
-- **Sponsors**: YAML files in `src/data/sponsors/`
-- **Hotels**: YAML files in `src/data/hotels/`
-- **Images**: Organized by category in `src/images/`
+- **Team Data**: Embedded in `src/utils/data-loader.ts` site metadata
+- **Sponsors**: YAML files in `public/data/sponsors/`
+- **Hotels**: YAML files in `public/data/hotels/`
+- **Images**: Organized by category in `public/images/`
 
 ## 🔧 Development Guidelines
 
@@ -153,11 +154,11 @@ Configuration is managed in `src/hooks/use-sessionize.tsx`.
 
 ### Performance & Best Practices
 
-- **Image Optimization**: Use `gatsby-plugin-image` for all images
-- **Code Splitting**: Automatic with Gatsby's build process
-- **Bundle Optimization**: Tree shaking and dead code elimination
+- **Image Optimization**: Use native `<img>` tags with proper loading attributes
+- **Code Splitting**: Automatic with Vite's build process and React Router
+- **Bundle Optimization**: Tree shaking and dead code elimination via Vite
 - **Responsive Design**: Mobile-first approach with Tailwind CSS
-- **SEO Optimization**: Meta tags, structured data, sitemap generation
+- **SEO Optimization**: Meta tags and structured data via react-helmet-async
 
 For complete development guidelines, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
@@ -188,7 +189,7 @@ We welcome contributions! Please read our [Contributing Guide](./CONTRIBUTING.md
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE.md) file for details.
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](./LICENSE) file for details.
 
 ## 👥 Community
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import Logo from "../images/logo.svg"
-import { Link } from "gatsby"
-import { useLocation } from "@reach/router"
+import { Link, useLocation } from "react-router-dom"
 import { useScrollVisibility } from "../hooks/use-scroll-visibility"
 import HamburgerMenu from "../images/hamburger-menu.inline.svg"
 import CloseMenu from "../images/close-menu.inline.svg"

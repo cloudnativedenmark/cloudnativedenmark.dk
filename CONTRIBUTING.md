@@ -19,7 +19,7 @@ Before contributing, make sure you have:
 
 - Node.js 18+ installed
 - Git configured with your GitHub account
-- Basic knowledge of React, TypeScript, and Gatsby
+- Basic knowledge of React, TypeScript, and Vite
 
 ### Development Setup
 
@@ -240,7 +240,7 @@ For new features, provide:
 
 - **Static Data**: Use YAML files in `src/data/`
 - **Dynamic Data**: Use Sessionize API via custom hooks
-- **GraphQL**: Leverage Gatsby's GraphQL layer for static content
+- **Static Loading**: Use custom utilities for YAML content loading
 - **State**: Use React hooks for local state management
 
 ### Styling Guidelines
@@ -272,7 +272,7 @@ Currently, we rely on:
 
 ### Learning Materials
 
-- [Gatsby Documentation](https://www.gatsbyjs.com/docs/)
+- [Vite Documentation](https://vitejs.dev/guide/)
 - [React Documentation](https://reactjs.org/docs/)
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)

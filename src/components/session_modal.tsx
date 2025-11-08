@@ -5,6 +5,7 @@ import {
   calculateSessionDuration,
 } from "../utils/time-formatting"
 import SpeakerList from "./speaker-list"
+import Button from "./ui/button"
 
 const SessionModal: React.FC<{
   session: Session
@@ -89,12 +90,9 @@ const SessionModal: React.FC<{
 
           <div className="p-4 pb-8 text-center bg-white flex-shrink-0 relative flex justify-center gap-4">
             <div className="absolute bottom-full left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
-            <button
-              onClick={onClose}
-              className="bg-background hover:bg-hover text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200"
-            >
+            <Button onClick={onClose} variant="primary">
               Back to Schedule
-            </button>
+            </Button>
           </div>
         </div>
       </div>

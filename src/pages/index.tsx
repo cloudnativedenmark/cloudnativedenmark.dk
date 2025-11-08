@@ -1,10 +1,9 @@
-import * as React from "react"
-import { type HeadFC, type PageProps, graphql } from "gatsby"
-import { StaticImage } from "gatsby-plugin-image"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
+import React from "react"
+import { useLocation } from "react-router-dom"
+import SEOHead from "../components/seo-head"
 import { useSessionizeSpeakers } from "../hooks/use-sessionize"
 import { useModalManagement } from "../hooks/use-modal-management"
+import { useSponsors } from "../hooks/use-sponsors"
 import HeroSection from "../components/layout/hero-section"
 import ConferenceInfo from "../components/content/conference-info"
 import VenueSection from "../components/content/venue-section"
@@ -16,55 +15,10 @@ import SponsorsSection from "../components/content/sponsors-section"
 import SpeakerModal from "../components/speaker_modal"
 import Logo from "../images/logo.svg"
 
-interface Sponsor {
-  title: string
-  url: string
-  scale: string
-  logo: {
-    publicURL: string
-  }
-}
-
-interface Hotel {
-  title: string
-  url: string
-  description: string
-  logo: {
-    publicURL: string
-  }
-}
-
-type DataProps = {
-  allCommunityYaml: {
-    nodes: Sponsor[]
-  }
-  allGoldYaml: {
-    nodes: Sponsor[]
-  }
-  allBronzeYaml: {
-    nodes: Sponsor[]
-  }
-  allPlatinumYaml: {
-    nodes: Sponsor[]
-  }
-  allPartnerYaml: {
-    nodes: Sponsor[]
-  }
-  allHotelsYaml: {
-    nodes: Hotel[]
-  }
-}
-
-const IndexPage: React.FC<PageProps<DataProps>> = ({
-  data: {
-    allCommunityYaml,
-    allGoldYaml,
-    allBronzeYaml,
-    allPlatinumYaml,
-    allPartnerYaml,
-  },
-}) => {
+const IndexPage: React.FC = () => {
+  const location = useLocation()
   const { speakers } = useSessionizeSpeakers()
+  const { sponsors } = useSponsors()
   const { selectedSpeaker, handleSpeakerClick, handleCloseSpeakerModal } =
     useModalManagement()
 
@@ -101,7 +55,8 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
   )
 
   return (
-    <Layout>
+    <>
+      <SEOHead title="Cloud Native Denmark 2025" pathname={location.pathname} />
       <HeroSection
         logo={{
           src: Logo,
@@ -150,19 +105,20 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
         description="Cloud Native Denmark shares knowledge about Cloud Native Technologies and creates community networks in Denmark within this area. This may happen through events and profit from these will be donated to charity."
         partnerDescription="This year we are collaborating with Coding Pirates and all profits go to them."
       >
-        <StaticImage
-          src="../images/coding-pirates-logo.png"
+        <img
+          src="/images/coding-pirates-logo.png"
           alt="Coding Pirates"
           className="w-48 h-auto"
+          loading="lazy"
         />
       </MissionSection>
 
       <SponsorsSection
-        platinum={allPlatinumYaml.nodes}
-        gold={allGoldYaml.nodes}
-        bronze={allBronzeYaml.nodes}
-        community={allCommunityYaml.nodes}
-        partners={allPartnerYaml.nodes}
+        platinum={sponsors.platinum}
+        gold={sponsors.gold}
+        bronze={sponsors.bronze}
+        community={sponsors.community}
+        partners={sponsors.partners}
       />
 
       {selectedSpeaker && (
@@ -171,88 +127,8 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
           onClose={handleCloseSpeakerModal}
         />
       )}
-    </Layout>
+    </>
   )
 }
 
 export default IndexPage
-
-export const Head: HeadFC = ({ location: { pathname } }) => (
-  <SEO pathname={pathname} />
-)
-
-export const query = graphql`
-  query IndexPageQuery {
-    allCommunityYaml {
-      nodes {
-        id
-        title
-        url
-        logo {
-          publicURL
-        }
-        scale
-      }
-    }
-
-    allGoldYaml {
-      nodes {
-        id
-        title
-        url
-        logo {
-          publicURL
-        }
-        scale
-      }
-    }
-
-    allBronzeYaml {
-      nodes {
-        id
-        title
-        url
-        logo {
-          publicURL
-        }
-        scale
-      }
-    }
-
-    allPlatinumYaml {
-      nodes {
-        id
-        title
-        url
-        logo {
-          publicURL
-        }
-        scale
-      }
-    }
-
-    allPartnerYaml {
-      nodes {
-        id
-        title
-        url
-        logo {
-          publicURL
-        }
-        scale
-      }
-    }
-
-    allHotelsYaml {
-      nodes {
-        id
-        title
-        url
-        description
-        logo {
-          publicURL
-        }
-      }
-    }
-  }
-`

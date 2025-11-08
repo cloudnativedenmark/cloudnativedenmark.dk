@@ -2,20 +2,24 @@
   "name": "cloud-native-denmark",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Official Website of Cloud Native Denmark.",
   "contributors": [
     "Thor Anker Kvisgård Lange",
     "Aleksander Nowak"
   ],
   "keywords": [
-    "gatsby"
+    "vite",
+    "react",
+    "conference",
+    "cloud-native"
   ],
   "scripts": {
-    "develop": "gatsby develop",
-    "start": "gatsby develop",
-    "build": "gatsby build",
-    "serve": "gatsby serve",
-    "clean": "gatsby clean",
+    "develop": "vite",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
+    "clean": "rm -rf dist .vite",
     "typecheck": "tsc --noEmit",
     "format": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,md}\"",
     "format:fix": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\"",
@@ -26,35 +30,28 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
-    "@mdx-js/react": "^2.0.0",
     "fuse.js": "^7.1.0",
-    "gatsby": "^5.14.1",
-    "gatsby-plugin-image": "^3.14.0",
-    "gatsby-plugin-manifest": "^5.14.0",
-    "gatsby-plugin-mdx": "^5.14.0",
-    "gatsby-plugin-postcss": "^6.14.0",
-    "gatsby-plugin-sharp": "^5.14.0",
-    "gatsby-plugin-svgr-svgo": "^2.0.0",
-    "gatsby-source-filesystem": "^5.14.0",
-    "gatsby-transformer-sharp": "^5.14.0",
-    "gatsby-transformer-yaml": "^5.14.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "js-yaml": "^4.1.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-helmet-async": "^2.0.5",
+    "react-router-dom": "^7.9.5",
     "tailwindcss": "^4.0.11"
   },
   "devDependencies": {
-    "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4.0.11",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/jest": "^30.0.0",
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^24.10.0",
-    "@types/react": "^18.2.55",
-    "@types/react-dom": "^18.2.19",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
     "@typescript-eslint/eslint-plugin": "^8.46.0",
     "@typescript-eslint/parser": "^8.46.0",
+    "@vitejs/plugin-react": "^5.1.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
@@ -68,6 +65,7 @@
     "prettier": "^3.6.2",
     "ts-jest": "^29.4.5",
     "typescript": "^5.3.3",
-    "url-loader": "^4.1.1"
+    "vite": "^7.2.2",
+    "vite-plugin-svgr": "^4.2.0"
   }
 }

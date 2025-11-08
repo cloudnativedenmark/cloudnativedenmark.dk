@@ -1,11 +1,13 @@
 import React from "react"
-import Layout from "../components/layout"
-import { HeadFC, PageProps } from "gatsby"
-import SEO from "../components/seo"
+import { useLocation } from "react-router-dom"
+import SEOHead from "../components/seo-head"
 
-const PrivacyPage: React.FC<PageProps> = () => {
+const PrivacyPage: React.FC = () => {
+  const location = useLocation()
+
   return (
-    <Layout>
+    <>
+      <SEOHead title="Privacy Policy" pathname={location.pathname} />
       <div className="mx-auto max-w-6xl">
         <div className="text-primary text-base font-sans mx-2 md:mx-28 pb-12">
           <h1 className="text-4xl font-bold pt-24">Privacy Policy</h1>
@@ -375,12 +377,8 @@ const PrivacyPage: React.FC<PageProps> = () => {
           </p>
         </div>
       </div>
-    </Layout>
+    </>
   )
 }
 
 export default PrivacyPage
-
-export const Head: HeadFC = ({ location: { pathname } }) => (
-  <SEO title="Cloud Native Denmark - Privacy Policy" pathname={pathname} />
-)

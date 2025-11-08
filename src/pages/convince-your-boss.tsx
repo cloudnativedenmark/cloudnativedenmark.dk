@@ -1,11 +1,13 @@
-import * as React from "react"
-import { type HeadFC, type PageProps } from "gatsby"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
+import React from "react"
+import { useLocation } from "react-router-dom"
+import SEOHead from "../components/seo-head"
 
-const ConvinceYourBossPage: React.FC<PageProps> = () => {
+const ConvinceYourBossPage: React.FC = () => {
+  const location = useLocation()
+
   return (
-    <Layout>
+    <>
+      <SEOHead title="Convince Your Boss" pathname={location.pathname} />
       <section className="bg-white py-8">
         <div className="mx-auto max-w-4xl px-6 text-left sm:text-justify">
           <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-8">
@@ -251,16 +253,8 @@ const ConvinceYourBossPage: React.FC<PageProps> = () => {
           </div>
         </div>
       </section>
-    </Layout>
+    </>
   )
 }
 
 export default ConvinceYourBossPage
-
-export const Head: HeadFC = ({ location: { pathname } }) => (
-  <SEO
-    pathname={pathname}
-    title="Convince Your Boss"
-    description="Justification and email template to get approval to attend Cloud Native Denmark 2025."
-  />
-)

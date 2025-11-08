@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `yarn develop` or `yarn start` - Start development server (runs on http://localhost:8000)
 - `yarn build` - Build the site for production
 - `yarn serve` - Serve the production build locally
-- `yarn clean` - Clean Gatsby cache and public directory
+- `yarn clean` - Clean Vite cache and dist directory
 - `yarn typecheck` - Run TypeScript type checking
 - `yarn format` - Check code formatting with Prettier
 - `yarn format:fix` - Fix code formatting with Prettier
@@ -26,12 +26,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-This is a **Gatsby v5 site** for Cloud Native Denmark, a technical conference website built with **TypeScript**, **React**, and **Tailwind CSS**.
+This is a **Vite + React** site for Cloud Native Denmark, a technical conference website built with **TypeScript**, **React**, and **Tailwind CSS**.
 
 ### Core Technologies
 
-- **Gatsby** - Static site generator with GraphQL data layer
+- **Vite** - Fast build tool and development server
 - **React 18** - UI framework with TypeScript
+- **React Router** - Client-side routing
 - **Tailwind CSS v4** - Utility-first CSS framework
 - **PostCSS** - CSS processing
 
@@ -39,10 +40,10 @@ This is a **Gatsby v5 site** for Cloud Native Denmark, a technical conference we
 
 #### Data Sources & Management
 
-- **YAML-driven content**: Sponsors, hotels, and team data stored as YAML files in `src/data/`
+- **YAML-driven content**: Sponsors, hotels, and team data stored as YAML files in `public/data/`
 - **Sessionize API integration**: Live conference data (speakers, schedule, sessions) fetched from Sessionize API via custom hooks
-- **GraphQL data layer**: Gatsby's GraphQL for static data, REST API calls for dynamic data
-- **File-based routing**: Pages in `src/pages/` become routes automatically
+- **Data utilities**: Custom data loading utilities in `src/utils/data-loader.ts` for YAML parsing
+- **React Router**: Client-side routing with nested routes
 
 #### Component Architecture
 
@@ -71,7 +72,7 @@ src/
 ├── data/          - YAML content files (sponsors, hotels, team)
 ├── hooks/         - Custom React hooks (Sessionize API, modal management, scroll visibility)
 ├── images/        - Static assets and images
-├── pages/         - Gatsby pages (auto-routed, now using component composition)
+├── pages/         - React Router pages (using component composition)
 ├── styles/        - Global CSS styles
 └── utils/         - Shared utilities (time formatting, etc.)
 ```
@@ -93,7 +94,7 @@ src/
 
 #### Content Management
 
-- Team data embedded in `gatsby-config.ts` site metadata
+- Team data stored in TypeScript configuration files
 - Sponsor/hotel data in YAML files under `src/data/`
 - Images organized by category in `src/images/`
 
@@ -101,7 +102,7 @@ src/
 
 - Tailwind v4 with PostCSS configuration
 - Custom color scheme defined in Tailwind config
-- SVG icons imported as React components via `@svgr/webpack`
+- SVG icons imported as React components via `vite-plugin-svgr`
 
 ### Development Considerations
 

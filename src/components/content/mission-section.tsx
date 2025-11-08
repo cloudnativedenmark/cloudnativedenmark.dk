@@ -1,6 +1,5 @@
 import React from "react"
 import Section from "../ui/section"
-import Container from "../ui/container"
 
 interface MissionSectionProps {
   title?: string
@@ -16,12 +15,13 @@ const MissionSection: React.FC<MissionSectionProps> = ({
   children,
 }) => {
   return (
-    <Section variant="gray">
-      <Container>
+    <Section className="bg-gray-100">
+      <div>
         <h2 className="text-4xl lg:text-5xl font-bold text-center text-gray-900 mb-12">
           {title}
         </h2>
         <div className="flex flex-col lg:flex-row items-center justify-center gap-12">
+          {children && <div className="flex-shrink-0">{children}</div>}
           <div className="flex-1 text-center lg:text-left">
             <p className="text-lg lg:text-xl text-gray-800 leading-relaxed mb-6">
               {description}
@@ -32,9 +32,8 @@ const MissionSection: React.FC<MissionSectionProps> = ({
               </p>
             )}
           </div>
-          {children && <div className="flex-shrink-0">{children}</div>}
         </div>
-      </Container>
+      </div>
     </Section>
   )
 }

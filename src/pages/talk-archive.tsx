@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from "react"
-import { type HeadFC, type PageProps } from "gatsby"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
+import { useLocation } from "react-router-dom"
+import SEOHead from "../components/seo-head"
 import { useSessionizeSchedule } from "../hooks/use-sessionize"
 import { useModalManagement } from "../hooks/use-modal-management"
 import Fuse from "fuse.js"
@@ -13,7 +12,8 @@ const sessionizeEvents = {
   "2024": { id: "cg322q6k", name: "KCD Denmark 2024", location: "Copenhagen" },
 }
 
-const ArchivePage: React.FC<PageProps> = () => {
+const ArchivePage: React.FC = () => {
+  const location = useLocation()
   const selectedYear = "2025"
   const { schedule } = useSessionizeSchedule(sessionizeEvents[selectedYear].id)
   const [searchQuery, setSearchQuery] = useState("")
@@ -69,7 +69,8 @@ const ArchivePage: React.FC<PageProps> = () => {
   }, [searchQuery, archivedSessions, fuse])
 
   return (
-    <Layout>
+    <>
+      <SEOHead title="Talk Archive" pathname={location.pathname} />
       <section className="py-16 bg-white">
         <div className="mx-auto max-w-6xl px-6">
           <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-12 text-center">
@@ -105,12 +106,8 @@ const ArchivePage: React.FC<PageProps> = () => {
           onClose={handleCloseSpeakerModal}
         />
       )}
-    </Layout>
+    </>
   )
 }
 
 export default ArchivePage
-
-export const Head: HeadFC = ({ location: { pathname } }) => (
-  <SEO pathname={pathname} />
-)

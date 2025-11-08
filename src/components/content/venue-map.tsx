@@ -1,6 +1,5 @@
 import React from "react"
 import Section from "../ui/section"
-import Container from "../ui/container"
 
 interface VenueMapProps {
   maps: {
@@ -18,8 +17,8 @@ const VenueMap: React.FC<VenueMapProps> = ({
   description,
 }) => {
   return (
-    <Section variant="default" paddingY="medium">
-      <Container centerContent>
+    <Section className="bg-white lg:py-12">
+      <div className="text-center">
         {title && (
           <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-8">
             {title}
@@ -48,7 +47,7 @@ const VenueMap: React.FC<VenueMapProps> = ({
             </div>
           ))}
         </div>
-      </Container>
+      </div>
     </Section>
   )
 }
