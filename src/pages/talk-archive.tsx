@@ -6,14 +6,12 @@ import { useSessionizeSchedule, type Speaker } from "../hooks/use-sessionize";
 import Fuse from "fuse.js";
 import SpeakerModal from "../components/speaker_modal";
 
-import Dropdown from "../components/dropdown";
-
 const sessionizeEvents = {
   "2025": { id: "ri9gml9f", name: "CND 2025 Aarhus", location: "Aarhus" },
 };
 
 const ArchivePage: React.FC<PageProps> = () => {
-  const [selectedYear, setSelectedYear] = useState("2025");
+  const selectedYear = "2025";
   const { schedule } = useSessionizeSchedule(sessionizeEvents[selectedYear].id);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSpeaker, setSelectedSpeaker] = useState<Speaker | null>(null);
@@ -66,32 +64,20 @@ const ArchivePage: React.FC<PageProps> = () => {
     return fuse.search(searchQuery).map((result) => result.item);
   }, [searchQuery, archivedSessions, fuse]);
 
-  const yearOptions = Object.keys(sessionizeEvents)
-    .sort((a, b) => parseInt(b) - parseInt(a))
-    .map((year) => ({
-      value: year,
-      label: year,
-    }));
-
   return (
     <Layout>
       <section className="py-16 bg-white">
         <div className="mx-auto max-w-6xl px-6">
           <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-12 text-center">
-            Archive
+            Talk Archive
           </h2>
-          <div className="mb-8 max-w-lg mx-auto flex flex-col sm:flex-row gap-4">
+          <div className="mb-8 max-w-lg mx-auto">
             <input
               type="text"
               placeholder="Search talks by title, speaker, description..."
               className="w-full p-4 border border-gray-300 rounded-lg"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <Dropdown
-              options={yearOptions}
-              selectedValue={selectedYear}
-              onSelect={setSelectedYear}
             />
           </div>
           <div className="space-y-8">

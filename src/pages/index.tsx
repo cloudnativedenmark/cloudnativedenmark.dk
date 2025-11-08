@@ -140,9 +140,17 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <a
                   className="inline-flex items-center justify-center text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200 bg-background hover:bg-hover"
-                  href="schedule/"
+                  href="/talk-archive"
                 >
-                  Schedule
+                  Videos & Slides
+                </a>
+                <a
+                  className="inline-flex items-center justify-center text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-200 bg-background hover:bg-hover"
+                  href="https://www.picdrop.com/kim-yennguyen/Rpea9zFuqv"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Photos
                 </a>
               </div>
             </div>
