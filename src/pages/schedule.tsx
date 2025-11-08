@@ -1,107 +1,24 @@
-import * as React from "react";
-import { type HeadFC, type PageProps } from "gatsby";
-import Layout from "../components/layout";
-import SEO from "../components/seo";
-import {
-  useSessionizeSchedule,
-  type Session,
-  type Speaker,
-} from "../hooks/use-sessionize";
-import SessionModal from "../components/session_modal";
-import SpeakerModal from "../components/speaker_modal";
-
-const SessionCard: React.FC<{ session: Session; onClick?: () => void }> = ({
-  session,
-  onClick,
-}) => {
-  if (!session || !session.id) {
-    return null;
-  }
-
-  if (session.isServiceSession) {
-    return (
-      <div className="bg-gray-100 p-4 h-full flex items-center justify-center text-center rounded-lg border border-gray-300">
-        <h3 className="font-bold text-lg text-gray-700">
-          {session.title || session.name}
-        </h3>
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className="bg-blue-50 hover:bg-blue-100 p-3 h-full flex flex-col justify-between rounded-lg shadow-sm border border-blue-200 transition-colors duration-200 cursor-pointer"
-      onClick={onClick}
-    >
-      <div>
-        <h3 className="font-bold text-md text-primary">
-          {session.title || session.name}
-        </h3>
-        {session.speakers && session.speakers.length > 0 && (
-          <p className="text-sm text-gray-600 mt-2">
-            <em>{session.speakers.map((s) => s.fullName).join(", ")}</em>
-          </p>
-        )}
-      </div>
-    </div>
-  );
-};
+import * as React from "react"
+import { type HeadFC, type PageProps } from "gatsby"
+import Layout from "../components/layout"
+import SEO from "../components/seo"
+import { useSessionizeSchedule } from "../hooks/use-sessionize"
+import { useModalManagement } from "../hooks/use-modal-management"
+import { formatDate, formatTime } from "../utils/time-formatting"
+import SessionCard from "../components/session-card"
+import SessionModal from "../components/session_modal"
+import SpeakerModal from "../components/speaker_modal"
 
 const SchedulePage: React.FC<PageProps> = () => {
-  const { schedule } = useSessionizeSchedule();
-  const [selectedSession, setSelectedSession] = React.useState<Session | null>(
-    null
-  );
-  const [selectedSpeaker, setSelectedSpeaker] = React.useState<Speaker | null>(
-    null
-  );
-
-  React.useEffect(() => {
-    if (schedule.length > 0 && typeof window !== "undefined") {
-      const hash = window.location.hash;
-      if (hash) {
-        const sessionId = hash.substring(1);
-        if (sessionId) {
-          const allSessions = schedule.flatMap((day) =>
-            day.timeSlots.flatMap((ts) => ts.rooms.map((r) => r.session))
-          );
-          const session = allSessions.find((s) => s.id === sessionId);
-          if (session) {
-            setSelectedSession(session);
-          }
-        }
-      }
-    }
-  }, [schedule]);
-
-  const handleSessionClick = (session: Session) => {
-    if (session && session.id) {
-      setSelectedSession(session);
-      window.history.pushState(null, "", `#${session.id}`);
-    }
-  };
-
-  const handleCloseSessionModal = () => {
-    setSelectedSession(null);
-    setSelectedSpeaker(null);
-    window.history.pushState(
-      null,
-      "",
-      window.location.pathname + window.location.search
-    );
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
-  const formatTime = (timeString: string) => {
-    return timeString.substring(0, timeString.lastIndexOf(":"));
-  };
+  const { schedule } = useSessionizeSchedule()
+  const {
+    selectedSession,
+    selectedSpeaker,
+    handleSessionClick,
+    handleSpeakerClick,
+    handleCloseSessionModal,
+    handleCloseSpeakerModal,
+  } = useModalManagement({ schedule })
 
   return (
     <Layout>
@@ -129,17 +46,17 @@ const SchedulePage: React.FC<PageProps> = () => {
                 <button
                   key={day.date}
                   onClick={() => {
-                    const element = document.getElementById(day.date);
+                    const element = document.getElementById(day.date)
                     if (element) {
                       const elementPosition =
-                        element.getBoundingClientRect().top;
+                        element.getBoundingClientRect().top
                       const offsetPosition =
-                        elementPosition + window.pageYOffset - 76;
+                        elementPosition + window.pageYOffset - 76
 
                       window.scrollTo({
                         top: offsetPosition,
                         behavior: "smooth",
-                      });
+                      })
                     }
                   }}
                   className="bg-background hover:bg-hover text-white text-l font-semibold py-3 px-6 rounded-full transition-colors duration-200"
@@ -151,7 +68,7 @@ const SchedulePage: React.FC<PageProps> = () => {
           )}
 
           {schedule.map((day) => {
-            const renderedSessions = new Map<string, Set<number>>();
+            const renderedSessions = new Map<string, Set<number>>()
             return (
               <div key={day.date} id={day.date} className="mb-16">
                 <h2 className="text-3xl font-bold text-gray-900 my-8 text-center">
@@ -182,11 +99,11 @@ const SchedulePage: React.FC<PageProps> = () => {
                       timeSlot.rooms.length === 1 &&
                       timeSlot.rooms[0].session.isPlenumSession
                         ? timeSlot.rooms[0].session
-                        : null;
+                        : null
 
                     if (plenumSession) {
                       const concurrent =
-                        renderedSessions.get(timeSlot.slotStart)?.size || 0;
+                        renderedSessions.get(timeSlot.slotStart)?.size || 0
                       return [
                         <div
                           key={`${timeSlot.slotStart}-time`}
@@ -204,9 +121,10 @@ const SchedulePage: React.FC<PageProps> = () => {
                           <SessionCard
                             session={plenumSession}
                             onClick={() => handleSessionClick(plenumSession)}
+                            variant="schedule"
                           />
                         </div>,
-                      ];
+                      ]
                     }
 
                     const timeCell = (
@@ -216,32 +134,32 @@ const SchedulePage: React.FC<PageProps> = () => {
                       >
                         {formatTime(timeSlot.slotStart)}
                       </div>
-                    );
+                    )
 
                     const sessionCells = day.rooms.flatMap((room) => {
                       // This room already has a continued session for the timeslot
                       if (
                         renderedSessions.get(timeSlot.slotStart)?.has(room.id)
                       ) {
-                        return [];
+                        return []
                       }
 
                       // Nothing happens in the room at this time
                       const sessionForRoom = timeSlot.rooms.find(
                         (r) => r.id === room.id
-                      )?.session;
+                      )?.session
                       if (!sessionForRoom || !sessionForRoom.id) {
                         return [
                           <div
                             key={`${timeSlot.slotStart}-${room.id}`}
                             className="bg-white p-1"
                           />,
-                        ];
+                        ]
                       }
 
                       // A session is schedules for this timeslot
-                      let rowSpan = 1;
-                      const ends = new Date(sessionForRoom.endsAt);
+                      let rowSpan = 1
+                      const ends = new Date(sessionForRoom.endsAt)
                       for (
                         let i = timeSlotIndex + 1;
                         i < day.timeSlots.length;
@@ -249,22 +167,22 @@ const SchedulePage: React.FC<PageProps> = () => {
                       ) {
                         const slotStart = new Date(
                           day.timeSlots[i].rooms[0].session.startsAt
-                        );
+                        )
                         if (slotStart < ends) {
-                          rowSpan++;
+                          rowSpan++
                           if (
                             !renderedSessions.has(day.timeSlots[i].slotStart)
                           ) {
                             renderedSessions.set(
                               day.timeSlots[i].slotStart,
                               new Set()
-                            );
+                            )
                           }
                           renderedSessions
                             .get(day.timeSlots[i].slotStart)
-                            ?.add(room.id);
+                            ?.add(room.id)
                         } else {
-                          break;
+                          break
                         }
                       }
                       return [
@@ -276,12 +194,13 @@ const SchedulePage: React.FC<PageProps> = () => {
                           <SessionCard
                             session={sessionForRoom}
                             onClick={() => handleSessionClick(sessionForRoom)}
+                            variant="schedule"
                           />
                         </div>,
-                      ];
-                    });
+                      ]
+                    })
 
-                    return [timeCell, ...sessionCells];
+                    return [timeCell, ...sessionCells]
                   })}
                 </div>
                 <div className="md:hidden">
@@ -304,6 +223,7 @@ const SchedulePage: React.FC<PageProps> = () => {
                             <SessionCard
                               session={room.session}
                               onClick={() => handleSessionClick(room.session)}
+                              variant="schedule"
                             />
                           </div>
                         ))}
@@ -312,7 +232,7 @@ const SchedulePage: React.FC<PageProps> = () => {
                   ))}
                 </div>
               </div>
-            );
+            )
           })}
         </div>
       </section>
@@ -320,21 +240,21 @@ const SchedulePage: React.FC<PageProps> = () => {
         <SessionModal
           session={selectedSession}
           onClose={handleCloseSessionModal}
-          onSpeakerClick={(speaker) => setSelectedSpeaker(speaker)}
+          onSpeakerClick={handleSpeakerClick}
         />
       )}
       {selectedSpeaker && (
         <SpeakerModal
           speaker={selectedSpeaker}
-          onClose={() => setSelectedSpeaker(null)}
+          onClose={handleCloseSpeakerModal}
         />
       )}
     </Layout>
-  );
-};
+  )
+}
 
-export default SchedulePage;
+export default SchedulePage
 
 export const Head: HeadFC = ({ location: { pathname } }) => (
   <SEO title="Cloud Native Denmark - Schedule" pathname={pathname} />
-);
+)

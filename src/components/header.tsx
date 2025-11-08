@@ -1,48 +1,34 @@
-import React, { useState, useEffect } from "react";
-import Logo from "../images/logo.svg";
-import { Link } from "gatsby";
-import { useLocation } from "@gatsbyjs/reach-router";
-import HamburgerMenu from "../images/hamburger-menu.inline.svg";
-import CloseMenu from "../images/close-menu.inline.svg";
+import React, { useState, useEffect } from "react"
+import Logo from "../images/logo.svg"
+import { Link } from "gatsby"
+import { useLocation } from "@reach/router"
+import { useScrollVisibility } from "../hooks/use-scroll-visibility"
+import HamburgerMenu from "../images/hamburger-menu.inline.svg"
+import CloseMenu from "../images/close-menu.inline.svg"
 
 interface HeaderProps {
   menuLinks: {
-    name: string;
-    link: string;
-  }[];
+    name: string
+    link: string
+  }[]
 }
 
 const Header = ({ menuLinks }: HeaderProps) => {
-  const [showLogo, setShowLogo] = useState(false);
-  const [isMenuOpen, setMenuOpen] = useState(false);
-  const location = useLocation();
-  const isHomePage = location.pathname === "/";
+  const [isMenuOpen, setMenuOpen] = useState(false)
+  const location = useLocation()
+  const isHomePage = location.pathname === "/"
+  const showLogo = useScrollVisibility({ threshold: 600, enabled: isHomePage })
 
   useEffect(() => {
-    const handleScroll = () => {
-      // Show logo when scrolled past hero section (roughly 600px)
-      setShowLogo(window.scrollY > 600);
-    };
-
-    // Check if window is available (for SSR compatibility)
-    if (typeof window !== "undefined" && isHomePage) {
-      // Set initial state
-      handleScroll();
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
-    }
-  }, [isHomePage]);
-
-  useEffect(() => {
-    document.body.style.overflow = isMenuOpen ? "hidden" : "unset";
+    document.body.style.overflow = isMenuOpen ? "hidden" : "unset"
     return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isMenuOpen]);
+      document.body.style.overflow = "unset"
+    }
+  }, [isMenuOpen])
 
   const toggleMenu = () => {
-    setMenuOpen(!isMenuOpen);
-  };
+    setMenuOpen(!isMenuOpen)
+  }
 
   return (
     <header
@@ -101,7 +87,7 @@ const Header = ({ menuLinks }: HeaderProps) => {
         </div>
       )}
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

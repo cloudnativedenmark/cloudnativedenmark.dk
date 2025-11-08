@@ -1,11 +1,10 @@
-# Verify we can build the site.
+# Verify code quality and build the site.
 name: Test build
 
-on:
-  pull_request
+on: pull_request
 
 jobs:
-  build:
+  quality-checks:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,11 +14,31 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
-          cache: "npm"
+          node-version: "22"
+          cache: "yarn"
+
+      - name: Verify lock file is up to date
+        run: |
+          yarn install --frozen-lockfile --check-files
+          if [ -n "$(git status --porcelain yarn.lock)" ]; then
+            echo "yarn.lock is not up to date. Please run 'yarn install' and commit the changes."
+            exit 1
+          fi
 
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
+
+      - name: Run TypeScript type checking
+        run: yarn typecheck
+
+      - name: Run ESLint
+        run: yarn lint
+
+      - name: Check code formatting
+        run: yarn format
+
+      - name: Run tests
+        run: yarn test
 
       - name: Build website
-        run: npx gatsby build
+        run: yarn build

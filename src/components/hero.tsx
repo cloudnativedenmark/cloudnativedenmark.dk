@@ -1,5 +1,5 @@
-import React from "react";
-import Logo from "../images/logo.svg";
+import React from "react"
+import Logo from "../images/logo.svg"
 
 const Hero = () => {
   return (
@@ -24,7 +24,7 @@ const Hero = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Hero;
+export default Hero

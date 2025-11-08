@@ -2,8 +2,11 @@
   "name": "cloud-native-denmark",
   "version": "1.0.0",
   "private": true,
-  "description": "cloud-native-denmark",
-  "author": "Thor Anker Kvisgård Lange",
+  "description": "Official Website of Cloud Native Denmark.",
+  "contributors": [
+    "Thor Anker Kvisgård Lange",
+    "Aleksander Nowak"
+  ],
   "keywords": [
     "gatsby"
   ],
@@ -13,12 +16,17 @@
     "build": "gatsby build",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:fix": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\"",
+    "lint": "eslint \"src/**/*.{ts,tsx,js,jsx}\"",
+    "lint:fix": "eslint \"src/**/*.{ts,tsx,js,jsx}\" --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@mdx-js/react": "^2.0.0",
-    "@svgr/webpack": "^8.1.0",
-    "autoprefixer": "^10.4.20",
     "fuse.js": "^7.1.0",
     "gatsby": "^5.14.1",
     "gatsby-plugin-image": "^3.14.0",
@@ -30,16 +38,36 @@
     "gatsby-source-filesystem": "^5.14.0",
     "gatsby-transformer-sharp": "^5.14.0",
     "gatsby-transformer-yaml": "^5.14.0",
-    "postcss": "^8.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwindcss": "^4.0.11"
   },
   "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4.0.11",
-    "@types/node": "^20.11.19",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.10.0",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
-    "typescript": "^5.3.3"
+    "@typescript-eslint/eslint-plugin": "^8.46.0",
+    "@typescript-eslint/parser": "^8.46.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "globals": "^16.5.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
+    "postcss": "^8.5.3",
+    "prettier": "^3.6.2",
+    "ts-jest": "^29.4.5",
+    "typescript": "^5.3.3",
+    "url-loader": "^4.1.1"
   }
 }

@@ -1,10 +1,10 @@
-import React from "react";
-import Header from "./header";
-import { useStaticQuery, graphql } from "gatsby";
-import Footer from "./footer";
+import React from "react"
+import Header from "./header"
+import { useStaticQuery, graphql } from "gatsby"
+import Footer from "./footer"
 
 interface LayoutProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 const Layout = ({ children }: LayoutProps) => {
@@ -20,7 +20,7 @@ const Layout = ({ children }: LayoutProps) => {
         }
       }
     }
-  `);
+  `)
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -28,7 +28,7 @@ const Layout = ({ children }: LayoutProps) => {
       <main className="relative isolate grow">{children}</main>
       <Footer />
     </div>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

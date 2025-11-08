@@ -1,38 +1,33 @@
-import * as React from "react";
-import { type Session, type Speaker } from "../hooks/use-sessionize";
+import * as React from "react"
+import { type Session, type Speaker } from "../hooks/use-sessionize"
+import {
+  formatTimeDetailed,
+  calculateSessionDuration,
+} from "../utils/time-formatting"
+import SpeakerList from "./speaker-list"
 
 const SessionModal: React.FC<{
-  session: Session;
-  onClose: () => void;
-  onSpeakerClick: (speaker: Speaker) => void;
+  session: Session
+  onClose: () => void
+  onSpeakerClick: (speaker: Speaker) => void
 }> = ({ session, onClose, onSpeakerClick }) => {
-  const starts = new Date(session.startsAt);
-  const ends = new Date(session.endsAt);
-  const duration = (ends.getTime() - starts.getTime()) / (1000 * 60); // duration in minutes
-
-  const formatTime = (timeString: string) => {
-    return new Date(timeString).toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  };
+  const duration = calculateSessionDuration(session.startsAt, session.endsAt)
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        onClose();
+        onClose()
       }
-    };
+    }
 
-    document.body.style.overflow = "hidden";
-    document.addEventListener("keydown", handleKeyDown);
+    document.body.style.overflow = "hidden"
+    document.addEventListener("keydown", handleKeyDown)
 
     return () => {
-      document.body.style.overflow = "unset";
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [onClose]);
+      document.body.style.overflow = "unset"
+      document.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [onClose])
 
   return (
     <>
@@ -57,8 +52,8 @@ const SessionModal: React.FC<{
 
             <div className="flex flex-wrap gap-x-6 gap-y-2 text-gray-600 mb-6">
               <span>
-                <strong>Time:</strong> {formatTime(session.startsAt)} -{" "}
-                {formatTime(session.endsAt)} ({duration} min)
+                <strong>Time:</strong> {formatTimeDetailed(session.startsAt)} -{" "}
+                {formatTimeDetailed(session.endsAt)} ({duration} min)
               </span>
               <span>
                 <strong>Room:</strong> {session.room}
@@ -70,24 +65,12 @@ const SessionModal: React.FC<{
                 <h3 className="text-xl font-bold text-gray-800 mb-3">
                   Speakers
                 </h3>
-                <div className="flex flex-wrap gap-6">
-                  {session.speakers.map((speaker) => (
-                    <div
-                      key={speaker.id}
-                      className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
-                      onClick={() => onSpeakerClick(speaker)}
-                    >
-                      <img
-                        src={speaker.profilePicture}
-                        alt={speaker.fullName}
-                        className="w-16 h-16 rounded-full object-cover shadow-md"
-                      />
-                      <span className="font-semibold text-gray-700">
-                        {speaker.fullName}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+                <SpeakerList
+                  speakers={session.speakers}
+                  onSpeakerClick={onSpeakerClick}
+                  variant="inline"
+                  size="medium"
+                />
               </div>
             )}
 
@@ -116,7 +99,7 @@ const SessionModal: React.FC<{
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default SessionModal;
+export default SessionModal

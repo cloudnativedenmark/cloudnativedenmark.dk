@@ -1,4 +1,4 @@
-export const createSchemaCustomization = ({ actions }) => {
+export const createSchemaCustomization = ({ actions }: { actions: any }) => {
   const { createTypes } = actions;
   const typeDefs = `
     type SiteSiteMetadataTeam {

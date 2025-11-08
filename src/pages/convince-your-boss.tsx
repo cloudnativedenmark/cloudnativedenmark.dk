@@ -1,7 +1,7 @@
-import * as React from "react";
-import { type HeadFC, type PageProps } from "gatsby";
-import Layout from "../components/layout";
-import SEO from "../components/seo";
+import * as React from "react"
+import { type HeadFC, type PageProps } from "gatsby"
+import Layout from "../components/layout"
+import SEO from "../components/seo"
 
 const ConvinceYourBossPage: React.FC<PageProps> = () => {
   return (
@@ -252,10 +252,10 @@ const ConvinceYourBossPage: React.FC<PageProps> = () => {
         </div>
       </section>
     </Layout>
-  );
-};
+  )
+}
 
-export default ConvinceYourBossPage;
+export default ConvinceYourBossPage
 
 export const Head: HeadFC = ({ location: { pathname } }) => (
   <SEO
@@ -263,4 +263,4 @@ export const Head: HeadFC = ({ location: { pathname } }) => (
     title="Convince Your Boss"
     description="Justification and email template to get approval to attend Cloud Native Denmark 2025."
   />
-);
+)

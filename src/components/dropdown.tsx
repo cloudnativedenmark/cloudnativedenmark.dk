@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react"
 
 interface DropdownProps {
-  options: { value: string; label: string }[];
-  selectedValue: string;
-  onSelect: (value: string) => void;
+  options: { value: string; label: string }[]
+  selectedValue: string
+  onSelect: (value: string) => void
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -11,13 +11,13 @@ const Dropdown: React.FC<DropdownProps> = ({
   selectedValue,
   onSelect,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   const handleSelect = (value: string) => {
-    onSelect(value);
-    setIsOpen(false);
-  };
+    onSelect(value)
+    setIsOpen(false)
+  }
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -25,15 +25,15 @@ const Dropdown: React.FC<DropdownProps> = ({
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
+        setIsOpen(false)
       }
-    };
+    }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -79,7 +79,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Dropdown;
+export default Dropdown
