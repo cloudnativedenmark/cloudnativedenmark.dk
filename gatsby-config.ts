@@ -8,8 +8,8 @@ const config: GatsbyConfig = {
     siteUrl: `https://cloudnativedenmark.dk`,
     menuLinks: [
       {
-        name: "Schedule",
-        link: "/schedule",
+        name: "Talk Archive",
+        link: "/talk-archive",
       },
       {
         name: "Venue Plan",
@@ -22,10 +22,6 @@ const config: GatsbyConfig = {
       {
         name: "Team",
         link: "/team",
-      },
-      {
-        name: "Archive",
-        link: "/archive",
       },
     ],
     team: [
