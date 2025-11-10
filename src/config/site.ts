@@ -17,7 +17,7 @@ export interface SiteConfig {
 export const siteConfig: SiteConfig = {
   title: "Cloud Native Denmark",
   description:
-    "Cloud Native Denmark shares knowledge about Cloud Native Techonologies and creates community networks in Denmark within this area.",
+    "Cloud Native Denmark shares knowledge about Cloud Native Technologies and creates community networks in Denmark within this area.",
   siteUrl: "https://cloudnativedenmark.dk",
   menuLinks: [
     {
