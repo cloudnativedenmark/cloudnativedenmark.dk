@@ -1,8 +1,7 @@
-import React from "react";
-import LinkedIn from "../images/linkedin-logo.inline.svg";
-import Youtube from "../images/youtube.inline.svg";
-import Flickr from "../images/flickr.inline.svg";
-import { Link } from "gatsby";
+import React from "react"
+import { Link } from "react-router-dom"
+import SocialLinks from "./content/social-links"
+import ExternalLink from "./ui/external-link"
 
 const Footer = () => {
   return (
@@ -12,13 +11,12 @@ const Footer = () => {
           <nav>
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-4">
               <li>
-                <a
-                  className="text-white hover:text-gray-200 text-sm font-semibold"
-                  target="_blank"
+                <ExternalLink
                   href="https://events.linuxfoundation.org/about/code-of-conduct/"
+                  className="text-white hover:text-gray-200 text-sm font-semibold underline"
                 >
                   Code of Conduct
-                </a>
+                </ExternalLink>
               </li>
               <li>
                 <Link
@@ -31,46 +29,41 @@ const Footer = () => {
             </ul>
           </nav>
           <div>
-            <a
-              className="text-sm font-semibold transition-colors duration-200 text-white hover:text-gray-200"
+            <ExternalLink
               href="mailto:contact@cloudnativedenmark.dk"
+              openInNewTab={false}
+              className="text-sm font-semibold transition-colors duration-200 text-white hover:text-gray-200 underline"
             >
               contact@cloudnativedenmark.dk
-            </a>
-            <ul className="flex mt-4 gap-x-2.5">
-              <li className="h-9 w-9">
-                <a
-                  className="items-center h-full w-full"
-                  href="https://www.linkedin.com/company/cloud-native-denmark"
-                  target="_blank"
-                >
-                  <LinkedIn />
-                </a>
-              </li>
-              <li className="h-9 w-9">
-                <a
-                  className="items-center h-full w-full"
-                  href="https://www.youtube.com/@CloudNativeNordics/videos"
-                  target="_blank"
-                >
-                  <Youtube />
-                </a>
-              </li>
-              <li className="h-9 w-9 pt-1">
-                <a
-                  className="items-center h-full w-full"
-                  href="https://www.flickr.com/photos/199545304@N04/"
-                  target="_blank"
-                >
-                  <Flickr />
-                </a>
-              </li>
-            </ul>
+            </ExternalLink>
+            <div className="mt-4">
+              <SocialLinks
+                links={[
+                  {
+                    type: "linkedin",
+                    url: "https://www.linkedin.com/company/cloud-native-denmark",
+                    label: "LinkedIn",
+                  },
+                  {
+                    type: "youtube",
+                    url: "https://www.youtube.com/@CloudNativeNordics/videos",
+                    label: "YouTube",
+                  },
+                  {
+                    type: "flickr",
+                    url: "https://www.flickr.com/photos/199545304@N04/",
+                    label: "Flickr",
+                  },
+                ]}
+                size="medium"
+                spacing="normal"
+              />
+            </div>
           </div>
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

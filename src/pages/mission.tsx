@@ -1,26 +1,28 @@
-import React from "react";
-import Layout from "../components/layout";
-import { HeadFC, PageProps } from "gatsby";
-import SEO from "../components/seo";
+import React from "react"
+import { useLocation } from "react-router-dom"
+import SEOHead from "../components/seo-head"
+import PageHeader from "../components/layout/page-header"
+import Section from "../components/ui/section"
 
-const PrivacyPage: React.FC<PageProps> = () => {
+const MissionPage: React.FC = () => {
+  const location = useLocation()
+
   return (
-    <Layout>
-      <div className="text-primary text-base text-center font-sans pb-20 mx-auto max-w-6xl">
-        <h1 className="mx-2 md:mx-32 text-4xl font-bold pt-24">Mission</h1>
-        <p className="mx-2 md:mx-32 mt-16 text-2xl">
-          Cloud Native Denmark shares knowledge about Cloud Native Techonologies
-          and creates community networks in Denmark within this area. This may
-          happen through events and profit from these will be donated to
-          charity.
-        </p>
-      </div>
-    </Layout>
-  );
-};
+    <>
+      <SEOHead title="Mission" pathname={location.pathname} />
+      <PageHeader title="Mission" variant="default" size="medium" />
+      <Section className="bg-white py-20">
+        <div className="text-center">
+          <p className="text-2xl text-primary leading-relaxed max-w-4xl">
+            Cloud Native Denmark shares knowledge about Cloud Native
+            Technologies and creates community networks in Denmark within this
+            area. This may happen through events and profit from these will be
+            donated to charity.
+          </p>
+        </div>
+      </Section>
+    </>
+  )
+}
 
-export default PrivacyPage;
-
-export const Head: HeadFC = ({ location: { pathname } }) => (
-  <SEO title="Cloud Native Denmark - Mission" pathname={pathname} />
-);
+export default MissionPage
