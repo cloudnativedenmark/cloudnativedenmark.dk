@@ -1,0 +1,100 @@
+name: Deploy Release to CloudFlare
+
+on:
+  push:
+    branches:
+      - "release-*"
+  workflow_dispatch:
+
+concurrency:
+  group: "${{ github.ref_name }}"
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - name: Validate branch name
+        run: |
+          if [[ ! "${{ github.ref_name }}" =~ ^release- ]]; then
+            echo "❌ Error: This workflow can only run on branches starting with 'release-'"
+            echo "Current branch: ${{ github.ref_name }}"
+            echo "Expected format: release-*"
+            exit 1
+          fi
+          echo "✅ Branch name is valid: ${{ github.ref_name }}"
+
+      - name: Extract release name from branch
+        id: extract-release
+        run: |
+          BRANCH_NAME="${{ github.ref_name }}"
+          RELEASE_NAME=$(echo "$BRANCH_NAME" | sed 's/^release-//')
+          if [ -z "$RELEASE_NAME" ]; then
+            echo "Error: Invalid branch name format. Expected 'release-<name>', got '$BRANCH_NAME'"
+            exit 1
+          fi
+          # Validate URL-safe characters (alphanumeric, hyphens, underscores)
+          if [[ ! "$RELEASE_NAME" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+            echo "Error: Release name contains invalid characters. Only alphanumeric, hyphens, and underscores are allowed."
+            echo "Release name: '$RELEASE_NAME'"
+            exit 1
+          fi
+          echo "release_name=$RELEASE_NAME" >> $GITHUB_OUTPUT
+          echo "subdomain=${RELEASE_NAME}.cloudnativedenmark.dk" >> $GITHUB_OUTPUT
+          echo "Deploying to: ${RELEASE_NAME}.cloudnativedenmark.dk"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Yarn Berry
+        run: corepack prepare yarn@4.9.1 --activate
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Run TypeScript type checking
+        run: yarn typecheck
+
+      - name: Run ESLint
+        run: yarn lint
+
+      - name: Check code formatting
+        run: yarn format
+
+      - name: Run tests
+        run: yarn test
+
+      - name: Build website
+        run: yarn build
+
+      - name: Create Pages project (if needed)
+        continue-on-error: true
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages project create cloudnative-denmark-${{ steps.extract-release.outputs.release_name }} --production-branch=${{ github.ref_name }}
+
+      - name: Deploy to CloudFlare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy dist --project-name=cloudnative-denmark-${{ steps.extract-release.outputs.release_name }}
