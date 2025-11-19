@@ -1,15 +1,12 @@
 import React from "react"
 import { useLocation } from "react-router-dom"
 import SEOHead from "../components/seo-head"
-import { useSessionizeSpeakers } from "../hooks/use-sessionize"
 import { useModalManagement } from "../hooks/use-modal-management"
 import { useSponsors } from "../hooks/use-sponsors"
 import HeroSection from "../components/layout/hero-section"
 import ConferenceInfo from "../components/content/conference-info"
 import VenueSection from "../components/content/venue-section"
-import SpeakersSection from "../components/content/speakers-section"
 import LastYearEventSection from "../components/content/last-year-event-section"
-import MerchandiseSection from "../components/content/merchandise-section"
 import MissionSection from "../components/content/mission-section"
 import SponsorsSection from "../components/content/sponsors-section"
 import SpeakerModal from "../components/speaker_modal"
@@ -17,10 +14,8 @@ import Logo from "../images/logo.svg"
 
 const IndexPage: React.FC = () => {
   const location = useLocation()
-  const { speakers } = useSessionizeSpeakers()
   const { sponsors } = useSponsors()
-  const { selectedSpeaker, handleSpeakerClick, handleCloseSpeakerModal } =
-    useModalManagement()
+  const { selectedSpeaker, handleCloseSpeakerModal } = useModalManagement()
 
   // Hero background SVG element
   const heroBackgroundSvg = (
@@ -70,14 +65,15 @@ const IndexPage: React.FC = () => {
             <span className="font-extrabold">DENMARK</span>
           </>
         }
-        subtitle="October 7-8, 2025 • Aarhus"
+        subtitle="Fall, 2026 • Copenhagen"
         primaryAction={{
-          text: "Videos & Slides",
-          href: "/talk-archive",
+          text: "Early Bird Tickets",
+          href: "https://cloudnativedenmark.ticketbutler.io/da/e/cloud-native-denmark-26/",
+          isExternal: true,
         }}
         secondaryAction={{
-          text: "Photos",
-          href: "https://www.picdrop.com/kim-yennguyen/Rpea9zFuqv",
+          text: "Merch",
+          href: "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/?extras_flow=true",
           isExternal: true,
         }}
         backgroundElement={heroBackgroundSvg}
@@ -85,25 +81,17 @@ const IndexPage: React.FC = () => {
 
       <ConferenceInfo
         title=""
-        description="Join us in Aarhus on October 7–8, as the Kubernetes and Cloud Native community comes together for a two-day technical conference packed with inspiring talks, hands-on insights, and great opportunities to connect and grow."
+        description="Join us in Copenhagen as the Kubernetes and Cloud Native community comes together for a technical conference packed with inspiring talks, hands-on insights, and great opportunities to connect and grow."
         variant="dark"
       />
 
       <VenueSection />
 
-      <SpeakersSection
-        speakers={speakers}
-        onSpeakerClick={handleSpeakerClick}
-        initialSpeakersToShow={4}
-      />
-
       <LastYearEventSection />
 
-      <MerchandiseSection />
-
       <MissionSection
-        description="Cloud Native Denmark shares knowledge about Cloud Native Technologies and creates community networks in Denmark within this area. This may happen through events and profit from these will be donated to charity."
-        partnerDescription="This year we are collaborating with Coding Pirates and all profits go to them."
+        description="Through our joint passion for Cloud Native Technologies, we help facilitate the vibrant community meetups and conferences around Denmark, that aim primarily at sharing knowledge and creating deep and diverse proffesional networks. We use generated profits to make generous to trusted charities."
+        partnerDescription="This year, we are once again collaborating with Coding Pirates - a non-profit organization that help teaching children about technology and programming. Over the last three years, we have proudly made a cumulative donation valued over 840,000 DKK to their charity. Help us reach well beyond 1,000,000 DKK in 2026! ⭐"
       >
         <img
           src="/images/coding-pirates-logo.png"
@@ -112,6 +100,14 @@ const IndexPage: React.FC = () => {
           loading="lazy"
         />
       </MissionSection>
+
+      {/*<SpeakersSection
+        speakers={speakers}
+        onSpeakerClick={handleSpeakerClick}
+        initialSpeakersToShow={4}
+      />*/}
+
+      {/*<MerchandiseSection />*/}
 
       <SponsorsSection
         platinum={sponsors.platinum}

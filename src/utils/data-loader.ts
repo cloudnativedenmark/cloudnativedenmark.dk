@@ -162,34 +162,7 @@ export async function loadSponsors() {
       sponsors[category] = []
 
       // Load all sponsor files for this category
-      const allSponsors = [
-        "aeven",
-        "akamai",
-        "aws",
-        "bankdata",
-        "bifrostsec",
-        "cncf",
-        "deranged",
-        "edb",
-        "eficode",
-        "jysk",
-        "komodor",
-        "kubecareers",
-        "kubeevents",
-        "lego",
-        "mftenergy",
-        "netic",
-        "redhat",
-        "saxobank",
-        "scannet",
-        "suse",
-        "sysdig",
-        "systematic",
-        "trifork",
-        "upwind",
-        "vertica",
-        "whiteawaygroup",
-      ]
+      const allSponsors: string[] = []
 
       for (const sponsorName of allSponsors) {
         try {

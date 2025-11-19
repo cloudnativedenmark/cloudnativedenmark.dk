@@ -12,28 +12,27 @@ const LastYearEventSection: React.FC = () => {
         </h2>
         <div className="mx-auto max-w-4xl text-center mb-12">
           <p className="text-lg lg:text-xl text-white">
-            In 2024, we hosted{" "}
+            Last year, we hosted{" "}
             <ExternalLink
-              href="https://2024.kcddenmark.dk/"
+              href="https://2025.cloudnativedenmark.dk/"
               className="text-white underline decoration-dotted hover:text-gray-200"
             >
-              Kubernetes Community Days Denmark
+              Cloud Native Denmark 2025
             </ExternalLink>{" "}
-            at the Bella Center in Copenhagen, bringing together over 500
-            attendees for two packed days of technical talks, community
-            connection, and cloud native inspiration.
+            at the Savværket in Aarhus, bringing together over 450 attendees for
+            two packed days of technical talks, community connection, and cloud
+            native inspiration.
           </p>
           <p className="text-lg lg:text-xl text-white leading-relaxed mt-6">
             While we're not running under the official KCD banner this year due
             to a few logistical reasons, it's still the same event, organized by
-            the same passionate community — just with a new name and a new city.
-            This October in Aarhus, we're aiming even higher. Join us as we take
-            things to the next level.
+            the same passionate community. Join us as we take things to the next
+            level in 2026!
           </p>
         </div>
         <VideoEmbed
-          src="https://www.youtube-nocookie.com/embed/eqqHVjg7FaU"
-          title="KCD Denmark 2024 Highlights"
+          src="https://www.youtube-nocookie.com/embed/BCYvLADtKjE"
+          title="Cloud Native Denmark 2025 Aarhus Reel"
           maxWidth="4xl"
         />
       </div>
