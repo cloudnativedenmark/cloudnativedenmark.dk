@@ -70,7 +70,7 @@ const IndexPage: React.FC = () => {
             <span className="font-extrabold">DENMARK</span>
           </>
         }
-        subtitle="October 7-8, 2025 • Aarhus"
+        subtitle="Fall, 2026 • Copenhagen"
         primaryAction={{
           text: "Videos & Slides",
           href: "/talk-archive",
@@ -85,7 +85,7 @@ const IndexPage: React.FC = () => {
 
       <ConferenceInfo
         title=""
-        description="Join us in Aarhus on October 7–8, as the Kubernetes and Cloud Native community comes together for a two-day technical conference packed with inspiring talks, hands-on insights, and great opportunities to connect and grow."
+        description="Join us in Copenhagen as the Kubernetes and Cloud Native community comes together for a technical conference packed with inspiring talks, hands-on insights, and great opportunities to connect and grow."
         variant="dark"
       />
 
