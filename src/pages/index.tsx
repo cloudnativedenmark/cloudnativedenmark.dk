@@ -100,7 +100,7 @@ const IndexPage: React.FC = () => {
 
       <LastYearEventSection />
 
-      <MerchandiseSection />
+      {/*<MerchandiseSection />*/}
 
       <MissionSection
         description="Cloud Native Denmark shares knowledge about Cloud Native Technologies and creates community networks in Denmark within this area. This may happen through events and profit from these will be donated to charity."
