@@ -20,25 +20,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: "18"
-          cache: "npm"
+          node-version: "24"
+
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Yarn Berry
+        run: corepack prepare yarn@4.9.1 --activate
 
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --immutable
+
+      - name: Run TypeScript type checking
+        run: yarn typecheck
+
+      - name: Run ESLint
+        run: yarn lint
+
+      - name: Check code formatting
+        run: yarn format
+
+      - name: Run tests
+        run: yarn test
 
       - name: Build website
-        run: npx gatsby build
+        run: yarn build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./public
+          path: ./dist
 
   deploy:
     runs-on: ubuntu-latest

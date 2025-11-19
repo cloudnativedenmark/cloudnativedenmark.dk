@@ -1,34 +1,37 @@
-import React from "react";
-import Header from "./header";
-import { useStaticQuery, graphql } from "gatsby";
-import Footer from "./footer";
+import React from "react"
+import { Outlet } from "react-router-dom"
+import Header from "./header"
+import Footer from "./footer"
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
+const menuLinks = [
+  {
+    name: "Talk Archive",
+    link: "/talk-archive",
+  },
+  {
+    name: "Venue Plan",
+    link: "/venue-plan",
+  },
+  {
+    name: "Convince Your Boss",
+    link: "/convince-your-boss",
+  },
+  {
+    name: "Team",
+    link: "/team",
+  },
+]
 
-const Layout = ({ children }: LayoutProps) => {
-  const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
-          menuLinks {
-            name
-            link
-          }
-        }
-      }
-    }
-  `);
-
+const Layout = () => {
   return (
     <div className="flex min-h-screen flex-col">
-      <Header menuLinks={data.site.siteMetadata.menuLinks} />
-      <main className="relative isolate grow">{children}</main>
+      <Header menuLinks={menuLinks} />
+      <main className="relative isolate grow">
+        <Outlet />
+      </main>
       <Footer />
     </div>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout
