@@ -72,12 +72,13 @@ const IndexPage: React.FC = () => {
         }
         subtitle="Fall, 2026 • Copenhagen"
         primaryAction={{
-          text: "Videos & Slides",
-          href: "/talk-archive",
+          text: "Early Bird Tickets",
+          href: "https://cloudnativedenmark.ticketbutler.io/da/e/cloud-native-denmark-26/",
+          isExternal: true,
         }}
         secondaryAction={{
-          text: "Photos",
-          href: "https://www.picdrop.com/kim-yennguyen/Rpea9zFuqv",
+          text: "Merch",
+          href: "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/?extras_flow=true",
           isExternal: true,
         }}
         backgroundElement={heroBackgroundSvg}
