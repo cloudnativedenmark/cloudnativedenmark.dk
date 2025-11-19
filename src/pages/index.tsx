@@ -90,21 +90,17 @@ const IndexPage: React.FC = () => {
         variant="dark"
       />
 
-      <VenueSection />
+      <LastYearEventSection />
 
-      <SpeakersSection
+      {/*<SpeakersSection
         speakers={speakers}
         onSpeakerClick={handleSpeakerClick}
         initialSpeakersToShow={4}
-      />
-
-      <LastYearEventSection />
-
-      {/*<MerchandiseSection />*/}
+      />*/}
 
       <MissionSection
-        description="Cloud Native Denmark shares knowledge about Cloud Native Technologies and creates community networks in Denmark within this area. This may happen through events and profit from these will be donated to charity."
-        partnerDescription="This year we are collaborating with Coding Pirates and all profits go to them."
+        description="Through our joint passion for Cloud Native Technologies, we help facilitate the vibrant community meetups and conferences around Denmark, that aim primarily at sharing knowledge and creating deep and diverse proffesional networks. We use generated profits to make generous to trusted charities."
+        partnerDescription="This year, we are once again collaborating with Coding Pirates - a non-profit organization that help teaching children about technology and programming. Over the last three years, we have proudly made a cumulative donation valued over 840,000 DKK to their charity. Help us reach well beyond 1,000,000 DKK in 2026! ⭐"
       >
         <img
           src="/images/coding-pirates-logo.png"
@@ -113,6 +109,10 @@ const IndexPage: React.FC = () => {
           loading="lazy"
         />
       </MissionSection>
+
+      {/*<MerchandiseSection />*/}
+
+      <VenueSection />
 
       <SponsorsSection
         platinum={sponsors.platinum}
