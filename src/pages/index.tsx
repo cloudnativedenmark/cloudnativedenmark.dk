@@ -90,13 +90,9 @@ const IndexPage: React.FC = () => {
         variant="dark"
       />
 
-      <LastYearEventSection />
+      <VenueSection />
 
-      {/*<SpeakersSection
-        speakers={speakers}
-        onSpeakerClick={handleSpeakerClick}
-        initialSpeakersToShow={4}
-      />*/}
+      <LastYearEventSection />
 
       <MissionSection
         description="Through our joint passion for Cloud Native Technologies, we help facilitate the vibrant community meetups and conferences around Denmark, that aim primarily at sharing knowledge and creating deep and diverse proffesional networks. We use generated profits to make generous to trusted charities."
@@ -110,9 +106,13 @@ const IndexPage: React.FC = () => {
         />
       </MissionSection>
 
-      {/*<MerchandiseSection />*/}
+      {/*<SpeakersSection
+        speakers={speakers}
+        onSpeakerClick={handleSpeakerClick}
+        initialSpeakersToShow={4}
+      />*/}
 
-      <VenueSection />
+      {/*<MerchandiseSection />*/}
 
       <SponsorsSection
         platinum={sponsors.platinum}
