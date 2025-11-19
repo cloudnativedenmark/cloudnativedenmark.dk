@@ -1,15 +1,12 @@
 import React from "react"
 import { useLocation } from "react-router-dom"
 import SEOHead from "../components/seo-head"
-import { useSessionizeSpeakers } from "../hooks/use-sessionize"
 import { useModalManagement } from "../hooks/use-modal-management"
 import { useSponsors } from "../hooks/use-sponsors"
 import HeroSection from "../components/layout/hero-section"
 import ConferenceInfo from "../components/content/conference-info"
 import VenueSection from "../components/content/venue-section"
-import SpeakersSection from "../components/content/speakers-section"
 import LastYearEventSection from "../components/content/last-year-event-section"
-import MerchandiseSection from "../components/content/merchandise-section"
 import MissionSection from "../components/content/mission-section"
 import SponsorsSection from "../components/content/sponsors-section"
 import SpeakerModal from "../components/speaker_modal"
@@ -17,10 +14,8 @@ import Logo from "../images/logo.svg"
 
 const IndexPage: React.FC = () => {
   const location = useLocation()
-  const { speakers } = useSessionizeSpeakers()
   const { sponsors } = useSponsors()
-  const { selectedSpeaker, handleSpeakerClick, handleCloseSpeakerModal } =
-    useModalManagement()
+  const { selectedSpeaker, handleCloseSpeakerModal } = useModalManagement()
 
   // Hero background SVG element
   const heroBackgroundSvg = (
