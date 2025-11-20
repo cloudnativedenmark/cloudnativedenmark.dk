@@ -1,7 +1,6 @@
 import React from "react"
 import Section from "../ui/section"
 import ExternalLink from "../ui/external-link"
-import Button from "../ui/button"
 import SponsorGrid from "./sponsor-grid"
 
 interface Sponsor {
@@ -50,11 +49,11 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
               sponsor@cloudnativedenmark.dk
             </ExternalLink>
           </p>
-          <div className="text-center">
+          {/*<div className="text-center">
             <ExternalLink href="https://cloudnativedenmark2025.my.canva.site/">
               <Button variant="primary">Sponsor Prospectus</Button>
             </ExternalLink>
-          </div>
+          </div>*/}
         </div>
       </div>
 
