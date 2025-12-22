@@ -8,7 +8,7 @@ const LastYearEventSection: React.FC = () => {
     <Section className="bg-background-dark">
       <div>
         <h2 className="text-4xl lg:text-5xl font-bold text-center text-white mb-8">
-          Recap last years event
+          Recap last year's event
         </h2>
         <div className="mx-auto max-w-4xl text-center mb-12">
           <p className="text-lg lg:text-xl text-white">
