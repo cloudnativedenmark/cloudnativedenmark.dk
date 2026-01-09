@@ -65,9 +65,9 @@ const IndexPage: React.FC = () => {
             <span className="font-extrabold">DENMARK</span>
           </>
         }
-        subtitle="Fall, 2026 • Copenhagen"
+        subtitle="November 19-20, 2026 • Scandic Copenhagen"
         primaryAction={{
-          text: "Early Bird Tickets",
+          text: "Blind Bird Tickets",
           href: "https://cloudnativedenmark.ticketbutler.io/da/e/cloud-native-denmark-26/",
           isExternal: true,
         }}
