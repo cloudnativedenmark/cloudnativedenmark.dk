@@ -14,6 +14,7 @@ export interface SponsorYamlData {
   url: string
   logo: string
   scale?: string
+  enabled?: boolean
 }
 
 export interface HotelData {
@@ -148,52 +149,80 @@ async function loadYamlFile<T>(path: string): Promise<T> {
 }
 
 export async function loadSponsors() {
-  const sponsorCategories = [
-    "platinum",
-    "gold",
-    "bronze",
-    "community",
-    "partner",
-  ]
   const sponsors: Record<string, SponsorData[]> = {}
 
-  for (const category of sponsorCategories) {
+  // Use Vite's import.meta.glob to dynamically discover all sponsor YAML files at build time
+  const sponsorFiles = import.meta.glob("/src/data/sponsors/**/*.yaml", {
+    query: "?raw",
+    import: "default",
+  })
+
+  // Load all sponsor images and create a lookup map
+  const imageFiles = import.meta.glob("/src/data/sponsors/**/images/*", {
+    query: "?url",
+    import: "default",
+  })
+
+  // Build image URL lookup: "images/logo.svg" -> bundled URL
+  const imageUrlMap: Record<string, string> = {}
+  for (const path of Object.keys(imageFiles)) {
+    // Extract: /src/data/sponsors/{category}/images/{filename}
+    const parts = path.split("/")
+    const category = parts[4]
+    const filename = parts[6]
+    const key = `${category}/images/${filename}`
+    imageUrlMap[key] = (await imageFiles[path]()) as string
+  }
+
+  for (const path of Object.keys(sponsorFiles)) {
     try {
-      sponsors[category] = []
+      // Extract category from path: /src/data/sponsors/{category}/{name}.yaml
+      const parts = path.split("/")
+      const category = parts[4]
 
-      // Load all sponsor files for this category
-      const allSponsors: string[] = []
-
-      for (const sponsorName of allSponsors) {
-        try {
-          const sponsorYaml = await loadYamlFile<SponsorYamlData>(
-            `/data/sponsors/${category}/${sponsorName}.yaml`
-          )
-
-          // Validate required fields
-          if (!sponsorYaml.title || !sponsorYaml.url || !sponsorYaml.logo) {
-            continue
-          }
-
-          // Transform YAML data to component interface
-          const sponsor: SponsorData = {
-            title: sponsorYaml.title,
-            url: sponsorYaml.url,
-            scale: sponsorYaml.scale,
-            logo: {
-              publicURL: `/data/sponsors/${category}/${sponsorYaml.logo}`,
-            },
-          }
-          sponsors[category].push(sponsor)
-        } catch {
-          // Sponsor file doesn't exist for this category, skip it
-          continue
-        }
+      if (!sponsors[category]) {
+        sponsors[category] = []
       }
+
+      // Load and parse YAML content
+      const rawContent = (await sponsorFiles[path]()) as string
+      const sponsorYaml = yaml.load(rawContent) as SponsorYamlData
+
+      // Skip disabled sponsors
+      if (!sponsorYaml.enabled) {
+        continue
+      }
+
+      // Validate required fields
+      if (!sponsorYaml.title || !sponsorYaml.url || !sponsorYaml.logo) {
+        continue
+      }
+
+      // Get the bundled image URL
+      const imageKey = `${category}/${sponsorYaml.logo}`
+      const imageUrl = imageUrlMap[imageKey]
+
+      if (!imageUrl) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          `Image not found for sponsor ${sponsorYaml.title}: ${imageKey}`
+        )
+        continue
+      }
+
+      // Transform YAML data to component interface
+      const sponsor: SponsorData = {
+        title: sponsorYaml.title,
+        url: sponsorYaml.url,
+        scale: sponsorYaml.scale,
+        logo: {
+          publicURL: imageUrl,
+        },
+      }
+      sponsors[category].push(sponsor)
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.warn(`Failed to load sponsors for category ${category}:`, error)
-      sponsors[category] = []
+      console.warn(`Failed to load sponsor from ${path}:`, error)
     }
   }
 

@@ -2,6 +2,7 @@ import React from "react"
 import Section from "../ui/section"
 import ExternalLink from "../ui/external-link"
 import SponsorGrid from "./sponsor-grid"
+import Button from "../ui/button"
 
 interface Sponsor {
   title: string
@@ -49,11 +50,11 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
               sponsor@cloudnativedenmark.dk
             </ExternalLink>
           </p>
-          {/*<div className="text-center">
-            <ExternalLink href="https://cloudnativedenmark2025.my.canva.site/">
+          <div className="text-center">
+            <ExternalLink href="https://www.canva.com/design/DAG18lTHcrM/RZGm8CHGviE7ZRUBsupWOA/edit">
               <Button variant="primary">Sponsor Prospectus</Button>
             </ExternalLink>
-          </div>*/}
+          </div>
         </div>
       </div>
 
