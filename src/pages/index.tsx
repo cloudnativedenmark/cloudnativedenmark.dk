@@ -66,16 +66,26 @@ const IndexPage: React.FC = () => {
           </>
         }
         subtitle="November 19-20, 2026 • Scandic Copenhagen"
-        primaryAction={{
-          text: "Blind Bird Tickets",
-          href: "https://cloudnativedenmark.ticketbutler.io/da/e/cloud-native-denmark-26/",
-          isExternal: true,
-        }}
-        secondaryAction={{
-          text: "Merch",
-          href: "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/?extras_flow=true",
-          isExternal: true,
-        }}
+        actions={[
+          {
+            text: "Blind Bird Tickets",
+            href: "https://cloudnativedenmark.ticketbutler.io/da/e/cloud-native-denmark-26/",
+            isExternal: true,
+            variant: "primary",
+          },
+          {
+            text: "Submit a talk",
+            href: "http://cloudnativedenmark.dk/cfp",
+            isExternal: true,
+            variant: "primary",
+          },
+          {
+            text: "Merch",
+            href: "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/?extras_flow=true",
+            isExternal: true,
+            variant: "secondary",
+          },
+        ]}
         backgroundElement={heroBackgroundSvg}
       />
 

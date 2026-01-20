@@ -13,16 +13,12 @@ interface HeroSectionProps {
   title: string | React.ReactNode
   subtitle?: string
   description?: string
-  primaryAction?: {
+  actions?: Array<{
     text: string
     href: string
     isExternal?: boolean
-  }
-  secondaryAction?: {
-    text: string
-    href: string
-    isExternal?: boolean
-  }
+    variant?: "primary" | "secondary"
+  }>
   backgroundElement?: React.ReactNode
 }
 
@@ -31,8 +27,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   title,
   subtitle,
   description,
-  primaryAction,
-  secondaryAction,
+  actions,
   backgroundElement,
 }) => {
   return (
@@ -65,40 +60,29 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                 {description}
               </p>
             )}
-            {(primaryAction || secondaryAction) && (
+            {actions && actions.length > 0 && (
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                {primaryAction &&
-                  (primaryAction.isExternal ? (
+                {actions.map((action, index) => {
+                  const buttonVariant = action.variant || "primary"
+                  const buttonElement = (
+                    <Button variant={buttonVariant}>{action.text}</Button>
+                  )
+
+                  return action.isExternal ? (
                     <a
-                      href={primaryAction.href}
+                      key={index}
+                      href={action.href}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Button>{primaryAction.text}</Button>
+                      {buttonElement}
                     </a>
                   ) : (
-                    <Link to={primaryAction.href}>
-                      <Button>{primaryAction.text}</Button>
+                    <Link key={index} to={action.href}>
+                      {buttonElement}
                     </Link>
-                  ))}
-                {secondaryAction &&
-                  (secondaryAction.isExternal ? (
-                    <a
-                      href={secondaryAction.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button variant="secondary">
-                        {secondaryAction.text}
-                      </Button>
-                    </a>
-                  ) : (
-                    <Link to={secondaryAction.href}>
-                      <Button variant="secondary">
-                        {secondaryAction.text}
-                      </Button>
-                    </Link>
-                  ))}
+                  )
+                })}
               </div>
             )}
           </div>
