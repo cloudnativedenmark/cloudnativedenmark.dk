@@ -51,7 +51,7 @@ const IndexPage: React.FC = () => {
 
   return (
     <>
-      <SEOHead title="Cloud Native Denmark 2025" pathname={location.pathname} />
+      <SEOHead title="Cloud Native Denmark 2026" pathname={location.pathname} />
       <HeroSection
         logo={{
           src: Logo,
