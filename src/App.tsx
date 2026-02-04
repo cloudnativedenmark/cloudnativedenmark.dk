@@ -8,6 +8,7 @@ import Privacy from "./pages/privacy"
 import Schedule from "./pages/schedule"
 import TalkArchive from "./pages/talk-archive"
 import Team from "./pages/team"
+import TicketRates from "./pages/ticket-rates"
 import VenuePlan from "./pages/venue-plan"
 import NotFound from "./pages/404"
 
@@ -22,6 +23,7 @@ function App() {
         <Route path="schedule" element={<Schedule />} />
         <Route path="talk-archive" element={<TalkArchive />} />
         <Route path="team" element={<Team />} />
+        <Route path="ticket-rates" element={<TicketRates />} />
         <Route path="venue-plan" element={<VenuePlan />} />
         <Route path="*" element={<NotFound />} />
       </Route>
