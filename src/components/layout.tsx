@@ -12,10 +12,10 @@ const menuLinks = [
   //   name: "Venue Plan",
   //   link: "/venue-plan",
   // },
-  // {
-  //   name: "Convince Your Boss",
-  //   link: "/convince-your-boss",
-  // },
+  {
+    name: "Convince Your Boss",
+    link: "/convince-your-boss",
+  },
   {
     name: "Team",
     link: "/team",
