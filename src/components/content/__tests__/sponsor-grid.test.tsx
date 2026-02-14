@@ -98,12 +98,12 @@ describe("SponsorGrid", () => {
     })
   })
 
-  describe("variants", () => {
-    it("should apply default variant styling", () => {
-      const sponsors = [createMockSponsor("Default Sponsor")]
+  describe("sizes", () => {
+    it("should apply large size styling", () => {
+      const sponsors = [createMockSponsor("Large Sponsor")]
 
       const { container } = render(
-        <SponsorGrid sponsors={sponsors} title="Sponsors" variant="default" />
+        <SponsorGrid sponsors={sponsors} title="Sponsors" size="large" />
       )
 
       const gridContainer = container.firstChild
@@ -111,11 +111,11 @@ describe("SponsorGrid", () => {
       expect(gridContainer).toHaveClass("mb-20")
     })
 
-    it("should apply compact variant styling", () => {
-      const sponsors = [createMockSponsor("Compact Sponsor")]
+    it("should apply small size styling", () => {
+      const sponsors = [createMockSponsor("Small Sponsor")]
 
       const { container } = render(
-        <SponsorGrid sponsors={sponsors} title="Sponsors" variant="compact" />
+        <SponsorGrid sponsors={sponsors} title="Sponsors" size="small" />
       )
 
       const gridContainer = container.firstChild
@@ -123,7 +123,7 @@ describe("SponsorGrid", () => {
       expect(gridContainer).toHaveClass("mb-16")
     })
 
-    it("should use default variant when not specified", () => {
+    it("should use medium size when not specified", () => {
       const sponsors = [createMockSponsor("Default Sponsor")]
 
       const { container } = render(
@@ -131,8 +131,8 @@ describe("SponsorGrid", () => {
       )
 
       const gridContainer = container.firstChild
-      expect(gridContainer).toHaveClass("mt-16")
-      expect(gridContainer).toHaveClass("mb-20")
+      expect(gridContainer).toHaveClass("mt-14")
+      expect(gridContainer).toHaveClass("mb-18")
     })
   })
 

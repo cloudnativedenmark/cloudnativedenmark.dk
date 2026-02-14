@@ -72,7 +72,7 @@ describe("SponsorsSection", () => {
 
       render(<SponsorsSection {...props} />)
 
-      expect(screen.getByText("Platinum Sponsors")).toBeInTheDocument()
+      expect(screen.getByText("Platinum")).toBeInTheDocument()
       expect(screen.getByAltText("Platinum Sponsor")).toBeInTheDocument()
     })
 
@@ -84,7 +84,7 @@ describe("SponsorsSection", () => {
 
       render(<SponsorsSection {...props} />)
 
-      expect(screen.getByText("Gold Sponsors")).toBeInTheDocument()
+      expect(screen.getByText("Gold")).toBeInTheDocument()
       expect(screen.getByAltText("Gold Sponsor")).toBeInTheDocument()
     })
 
@@ -96,7 +96,7 @@ describe("SponsorsSection", () => {
 
       render(<SponsorsSection {...props} />)
 
-      expect(screen.getByText("Bronze Sponsors")).toBeInTheDocument()
+      expect(screen.getByText("Bronze")).toBeInTheDocument()
       expect(screen.getByAltText("Bronze Sponsor")).toBeInTheDocument()
     })
 
@@ -108,7 +108,7 @@ describe("SponsorsSection", () => {
 
       render(<SponsorsSection {...props} />)
 
-      expect(screen.getByText("Community Sponsors")).toBeInTheDocument()
+      expect(screen.getByText("Community")).toBeInTheDocument()
       expect(screen.getByAltText("Online City")).toBeInTheDocument()
     })
 
@@ -127,10 +127,10 @@ describe("SponsorsSection", () => {
     it("should not render tier sections when empty", () => {
       render(<SponsorsSection {...defaultProps} />)
 
-      expect(screen.queryByText("Platinum Sponsors")).not.toBeInTheDocument()
-      expect(screen.queryByText("Gold Sponsors")).not.toBeInTheDocument()
-      expect(screen.queryByText("Bronze Sponsors")).not.toBeInTheDocument()
-      expect(screen.queryByText("Community Sponsors")).not.toBeInTheDocument()
+      expect(screen.queryByText("Platinum")).not.toBeInTheDocument()
+      expect(screen.queryByText("Gold")).not.toBeInTheDocument()
+      expect(screen.queryByText("Bronze")).not.toBeInTheDocument()
+      expect(screen.queryByText("Community")).not.toBeInTheDocument()
       expect(screen.queryByText("Partners & Media")).not.toBeInTheDocument()
     })
   })
@@ -166,10 +166,10 @@ describe("SponsorsSection", () => {
 
       render(<SponsorsSection {...props} />)
 
-      expect(screen.getByText("Platinum Sponsors")).toBeInTheDocument()
-      expect(screen.getByText("Gold Sponsors")).toBeInTheDocument()
-      expect(screen.getByText("Bronze Sponsors")).toBeInTheDocument()
-      expect(screen.getByText("Community Sponsors")).toBeInTheDocument()
+      expect(screen.getByText("Platinum")).toBeInTheDocument()
+      expect(screen.getByText("Gold")).toBeInTheDocument()
+      expect(screen.getByText("Bronze")).toBeInTheDocument()
+      expect(screen.getByText("Community")).toBeInTheDocument()
       expect(screen.getByText("Partners & Media")).toBeInTheDocument()
     })
   })
