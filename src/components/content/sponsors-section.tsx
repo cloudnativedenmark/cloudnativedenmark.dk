@@ -40,11 +40,31 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
           </h2>
         </div>
 
-        <SponsorGrid sponsors={platinum} title="Platinum" size="large" tier="platinum" />
+        <SponsorGrid
+          sponsors={platinum}
+          title="Platinum"
+          size="large"
+          tier="platinum"
+        />
         <SponsorGrid sponsors={gold} title="Gold" size="medium" tier="gold" />
-        <SponsorGrid sponsors={bronze} title="Bronze" size="small" tier="bronze" />
-        <SponsorGrid sponsors={community} title="Community" size="small" tier="community" />
-        <SponsorGrid sponsors={partners} title="Partners & Media" size="small" tier="partners" />
+        <SponsorGrid
+          sponsors={bronze}
+          title="Bronze"
+          size="small"
+          tier="bronze"
+        />
+        <SponsorGrid
+          sponsors={community}
+          title="Community"
+          size="small"
+          tier="community"
+        />
+        <SponsorGrid
+          sponsors={partners}
+          title="Partners & Media"
+          size="small"
+          tier="partners"
+        />
       </Section>
 
       <Section className="bg-white px-0 sm:px-6 lg:px-12">
