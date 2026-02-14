@@ -5,6 +5,7 @@ import { useModalManagement } from "../hooks/use-modal-management"
 import { useSponsors } from "../hooks/use-sponsors"
 import HeroSection from "../components/layout/hero-section"
 import ConferenceInfo from "../components/content/conference-info"
+import TicketRatesSection from "../components/content/ticket-rates-section"
 import VenueSection from "../components/content/venue-section"
 import LastYearEventSection from "../components/content/last-year-event-section"
 import MissionSection from "../components/content/mission-section"
@@ -16,6 +17,16 @@ const IndexPage: React.FC = () => {
   const location = useLocation()
   const { sponsors } = useSponsors()
   const { selectedSpeaker, handleCloseSpeakerModal } = useModalManagement()
+
+  const scrollToTicketRates = () => {
+    const element = document.getElementById("ticket-rates")
+    if (element) {
+      const headerOffset = 70
+      const elementPosition = element.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.scrollY - headerOffset
+      window.scrollTo({ top: offsetPosition, behavior: "smooth" })
+    }
+  }
 
   // Hero background SVG element
   const heroBackgroundSvg = (
@@ -68,9 +79,8 @@ const IndexPage: React.FC = () => {
         subtitle="November 19-20, 2026 • Scandic Copenhagen"
         actions={[
           {
-            text: "Blind Bird Tickets",
-            href: "https://cloudnativedenmark.ticketbutler.io/da/e/cloud-native-denmark-26/",
-            isExternal: true,
+            text: "Ticket Rates",
+            onClick: scrollToTicketRates,
             variant: "primary",
           },
           {
@@ -94,6 +104,8 @@ const IndexPage: React.FC = () => {
         description="Join us in Copenhagen as the Kubernetes and Cloud Native community comes together for a technical conference packed with inspiring talks, hands-on insights, and great opportunities to connect and grow."
         variant="dark"
       />
+
+      <TicketRatesSection id="ticket-rates" />
 
       <VenueSection />
 

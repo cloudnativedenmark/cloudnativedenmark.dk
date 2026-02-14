@@ -15,9 +15,10 @@ interface HeroSectionProps {
   description?: string
   actions?: Array<{
     text: string
-    href: string
+    href?: string
     isExternal?: boolean
     variant?: "primary" | "secondary"
+    onClick?: () => void
   }>
   backgroundElement?: React.ReactNode
 }
@@ -68,6 +69,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                     <Button variant={buttonVariant}>{action.text}</Button>
                   )
 
+                  if (action.onClick) {
+                    return (
+                      <button key={index} onClick={action.onClick}>
+                        {buttonElement}
+                      </button>
+                    )
+                  }
+
                   return action.isExternal ? (
                     <a
                       key={index}
@@ -78,7 +87,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                       {buttonElement}
                     </a>
                   ) : (
-                    <Link key={index} to={action.href}>
+                    <Link key={index} to={action.href!}>
                       {buttonElement}
                     </Link>
                   )
