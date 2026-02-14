@@ -70,17 +70,27 @@ const SponsorGrid: React.FC<SponsorGridProps> = ({
     },
   }
 
-  const { container: containerClasses, item: itemClasses, image: imageClasses } = sizeConfig[size]
+  const {
+    container: containerClasses,
+    item: itemClasses,
+    image: imageClasses,
+  } = sizeConfig[size]
   const { line: lineGradient, text: textColor } = tierConfig[tier]
 
   return (
     <div className={containerClasses}>
       <div className="flex items-center justify-center gap-4 mb-10">
-        <div className={`h-px bg-gradient-to-r ${lineGradient} flex-1 max-w-24`}></div>
-        <p className={`text-center text-lg font-semibold uppercase tracking-widest ${textColor}`}>
+        <div
+          className={`h-px bg-gradient-to-r ${lineGradient} flex-1 max-w-24`}
+        ></div>
+        <p
+          className={`text-center text-lg font-semibold uppercase tracking-widest ${textColor}`}
+        >
           {title}
         </p>
-        <div className={`h-px bg-gradient-to-l ${lineGradient} flex-1 max-w-24`}></div>
+        <div
+          className={`h-px bg-gradient-to-l ${lineGradient} flex-1 max-w-24`}
+        ></div>
       </div>
       <div className="flex flex-wrap justify-center gap-x-8 xl:gap-y-6">
         {sponsors.map((sponsor, index) => (

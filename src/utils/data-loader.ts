@@ -163,20 +163,29 @@ export async function loadSponsors() {
     import: "default",
   })
 
-  // Build image URL lookup: "images/logo.svg" -> bundled URL
+  // Build image URL lookup in parallel
+  const imagePaths = Object.keys(imageFiles)
+  const imageResults = await Promise.all(
+    imagePaths.map((path) => imageFiles[path]())
+  )
+
   const imageUrlMap: Record<string, string> = {}
-  for (const path of Object.keys(imageFiles)) {
-    // Extract: /src/data/sponsors/{category}/images/{filename}
+  imagePaths.forEach((path, index) => {
     const parts = path.split("/")
     const category = parts[4]
     const filename = parts[6]
     const key = `${category}/images/${filename}`
-    imageUrlMap[key] = (await imageFiles[path]()) as string
-  }
+    imageUrlMap[key] = imageResults[index] as string
+  })
 
-  for (const path of Object.keys(sponsorFiles)) {
+  // Load all YAML files in parallel
+  const yamlPaths = Object.keys(sponsorFiles)
+  const yamlResults = await Promise.all(
+    yamlPaths.map((path) => sponsorFiles[path]())
+  )
+
+  yamlPaths.forEach((path, index) => {
     try {
-      // Extract category from path: /src/data/sponsors/{category}/{name}.yaml
       const parts = path.split("/")
       const category = parts[4]
 
@@ -184,18 +193,17 @@ export async function loadSponsors() {
         sponsors[category] = []
       }
 
-      // Load and parse YAML content
-      const rawContent = (await sponsorFiles[path]()) as string
+      const rawContent = yamlResults[index] as string
       const sponsorYaml = yaml.load(rawContent) as SponsorYamlData
 
       // Skip disabled sponsors
       if (!sponsorYaml.enabled) {
-        continue
+        return
       }
 
       // Validate required fields
       if (!sponsorYaml.title || !sponsorYaml.url || !sponsorYaml.logo) {
-        continue
+        return
       }
 
       // Get the bundled image URL
@@ -207,7 +215,7 @@ export async function loadSponsors() {
         console.warn(
           `Image not found for sponsor ${sponsorYaml.title}: ${imageKey}`
         )
-        continue
+        return
       }
 
       // Transform YAML data to component interface
@@ -224,7 +232,7 @@ export async function loadSponsors() {
       // eslint-disable-next-line no-console
       console.warn(`Failed to load sponsor from ${path}:`, error)
     }
-  }
+  })
 
   return sponsors
 }
