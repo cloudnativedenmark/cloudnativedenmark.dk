@@ -1,6 +1,11 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
+import { MemoryRouter } from "react-router-dom"
 import SponsorsSection from "../sponsors-section"
+
+const renderWithRouter = (ui: React.ReactElement) => {
+  return render(<MemoryRouter>{ui}</MemoryRouter>)
+}
 
 const createMockSponsor = (title: string, overrides = {}) => ({
   title,
@@ -22,44 +27,28 @@ describe("SponsorsSection", () => {
 
   describe("rendering", () => {
     it("should render the Sponsors heading", () => {
-      render(<SponsorsSection {...defaultProps} />)
+      renderWithRouter(<SponsorsSection {...defaultProps} />)
 
       expect(
         screen.getByRole("heading", { name: "Sponsors" })
       ).toBeInTheDocument()
     })
 
-    it("should render the sponsor contact email", () => {
-      render(<SponsorsSection {...defaultProps} />)
-
-      const emailLink = screen.getByRole("link", {
-        name: "sponsor@cloudnativedenmark.dk",
-      })
-      expect(emailLink).toBeInTheDocument()
-      expect(emailLink).toHaveAttribute(
-        "href",
-        "mailto:sponsor@cloudnativedenmark.dk"
-      )
-    })
-
-    it("should render the Sponsor Prospectus button", () => {
-      render(<SponsorsSection {...defaultProps} />)
+    it("should render the Become a Sponsor button", () => {
+      renderWithRouter(<SponsorsSection {...defaultProps} />)
 
       expect(
-        screen.getByRole("button", { name: "Sponsor Prospectus" })
+        screen.getByRole("button", { name: "Become a Sponsor" })
       ).toBeInTheDocument()
     })
 
-    it("should link to the Canva prospectus", () => {
-      render(<SponsorsSection {...defaultProps} />)
+    it("should link to the become-a-sponsor page", () => {
+      renderWithRouter(<SponsorsSection {...defaultProps} />)
 
-      const prospectusLink = screen.getByRole("link", {
-        name: "Sponsor Prospectus",
+      const sponsorLink = screen.getByRole("link", {
+        name: "Become a Sponsor",
       })
-      expect(prospectusLink).toHaveAttribute(
-        "href",
-        "https://www.canva.com/design/DAG18lTHcrM/RZGm8CHGviE7ZRUBsupWOA/edit"
-      )
+      expect(sponsorLink).toHaveAttribute("href", "/become-a-sponsor")
     })
   })
 
@@ -70,7 +59,7 @@ describe("SponsorsSection", () => {
         platinum: [createMockSponsor("Platinum Sponsor")],
       }
 
-      render(<SponsorsSection {...props} />)
+      renderWithRouter(<SponsorsSection {...props} />)
 
       expect(screen.getByText("Platinum")).toBeInTheDocument()
       expect(screen.getByAltText("Platinum Sponsor")).toBeInTheDocument()
@@ -82,7 +71,7 @@ describe("SponsorsSection", () => {
         gold: [createMockSponsor("Gold Sponsor")],
       }
 
-      render(<SponsorsSection {...props} />)
+      renderWithRouter(<SponsorsSection {...props} />)
 
       expect(screen.getByText("Gold")).toBeInTheDocument()
       expect(screen.getByAltText("Gold Sponsor")).toBeInTheDocument()
@@ -94,7 +83,7 @@ describe("SponsorsSection", () => {
         bronze: [createMockSponsor("Bronze Sponsor")],
       }
 
-      render(<SponsorsSection {...props} />)
+      renderWithRouter(<SponsorsSection {...props} />)
 
       expect(screen.getByText("Bronze")).toBeInTheDocument()
       expect(screen.getByAltText("Bronze Sponsor")).toBeInTheDocument()
@@ -106,7 +95,7 @@ describe("SponsorsSection", () => {
         community: [createMockSponsor("Online City", { scale: "120%" })],
       }
 
-      render(<SponsorsSection {...props} />)
+      renderWithRouter(<SponsorsSection {...props} />)
 
       expect(screen.getByText("Community")).toBeInTheDocument()
       expect(screen.getByAltText("Online City")).toBeInTheDocument()
@@ -118,14 +107,14 @@ describe("SponsorsSection", () => {
         partners: [createMockSponsor("CNCF")],
       }
 
-      render(<SponsorsSection {...props} />)
+      renderWithRouter(<SponsorsSection {...props} />)
 
       expect(screen.getByText("Partners & Media")).toBeInTheDocument()
       expect(screen.getByAltText("CNCF")).toBeInTheDocument()
     })
 
     it("should not render tier sections when empty", () => {
-      render(<SponsorsSection {...defaultProps} />)
+      renderWithRouter(<SponsorsSection {...defaultProps} />)
 
       expect(screen.queryByText("Platinum")).not.toBeInTheDocument()
       expect(screen.queryByText("Gold")).not.toBeInTheDocument()
@@ -146,7 +135,7 @@ describe("SponsorsSection", () => {
         ],
       }
 
-      render(<SponsorsSection {...props} />)
+      renderWithRouter(<SponsorsSection {...props} />)
 
       expect(screen.getByAltText("Online City")).toBeInTheDocument()
       expect(screen.getByAltText("Another Sponsor")).toBeInTheDocument()
@@ -164,7 +153,7 @@ describe("SponsorsSection", () => {
         partners: [createMockSponsor("Partner Co")],
       }
 
-      render(<SponsorsSection {...props} />)
+      renderWithRouter(<SponsorsSection {...props} />)
 
       expect(screen.getByText("Platinum")).toBeInTheDocument()
       expect(screen.getByText("Gold")).toBeInTheDocument()
@@ -176,7 +165,7 @@ describe("SponsorsSection", () => {
 
   describe("accessibility", () => {
     it("should have accessible sponsor heading with id", () => {
-      render(<SponsorsSection {...defaultProps} />)
+      renderWithRouter(<SponsorsSection {...defaultProps} />)
 
       const heading = screen.getByRole("heading", { name: "Sponsors" })
       expect(heading).toHaveAttribute("id", "sponsors")
@@ -188,7 +177,7 @@ describe("SponsorsSection", () => {
         community: [createMockSponsor("Accessible Sponsor")],
       }
 
-      render(<SponsorsSection {...props} />)
+      renderWithRouter(<SponsorsSection {...props} />)
 
       expect(screen.getByAltText("Accessible Sponsor")).toBeInTheDocument()
     })

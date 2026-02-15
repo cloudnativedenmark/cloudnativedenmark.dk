@@ -1,6 +1,6 @@
 import React from "react"
+import { Link } from "react-router-dom"
 import Section from "../ui/section"
-import ExternalLink from "../ui/external-link"
 import SponsorGrid from "./sponsor-grid"
 import Button from "../ui/button"
 
@@ -33,11 +33,18 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
       <Section className="bg-gradient-to-b from-gray-50 via-white to-gray-50 px-0 sm:px-6 lg:px-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
           <h2
-            className="text-4xl lg:text-5xl font-bold text-gray-900 mb-8"
+            className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4"
             id="sponsors"
           >
             Sponsors
           </h2>
+          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+            Cloud Native Denmark is made possible by the generous support of our
+            sponsors.
+          </p>
+          <Link to="/become-a-sponsor">
+            <Button variant="primary">Become a Sponsor</Button>
+          </Link>
         </div>
 
         <SponsorGrid
@@ -65,36 +72,6 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
           size="small"
           tier="partners"
         />
-      </Section>
-
-      <Section className="bg-white px-0 sm:px-6 lg:px-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
-          <h2
-            className="text-4xl lg:text-5xl font-bold text-gray-900 mb-8"
-            id="become-a-sponsor"
-          >
-            Become a Sponsor
-          </h2>
-          <div className="mx-auto max-w-[600px]">
-            <p className="text-lg text-gray-700 leading-relaxed text-center mb-4">
-              If you're interested in becoming a sponsor, please contact:
-            </p>
-            <p className="text-center mb-12">
-              <ExternalLink
-                href="mailto:sponsor@cloudnativedenmark.dk"
-                openInNewTab={false}
-                className="text-lg font-medium text-background hover:text-background/80 underline"
-              >
-                sponsor@cloudnativedenmark.dk
-              </ExternalLink>
-            </p>
-            <div className="text-center">
-              <ExternalLink href="https://www.canva.com/design/DAG18lTHcrM/RZGm8CHGviE7ZRUBsupWOA/edit">
-                <Button variant="primary">Sponsor Prospectus</Button>
-              </ExternalLink>
-            </div>
-          </div>
-        </div>
       </Section>
     </>
   )
