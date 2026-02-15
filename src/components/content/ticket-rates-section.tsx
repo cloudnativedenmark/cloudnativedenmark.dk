@@ -19,14 +19,14 @@ const ticketTiers: TicketTier[] = [
   {
     name: "Blind Bird",
     price: 1499,
-    availableUntil: new Date("2026-03-31"),
-    displayDate: "Through Mar 31",
+    availableUntil: new Date("2026-09-18"),
+    displayDate: "Through Sep 18",
   },
   {
-    name: "Ordinary",
+    name: "Standard",
     price: 1999,
-    availableUntil: new Date("2026-11-05"),
-    displayDate: "Through Nov 5",
+    availableUntil: new Date("2026-11-17"),
+    displayDate: "Through Nov 17",
   },
   {
     name: "Late Bird",
@@ -167,28 +167,10 @@ const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({ id }) => {
           })}
         </div>
 
-        {/* Community Sponsor Section */}
-        <h3 className="text-2xl font-bold text-gray-900 mt-16 mb-6">
-          Community Sponsor
-        </h3>
-        <div className="max-w-2xl mx-auto">
-          <div className="rounded-lg p-8 text-center border bg-blue-50 border-blue-300">
-            <p className="text-2xl font-bold text-blue-600 mb-4">14.999 DKK</p>
-            <p className="text-gray-700 mb-4">
-              Includes 5 tickets to the conference and branding with your logo
-              displayed in common areas and on our website.
-            </p>
-            <p className="text-sm text-gray-500 italic">
-              We will contact you after purchase with details on logo and
-              tickets.
-            </p>
-          </div>
-        </div>
-
         <p className="text-sm text-gray-500 text-center mt-8 italic">
           Visible prices include 25% VAT. Additional Ticketbutler service fees
-          apply at checkout. Prices, dates, and other details may be subject to
-          change.
+          apply at checkout. Blind Bird availability is capped at 100 tickets,
+          and may be limitted given early release of the conference schedule.
         </p>
 
         <div className="text-center mt-8">

@@ -1,5 +1,5 @@
-import React from "react"
-import { Outlet } from "react-router-dom"
+import React, { useEffect } from "react"
+import { Outlet, useLocation } from "react-router-dom"
 import Header from "./header"
 import Footer from "./footer"
 
@@ -13,6 +13,10 @@ const menuLinks = [
   //   link: "/venue-plan",
   // },
   {
+    name: "Become a Sponsor",
+    link: "/become-a-sponsor",
+  },
+  {
     name: "Convince Your Boss",
     link: "/convince-your-boss",
   },
@@ -23,6 +27,12 @@ const menuLinks = [
 ]
 
 const Layout = () => {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header menuLinks={menuLinks} />
