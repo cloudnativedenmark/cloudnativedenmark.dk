@@ -15,14 +15,14 @@ type TierType = "platinum" | "gold" | "bronze" | "community" | "partners"
 interface SponsorGridProps {
   sponsors: Sponsor[]
   title: string
-  size?: "large" | "medium" | "small"
+  size?: "xl" | "l" | "m" | "s"
   tier?: TierType
 }
 
 const SponsorGrid: React.FC<SponsorGridProps> = ({
   sponsors,
   title,
-  size = "medium",
+  size = "m",
   tier = "community",
 }) => {
   if (!sponsors || sponsors.length === 0) {
@@ -30,17 +30,22 @@ const SponsorGrid: React.FC<SponsorGridProps> = ({
   }
 
   const sizeConfig = {
-    large: {
+    xl: {
       container: "mt-16 mb-20",
       item: "flex items-center justify-center min-w-[380px] min-h-[130px] sm:min-w-[320px] sm:min-h-[110px] xs:min-w-fit xs:max-w-full",
       image: "h-auto max-h-[140px] xs:max-w-full max-w-[340px] sm:min-w-[70%]",
     },
-    medium: {
+    l: {
       container: "mt-14 mb-18",
       item: "flex items-center justify-center min-w-[320px] min-h-[120px] sm:min-w-[280px] sm:min-h-[100px] xs:min-w-fit xs:max-w-full",
       image: "h-auto max-h-[120px] xs:max-w-full max-w-[280px] sm:min-w-[70%]",
     },
-    small: {
+    m: {
+      container: "mt-12 mb-16",
+      item: "flex items-center justify-center min-w-[240px] min-h-[100px] sm:min-w-[200px] sm:min-h-[85px] xs:min-w-fit xs:max-w-full",
+      image: "h-auto max-h-[100px] xs:max-w-full max-w-[220px] sm:min-w-[70%]",
+    },
+    s: {
       container: "mt-12 mb-16",
       item: "flex items-center justify-center min-w-[200px] min-h-[80px] sm:min-w-[180px] sm:min-h-[70px] xs:min-w-fit xs:max-w-full",
       image: "h-auto max-h-[80px] xs:max-w-full max-w-[180px] sm:min-w-[70%]",
