@@ -13,6 +13,10 @@ const menuLinks = [
   //   link: "/venue-plan",
   // },
   {
+    name: "Venue",
+    link: "/venue",
+  },
+  {
     name: "Become a Sponsor",
     link: "/become-a-sponsor",
   },

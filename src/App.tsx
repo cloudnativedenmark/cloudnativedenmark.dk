@@ -8,6 +8,7 @@ import Privacy from "./pages/privacy"
 import Schedule from "./pages/schedule"
 import TalkArchive from "./pages/talk-archive"
 import Team from "./pages/team"
+import Venue from "./pages/venue"
 import VenuePlan from "./pages/venue-plan"
 import BecomeASponsor from "./pages/become-a-sponsor"
 import NotFound from "./pages/404"
@@ -23,6 +24,7 @@ function App() {
         <Route path="schedule" element={<Schedule />} />
         <Route path="talk-archive" element={<TalkArchive />} />
         <Route path="team" element={<Team />} />
+        <Route path="venue" element={<Venue />} />
         <Route path="venue-plan" element={<VenuePlan />} />
         <Route path="become-a-sponsor" element={<BecomeASponsor />} />
         <Route path="*" element={<NotFound />} />
