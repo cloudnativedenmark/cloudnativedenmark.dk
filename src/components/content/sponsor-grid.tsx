@@ -47,8 +47,8 @@ const SponsorGrid: React.FC<SponsorGridProps> = ({
     },
     s: {
       container: "mt-12 mb-16",
-      item: "flex items-center justify-center min-w-[200px] min-h-[80px] sm:min-w-[180px] sm:min-h-[70px] xs:min-w-fit xs:max-w-full",
-      image: "h-auto max-h-[80px] xs:max-w-full max-w-[180px] sm:min-w-[70%]",
+      item: "flex items-center justify-center min-w-[200px] min-h-[90px] sm:min-w-[180px] sm:min-h-[75px] xs:min-w-fit xs:max-w-full",
+      image: "h-auto max-h-[90px] xs:max-w-full max-w-[190px] sm:min-w-[70%]",
     },
   }
 

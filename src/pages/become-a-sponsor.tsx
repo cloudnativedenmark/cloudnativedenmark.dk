@@ -56,11 +56,9 @@ const sponsorTiers: SponsorTier[] = [
       "30% discount for guests (10 tickets)**",
       "Lead scanner app",
       "Branding on swag and marketing material",
+      "Logo on lanyard",
     ],
-    addons: [
-      "20,000 DKK: Logo on lanyard",
-      "20,000 DKK: Promotion at the after party",
-    ],
+    addons: ["20,000 DKK: Promotion at the after party"],
     availability: "Limited to 2 sponsorships or 1 sponsorship with 300,000 DKK",
   },
   {
@@ -76,6 +74,7 @@ const sponsorTiers: SponsorTier[] = [
       "30% discount for guests (10 tickets)**",
       "Lead scanner app",
       "Branding on swag and marketing material",
+      "Logo on lanyard",
     ],
     availability: "Limited to 4 sponsorships",
   },
@@ -91,6 +90,7 @@ const sponsorTiers: SponsorTier[] = [
       "30% discount for guests (4 tickets)**",
       "Lead scanner app",
       "Branding on marketing material",
+      "Logo on lanyard",
     ],
     availability: "Limited to 5 sponsorships",
   },
@@ -104,6 +104,7 @@ const sponsorTiers: SponsorTier[] = [
       "5 tickets",
       "Keynote mention",
       "Branding in common areas and logo on website",
+      "Logo on lanyard",
     ],
   },
 ]
