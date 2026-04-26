@@ -21,12 +21,9 @@ interface TeamGridProps {
 const TeamGrid: React.FC<TeamGridProps> = ({
   members,
   variant = "default",
-  columns = { mobile: 1, tablet: 2, desktop: 4 },
 }) => {
-  const gridClasses = `text-primary grid grid-cols-${columns.mobile} md:grid-cols-${columns.tablet} lg:grid-cols-${columns.desktop} gap-8 justify-items-center`
-
   return (
-    <div className={gridClasses}>
+    <div className="grid grid-cols-1 gap-x-6 gap-y-14 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-items-center">
       {members.map((member, index) => (
         <TeamMember
           key={`${member.name}-${index}`}

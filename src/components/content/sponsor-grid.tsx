@@ -52,26 +52,34 @@ const SponsorGrid: React.FC<SponsorGridProps> = ({
     },
   }
 
-  const tierConfig = {
+  const tierConfig: Record<
+    TierType,
+    { dot: string; text: string; line: string }
+  > = {
     platinum: {
-      line: "from-transparent via-slate-400 to-transparent",
-      text: "text-slate-500",
+      dot: "bg-cnd-red",
+      text: "text-cnd-midnight",
+      line: "from-transparent via-cnd-red/60 to-transparent",
     },
     gold: {
-      line: "from-transparent via-amber-400 to-transparent",
-      text: "text-amber-600",
+      dot: "bg-cnd-amber",
+      text: "text-cnd-midnight",
+      line: "from-transparent via-cnd-amber to-transparent",
     },
     bronze: {
-      line: "from-transparent via-orange-700 to-transparent",
-      text: "text-orange-700",
+      dot: "bg-cnd-coral",
+      text: "text-cnd-midnight",
+      line: "from-transparent via-cnd-coral to-transparent",
     },
     community: {
-      line: "from-transparent via-pink-600 to-transparent",
-      text: "text-pink-600",
+      dot: "bg-cnd-electric",
+      text: "text-cnd-midnight",
+      line: "from-transparent via-cnd-electric/70 to-transparent",
     },
     partners: {
-      line: "from-transparent via-gray-300 to-transparent",
-      text: "text-gray-500",
+      dot: "bg-cnd-sky",
+      text: "text-cnd-slate",
+      line: "from-transparent via-cnd-fog to-transparent",
     },
   }
 
@@ -80,7 +88,7 @@ const SponsorGrid: React.FC<SponsorGridProps> = ({
     item: itemClasses,
     image: imageClasses,
   } = sizeConfig[size]
-  const { line: lineGradient, text: textColor } = tierConfig[tier]
+  const { dot: dotColor, line: lineGradient, text: textColor } = tierConfig[tier]
 
   return (
     <div className={containerClasses}>
@@ -88,8 +96,13 @@ const SponsorGrid: React.FC<SponsorGridProps> = ({
         <div
           className={`h-px bg-gradient-to-r ${lineGradient} flex-1 max-w-24`}
         ></div>
+        <span
+          className={`inline-block h-2 w-2 rounded-sm ${dotColor}`}
+          aria-hidden="true"
+        />
         <p
-          className={`text-center text-lg font-semibold uppercase tracking-widest ${textColor}`}
+          className={`eyebrow text-center ${textColor}`}
+          style={{ fontSize: 13, letterSpacing: "0.22em" }}
         >
           {title}
         </p>

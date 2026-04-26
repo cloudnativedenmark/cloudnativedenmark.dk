@@ -10,30 +10,30 @@ const ConvinceYourBossPage: React.FC = () => {
       <SEOHead title="Convince Your Boss" pathname={location.pathname} />
       <section className="bg-white py-8">
         <div className="mx-auto max-w-4xl px-6 text-left sm:text-justify">
-          <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-8">
+          <h1 className="text-4xl lg:text-5xl font-bold text-cnd-midnight mb-8">
             Convince Your Boss
           </h1>
-          <p className="text-lg text-gray-700 mx-auto mb-12 leading-relaxed">
+          <p className="text-lg text-cnd-slate mx-auto mb-12 leading-relaxed">
             The Cloud Native Denmark 2026 conference is the premier technical
             event in the region for any team serious about Kubernetes and
             cloud-native technologies. Building on the success of{" "}
             <a
               href="https://2025.cloudnativedenmark.dk/"
-              className="font-semibold text-blue-600 hover:text-blue-800"
+              className="font-semibold text-cnd-red hover:text-cnd-coral underline decoration-2 underline-offset-4"
             >
               Cloud Native Denmark 2025
             </a>{" "}
             in Aarhus and the highly acclaimed{" "}
             <a
               href="https://2024.kcddenmark.dk/"
-              className="font-semibold text-blue-600 hover:text-blue-800"
+              className="font-semibold text-cnd-red hover:text-cnd-coral underline decoration-2 underline-offset-4"
             >
               Kubernetes Community Days Denmark 2024
             </a>
             , this year we return to Copenhagen at{" "}
             <a
               href="https://www.scandichotels.com/da/hoteller/scandic-copenhagen"
-              className="font-semibold text-blue-600 hover:text-blue-800"
+              className="font-semibold text-cnd-red hover:text-cnd-coral underline decoration-2 underline-offset-4"
             >
               Scandic Copenhagen
             </a>{" "}
@@ -42,15 +42,15 @@ const ConvinceYourBossPage: React.FC = () => {
             build the cloud-native community.
           </p>
 
-          <h2 className="text-3xl font-bold text-gray-900 mt-12 mb-6">
+          <h2 className="text-3xl font-bold text-cnd-midnight mt-12 mb-6">
             The ROI: What’s in It for Your Team?
           </h2>
-          <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          <p className="text-lg text-cnd-slate mb-6 leading-relaxed">
             It's not just about listening to talks; it's about finding clever
             and inspiring solutions to real business problems. Your focus at the
             conference should be on three things:
           </p>
-          <ul className="list-disc list-inside text-lg text-gray-700 space-y-4">
+          <ul className="list-disc list-inside text-lg text-cnd-slate space-y-4">
             <li>
               <strong>Direct Problem-Solving:</strong> The conference is packed
               with technical deep dives on observability, security, CI/CD, and
@@ -72,10 +72,10 @@ const ConvinceYourBossPage: React.FC = () => {
             </li>
           </ul>
 
-          <h2 className="text-3xl font-bold text-gray-900 mt-12 mb-6">
+          <h2 className="text-3xl font-bold text-cnd-midnight mt-12 mb-6">
             Copenhagen: A Global Tech Gateway
           </h2>
-          <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          <p className="text-lg text-cnd-slate mb-6 leading-relaxed">
             Copenhagen is not just Denmark's capital—it's a global tech gateway
             into the Nordics and Europe as a whole. With one of Europe's highest
             concentrations of tech talent and a thriving start-up ecosystem, the
@@ -84,7 +84,7 @@ const ConvinceYourBossPage: React.FC = () => {
             unparalleled networking opportunities with professionals from across
             Europe and beyond.
           </p>
-          <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          <p className="text-lg text-cnd-slate mb-6 leading-relaxed">
             Copenhagen is home to major tech companies spanning finance,
             e-commerce, gaming, and enterprise software. Industry giants like{" "}
             <strong>Danske Bank</strong>, <strong>Nordea</strong>, and{" "}
@@ -97,7 +97,7 @@ const ConvinceYourBossPage: React.FC = () => {
             cloud-native boundaries daily. Attending means networking directly
             with engineers from these organizations, all gathered in one place.
           </p>
-          <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          <p className="text-lg text-cnd-slate mb-6 leading-relaxed">
             The conference is deeply embedded in the Danish tech scene and
             supported by the community's most innovative employers—from fintech
             unicorns to established enterprises modernizing their
@@ -107,19 +107,19 @@ const ConvinceYourBossPage: React.FC = () => {
             valuable.
           </p>
 
-          <h2 className="text-3xl font-bold text-gray-900 mt-12 mb-6">
+          <h2 className="text-3xl font-bold text-cnd-midnight mt-12 mb-6">
             Getting There: Travel Logistics Made Simple
           </h2>
-          <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          <p className="text-lg text-cnd-slate mb-6 leading-relaxed">
             Getting to the conference is straightforward, even for international
             attendees.
           </p>
-          <ul className="list-disc list-inside text-lg text-gray-700 space-y-4">
+          <ul className="list-disc list-inside text-lg text-cnd-slate space-y-4">
             <li>
               <strong>Flights:</strong> Flights to{" "}
               <a
                 href="https://www.cph.dk/en"
-                className="font-semibold text-blue-600 hover:text-blue-800"
+                className="font-semibold text-cnd-red hover:text-cnd-coral underline decoration-2 underline-offset-4"
               >
                 Copenhagen Airport
               </a>{" "}
@@ -130,21 +130,21 @@ const ConvinceYourBossPage: React.FC = () => {
               Metro or{" "}
               <a
                 href="https://www.dsb.dk/en"
-                className="font-semibold text-blue-600 hover:text-blue-800"
+                className="font-semibold text-cnd-red hover:text-cnd-coral underline decoration-2 underline-offset-4"
               >
                 DSB
               </a>{" "}
               regional train directly to{" "}
               <a
                 href="https://maps.app.goo.gl/ostUzhYxAQQmUpFQ9"
-                className="font-semibold text-blue-600 hover:text-blue-800"
+                className="font-semibold text-cnd-red hover:text-cnd-coral underline decoration-2 underline-offset-4"
               >
                 Copenhagen Central Station
               </a>
               . The venue,{" "}
               <a
                 href="https://www.scandichotels.com/da/hoteller/scandic-copenhagen"
-                className="font-semibold text-blue-600 hover:text-blue-800"
+                className="font-semibold text-cnd-red hover:text-cnd-coral underline decoration-2 underline-offset-4"
               >
                 Scandic Copenhagen
               </a>
@@ -153,10 +153,10 @@ const ConvinceYourBossPage: React.FC = () => {
             </li>
           </ul>
 
-          <h2 className="text-3xl font-bold text-gray-900 mt-12 mb-6">
+          <h2 className="text-3xl font-bold text-cnd-midnight mt-12 mb-6">
             Your "Get Approval" Email Template
           </h2>
-          <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          <p className="text-lg text-cnd-slate mb-6 leading-relaxed">
             Copy, paste, and adapt this template. It is designed to be short,
             respectful of your manager's time, and focused purely on value.
           </p>

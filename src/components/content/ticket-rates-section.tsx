@@ -62,124 +62,166 @@ interface TicketRatesSectionProps {
   id?: string
 }
 
+const tierCardClasses = (status: TierStatus) => {
+  switch (status) {
+    case "active":
+      return "bg-cnd-midnight text-white border-cnd-coral shadow-[0_18px_40px_rgba(11,30,63,0.18)] -translate-y-1"
+    case "upcoming":
+      return "bg-white text-cnd-midnight border-cnd-fog/60 hover:-translate-y-0.5"
+    case "expired":
+      return "bg-cnd-bone text-cnd-ash border-cnd-fog/40 opacity-60"
+  }
+}
+
+const tierBadgeClasses = (status: TierStatus) => {
+  switch (status) {
+    case "active":
+      return "bg-cnd-coral text-cnd-midnight"
+    case "upcoming":
+      return "bg-cnd-fog/40 text-cnd-slate"
+    case "expired":
+      return "bg-cnd-fog/30 text-cnd-ash"
+  }
+}
+
+const TierCard: React.FC<{
+  tier: TicketTier
+  status: TierStatus
+  index: number
+}> = ({ tier, status, index }) => {
+  const priceColor =
+    status === "active"
+      ? "text-white"
+      : status === "expired"
+        ? "text-cnd-ash"
+        : "text-cnd-midnight"
+  return (
+    <div
+      className={`relative flex flex-col rounded-2xl border-[1.5px] p-7 text-left transition-transform duration-200 ${tierCardClasses(
+        status
+      )}`}
+    >
+      <div className="mb-6 flex items-center justify-between">
+        <span
+          className={`eyebrow rounded-full px-3 py-1 ${tierBadgeClasses(status)}`}
+          style={{ fontSize: 10 }}
+        >
+          {String(index + 1).padStart(2, "0")} · {status.toUpperCase()}
+        </span>
+        {status === "active" && (
+          <span
+            className="eyebrow text-cnd-coral"
+            style={{ fontSize: 10, letterSpacing: "0.2em" }}
+          >
+            ON SALE
+          </span>
+        )}
+      </div>
+      <h3
+        className="display"
+        style={{
+          fontSize: 22,
+          letterSpacing: "-0.02em",
+        }}
+      >
+        {tier.name}
+      </h3>
+      <p
+        className={`mt-2 text-sm ${
+          status === "active" ? "text-cnd-fog" : "text-cnd-ash"
+        }`}
+      >
+        {tier.displayDate}
+      </p>
+      <div className="mt-8 flex items-baseline gap-2">
+        <span
+          className={`display ${priceColor}`}
+          style={{ fontSize: 44, letterSpacing: "-0.03em" }}
+        >
+          {tier.price.toLocaleString("da-DK")}
+        </span>
+        <span
+          className="eyebrow"
+          style={{
+            color:
+              status === "active"
+                ? "var(--color-cnd-fog)"
+                : "var(--color-cnd-ash)",
+          }}
+        >
+          DKK
+        </span>
+      </div>
+    </div>
+  )
+}
+
 const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({ id }) => {
   const activeTierIndex = getActiveTierIndex(ticketTiers)
 
   return (
-    <Section id={id} className="bg-gray-50">
-      <div className="text-center">
-        <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-          Ticket Rates
-        </h2>
-        <p className="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">
-          Book early to get the best price!
-        </p>
-
-        <h3 className="text-2xl font-bold text-gray-900 mb-6">Individual</h3>
-
-        {/* Desktop table */}
-        <div className="hidden md:grid md:grid-cols-4 gap-4 max-w-5xl mx-auto">
-          {ticketTiers.map((tier, index) => {
-            const status = getTierStatus(tier, index, activeTierIndex)
-            return (
-              <div
-                key={tier.name}
-                className={`rounded-lg p-6 text-center border ${
-                  status === "active"
-                    ? "bg-blue-50 border-blue-300"
-                    : status === "upcoming"
-                      ? "bg-white border-gray-200"
-                      : "bg-gray-100 border-gray-300 opacity-50"
-                }`}
-              >
-                <h3
-                  className={`text-lg font-bold ${
-                    status === "expired" ? "text-gray-400" : "text-gray-900"
-                  }`}
-                >
-                  {tier.name}
-                </h3>
-                <p
-                  className={`text-sm mt-1 ${
-                    status === "expired" ? "text-gray-400" : "text-gray-500"
-                  }`}
-                >
-                  {tier.displayDate}
-                </p>
-                <p
-                  className={`text-2xl font-bold mt-4 ${
-                    status === "active"
-                      ? "text-blue-600"
-                      : status === "upcoming"
-                        ? "text-gray-700"
-                        : "text-gray-400"
-                  }`}
-                >
-                  {tier.price.toLocaleString("da-DK")} DKK
-                </p>
-              </div>
-            )
-          })}
+    <Section id={id} className="bg-cnd-bone text-cnd-midnight">
+      <div className="mx-auto max-w-6xl">
+        <div className="flex flex-col items-baseline gap-2 md:flex-row md:items-end md:justify-between">
+          <div>
+            <div
+              className="eyebrow mb-3"
+              style={{ color: "var(--color-cnd-red)" }}
+            >
+              03 · TICKETS
+            </div>
+            <h2
+              className="display"
+              style={{
+                fontSize: "clamp(32px, 5vw, 56px)",
+                letterSpacing: "-0.035em",
+              }}
+            >
+              Book early.
+              <br />
+              Pay less.
+            </h2>
+          </div>
+          <p
+            className="mt-4 max-w-md text-cnd-slate md:mt-0 md:text-right"
+            style={{ fontSize: 16, lineHeight: 1.55 }}
+          >
+            Four tiers, sliding price, capped Blind Bird seats. The earlier you
+            commit, the better the deal — and the schedule rewards you for it.
+          </p>
         </div>
 
-        {/* Mobile cards */}
-        <div className="md:hidden space-y-4">
-          {ticketTiers.map((tier, index) => {
-            const status = getTierStatus(tier, index, activeTierIndex)
-            return (
-              <div
-                key={tier.name}
-                className={`rounded-lg p-6 text-center border ${
-                  status === "active"
-                    ? "bg-blue-50 border-blue-300"
-                    : status === "upcoming"
-                      ? "bg-white border-gray-200"
-                      : "bg-gray-100 border-gray-300 opacity-50"
-                }`}
-              >
-                <h3
-                  className={`text-lg font-bold ${
-                    status === "expired" ? "text-gray-400" : "text-gray-900"
-                  }`}
-                >
-                  {tier.name}
-                </h3>
-                <p
-                  className={`text-sm mt-1 ${
-                    status === "expired" ? "text-gray-400" : "text-gray-500"
-                  }`}
-                >
-                  {tier.displayDate}
-                </p>
-                <p
-                  className={`text-2xl font-bold mt-4 ${
-                    status === "active"
-                      ? "text-blue-600"
-                      : status === "upcoming"
-                        ? "text-gray-700"
-                        : "text-gray-400"
-                  }`}
-                >
-                  {tier.price.toLocaleString("da-DK")} DKK
-                </p>
-              </div>
-            )
-          })}
+        <h3
+          className="eyebrow mt-12 mb-6 text-cnd-ash"
+          style={{ letterSpacing: "0.2em" }}
+        >
+          INDIVIDUAL TICKETS
+        </h3>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {ticketTiers.map((tier, index) => (
+            <TierCard
+              key={tier.name}
+              tier={tier}
+              index={index}
+              status={getTierStatus(tier, index, activeTierIndex)}
+            />
+          ))}
         </div>
 
-        <p className="text-sm text-gray-500 text-center mt-8 italic">
+        <p className="mt-8 text-center text-sm italic text-cnd-ash">
           Visible prices include 25% VAT. Additional Ticketbutler service fees
           apply at checkout. Blind Bird availability is capped at 100 tickets,
-          and may be limitted given early release of the conference schedule.
+          and may be limited given early release of the conference schedule.
         </p>
 
-        <div className="text-center mt-8">
+        <div className="mt-10 flex justify-center">
           <a
             href="https://cloudnativedenmark.ticketbutler.io/da/e/cloud-native-denmark-26/"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Button>Buy Tickets</Button>
+            <Button>Buy tickets →</Button>
           </a>
         </div>
       </div>

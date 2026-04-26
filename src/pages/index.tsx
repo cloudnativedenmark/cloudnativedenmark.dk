@@ -10,8 +10,8 @@ import VenueSection from "../components/content/venue-section"
 import LastYearEventSection from "../components/content/last-year-event-section"
 import MissionSection from "../components/content/mission-section"
 import SponsorsSection from "../components/content/sponsors-section"
+import TalksCarouselSection from "../components/content/talks-carousel-section"
 import SpeakerModal from "../components/speaker_modal"
-import Logo from "../images/logo.svg"
 
 const IndexPage: React.FC = () => {
   const location = useLocation()
@@ -28,58 +28,31 @@ const IndexPage: React.FC = () => {
     }
   }
 
-  // Hero background SVG element
-  const heroBackgroundSvg = (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-full h-full"
-      viewBox="-80.724 316.355 927.667 175.986"
-      preserveAspectRatio="xMidYMid slice"
-      width="927.667px"
-      height="175.986px"
-    >
-      <defs></defs>
-      <g clipPath="url(#wave1)">
-        <path
-          fill="#d7dff4"
-          d="M 348.113 567.704 L -1048.965 568.625 L -1048.965 464.805 C -583.18 717.992 -117.672 142.594 348.113 395.777 L 348.113 567.704 Z"
-        />
-      </g>
-      <g clipPath="url(#wave2)">
-        <path
-          fill="#0026ce"
-          d="M 548.566 568.003 L -637.617 568.186 L -637.617 477.156 C -242.145 692.121 153.094 203.582 548.566 418.551 L 548.566 568.003 Z"
-        />
-      </g>
-      <g clipPath="url(#wave3)">
-        <path
-          fill="#11347e"
-          d="M 1019.449219 568.15625 L -151.777344 568.15625 L -151.777344 430.761719 C 238.710938 642.867188 628.964844 160.832031 1019.449219 372.9375 Z"
-        />
-      </g>
-    </svg>
-  )
-
   return (
     <>
       <SEOHead title="Cloud Native Denmark 2026" pathname={location.pathname} />
       <HeroSection
-        logo={{
-          src: Logo,
-          alt: "Cloud Native Denmark",
-          width: 300,
-        }}
+        eyebrow="EDITION Nº 04 · NORDIC CLOUD NATIVE CONFERENCE"
         title={
           <>
-            <span className="font-medium tracking-wider">CLOUD NATIVE</span>
+            CLOUD
             <br />
-            <span className="font-extrabold">DENMARK</span>
+            NATIVE
+            <br />
+            <span
+              style={{
+                WebkitTextStroke: "3px var(--color-cnd-midnight)",
+                color: "transparent",
+              }}
+            >
+              DENMARK.
+            </span>
           </>
         }
-        subtitle="November 19-20, 2026 • Scandic Copenhagen"
+        description="Two days in Copenhagen with the platform engineers, SREs, and architects shipping the Nordics' most demanding cloud native systems to production."
         actions={[
           {
-            text: "Ticket Rates",
+            text: "Ticket rates →",
             onClick: scrollToTicketRates,
             variant: "primary",
           },
@@ -87,20 +60,24 @@ const IndexPage: React.FC = () => {
             text: "Submit a talk",
             href: "http://cloudnativedenmark.dk/cfp",
             isExternal: true,
-            variant: "primary",
+            variant: "midnight",
           },
           {
-            text: "Merch",
+            text: "Merch →",
             href: "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/?extras_flow=true",
             isExternal: true,
             variant: "secondary",
           },
         ]}
-        backgroundElement={heroBackgroundSvg}
+        dateStamp={{
+          label: "COPENHAGEN · CND/2026",
+          dates: "19–20 NOV 2026",
+          venue: "Scandic Copenhagen",
+        }}
       />
 
       <ConferenceInfo
-        title=""
+        title="WHY YOU'RE COMING"
         description="Join us in Copenhagen as the Kubernetes and Cloud Native community comes together for a technical conference packed with inspiring talks, hands-on insights, and great opportunities to connect and grow."
         variant="dark"
       />
@@ -131,6 +108,8 @@ const IndexPage: React.FC = () => {
         community={sponsors.community}
         partners={sponsors.partners}
       />
+
+      <TalksCarouselSection />
 
       {selectedSpeaker && (
         <SpeakerModal

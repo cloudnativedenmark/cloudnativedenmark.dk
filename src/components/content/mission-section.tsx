@@ -15,19 +15,48 @@ const MissionSection: React.FC<MissionSectionProps> = ({
   children,
 }) => {
   return (
-    <Section className="bg-gray-100">
-      <div>
-        <h2 className="text-4xl lg:text-5xl font-bold text-center text-gray-900 mb-12">
-          {title}
-        </h2>
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-12">
+    <Section className="bg-cnd-bone text-cnd-midnight">
+      <div className="mx-auto max-w-5xl">
+        <div className="text-center">
+          <div
+            className="eyebrow mb-4"
+            style={{ color: "var(--color-cnd-red)" }}
+          >
+            06 · MISSION
+          </div>
+          <h2
+            className="display text-cnd-midnight"
+            style={{
+              fontSize: "clamp(32px, 5vw, 52px)",
+              letterSpacing: "-0.03em",
+            }}
+          >
+            {title}.
+          </h2>
+        </div>
+
+        <div className="mt-12 flex flex-col items-center justify-center gap-12 lg:flex-row lg:items-start">
           {children && <div className="flex-shrink-0">{children}</div>}
           <div className="flex-1 text-center lg:text-left">
-            <p className="text-lg lg:text-xl text-gray-800 leading-relaxed mb-6">
+            <p
+              className="text-cnd-slate"
+              style={{
+                fontSize: "clamp(18px, 1.5vw, 22px)",
+                lineHeight: 1.55,
+                fontWeight: 500,
+              }}
+            >
               {description}
             </p>
             {partnerDescription && (
-              <p className="text-lg lg:text-xl text-gray-800 leading-relaxed">
+              <p
+                className="mt-6 text-cnd-slate"
+                style={{
+                  fontSize: "clamp(18px, 1.5vw, 22px)",
+                  lineHeight: 1.55,
+                  fontWeight: 500,
+                }}
+              >
                 {partnerDescription}
               </p>
             )}

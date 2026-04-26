@@ -130,10 +130,22 @@ const VenueSection: React.FC = () => {
   }
 
   return (
-    <Section className="bg-white">
+    <Section className="bg-cnd-bone text-cnd-midnight">
       <div className="text-center">
-        <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-12">
-          Venue
+        <div
+          className="eyebrow mb-3"
+          style={{ color: "var(--color-cnd-red)" }}
+        >
+          04 · VENUE
+        </div>
+        <h2
+          className="display mb-12 text-cnd-midnight"
+          style={{
+            fontSize: "clamp(32px, 5vw, 56px)",
+            letterSpacing: "-0.035em",
+          }}
+        >
+          Where we land.
         </h2>
         {siteConfig.venueAnnouncementMode ? (
           <div className="flex flex-col items-center justify-center gap-8">
@@ -237,7 +249,9 @@ const VenueSection: React.FC = () => {
                       key={index}
                       onClick={() => setCurrentIndex(index + 1)}
                       className={`w-2 h-2 rounded-full transition-colors ${
-                        index === getRealIndex() ? "bg-blue-600" : "bg-gray-300"
+                        index === getRealIndex()
+                          ? "bg-cnd-red"
+                          : "bg-cnd-fog"
                       }`}
                       aria-label={`Go to image ${index + 1}`}
                     />

@@ -3,6 +3,75 @@ import { useLocation } from "react-router-dom"
 import SEOHead from "../components/seo-head"
 import PageHeader from "../components/layout/page-header"
 import Section from "../components/ui/section"
+import CNDShape from "../components/ui/cnd-shape"
+import Button from "../components/ui/button"
+
+interface FeatureStat {
+  value: string
+  label: string
+  body: string
+  color: string
+}
+
+const featureStats: FeatureStat[] = [
+  {
+    value: "500",
+    label: "Attendees",
+    body: "Room for the entire community",
+    color: "var(--color-cnd-red)",
+  },
+  {
+    value: "2",
+    label: "Conference tracks",
+    body: "Parallel sessions to choose from",
+    color: "var(--color-cnd-coral)",
+  },
+  {
+    value: "1",
+    label: "Exhibition area",
+    body: "Meet sponsors outside the auditoriums",
+    color: "var(--color-cnd-amber)",
+  },
+]
+
+interface SpaceCard {
+  src: string
+  alt: string
+  title: string
+  body: string
+  accent: string
+}
+
+const spaces: SpaceCard[] = [
+  {
+    src: "/images/scandic-copenhagen/auditorium.webp",
+    alt: "Main auditorium",
+    title: "Main auditorium",
+    body: "Primary stage for keynotes and main track sessions.",
+    accent: "var(--color-cnd-red)",
+  },
+  {
+    src: "/images/scandic-copenhagen/hall-1.webp",
+    alt: "Conference hall",
+    title: "Conference hall",
+    body: "Second-track sessions and workshops.",
+    accent: "var(--color-cnd-coral)",
+  },
+  {
+    src: "/images/scandic-copenhagen/hall-2.webp",
+    alt: "Break-out session room",
+    title: "Exhibition area",
+    body: "Meet sponsors and network with fellow attendees.",
+    accent: "var(--color-cnd-electric)",
+  },
+  {
+    src: "/images/scandic-copenhagen/restaurant.jpg",
+    alt: "Restaurant area",
+    title: "Restaurant & lounge",
+    body: "Lunch, refreshments, and networking breaks.",
+    accent: "var(--color-cnd-amber)",
+  },
+]
 
 const VenuePage: React.FC = () => {
   const location = useLocation()
@@ -11,209 +80,296 @@ const VenuePage: React.FC = () => {
     <>
       <SEOHead
         title="Venue"
-        description="Cloud Native Denmark 2025 takes place at Scandic Copenhagen - a modern venue in the heart of Copenhagen with capacity for 500 attendees."
+        description="Cloud Native Denmark 2026 takes place at Scandic Copenhagen — a modern venue in the heart of Copenhagen with capacity for 500 attendees."
         pathname={location.pathname}
       />
       <PageHeader
-        title="Venue"
-        description="In the heart of Copenhagen"
+        eyebrow="04 · VENUE"
+        title="Where we land."
+        description="In the heart of Copenhagen, a five-minute walk from Central Station."
         variant="dark"
         size="large"
       />
 
       {/* Venue Overview */}
-      <Section className="bg-white py-16">
-        <div className="max-w-6xl mx-auto">
-          {/* Hero layout with vertical image */}
-          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 mb-12">
-            <div className="relative rounded-2xl overflow-hidden w-full md:w-2/5 flex-shrink-0">
-              <img
-                src="/images/scandic-copenhagen/hotel-outside-2.jpg"
-                alt="Scandic Copenhagen exterior"
-                className="w-full h-80 md:h-[28rem] object-cover"
-                loading="lazy"
+      <Section className="relative overflow-hidden bg-cnd-bone py-16 lg:py-20">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute hidden md:block"
+          style={{ top: 40, right: 40, opacity: 0.45 }}
+        >
+          <CNDShape size={120} fill="var(--color-cnd-coral)" />
+        </div>
+        <div className="relative mx-auto max-w-6xl">
+          <div className="mb-12 flex flex-col items-center gap-8 md:flex-row md:gap-12">
+            <div className="relative flex-shrink-0 w-full md:w-2/5">
+              <div
+                aria-hidden="true"
+                className="absolute -inset-3 rounded-3xl bg-cnd-red opacity-90"
+                style={{ transform: "rotate(-1.6deg)" }}
               />
+              <div className="relative rounded-2xl overflow-hidden">
+                <img
+                  src="/images/scandic-copenhagen/hotel-outside-2.jpg"
+                  alt="Scandic Copenhagen exterior"
+                  className="w-full h-80 md:h-[28rem] object-cover"
+                  loading="lazy"
+                />
+              </div>
             </div>
             <div className="flex-1 text-center md:text-left">
+              <div
+                className="eyebrow mb-3"
+                style={{ color: "var(--color-cnd-red)", letterSpacing: "0.22em" }}
+              >
+                THE VENUE
+              </div>
               <img
                 src="/images/scandic-logo.png"
                 alt="Scandic"
-                className="h-12 md:h-16 mb-4 object-contain mx-auto md:mx-0"
+                className="h-12 md:h-14 mb-5 object-contain mx-auto md:mx-0"
                 loading="lazy"
               />
-              <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-4">
-                Scandic Copenhagen
-              </h3>
-              <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
-                The event will take place in the large auditoriums of Scandic
-                Copenhagen, which has room for all 500 attendees. The venue
-                hosts all attendees and sponsors, and features separate
-                auditoriums for break-out sessions.
+              <h2
+                className="display text-cnd-midnight"
+                style={{
+                  fontSize: "clamp(28px, 3.6vw, 44px)",
+                  letterSpacing: "-0.03em",
+                  lineHeight: 1.05,
+                }}
+              >
+                Scandic Copenhagen.
+              </h2>
+              <p
+                className="mt-5 text-cnd-slate"
+                style={{ fontSize: 18, lineHeight: 1.6 }}
+              >
+                The event takes over the large auditoriums of Scandic
+                Copenhagen, with room for all 500 attendees. The venue hosts
+                attendees and sponsors together, with separate auditoriums for
+                break-out sessions.
               </p>
             </div>
           </div>
 
           {/* Feature highlights */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-16">
-            <div className="bg-gray-50 rounded-xl p-6 text-center">
-              <div className="text-4xl font-bold text-blue-600 mb-2">500</div>
-              <div className="text-gray-700 font-medium">Attendees</div>
-              <p className="text-sm text-gray-500 mt-2">
-                Room for the entire community
-              </p>
-            </div>
-            <div className="bg-gray-50 rounded-xl p-6 text-center">
-              <div className="text-4xl font-bold text-blue-600 mb-2">2</div>
-              <div className="text-gray-700 font-medium">Conference Tracks</div>
-              <p className="text-sm text-gray-500 mt-2">
-                Parallel sessions to choose from
-              </p>
-            </div>
-            <div className="bg-gray-50 rounded-xl p-6 text-center">
-              <div className="text-4xl font-bold text-blue-600 mb-2">1</div>
-              <div className="text-gray-700 font-medium">Exhibition Area</div>
-              <p className="text-sm text-gray-500 mt-2">
-                Meet sponsors outside the auditoriums
-              </p>
-            </div>
+          <div className="mx-auto grid max-w-5xl grid-cols-1 gap-5 md:grid-cols-3">
+            {featureStats.map((s) => (
+              <div
+                key={s.label}
+                className="relative overflow-hidden rounded-2xl border-2 border-cnd-fog/40 bg-white p-7 transition-transform hover:-translate-y-1"
+              >
+                <span
+                  aria-hidden="true"
+                  className="absolute left-0 top-0 h-full w-1.5"
+                  style={{ background: s.color }}
+                />
+                <div
+                  className="display"
+                  style={{
+                    fontSize: 56,
+                    lineHeight: 1,
+                    letterSpacing: "-0.04em",
+                    color: s.color,
+                  }}
+                >
+                  {s.value}
+                </div>
+                <div
+                  className="eyebrow mt-3 text-cnd-midnight"
+                  style={{ letterSpacing: "0.18em" }}
+                >
+                  {s.label}
+                </div>
+                <p className="mt-2 text-sm text-cnd-ash">{s.body}</p>
+              </div>
+            ))}
           </div>
         </div>
       </Section>
 
       {/* Photo Gallery */}
-      <Section className="bg-gray-50 py-16">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-10">
-            The Spaces
-          </h2>
+      <Section className="relative overflow-hidden bg-cnd-midnight py-20 text-white hex-bg">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute hidden md:block"
+          style={{ top: 30, left: 30, opacity: 0.16 }}
+        >
+          <CNDShape size={120} fill="var(--color-cnd-coral)" />
+        </div>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute hidden md:block"
+          style={{ bottom: 30, right: 30, opacity: 0.14 }}
+        >
+          <CNDShape size={140} fill="var(--color-cnd-electric)" />
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <img
-                src="/images/scandic-copenhagen/auditorium.webp"
-                alt="Main auditorium"
-                className="w-full h-64 md:h-72 object-cover rounded-xl"
-                loading="lazy"
-              />
-              <p className="text-gray-600 font-medium">Main Auditorium</p>
-              <p className="text-sm text-gray-500">
-                The primary stage for keynotes and main track sessions
-              </p>
+        <div className="relative mx-auto max-w-6xl">
+          <div className="text-center">
+            <div
+              className="eyebrow mb-3"
+              style={{ color: "var(--color-cnd-coral)", letterSpacing: "0.22em" }}
+            >
+              THE SPACES
             </div>
-            <div className="space-y-2">
-              <img
-                src="/images/scandic-copenhagen/hall-1.webp"
-                alt="Conference hall"
-                className="w-full h-64 md:h-72 object-cover rounded-xl"
-                loading="lazy"
-              />
-              <p className="text-gray-600 font-medium">Conference Hall</p>
-              <p className="text-sm text-gray-500">
-                Second track sessions and workshops
-              </p>
-            </div>
-            <div className="space-y-2">
-              <img
-                src="/images/scandic-copenhagen/hall-2.webp"
-                alt="Break-out session room"
-                className="w-full h-64 md:h-72 object-cover rounded-xl"
-                loading="lazy"
-              />
-              <p className="text-gray-600 font-medium">Exhibition Area</p>
-              <p className="text-sm text-gray-500">
-                Meet our sponsors and network with fellow attendees
-              </p>
-            </div>
-            <div className="space-y-2">
-              <img
-                src="/images/scandic-copenhagen/restaurant.jpg"
-                alt="Restaurant area"
-                className="w-full h-64 md:h-72 object-cover rounded-xl"
-                loading="lazy"
-              />
-              <p className="text-gray-600 font-medium">Restaurant & Lounge</p>
-              <p className="text-sm text-gray-500">
-                Lunch, refreshments, and networking breaks
-              </p>
-            </div>
+            <h2
+              className="display"
+              style={{
+                fontSize: "clamp(32px, 5vw, 52px)",
+                letterSpacing: "-0.035em",
+              }}
+            >
+              Inside the venue.
+            </h2>
+          </div>
+
+          <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
+            {spaces.map((s, i) => (
+              <div
+                key={s.title}
+                className="group relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <img
+                    src={s.src}
+                    alt={s.alt}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <span
+                    aria-hidden="true"
+                    className="absolute left-0 top-0 h-full w-1.5"
+                    style={{ background: s.accent }}
+                  />
+                  <span
+                    className="eyebrow absolute left-4 top-4 rounded-full px-3 py-1 text-cnd-midnight"
+                    style={{
+                      background: s.accent,
+                      fontSize: 10,
+                      letterSpacing: "0.18em",
+                    }}
+                  >
+                    SPACE · {String(i + 1).padStart(2, "0")}
+                  </span>
+                </div>
+                <div className="p-6">
+                  <h3
+                    className="display text-white"
+                    style={{ fontSize: 20, letterSpacing: "-0.02em" }}
+                  >
+                    {s.title}.
+                  </h3>
+                  <p className="mt-2 text-cnd-fog text-sm">{s.body}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </Section>
 
       {/* Getting There */}
-      <Section className="bg-white py-16">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-10">
-            Getting There
-          </h2>
+      <Section className="bg-cnd-bone py-20">
+        <div className="mx-auto max-w-6xl">
+          <div className="text-center">
+            <div
+              className="eyebrow mb-3"
+              style={{ color: "var(--color-cnd-red)", letterSpacing: "0.22em" }}
+            >
+              GETTING THERE
+            </div>
+            <h2
+              className="display text-cnd-midnight"
+              style={{
+                fontSize: "clamp(32px, 5vw, 52px)",
+                letterSpacing: "-0.035em",
+              }}
+            >
+              Easy from anywhere.
+            </h2>
+          </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Directions */}
-            <div className="space-y-8">
-              <div className="bg-blue-50 border-l-4 border-blue-600 rounded-r-xl p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                  Address
-                </h3>
-                <p className="text-lg font-medium text-gray-800">
+          <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-2">
+            <div className="space-y-7">
+              <div className="relative rounded-2xl border-2 border-cnd-red/30 bg-white p-7">
+                <span
+                  aria-hidden="true"
+                  className="absolute left-0 top-0 h-full w-1.5 bg-cnd-red"
+                />
+                <div
+                  className="eyebrow mb-2 text-cnd-red"
+                  style={{ letterSpacing: "0.22em" }}
+                >
+                  ADDRESS
+                </div>
+                <p className="display text-cnd-midnight" style={{ fontSize: 22 }}>
                   Scandic Copenhagen
                 </p>
-                <p className="text-gray-700">Vester Sogade 6</p>
-                <p className="text-gray-700">1601 Copenhagen V</p>
-                <p className="text-gray-700">Denmark</p>
+                <p className="text-cnd-slate">Vester Søgade 6</p>
+                <p className="text-cnd-slate">1601 Copenhagen V · Denmark</p>
                 <a
                   href="https://maps.google.com/?q=Scandic+Copenhagen,Vester+Søgade+6,1601+København,Denmark"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block mt-4 text-blue-600 font-medium hover:underline"
+                  className="eyebrow mt-4 inline-flex items-center gap-1 text-cnd-red hover:text-cnd-coral"
                 >
-                  Open in Google Maps →
+                  OPEN IN GOOGLE MAPS →
                 </a>
               </div>
 
-              <div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-3">
-                  By Public Transport
-                </h3>
-                <ul className="text-gray-600 space-y-2">
+              <div className="rounded-2xl border-2 border-cnd-coral/40 bg-white p-7">
+                <div
+                  className="eyebrow mb-3"
+                  style={{ color: "var(--color-cnd-coral)", letterSpacing: "0.22em" }}
+                >
+                  BY PUBLIC TRANSPORT
+                </div>
+                <ul className="space-y-2 text-cnd-slate">
                   <li>
-                    <strong>Train:</strong> Copenhagen Central Station
-                    (Kobenhavn H) is a 5-minute walk
+                    <strong className="text-cnd-midnight">Train:</strong>{" "}
+                    Copenhagen Central Station (Kobenhavn H) — 5-minute walk.
                   </li>
                   <li>
-                    <strong>Metro:</strong> Vesterport Station is nearby
+                    <strong className="text-cnd-midnight">Metro:</strong>{" "}
+                    Vesterport Station is nearby.
                   </li>
                   <li>
-                    <strong>Bus:</strong> Multiple bus lines stop at Vesterport
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-3">
-                  From Copenhagen Airport
-                </h3>
-                <ul className="text-gray-600 space-y-2">
-                  <li>Take the Metro or train to Copenhagen Central Station</li>
-                  <li>Journey time: approximately 15-20 minutes</li>
-                  <li>
-                    From the station, walk 5 minutes to Scandic Copenhagen
+                    <strong className="text-cnd-midnight">Bus:</strong>{" "}
+                    Multiple bus lines stop at Vesterport.
                   </li>
                 </ul>
               </div>
 
-              <div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-3">
-                  By Car
-                </h3>
-                <p className="text-gray-600">
-                  Limited parking available at the hotel. We recommend public
-                  transport or nearby parking facilities.
+              <div className="rounded-2xl border-2 border-cnd-amber/60 bg-white p-7">
+                <div
+                  className="eyebrow mb-3"
+                  style={{ color: "var(--color-cnd-amber)", letterSpacing: "0.22em" }}
+                >
+                  FROM CPH AIRPORT
+                </div>
+                <ul className="space-y-2 text-cnd-slate">
+                  <li>Take the Metro or train to Copenhagen Central Station.</li>
+                  <li>Journey time: approximately 15-20 minutes.</li>
+                  <li>From the station, walk 5 minutes to Scandic Copenhagen.</li>
+                </ul>
+              </div>
+
+              <div className="rounded-2xl border-2 border-cnd-electric/40 bg-white p-7">
+                <div
+                  className="eyebrow mb-3"
+                  style={{ color: "var(--color-cnd-electric)", letterSpacing: "0.22em" }}
+                >
+                  BY CAR
+                </div>
+                <p className="text-cnd-slate">
+                  Limited parking at the hotel — we recommend public transport
+                  or one of the nearby parking facilities.
                 </p>
               </div>
             </div>
 
             {/* Map */}
-            <div className="h-80 lg:h-full min-h-80 bg-gray-200 rounded-xl overflow-hidden">
+            <div className="h-80 lg:min-h-[28rem] lg:h-full overflow-hidden rounded-2xl border-2 border-cnd-midnight/15 bg-cnd-fog/40">
               <iframe
                 className="border-0"
                 src="https://maps.google.com/maps?q=Scandic+Copenhagen,Vester+Søgade+6,1601+København,Denmark&t=&z=15&ie=UTF8&iwloc=&output=embed"
@@ -230,24 +386,54 @@ const VenuePage: React.FC = () => {
       </Section>
 
       {/* Accommodation */}
-      <Section className="bg-gray-50 py-16">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-            Accommodation
-          </h2>
-          <p className="text-lg text-gray-700 mb-6">
-            Scandic Copenhagen offers comfortable rooms if you prefer to stay at
-            the venue. Being centrally located, there are also many other hotels
-            within walking distance.
-          </p>
-          <a
-            href="https://www.scandichotels.com/hotels/denmark/copenhagen/scandic-copenhagen"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block border-2 border-blue-600 text-blue-600 px-8 py-3 text-lg rounded-full font-medium hover:bg-blue-600 hover:text-white transition-colors"
+      <Section className="relative overflow-hidden bg-cnd-sand py-20">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute hidden md:block"
+          style={{ top: 40, left: 40, opacity: 0.5 }}
+        >
+          <CNDShape size={120} fill="var(--color-cnd-amber)" />
+        </div>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute hidden md:block"
+          style={{ bottom: 40, right: 40, opacity: 0.5 }}
+        >
+          <CNDShape size={100} fill="var(--color-cnd-coral)" />
+        </div>
+        <div className="relative mx-auto max-w-3xl text-center">
+          <div
+            className="eyebrow mb-3"
+            style={{ color: "var(--color-cnd-red)", letterSpacing: "0.22em" }}
           >
-            Book at Scandic Copenhagen
-          </a>
+            STAYING OVER
+          </div>
+          <h2
+            className="display text-cnd-midnight"
+            style={{
+              fontSize: "clamp(28px, 4vw, 44px)",
+              letterSpacing: "-0.03em",
+            }}
+          >
+            Accommodation.
+          </h2>
+          <p
+            className="mx-auto mt-5 max-w-xl text-cnd-slate"
+            style={{ fontSize: 17, lineHeight: 1.6 }}
+          >
+            Scandic Copenhagen offers comfortable rooms if you'd like to stay at
+            the venue. Centrally located — many other hotels are within walking
+            distance.
+          </p>
+          <div className="mt-8 flex justify-center">
+            <a
+              href="https://www.scandichotels.com/hotels/denmark/copenhagen/scandic-copenhagen"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button>Book at Scandic Copenhagen →</Button>
+            </a>
+          </div>
         </div>
       </Section>
     </>
