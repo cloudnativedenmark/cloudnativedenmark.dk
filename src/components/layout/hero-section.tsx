@@ -262,7 +262,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         )}
       </div>
-
     </section>
   )
 }

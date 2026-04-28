@@ -7,6 +7,11 @@ import CNDShape from "../ui/cnd-shape"
 const LastYearEventSection: React.FC = () => {
   return (
     <Section className="relative overflow-hidden bg-cnd-ink hex-bg text-white">
+      {/* Subtle red side rule echoing the hero */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-0 left-0 h-full w-[5px] bg-cnd-red"
+      />
       {/* CND shape accent */}
       <div
         aria-hidden="true"
@@ -29,7 +34,7 @@ const LastYearEventSection: React.FC = () => {
             className="eyebrow mb-4"
             style={{ color: "var(--color-cnd-coral)" }}
           >
-            RECAP · 2025
+            05 · RECAP · 2025
           </div>
           <h2
             className="display text-white"

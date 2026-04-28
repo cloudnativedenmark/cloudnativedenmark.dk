@@ -48,9 +48,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
       >
         <CNDShape
           size={110}
-          fill={
-            isDark ? "var(--color-cnd-electric)" : "var(--color-cnd-amber)"
-          }
+          fill={isDark ? "var(--color-cnd-electric)" : "var(--color-cnd-amber)"}
         />
       </div>
 
@@ -59,9 +57,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           <div
             className="eyebrow mb-4"
             style={{
-              color: isDark
-                ? "var(--color-cnd-coral)"
-                : "var(--color-cnd-red)",
+              color: isDark ? "var(--color-cnd-coral)" : "var(--color-cnd-red)",
               letterSpacing: "0.22em",
             }}
           >

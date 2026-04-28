@@ -88,7 +88,11 @@ const SponsorGrid: React.FC<SponsorGridProps> = ({
     item: itemClasses,
     image: imageClasses,
   } = sizeConfig[size]
-  const { dot: dotColor, line: lineGradient, text: textColor } = tierConfig[tier]
+  const {
+    dot: dotColor,
+    line: lineGradient,
+    text: textColor,
+  } = tierConfig[tier]
 
   return (
     <div className={containerClasses}>

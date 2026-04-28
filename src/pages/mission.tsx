@@ -11,7 +11,7 @@ const MissionPage: React.FC = () => {
     <>
       <SEOHead title="Mission" pathname={location.pathname} />
       <PageHeader
-        eyebrow="06 · MISSION"
+        eyebrow="MISSION"
         title="Why we do this."
         variant="dark"
         size="medium"

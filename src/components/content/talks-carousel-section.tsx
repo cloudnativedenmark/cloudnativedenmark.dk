@@ -14,29 +14,62 @@ const PLAYLIST_URL = `https://youtube.com/playlist?list=${PLAYLIST_ID}`
 // playlist scraper (see /tmp/cnd-playlist.html in the design system handoff
 // notes) — order preserved as listed on YouTube.
 const TALKS: Talk[] = [
-  { id: "7VXnrd8bIA4", title: "Kubernetes is too complex for startups. WRONG!" },
-  { id: "IbWm0xPHgVo", title: "Testing Metal3 with 1000 Clusters at Zero Infrastructure Cost" },
+  {
+    id: "7VXnrd8bIA4",
+    title: "Kubernetes is too complex for startups. WRONG!",
+  },
+  {
+    id: "IbWm0xPHgVo",
+    title: "Testing Metal3 with 1000 Clusters at Zero Infrastructure Cost",
+  },
   { id: "HNsEFNPHFLg", title: "Platform Engineering Beyond the Tools" },
-  { id: "2P6Doe-eccI", title: "The Good, The Bad and The Ugly: The Gory Details of an IDP" },
-  { id: "-9ijsskqp2E", title: "Kubernetes at the Edge — Come See It In Action!" },
+  {
+    id: "2P6Doe-eccI",
+    title: "The Good, The Bad and The Ugly: The Gory Details of an IDP",
+  },
+  {
+    id: "-9ijsskqp2E",
+    title: "Kubernetes at the Edge — Come See It In Action!",
+  },
   { id: "Mfmf0KQEzEY", title: "Pragmatic Guide to Platforms and Compliance" },
-  { id: "jovh3u7CaIw", title: "Build a Cloud-Native Developer Platform for IO Interactive" },
-  { id: "NjWCiRly9vM", title: "Adopt the Bill of Behaviour into your daily workflow: bobctl" },
-  { id: "fkRmopLyEK4", title: "This Lying Has To Stop: Keeping AI Honest with OpenTelemetry" },
-  { id: "AZXEXR90Kpw", title: "From Anxiety to Action: A Guide to Bringing Workloads Back Home" },
-  { id: "UOFwb7MYQ20", title: "Developer Experience for Platform Engineers in 2025" },
+  {
+    id: "jovh3u7CaIw",
+    title: "Build a Cloud-Native Developer Platform for IO Interactive",
+  },
+  {
+    id: "NjWCiRly9vM",
+    title: "Adopt the Bill of Behaviour into your daily workflow: bobctl",
+  },
+  {
+    id: "fkRmopLyEK4",
+    title: "This Lying Has To Stop: Keeping AI Honest with OpenTelemetry",
+  },
+  {
+    id: "AZXEXR90Kpw",
+    title: "From Anxiety to Action: A Guide to Bringing Workloads Back Home",
+  },
+  {
+    id: "UOFwb7MYQ20",
+    title: "Developer Experience for Platform Engineers in 2025",
+  },
   { id: "bgHRuLhdLKI", title: "The Hitchhiker's Practical Guide to MLOps" },
   { id: "8fB3k95dCRE", title: "Yes, You Can Run LLMs on Kubernetes" },
   { id: "PQI2JRy42_g", title: "Driving Platform Adoption with Embedded SREs" },
   { id: "3gliyWYpmi8", title: "Multi-Site CSI for Kubernetes" },
-  { id: "nJX465BAO_M", title: "Not Forking Around: Leveraging NRI to extend Kubernetes at scale" },
-  { id: "n3H8tnqIeEU", title: "KRO-nicles of Kubernetes: Taming Resources the Open Source Way" },
+  {
+    id: "nJX465BAO_M",
+    title: "Not Forking Around: Leveraging NRI to extend Kubernetes at scale",
+  },
+  {
+    id: "n3H8tnqIeEU",
+    title: "KRO-nicles of Kubernetes: Taming Resources the Open Source Way",
+  },
   { id: "BD-KV92UQAc", title: "Kubernetes and AI to Protect Our Forests" },
 ]
 
 const TalkCard: React.FC<{ talk: Talk; index: number }> = ({ talk, index }) => {
-  // Use mqdefault.jpg (320x180) — fast, decent quality. Falls back at network level.
-  const thumb = `https://i.ytimg.com/vi/${talk.id}/mqdefault.jpg`
+  // Use maxresdefault.jpg (1280x720) with sddefault.jpg fallback.
+  const thumb = `https://i.ytimg.com/vi/${talk.id}/maxresdefault.jpg`
   const href = `https://www.youtube.com/watch?v=${talk.id}&list=${PLAYLIST_ID}`
 
   return (
@@ -131,7 +164,7 @@ const TalksCarouselSection: React.FC = () => {
               className="eyebrow mb-2"
               style={{ color: "var(--color-cnd-red)" }}
             >
-              09 · TALK ARCHIVE · CND 2025
+              06 · TALK ARCHIVE · CND 2025
             </div>
             <h2
               className="display"

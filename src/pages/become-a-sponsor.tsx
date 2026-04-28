@@ -179,7 +179,7 @@ const BecomeASponsorPage: React.FC = () => {
       <SEOHead title="Become a Sponsor" pathname={location.pathname} />
 
       <PageHeader
-        eyebrow="08 · BECOME A SPONSOR"
+        eyebrow="BECOME A SPONSOR"
         title="Partner with us."
         description="Connect with 500+ developers, engineers, and technical leaders at Copenhagen's premier Kubernetes and cloud-native conference."
         variant="dark"

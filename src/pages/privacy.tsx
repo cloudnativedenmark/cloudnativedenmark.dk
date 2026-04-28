@@ -25,11 +25,14 @@ const PrivacyPage: React.FC = () => {
             This Privacy Policy applies only to our online activities and is
             valid for visitors to our website with regards to the information
             that they shared and/or collected in cloudnativedenmark.dk. This
-            policy is not applicable to any information collected offline or
-            via channels other than this website.
+            policy is not applicable to any information collected offline or via
+            channels other than this website.
           </p>
 
-          <h2 className="display pt-6 text-cnd-midnight" style={{ fontSize: 26, letterSpacing: "-0.02em" }}>
+          <h2
+            className="display pt-6 text-cnd-midnight"
+            style={{ fontSize: 26, letterSpacing: "-0.02em" }}
+          >
             Consent
           </h2>
           <p>
@@ -37,7 +40,10 @@ const PrivacyPage: React.FC = () => {
             agree to its terms.
           </p>
 
-          <h2 className="display pt-6 text-cnd-midnight" style={{ fontSize: 26, letterSpacing: "-0.02em" }}>
+          <h2
+            className="display pt-6 text-cnd-midnight"
+            style={{ fontSize: 26, letterSpacing: "-0.02em" }}
+          >
             Information we collect
           </h2>
           <p>
@@ -57,10 +63,15 @@ const PrivacyPage: React.FC = () => {
             email address, and telephone number.
           </p>
 
-          <h2 className="display pt-6 text-cnd-midnight" style={{ fontSize: 26, letterSpacing: "-0.02em" }}>
+          <h2
+            className="display pt-6 text-cnd-midnight"
+            style={{ fontSize: 26, letterSpacing: "-0.02em" }}
+          >
             How we use your information
           </h2>
-          <p>We use the information we collect in various ways, including to:</p>
+          <p>
+            We use the information we collect in various ways, including to:
+          </p>
           <ul className="ml-6 list-disc space-y-1">
             <li>Provide, operate, and maintain our website</li>
             <li>Improve, personalize, and expand our website</li>
@@ -76,7 +87,10 @@ const PrivacyPage: React.FC = () => {
             <li>Find and prevent fraud</li>
           </ul>
 
-          <h2 className="display pt-6 text-cnd-midnight" style={{ fontSize: 26, letterSpacing: "-0.02em" }}>
+          <h2
+            className="display pt-6 text-cnd-midnight"
+            style={{ fontSize: 26, letterSpacing: "-0.02em" }}
+          >
             Log Files
           </h2>
           <p>
@@ -95,7 +109,10 @@ const PrivacyPage: React.FC = () => {
             information.
           </p>
 
-          <h2 className="display pt-6 text-cnd-midnight" style={{ fontSize: 26, letterSpacing: "-0.02em" }}>
+          <h2
+            className="display pt-6 text-cnd-midnight"
+            style={{ fontSize: 26, letterSpacing: "-0.02em" }}
+          >
             GDPR Data Protection Rights
           </h2>
           <p>
@@ -127,7 +144,10 @@ const PrivacyPage: React.FC = () => {
             </li>
           </ul>
 
-          <h2 className="display pt-6 text-cnd-midnight" style={{ fontSize: 26, letterSpacing: "-0.02em" }}>
+          <h2
+            className="display pt-6 text-cnd-midnight"
+            style={{ fontSize: 26, letterSpacing: "-0.02em" }}
+          >
             Ticket purchase
           </h2>
           <p>
@@ -141,7 +161,10 @@ const PrivacyPage: React.FC = () => {
             .
           </p>
 
-          <h2 className="display pt-6 text-cnd-midnight" style={{ fontSize: 26, letterSpacing: "-0.02em" }}>
+          <h2
+            className="display pt-6 text-cnd-midnight"
+            style={{ fontSize: 26, letterSpacing: "-0.02em" }}
+          >
             Contact
           </h2>
           <p>

@@ -84,7 +84,7 @@ const VenuePage: React.FC = () => {
         pathname={location.pathname}
       />
       <PageHeader
-        eyebrow="04 · VENUE"
+        eyebrow="VENUE"
         title="Where we land."
         description="In the heart of Copenhagen, a five-minute walk from Central Station."
         variant="dark"
@@ -120,7 +120,10 @@ const VenuePage: React.FC = () => {
             <div className="flex-1 text-center md:text-left">
               <div
                 className="eyebrow mb-3"
-                style={{ color: "var(--color-cnd-red)", letterSpacing: "0.22em" }}
+                style={{
+                  color: "var(--color-cnd-red)",
+                  letterSpacing: "0.22em",
+                }}
               >
                 THE VENUE
               </div>
@@ -209,7 +212,10 @@ const VenuePage: React.FC = () => {
           <div className="text-center">
             <div
               className="eyebrow mb-3"
-              style={{ color: "var(--color-cnd-coral)", letterSpacing: "0.22em" }}
+              style={{
+                color: "var(--color-cnd-coral)",
+                letterSpacing: "0.22em",
+              }}
             >
               THE SPACES
             </div>
@@ -302,7 +308,10 @@ const VenuePage: React.FC = () => {
                 >
                   ADDRESS
                 </div>
-                <p className="display text-cnd-midnight" style={{ fontSize: 22 }}>
+                <p
+                  className="display text-cnd-midnight"
+                  style={{ fontSize: 22 }}
+                >
                   Scandic Copenhagen
                 </p>
                 <p className="text-cnd-slate">Vester Søgade 6</p>
@@ -320,7 +329,10 @@ const VenuePage: React.FC = () => {
               <div className="rounded-2xl border-2 border-cnd-coral/40 bg-white p-7">
                 <div
                   className="eyebrow mb-3"
-                  style={{ color: "var(--color-cnd-coral)", letterSpacing: "0.22em" }}
+                  style={{
+                    color: "var(--color-cnd-coral)",
+                    letterSpacing: "0.22em",
+                  }}
                 >
                   BY PUBLIC TRANSPORT
                 </div>
@@ -334,8 +346,8 @@ const VenuePage: React.FC = () => {
                     Vesterport Station is nearby.
                   </li>
                   <li>
-                    <strong className="text-cnd-midnight">Bus:</strong>{" "}
-                    Multiple bus lines stop at Vesterport.
+                    <strong className="text-cnd-midnight">Bus:</strong> Multiple
+                    bus lines stop at Vesterport.
                   </li>
                 </ul>
               </div>
@@ -343,21 +355,31 @@ const VenuePage: React.FC = () => {
               <div className="rounded-2xl border-2 border-cnd-amber/60 bg-white p-7">
                 <div
                   className="eyebrow mb-3"
-                  style={{ color: "var(--color-cnd-amber)", letterSpacing: "0.22em" }}
+                  style={{
+                    color: "var(--color-cnd-amber)",
+                    letterSpacing: "0.22em",
+                  }}
                 >
                   FROM CPH AIRPORT
                 </div>
                 <ul className="space-y-2 text-cnd-slate">
-                  <li>Take the Metro or train to Copenhagen Central Station.</li>
+                  <li>
+                    Take the Metro or train to Copenhagen Central Station.
+                  </li>
                   <li>Journey time: approximately 15-20 minutes.</li>
-                  <li>From the station, walk 5 minutes to Scandic Copenhagen.</li>
+                  <li>
+                    From the station, walk 5 minutes to Scandic Copenhagen.
+                  </li>
                 </ul>
               </div>
 
               <div className="rounded-2xl border-2 border-cnd-electric/40 bg-white p-7">
                 <div
                   className="eyebrow mb-3"
-                  style={{ color: "var(--color-cnd-electric)", letterSpacing: "0.22em" }}
+                  style={{
+                    color: "var(--color-cnd-electric)",
+                    letterSpacing: "0.22em",
+                  }}
                 >
                   BY CAR
                 </div>

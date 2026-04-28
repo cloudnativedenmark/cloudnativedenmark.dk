@@ -132,10 +132,7 @@ const VenueSection: React.FC = () => {
   return (
     <Section className="bg-cnd-bone text-cnd-midnight">
       <div className="text-center">
-        <div
-          className="eyebrow mb-3"
-          style={{ color: "var(--color-cnd-red)" }}
-        >
+        <div className="eyebrow mb-3" style={{ color: "var(--color-cnd-red)" }}>
           04 · VENUE
         </div>
         <h2
@@ -249,9 +246,7 @@ const VenueSection: React.FC = () => {
                       key={index}
                       onClick={() => setCurrentIndex(index + 1)}
                       className={`w-2 h-2 rounded-full transition-colors ${
-                        index === getRealIndex()
-                          ? "bg-cnd-red"
-                          : "bg-cnd-fog"
+                        index === getRealIndex() ? "bg-cnd-red" : "bg-cnd-fog"
                       }`}
                       aria-label={`Go to image ${index + 1}`}
                     />

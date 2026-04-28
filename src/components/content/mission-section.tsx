@@ -22,7 +22,7 @@ const MissionSection: React.FC<MissionSectionProps> = ({
             className="eyebrow mb-4"
             style={{ color: "var(--color-cnd-red)" }}
           >
-            06 · MISSION
+            07 · MISSION
           </div>
           <h2
             className="display text-cnd-midnight"

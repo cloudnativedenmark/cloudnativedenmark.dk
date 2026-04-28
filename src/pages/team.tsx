@@ -14,7 +14,7 @@ const TeamPage: React.FC = () => {
     <>
       <SEOHead title="Team" pathname={location.pathname} />
       <PageHeader
-        eyebrow="07 · ORGANIZERS"
+        eyebrow="ORGANIZERS"
         title="The crew."
         description="Cloud Native Denmark is organized by a dedicated committee passionate about bringing people together and fostering a sense of community. Our goal is a platform for like-minded individuals from all levels and backgrounds, dedicated to learning, growth, and diversity."
         variant="dark"
