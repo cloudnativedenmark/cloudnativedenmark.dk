@@ -10,8 +10,10 @@ import VenueSection from "../components/content/venue-section"
 import LastYearEventSection from "../components/content/last-year-event-section"
 import MissionSection from "../components/content/mission-section"
 import SponsorsSection from "../components/content/sponsors-section"
+import TalksCarouselSection from "../components/content/talks-carousel-section"
 import SpeakerModal from "../components/speaker_modal"
-import Logo from "../images/logo.svg"
+import Section from "../components/ui/section"
+import Button from "../components/ui/button"
 
 const IndexPage: React.FC = () => {
   const location = useLocation()
@@ -28,58 +30,31 @@ const IndexPage: React.FC = () => {
     }
   }
 
-  // Hero background SVG element
-  const heroBackgroundSvg = (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-full h-full"
-      viewBox="-80.724 316.355 927.667 175.986"
-      preserveAspectRatio="xMidYMid slice"
-      width="927.667px"
-      height="175.986px"
-    >
-      <defs></defs>
-      <g clipPath="url(#wave1)">
-        <path
-          fill="#d7dff4"
-          d="M 348.113 567.704 L -1048.965 568.625 L -1048.965 464.805 C -583.18 717.992 -117.672 142.594 348.113 395.777 L 348.113 567.704 Z"
-        />
-      </g>
-      <g clipPath="url(#wave2)">
-        <path
-          fill="#0026ce"
-          d="M 548.566 568.003 L -637.617 568.186 L -637.617 477.156 C -242.145 692.121 153.094 203.582 548.566 418.551 L 548.566 568.003 Z"
-        />
-      </g>
-      <g clipPath="url(#wave3)">
-        <path
-          fill="#11347e"
-          d="M 1019.449219 568.15625 L -151.777344 568.15625 L -151.777344 430.761719 C 238.710938 642.867188 628.964844 160.832031 1019.449219 372.9375 Z"
-        />
-      </g>
-    </svg>
-  )
-
   return (
     <>
       <SEOHead title="Cloud Native Denmark 2026" pathname={location.pathname} />
       <HeroSection
-        logo={{
-          src: Logo,
-          alt: "Cloud Native Denmark",
-          width: 300,
-        }}
+        eyebrow="01 · EDITION Nº 04 · NORDIC CLOUD NATIVE CONFERENCE"
         title={
           <>
-            <span className="font-medium tracking-wider">CLOUD NATIVE</span>
+            CLOUD
             <br />
-            <span className="font-extrabold">DENMARK</span>
+            NATIVE
+            <br />
+            <span
+              style={{
+                WebkitTextStroke: "3px var(--color-cnd-midnight)",
+                color: "transparent",
+              }}
+            >
+              DENMARK.
+            </span>
           </>
         }
-        subtitle="November 19-20, 2026 • Scandic Copenhagen"
+        description="Two days in Copenhagen with the platform engineers, SREs, and architects shipping the Nordics' most demanding cloud native systems to production."
         actions={[
           {
-            text: "Ticket Rates",
+            text: "Ticket rates →",
             onClick: scrollToTicketRates,
             variant: "primary",
           },
@@ -87,20 +62,24 @@ const IndexPage: React.FC = () => {
             text: "Submit a talk",
             href: "http://cloudnativedenmark.dk/cfp",
             isExternal: true,
-            variant: "primary",
+            variant: "midnight",
           },
           {
-            text: "Merch",
+            text: "Merch →",
             href: "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/?extras_flow=true",
             isExternal: true,
             variant: "secondary",
           },
         ]}
-        backgroundElement={heroBackgroundSvg}
+        dateStamp={{
+          label: "COPENHAGEN · CND/2026",
+          dates: "19–20 NOV 2026",
+          venue: "Scandic Copenhagen",
+        }}
       />
 
       <ConferenceInfo
-        title=""
+        title="02 · WHY YOU'RE COMING"
         description="Join us in Copenhagen as the Kubernetes and Cloud Native community comes together for a technical conference packed with inspiring talks, hands-on insights, and great opportunities to connect and grow."
         variant="dark"
       />
@@ -110,6 +89,8 @@ const IndexPage: React.FC = () => {
       <VenueSection />
 
       <LastYearEventSection />
+
+      <TalksCarouselSection />
 
       <MissionSection
         description="Through our joint passion for Cloud Native Technologies, we help facilitate the vibrant community meetups and conferences around Denmark, that aim primarily at sharing knowledge and creating deep and diverse professional networks. We use generated profits to make generous donations to trusted charities."
@@ -131,6 +112,58 @@ const IndexPage: React.FC = () => {
         community={sponsors.community}
         partners={sponsors.partners}
       />
+
+      {/* Final CTA */}
+      <Section className="bg-cnd-bone py-16 lg:py-20">
+        <div className="mx-auto max-w-3xl">
+          <div className="flex flex-col items-center gap-4 rounded-2xl bg-cnd-midnight p-10 text-center text-white shadow-[0_18px_40px_rgba(11,30,63,0.22)]">
+            <div
+              className="eyebrow"
+              style={{
+                color: "var(--color-cnd-coral)",
+                letterSpacing: "0.22em",
+              }}
+            >
+              NOVEMBER 19–20, 2026 · SCANDIC COPENHAGEN
+            </div>
+            <h3
+              className="display"
+              style={{ fontSize: 32, letterSpacing: "-0.03em" }}
+            >
+              See you in Copenhagen.
+            </h3>
+            <p
+              className="max-w-xl text-cnd-fog"
+              style={{ fontSize: 17, lineHeight: 1.55 }}
+            >
+              Two days of talks, workshops, and community — don't miss out.
+            </p>
+            <div className="mt-2 flex flex-wrap justify-center gap-3">
+              <a
+                href="https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button>Get your ticket →</Button>
+              </a>
+              <a
+                href="http://cloudnativedenmark.dk/cfp"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="ghost">Submit a talk</Button>
+              </a>
+              <a
+                href="https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/?extras_flow=true"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="ghost">Merch →</Button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </Section>
 
       {selectedSpeaker && (
         <SpeakerModal

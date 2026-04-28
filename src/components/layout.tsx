@@ -38,7 +38,7 @@ const Layout = () => {
   }, [pathname])
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-cnd-bone font-sans text-cnd-slate antialiased">
       <Header menuLinks={menuLinks} />
       <main className="relative isolate grow">
         <Outlet />

@@ -12,18 +12,42 @@ const ConferenceInfo: React.FC<ConferenceInfoProps> = ({
   description,
   variant = "dark",
 }) => {
-  const textColorClass = variant === "dark" ? "text-white" : "text-gray-800"
+  const isDark = variant === "dark"
 
   return (
-    <Section className={variant === "dark" ? "bg-background-dark" : "bg-white"}>
-      <div className="text-center">
-        <h2
-          className={`text-4xl lg:text-5xl font-bold ${textColorClass} mb-12`}
-        >
-          {title}
-        </h2>
+    <Section
+      className={`${
+        isDark
+          ? "bg-cnd-midnight text-white hex-bg"
+          : "bg-cnd-bone text-cnd-midnight"
+      } relative overflow-hidden`}
+    >
+      {/* Subtle red side rule echoing the hero */}
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute top-0 left-0 h-full w-[5px] ${
+          isDark ? "bg-cnd-red" : "bg-cnd-coral"
+        }`}
+      />
+      <div className="relative mx-auto max-w-4xl text-center">
+        {title && (
+          <div
+            className="eyebrow mb-6"
+            style={{
+              color: isDark ? "var(--color-cnd-coral)" : "var(--color-cnd-red)",
+            }}
+          >
+            {title}
+          </div>
+        )}
         <p
-          className={`text-2xl lg:text-3xl font-medium leading-relaxed ${textColorClass}`}
+          className="display"
+          style={{
+            fontSize: "clamp(28px, 4vw, 48px)",
+            lineHeight: 1.1,
+            letterSpacing: "-0.025em",
+            fontWeight: 600,
+          }}
         >
           {description}
         </p>

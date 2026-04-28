@@ -6,6 +6,7 @@ import organizerCamillaLarsen from "/images/team/organizer-camilla-larsen.jpg"
 import organizerJinhongBrejnholt from "/images/team/organizer-jinhong-brejnholt.jpg"
 import organizerKasperNissen from "/images/team/organizer-kasper-nissen.jpg"
 import organizerMads from "/images/team/organizer-mads.jpg"
+import organizerMertGungor from "/images/team/organizer-mert-gungor.jpg"
 import organizerNikitaHald from "/images/team/organizer-nikita-hald.jpg"
 import organizerOpheliaDalsgaard from "/images/team/organizer-ophelia-dalsgaard.jpg"
 import organizerPerChristiansen from "/images/team/organizer-per-christiansen.jpg"
@@ -25,6 +26,7 @@ export const teamImages: Record<string, string> = {
   "team/organizer-jinhong-brejnholt.jpg": organizerJinhongBrejnholt,
   "team/organizer-kasper-nissen.jpg": organizerKasperNissen,
   "team/organizer-mads.jpg": organizerMads,
+  "team/organizer-mert-gungor.jpg": organizerMertGungor,
   "team/organizer-nikita-hald.jpg": organizerNikitaHald,
   "team/organizer-ophelia-dalsgaard.jpg": organizerOpheliaDalsgaard,
   "team/organizer-per-christiansen.jpg": organizerPerChristiansen,

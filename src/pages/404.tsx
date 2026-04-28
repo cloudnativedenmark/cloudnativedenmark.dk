@@ -1,31 +1,58 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import SEOHead from "../components/seo-head"
-import Logo from "../images/logo.svg"
+import CNDShape from "../components/ui/cnd-shape"
+import Button from "../components/ui/button"
 
 const NotFoundPage: React.FC = () => {
   return (
     <>
       <SEOHead title="Page Not Found" />
-      <main className="min-h-[70vh] flex flex-col items-center justify-center px-6 py-16 text-center">
-        <img
-          src={Logo}
-          alt="Cloud Native Denmark"
-          className="w-24 h-24 mb-8 opacity-50"
-        />
-        <h1 className="text-6xl font-bold text-gray-900 mb-4">404</h1>
-        <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-          Page Not Found
-        </h2>
-        <p className="text-lg text-gray-600 mb-8 max-w-md">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <Link
-          to="/"
-          className="bg-background text-white px-8 py-3 text-lg rounded-full font-medium hover:bg-background/90 transition-colors"
+      <main className="relative isolate flex min-h-[78vh] flex-col items-center justify-center overflow-hidden bg-cnd-bone px-6 py-16 text-center">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute hidden md:block"
+          style={{ top: 40, right: 60, opacity: 0.5 }}
         >
-          Back to Home
-        </Link>
+          <CNDShape size={140} fill="var(--color-cnd-coral)" />
+        </div>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute hidden md:block"
+          style={{ bottom: 50, left: 60, opacity: 0.5 }}
+        >
+          <CNDShape size={120} fill="var(--color-cnd-amber)" />
+        </div>
+        <div className="relative">
+          <div
+            className="eyebrow mb-3"
+            style={{ color: "var(--color-cnd-red)", letterSpacing: "0.22em" }}
+          >
+            ERROR · STAGE NOT FOUND
+          </div>
+          <h1
+            className="display text-cnd-midnight"
+            style={{
+              fontSize: "clamp(96px, 14vw, 200px)",
+              letterSpacing: "-0.05em",
+              lineHeight: 0.9,
+            }}
+          >
+            404.
+          </h1>
+          <p
+            className="mx-auto mt-6 max-w-md text-cnd-slate"
+            style={{ fontSize: 18, lineHeight: 1.5 }}
+          >
+            That page doesn't exist or has been moved. Hop back to the main
+            stage.
+          </p>
+          <div className="mt-8 flex justify-center">
+            <Link to="/">
+              <Button>Back to home →</Button>
+            </Link>
+          </div>
+        </div>
       </main>
     </>
   )
