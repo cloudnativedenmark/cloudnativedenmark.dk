@@ -37,7 +37,10 @@ const SpeakerCard: React.FC<{ speaker: Speaker }> = ({ speaker }) => {
         {speaker.fullName}
       </h3>
       {speaker.tagLine && (
-        <p className="mt-2 text-cnd-slate" style={{ fontSize: 14, lineHeight: 1.45 }}>
+        <p
+          className="mt-2 text-cnd-slate"
+          style={{ fontSize: 14, lineHeight: 1.45 }}
+        >
           {speaker.tagLine}
         </p>
       )}
@@ -49,7 +52,9 @@ interface FeaturedSpeakersSectionProps {
   sectionNumber: number
 }
 
-const FeaturedSpeakersSection: React.FC<FeaturedSpeakersSectionProps> = ({ sectionNumber }) => {
+const FeaturedSpeakersSection: React.FC<FeaturedSpeakersSectionProps> = ({
+  sectionNumber,
+}) => {
   const { speakers } = useSessionizeSpeakers()
   const topSpeakers = speakers.filter((s) => s.isTopSpeaker)
 

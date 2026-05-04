@@ -127,7 +127,9 @@ const TalkCard: React.FC<{ talk: Talk; index: number }> = ({ talk, index }) => {
   )
 }
 
-const TalksCarouselSection: React.FC<{ sectionNumber: number }> = ({ sectionNumber }) => {
+const TalksCarouselSection: React.FC<{ sectionNumber: number }> = ({
+  sectionNumber,
+}) => {
   const scrollerRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)

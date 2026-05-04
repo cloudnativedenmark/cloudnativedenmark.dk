@@ -157,7 +157,10 @@ const TierCard: React.FC<{
   )
 }
 
-const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({ id, sectionNumber }) => {
+const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({
+  id,
+  sectionNumber,
+}) => {
   const activeTierIndex = getActiveTierIndex(ticketTiers)
 
   return (

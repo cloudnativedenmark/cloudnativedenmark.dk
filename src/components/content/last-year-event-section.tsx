@@ -4,7 +4,9 @@ import VideoEmbed from "./video-embed"
 import ExternalLink from "../ui/external-link"
 import CNDShape from "../ui/cnd-shape"
 
-const LastYearEventSection: React.FC<{ sectionNumber: number }> = ({ sectionNumber }) => {
+const LastYearEventSection: React.FC<{ sectionNumber: number }> = ({
+  sectionNumber,
+}) => {
   return (
     <Section className="relative overflow-hidden bg-cnd-ink hex-bg text-white">
       {/* Subtle red side rule echoing the hero */}
