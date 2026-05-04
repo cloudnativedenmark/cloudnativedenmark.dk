@@ -2,6 +2,7 @@ import React from "react"
 import Section from "../ui/section"
 
 interface MissionSectionProps {
+  sectionNumber: number
   title?: string
   description: string
   partnerDescription?: string
@@ -9,6 +10,7 @@ interface MissionSectionProps {
 }
 
 const MissionSection: React.FC<MissionSectionProps> = ({
+  sectionNumber,
   title = "Mission",
   description,
   partnerDescription,
@@ -22,7 +24,7 @@ const MissionSection: React.FC<MissionSectionProps> = ({
             className="eyebrow mb-4"
             style={{ color: "var(--color-cnd-red)" }}
           >
-            07 · MISSION
+            {String(sectionNumber).padStart(2, "0")} · MISSION
           </div>
           <h2
             className="display text-cnd-midnight"

@@ -11,6 +11,7 @@ import LastYearEventSection from "../components/content/last-year-event-section"
 import MissionSection from "../components/content/mission-section"
 import SponsorsSection from "../components/content/sponsors-section"
 import TalksCarouselSection from "../components/content/talks-carousel-section"
+import FeaturedSpeakersSection from "../components/content/featured-speakers-section"
 import SpeakerModal from "../components/speaker_modal"
 import Section from "../components/ui/section"
 import Button from "../components/ui/button"
@@ -19,6 +20,11 @@ const IndexPage: React.FC = () => {
   const location = useLocation()
   const { sponsors } = useSponsors()
   const { selectedSpeaker, handleCloseSpeakerModal } = useModalManagement()
+
+  // Section numbering derives from call order — reorder JSX, numbers follow automatically
+  let _sec = 0
+  const sec = () => ++_sec
+  const pad = (n: number) => String(n).padStart(2, "0")
 
   const scrollToTicketRates = () => {
     const element = document.getElementById("ticket-rates")
@@ -34,7 +40,7 @@ const IndexPage: React.FC = () => {
     <>
       <SEOHead title="Cloud Native Denmark 2026" pathname={location.pathname} />
       <HeroSection
-        eyebrow="01 · EDITION Nº 04 · NORDIC CLOUD NATIVE CONFERENCE"
+        eyebrow={`${pad(sec())} · EDITION Nº 04 · NORDIC CLOUD NATIVE CONFERENCE`}
         title={
           <>
             CLOUD
@@ -79,20 +85,23 @@ const IndexPage: React.FC = () => {
       />
 
       <ConferenceInfo
-        title="02 · WHY YOU'RE COMING"
+        title={`${pad(sec())} · WHY YOU'RE COMING`}
         description="Join us in Copenhagen as the Kubernetes and Cloud Native community comes together for a technical conference packed with inspiring talks, hands-on insights, and great opportunities to connect and grow."
         variant="dark"
       />
 
-      <TicketRatesSection id="ticket-rates" />
+      <FeaturedSpeakersSection sectionNumber={sec()} />
 
-      <VenueSection />
+      <TicketRatesSection sectionNumber={sec()} id="ticket-rates" />
 
-      <LastYearEventSection />
+      <VenueSection sectionNumber={sec()} />
 
-      <TalksCarouselSection />
+      <LastYearEventSection sectionNumber={sec()} />
+
+      <TalksCarouselSection sectionNumber={sec()} />
 
       <MissionSection
+        sectionNumber={sec()}
         description="Through our joint passion for Cloud Native Technologies, we help facilitate the vibrant community meetups and conferences around Denmark, that aim primarily at sharing knowledge and creating deep and diverse professional networks. We use generated profits to make generous donations to trusted charities."
         partnerDescription="Over the last three years, we have proudly made cumulative donations valued over 840,000 DKK to charity. Help us reach well beyond 1,000,000 DKK in 2026! ⭐ We welcome inquiries from good cause organizations - particularly those supporting technological education and enablement!"
       />
@@ -106,6 +115,7 @@ const IndexPage: React.FC = () => {
       {/*<MerchandiseSection />*/}
 
       <SponsorsSection
+        sectionNumber={sec()}
         platinum={sponsors.platinum}
         gold={sponsors.gold}
         bronze={sponsors.bronze}

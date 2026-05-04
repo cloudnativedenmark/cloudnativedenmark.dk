@@ -22,7 +22,7 @@ const carouselImages = [
   venueImages[0],
 ]
 
-const VenueSection: React.FC = () => {
+const VenueSection: React.FC<{ sectionNumber: number }> = ({ sectionNumber }) => {
   // Start at index 1 (first real image, since index 0 is the duplicate last)
   const [currentIndex, setCurrentIndex] = useState(1)
   const [dragOffset, setDragOffset] = useState(0)
@@ -133,7 +133,7 @@ const VenueSection: React.FC = () => {
     <Section className="bg-cnd-bone text-cnd-midnight">
       <div className="text-center">
         <div className="eyebrow mb-3" style={{ color: "var(--color-cnd-red)" }}>
-          04 · VENUE
+          {String(sectionNumber).padStart(2, "0")} · VENUE
         </div>
         <h2
           className="display mb-12 text-cnd-midnight"

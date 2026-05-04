@@ -4,7 +4,7 @@ import VideoEmbed from "./video-embed"
 import ExternalLink from "../ui/external-link"
 import CNDShape from "../ui/cnd-shape"
 
-const LastYearEventSection: React.FC = () => {
+const LastYearEventSection: React.FC<{ sectionNumber: number }> = ({ sectionNumber }) => {
   return (
     <Section className="relative overflow-hidden bg-cnd-ink hex-bg text-white">
       {/* Subtle red side rule echoing the hero */}
@@ -34,7 +34,7 @@ const LastYearEventSection: React.FC = () => {
             className="eyebrow mb-4"
             style={{ color: "var(--color-cnd-coral)" }}
           >
-            05 · RECAP · 2025
+            {String(sectionNumber).padStart(2, "0")} · RECAP · 2025
           </div>
           <h2
             className="display text-white"

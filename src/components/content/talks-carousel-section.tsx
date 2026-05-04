@@ -127,7 +127,7 @@ const TalkCard: React.FC<{ talk: Talk; index: number }> = ({ talk, index }) => {
   )
 }
 
-const TalksCarouselSection: React.FC = () => {
+const TalksCarouselSection: React.FC<{ sectionNumber: number }> = ({ sectionNumber }) => {
   const scrollerRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
@@ -164,7 +164,7 @@ const TalksCarouselSection: React.FC = () => {
               className="eyebrow mb-2"
               style={{ color: "var(--color-cnd-red)" }}
             >
-              06 · TALK ARCHIVE · CND 2025
+              {String(sectionNumber).padStart(2, "0")} · TALK ARCHIVE · CND 2025
             </div>
             <h2
               className="display"

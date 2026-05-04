@@ -18,6 +18,7 @@ const createMockSponsor = (title: string, overrides = {}) => ({
 
 describe("SponsorsSection", () => {
   const defaultProps = {
+    sectionNumber: 1,
     platinum: [],
     gold: [],
     bronze: [],
@@ -148,6 +149,7 @@ describe("SponsorsSection", () => {
   describe("multiple tiers with sponsors", () => {
     it("should render multiple tier sections simultaneously", () => {
       const props = {
+        sectionNumber: 1,
         platinum: [createMockSponsor("Platinum Co")],
         gold: [createMockSponsor("Gold Co")],
         bronze: [createMockSponsor("Bronze Co")],
