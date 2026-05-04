@@ -15,6 +15,7 @@ interface Sponsor {
 }
 
 interface SponsorsSectionProps {
+  sectionNumber: number
   platinum: Sponsor[]
   gold: Sponsor[]
   bronze: Sponsor[]
@@ -23,6 +24,7 @@ interface SponsorsSectionProps {
 }
 
 const SponsorsSection: React.FC<SponsorsSectionProps> = ({
+  sectionNumber,
   platinum,
   gold,
   bronze,
@@ -53,7 +55,7 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
             className="eyebrow mb-4"
             style={{ color: "var(--color-cnd-red)" }}
           >
-            08 · SPONSORS
+            {String(sectionNumber).padStart(2, "0")} · SPONSORS
           </div>
           <h2
             className="display"

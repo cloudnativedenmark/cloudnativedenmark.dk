@@ -60,6 +60,7 @@ const getActiveTierIndex = (tiers: TicketTier[]): number => {
 
 interface TicketRatesSectionProps {
   id?: string
+  sectionNumber: number
 }
 
 const tierCardClasses = (status: TierStatus) => {
@@ -156,7 +157,10 @@ const TierCard: React.FC<{
   )
 }
 
-const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({ id }) => {
+const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({
+  id,
+  sectionNumber,
+}) => {
   const activeTierIndex = getActiveTierIndex(ticketTiers)
 
   return (
@@ -168,7 +172,7 @@ const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({ id }) => {
               className="eyebrow mb-3"
               style={{ color: "var(--color-cnd-red)" }}
             >
-              03 · TICKETS
+              {String(sectionNumber).padStart(2, "0")} · TICKETS
             </div>
             <h2
               className="display"
