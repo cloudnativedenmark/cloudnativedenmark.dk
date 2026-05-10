@@ -474,6 +474,25 @@ const BecomeASponsorPage: React.FC = () => {
                       )}
                     </div>
 
+                    {tier.tier === "community" && (
+                      <div className="mt-8 flex items-center gap-4">
+                        <a
+                          href="https://cloudnativedenmark.ticketbutler.io/da/e/cloud-native-denmark-26/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button
+                            className="bg-cnd-electric! hover:bg-cnd-electric/85! shadow-[0_4px_18px_rgba(30,77,216,0.3)]!"
+                          >
+                            Claim Sponsorship →
+                          </Button>
+                        </a>
+                        <span className="text-sm text-cnd-ash">
+                          No need to contact us — purchase directly online.
+                        </span>
+                      </div>
+                    )}
+
                     {tier.availability && (
                       <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-cnd-coral/15 px-4 py-2">
                         <span
