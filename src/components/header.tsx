@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import Logo from "../images/logo.svg"
-import { Link, useLocation } from "react-router-dom"
-import { useScrollVisibility } from "../hooks/use-scroll-visibility"
+import { Link } from "react-router-dom"
 import HamburgerMenu from "../images/hamburger-menu.inline.svg"
 import CloseMenu from "../images/close-menu.inline.svg"
 
@@ -14,9 +13,6 @@ interface HeaderProps {
 
 const Header = ({ menuLinks }: HeaderProps) => {
   const [isMenuOpen, setMenuOpen] = useState(false)
-  const location = useLocation()
-  const isHomePage = location.pathname === "/"
-  const showLogo = useScrollVisibility({ threshold: 600, enabled: isHomePage })
 
   useEffect(() => {
     document.body.style.overflow = isMenuOpen ? "hidden" : "unset"
@@ -32,51 +28,61 @@ const Header = ({ menuLinks }: HeaderProps) => {
   return (
     <header
       className={
-        "bg-white safe-paddings transition-200 z-50 transition-colors sticky top-0" +
-        (isMenuOpen ? " h-screen flex flex-col" : "")
+        "safe-paddings sticky top-0 z-50 bg-cnd-bone/85 backdrop-blur-md transition-colors border-b border-cnd-fog/40" +
+        (isMenuOpen ? " h-screen flex flex-col bg-cnd-bone" : "")
       }
     >
-      <div className="flex items-center justify-between p-4 w-full">
-        <div
-          className={`transition-opacity duration-300 ${
-            isHomePage && !showLogo ? "opacity-0" : "opacity-100"
-          }`}
-        >
-          <Link to="/">
+      <div className="flex w-full items-center justify-between p-4">
+        <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3">
             <img
               src={Logo}
-              width={44}
+              width={40}
               height="auto"
               loading="eager"
               alt="Cloud Native Denmark"
             />
+            <span
+              className="text-cnd-midnight"
+              style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 700,
+                fontSize: 13,
+                letterSpacing: "0.02em",
+                lineHeight: 1,
+              }}
+            >
+              CLOUD NATIVE
+              <br />
+              DENMARK
+            </span>
           </Link>
         </div>
-        <nav className="hidden md:flex mr-4">
+        <nav className="mr-4 hidden md:flex items-center gap-6">
           {menuLinks.map((link) => (
             <Link
               key={link.name}
               to={link.link}
-              className="text-gray-800 hover:text-gray-600 text-base font-semibold pl-4"
+              className="text-sm font-semibold text-cnd-slate hover:text-cnd-red transition-colors"
             >
               {link.name}
             </Link>
           ))}
         </nav>
         <div className="md:hidden">
-          <button onClick={toggleMenu}>
+          <button onClick={toggleMenu} aria-label="Toggle navigation">
             {isMenuOpen ? <CloseMenu /> : <HamburgerMenu />}
           </button>
         </div>
       </div>
       {isMenuOpen && (
-        <div className="md:hidden flex-grow">
-          <nav className="flex flex-col items-center justify-start h-full">
+        <div className="flex-grow md:hidden">
+          <nav className="flex h-full flex-col items-center justify-start gap-2 pt-4">
             {menuLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.link}
-                className="text-gray-800 hover:text-gray-600 text-2xl font-semibold my-4"
+                className="my-3 text-2xl font-semibold text-cnd-midnight hover:text-cnd-red"
                 onClick={toggleMenu}
               >
                 {link.name}

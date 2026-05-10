@@ -6,6 +6,10 @@ dist/
 .vite/
 .cache/
 
+# Build artifacts
+public/page-data/
+public/static/
+
 # Yarn v4 (Berry)
 .yarn/
 !.yarn/patches

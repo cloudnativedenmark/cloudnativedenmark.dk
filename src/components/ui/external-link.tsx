@@ -1,7 +1,6 @@
 import React from "react"
 
-interface ExternalLinkProps
-  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+interface ExternalLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string
   children: React.ReactNode
   openInNewTab?: boolean

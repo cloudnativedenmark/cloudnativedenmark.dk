@@ -14,13 +14,14 @@ const TeamPage: React.FC = () => {
     <>
       <SEOHead title="Team" pathname={location.pathname} />
       <PageHeader
-        title="Team"
-        description="Cloud Native Denmark is organized by a dedicated committee who are passionate about bringing people together and fostering a sense of community. Our goal is to provide a platform for like-minded individuals from all levels and backgrounds that is dedicated to learning, growth, and diversity."
+        eyebrow="ORGANIZERS"
+        title="The crew."
+        description="Cloud Native Denmark is organized by a dedicated committee passionate about bringing people together and fostering a sense of community. Our goal is a platform for like-minded individuals from all levels and backgrounds, dedicated to learning, growth, and diversity."
         variant="dark"
         size="large"
       />
-      <Section className="bg-white py-20 pb-40">
-        <div className="max-w-7xl mx-auto">
+      <Section className="bg-cnd-bone pb-32 pt-16 lg:pt-20 lg:pb-40">
+        <div className="mx-auto max-w-7xl">
           <TeamGrid members={teamMembers} />
         </div>
       </Section>

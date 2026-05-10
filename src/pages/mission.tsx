@@ -10,13 +10,27 @@ const MissionPage: React.FC = () => {
   return (
     <>
       <SEOHead title="Mission" pathname={location.pathname} />
-      <PageHeader title="Mission" variant="default" size="medium" />
-      <Section className="bg-white py-20">
-        <div className="text-center">
-          <p className="text-2xl text-primary leading-relaxed max-w-4xl">
-            Cloud Native Denmark shares knowledge about Cloud Native
-            Technologies and creates community networks in Denmark within this
-            area. This may happen through events and profit from these will be
+      <PageHeader
+        eyebrow="MISSION"
+        title="Why we do this."
+        variant="dark"
+        size="medium"
+      />
+      <Section className="bg-cnd-bone py-20">
+        <div className="mx-auto max-w-4xl text-center">
+          <p
+            className="display"
+            style={{
+              fontSize: "clamp(22px, 2.4vw, 30px)",
+              lineHeight: 1.35,
+              letterSpacing: "-0.02em",
+              color: "var(--color-cnd-midnight)",
+              fontWeight: 600,
+            }}
+          >
+            Cloud Native Denmark shares knowledge about cloud native
+            technologies and creates community networks in Denmark within this
+            area. This happens through events, and profits from these are
             donated to charity.
           </p>
         </div>

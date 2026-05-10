@@ -41,12 +41,6 @@ export const siteConfig: SiteConfig = {
   ],
   team: [
     {
-      name: "Camilla Larsen",
-      position: "",
-      image: "team/organizer-camilla-larsen.jpg",
-      linkedin: "camilla-larsen-tux",
-    },
-    {
       name: "Jinhong Brejnholt",
       position:
         "Chief Cloud Architect & Global Head of Cloud and Container Platform Engineering @ Saxo Bank A/S",
@@ -66,22 +60,16 @@ export const siteConfig: SiteConfig = {
       linkedin: "perhchristiansen",
     },
     {
-      name: "Ryan Gough",
-      position: "Technical Product Owner @ JYSK",
-      image: "team/organizer-ryan-gough.jpg",
-      linkedin: "ryanjgough",
+      name: "Mert Gungor",
+      position: "Software Engineer @ Corti",
+      image: "team/organizer-mert-gungor.jpg",
+      linkedin: "mert-gungor-tr",
     },
     {
       name: "Thor Anker Kvisgård Lange",
       position: "Team Lead Platform Development @ Netic",
       image: "team/organizer-thor-lange.jpg",
       linkedin: "thor-lange-26b388",
-    },
-    {
-      name: "Nikita Hald Sørensen",
-      position: "OPEN TO WORK ✨",
-      image: "team/organizer-nikita-hald.jpg",
-      linkedin: "nikitahald",
     },
     {
       name: "Allan Højgaard Jensen",
@@ -100,12 +88,6 @@ export const siteConfig: SiteConfig = {
       position: "Lead Engineer @ the LEGO Group",
       image: "team/organizer-mads.jpg",
       linkedin: "danquah",
-    },
-    {
-      name: "Aditya Sundaramurthy",
-      position: "Platform Engineer @ Novo Nordisk",
-      image: "team/organizer-aditya.jpg",
-      linkedin: "aditya-sundaramurthy",
     },
     {
       name: "Aleksander Nowak",

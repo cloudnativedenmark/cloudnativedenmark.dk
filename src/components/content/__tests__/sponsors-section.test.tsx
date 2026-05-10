@@ -18,6 +18,7 @@ const createMockSponsor = (title: string, overrides = {}) => ({
 
 describe("SponsorsSection", () => {
   const defaultProps = {
+    sectionNumber: 1,
     platinum: [],
     gold: [],
     bronze: [],
@@ -30,7 +31,9 @@ describe("SponsorsSection", () => {
       renderWithRouter(<SponsorsSection {...defaultProps} />)
 
       expect(
-        screen.getByRole("heading", { name: "Sponsors" })
+        screen.getByRole("heading", {
+          name: /made possible by\s+our sponsors/i,
+        })
       ).toBeInTheDocument()
     })
 
@@ -38,7 +41,7 @@ describe("SponsorsSection", () => {
       renderWithRouter(<SponsorsSection {...defaultProps} />)
 
       expect(
-        screen.getByRole("button", { name: "Become a Sponsor" })
+        screen.getByRole("button", { name: "Become a sponsor →" })
       ).toBeInTheDocument()
     })
 
@@ -46,7 +49,7 @@ describe("SponsorsSection", () => {
       renderWithRouter(<SponsorsSection {...defaultProps} />)
 
       const sponsorLink = screen.getByRole("link", {
-        name: "Become a Sponsor",
+        name: "Become a sponsor →",
       })
       expect(sponsorLink).toHaveAttribute("href", "/become-a-sponsor")
     })
@@ -146,6 +149,7 @@ describe("SponsorsSection", () => {
   describe("multiple tiers with sponsors", () => {
     it("should render multiple tier sections simultaneously", () => {
       const props = {
+        sectionNumber: 1,
         platinum: [createMockSponsor("Platinum Co")],
         gold: [createMockSponsor("Gold Co")],
         bronze: [createMockSponsor("Bronze Co")],
@@ -164,11 +168,11 @@ describe("SponsorsSection", () => {
   })
 
   describe("accessibility", () => {
-    it("should have accessible sponsor heading with id", () => {
+    it("should have accessible sponsor section with id", () => {
       renderWithRouter(<SponsorsSection {...defaultProps} />)
 
-      const heading = screen.getByRole("heading", { name: "Sponsors" })
-      expect(heading).toHaveAttribute("id", "sponsors")
+      const section = document.getElementById("sponsors")
+      expect(section).toBeInTheDocument()
     })
 
     it("should have alt text for all sponsor images", () => {
