@@ -2,3 +2,4 @@ logo: images/bankdata.svg
 title: Bankdata
 url: https://www.bankdata.dk/
 scale: 80%
+enabled: true
