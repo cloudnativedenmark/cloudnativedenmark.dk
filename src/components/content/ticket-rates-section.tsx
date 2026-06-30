@@ -7,6 +7,7 @@ interface TicketTier {
   price: number
   availableUntil: Date
   displayDate: string
+  soldOut?: boolean
 }
 
 const ticketTiers: TicketTier[] = [
@@ -19,6 +20,7 @@ const ticketTiers: TicketTier[] = [
   {
     name: "Blind Bird",
     price: 1499,
+    soldOut: true,
     availableUntil: new Date("2026-09-18"),
     displayDate: "Through Sep 18",
   },
@@ -51,7 +53,7 @@ const getTierStatus = (
 const getActiveTierIndex = (tiers: TicketTier[]): number => {
   const now = new Date()
   for (let i = 0; i < tiers.length; i++) {
-    if (now <= tiers[i].availableUntil) {
+    if (now <= tiers[i].availableUntil && !tiers[i].soldOut) {
       return i
     }
   }
@@ -115,6 +117,14 @@ const TierCard: React.FC<{
             style={{ fontSize: 10, letterSpacing: "0.2em" }}
           >
             ON SALE
+          </span>
+        )}
+        {tier.soldOut && (
+          <span
+            className="eyebrow text-cnd-ash"
+            style={{ fontSize: 10, letterSpacing: "0.2em" }}
+          >
+            SOLD OUT
           </span>
         )}
       </div>
