@@ -141,8 +141,8 @@ const SponsorInfoPage: React.FC = () => {
           ))}
 
           <p className="text-center text-sm italic text-cnd-ash">
-            This is a first pass covering the questions we've heard most
-            often — if something's missing, tell us and we'll add it.
+            This is a first pass covering the questions we've heard most often —
+            if something's missing, tell us and we'll add it.
           </p>
         </div>
       </Section>
