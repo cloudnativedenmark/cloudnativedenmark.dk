@@ -47,6 +47,17 @@ const Footer = () => {
               A community-driven cloud native conference, organized by
               practitioners for practitioners.
             </p>
+            <p className="mt-4 max-w-sm text-sm text-cnd-fog">
+              Thank you to our sponsors for making CND/2026 possible.
+            </p>
+            <p className="mt-2 text-sm text-cnd-fog">
+              <ExternalLink
+                href="https://2025.cloudnativedenmark.dk/"
+                className="font-semibold text-white underline decoration-cnd-coral decoration-2 underline-offset-4 hover:text-cnd-coral"
+              >
+                See last year's event (CND/2025) →
+              </ExternalLink>
+            </p>
           </div>
 
           <nav>
