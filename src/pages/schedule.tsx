@@ -10,7 +10,7 @@ import SpeakerModal from "../components/speaker_modal"
 
 const SchedulePage: React.FC = () => {
   const location = useLocation()
-  const { schedule } = useSessionizeSchedule()
+  const { schedule, isLoading } = useSessionizeSchedule()
   const {
     selectedSession,
     selectedSpeaker,
@@ -35,9 +35,17 @@ const SchedulePage: React.FC = () => {
 
       <section className="py-12 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {schedule.length === 0 && (
+          {schedule.length === 0 && isLoading && (
             <div className="text-center">
               <p className="text-xl text-gray-600">Loading schedule...</p>
+            </div>
+          )}
+
+          {schedule.length === 0 && !isLoading && (
+            <div className="text-center">
+              <p className="text-xl text-gray-600">
+                The schedule is being finalized — check back soon.
+              </p>
             </div>
           )}
 

@@ -86,38 +86,55 @@ export const useSessionizeSchedule = (sessionId: string = MainSessionizeId) => {
   const [speakers, setSpeakers] = useState<Speaker[]>([])
   const [schedule, setSchedule] = useState<GridEntry[]>([])
   const [sessions, setSessions] = useState<SessionList[]>([])
+  const [loaded, setLoaded] = useState({
+    grid: false,
+    speakers: false,
+    sessions: false,
+  })
 
   const fetchGrid = useCallback(async () => {
-    const response = await fetch(
-      `https://sessionize.com/api/v2/${sessionId}/view/Grid`
-    )
-    if (!response.ok) {
-      return
+    try {
+      const response = await fetch(
+        `https://sessionize.com/api/v2/${sessionId}/view/Grid`
+      )
+      if (!response.ok) {
+        return
+      }
+      const data = await response.json()
+      setGrid(data)
+    } finally {
+      setLoaded((s) => ({ ...s, grid: true }))
     }
-    const data = await response.json()
-    setGrid(data)
   }, [sessionId])
 
   const fetchSpeakers = useCallback(async () => {
-    const response = await fetch(
-      `https://sessionize.com/api/v2/${sessionId}/view/Speakers`
-    )
-    if (!response.ok) {
-      return
+    try {
+      const response = await fetch(
+        `https://sessionize.com/api/v2/${sessionId}/view/Speakers`
+      )
+      if (!response.ok) {
+        return
+      }
+      const data = await response.json()
+      setSpeakers(data)
+    } finally {
+      setLoaded((s) => ({ ...s, speakers: true }))
     }
-    const data = await response.json()
-    setSpeakers(data)
   }, [sessionId])
 
   const fetchSessions = useCallback(async () => {
-    const response = await fetch(
-      `https://sessionize.com/api/v2/${sessionId}/view/Sessions`
-    )
-    if (!response.ok) {
-      return
+    try {
+      const response = await fetch(
+        `https://sessionize.com/api/v2/${sessionId}/view/Sessions`
+      )
+      if (!response.ok) {
+        return
+      }
+      const data = await response.json()
+      setSessions(data)
+    } finally {
+      setLoaded((s) => ({ ...s, sessions: true }))
     }
-    const data = await response.json()
-    setSessions(data)
   }, [sessionId])
 
   useEffect(() => {
@@ -182,5 +199,7 @@ export const useSessionizeSchedule = (sessionId: string = MainSessionizeId) => {
     setSchedule(schedule)
   }, [grid, speakers, sessions])
 
-  return { schedule }
+  const isLoading = !(loaded.grid && loaded.speakers && loaded.sessions)
+
+  return { schedule, isLoading }
 }
