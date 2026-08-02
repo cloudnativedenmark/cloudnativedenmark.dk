@@ -178,6 +178,17 @@ The site is automatically deployed to GitHub Pages on every push to the main bra
 - **Production**: `https://cloudnativedenmark.dk`
 - **GitHub Pages**: `https://cloudnativedenmark.github.io/cloudnativedenmark.dk`
 
+### Preview Environments
+
+Per-PR preview deployments to Cloudflare Pages, gated by a label (workflow: `.github/workflows/preview.yaml`).
+
+1. Add the `preview-enabled` label to a PR (only users with write/triage access can apply labels).
+2. The **PR Preview** workflow builds the site and deploys it to the `cloudnative-denmark-preview` Cloudflare Pages project under a per-PR alias.
+3. A bot comment posts the preview URL — `https://pr-<number>.cloudnative-denmark-preview.pages.dev` — and redeploys on every push while the label is set.
+4. The deployment is deleted automatically when the label is removed or the PR is closed/merged.
+
+Requires repo secrets `CLOUDFLARE_API_TOKEN` (Pages:Edit scope) and `CLOUDFLARE_ACCOUNT_ID`.
+
 ## 🤝 Contributing
 
 We welcome contributions! Please read our [Contributing Guide](./CONTRIBUTING.md) for details on:
