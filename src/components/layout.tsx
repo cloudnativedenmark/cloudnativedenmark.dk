@@ -13,6 +13,10 @@ const menuLinks = [
   //   link: "/venue-plan",
   // },
   {
+    name: "Schedule",
+    link: "/schedule",
+  },
+  {
     name: "Venue",
     link: "/venue",
   },
