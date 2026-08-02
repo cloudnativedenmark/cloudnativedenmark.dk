@@ -50,6 +50,17 @@ end-to-end so the user gets a clickable preview link, not just a merged diff.
      and look for that bot comment instead.
    - Once it arrives, **show the Preview URL to the user directly** — that's
      the deliverable of this flow, not just "the workflow succeeded."
+   - If this run was driven by the Slack-monitoring automation (a request
+     that came in via Slack rather than direct chat), reply with the preview
+     link in the Slack thread where the request originated, addressed to
+     whoever actually asked for the change — not just Alek, and not
+     generically "the channel." If Alek relayed or forwarded someone else's
+     ask, trace it back to that original message and reply to that person.
+     Write the message in Alek's own voice: don't credit, name-check, or
+     otherwise disclose Claude/AI authorship in the Slack message (no "Made
+     by Claude," no AI signature). This applies to Slack only — PR
+     descriptions and commits still carry the standard Claude Code
+     attribution footer, which stays as-is.
    - If the `deploy` check run fails instead, fetch its logs
      (`mcp__github__get_job_logs` / the check run's `html_url`) and diagnose
      before reporting back — common causes are a failed `yarn build` or a
