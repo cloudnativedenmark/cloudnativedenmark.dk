@@ -1,0 +1,113 @@
+# Deploy per-PR preview environments to Cloudflare Pages.
+# Gated by the "preview-enabled" label; posts the preview URL as a PR comment.
+name: PR Preview
+
+on:
+  pull_request:
+    types: [opened, labeled, unlabeled, synchronize, reopened, closed]
+
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  deploy:
+    if: >-
+      github.event.action != 'closed' &&
+      github.event.action != 'unlabeled' &&
+      contains(github.event.pull_request.labels.*.name, 'preview-enabled')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      deployments: write
+
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Yarn Berry
+        run: corepack prepare yarn@4.9.1 --activate
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build website
+        run: yarn build
+
+      - name: Create Pages project (if needed)
+        continue-on-error: true
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages project create cloudnative-denmark-preview --production-branch=main
+
+      - name: Deploy preview to Cloudflare Pages
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy dist --project-name=cloudnative-denmark-preview --branch=pr-${{ github.event.pull_request.number }}
+
+      - name: Comment preview URL
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: preview
+          message: |
+            ### 🚀 Preview environment ready
+
+            | | |
+            |--|--|
+            | **Preview URL** | ${{ steps.deploy.outputs.pages-deployment-alias-url }} |
+            | **This build** | ${{ steps.deploy.outputs.deployment-url }} |
+            | **Commit** | `${{ github.event.pull_request.head.sha }}` |
+
+            Updates on every push while the `preview-enabled` label is set.
+            Removed automatically when the label is removed or the PR is closed.
+
+  teardown:
+    if: >-
+      github.event.action == 'closed' ||
+      (github.event.action == 'unlabeled' && github.event.label.name == 'preview-enabled')
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Delete preview deployments
+        continue-on-error: true
+        env:
+          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PROJECT: cloudnative-denmark-preview
+          BRANCH: pr-${{ github.event.pull_request.number }}
+        run: |
+          api="https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${PROJECT}/deployments"
+          ids=$(curl -s -H "Authorization: Bearer ${CF_API_TOKEN}" "${api}?per_page=100" \
+            | jq -r --arg b "${BRANCH}" '.result[]? | select(.deployment_trigger.metadata.branch == $b) | .id')
+          for id in ${ids}; do
+            echo "Deleting deployment ${id}"
+            curl -s -X DELETE -H "Authorization: Bearer ${CF_API_TOKEN}" "${api}/${id}?force=true" >/dev/null
+          done
+
+      - name: Remove preview comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: preview
+          message: |
+            🧹 Preview environment for this PR has been torn down.
