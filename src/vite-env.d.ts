@@ -1,6 +1,17 @@
 /// <reference types="vite/client" />
 /// <reference types="vite-plugin-svgr/client" />
 
+interface ImportMetaEnv {
+  readonly VITE_AUTH_CONFIG_KEY?: string
+  readonly VITE_API_BASE_URL?: string
+  readonly VITE_VAPID_PUBLIC_KEY?: string
+  readonly VITE_ADMIN_API_KEY?: string
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv
+}
+
 declare module "*.svg" {
   import React = require("react")
   export const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>

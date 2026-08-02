@@ -14,3 +14,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     </HelmetProvider>
   </React.StrictMode>
 )
+
+// Powers offline support for /companion — see public/sw.js and
+// src/companion/README.md.
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js")
+  })
+}
