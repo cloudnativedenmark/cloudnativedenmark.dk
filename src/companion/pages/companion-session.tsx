@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useOfflineSchedule } from "../data/use-offline-schedule"
 import { findSessionById } from "../data/schedule-utils"
 import { useAuth } from "../auth/auth-context"
@@ -7,6 +7,18 @@ import { useMyFeedback, useAllFeedback } from "../data/use-feedback"
 import { StarRatingInput } from "../components/star-rating"
 import FeedbackList from "../components/feedback-list"
 import { formatTimeDetailed } from "../../utils/time-formatting"
+
+const BackButton: React.FC = () => {
+  const navigate = useNavigate()
+  return (
+    <button
+      onClick={() => navigate(-1)}
+      className="mb-4 text-sm font-semibold text-cnd-electric"
+    >
+      ← Back
+    </button>
+  )
+}
 
 const CompanionSessionDetail: React.FC = () => {
   const { sessionId } = useParams<{ sessionId: string }>()
@@ -54,14 +66,18 @@ const CompanionSessionDetail: React.FC = () => {
 
   if (!session) {
     return (
-      <div className="px-4 py-12 text-center text-sm text-cnd-ash">
-        Session not found — try reconnecting once to refresh the schedule.
+      <div className="px-4 py-4">
+        <BackButton />
+        <p className="py-12 text-center text-sm text-cnd-ash">
+          Session not found — try reconnecting once to refresh the schedule.
+        </p>
       </div>
     )
   }
 
   return (
     <div className="px-4 py-4">
+      <BackButton />
       <div className="text-xs font-semibold text-cnd-electric">
         {formatTimeDetailed(session.startsAt)}–
         {formatTimeDetailed(session.endsAt)} · {session.room}
