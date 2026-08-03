@@ -37,6 +37,7 @@ export const StorageKeys = {
   favorites: "favorites",
   feedback: "feedback",
   scheduleCache: "schedule-cache",
+  scheduleShowFavoritesOnly: "schedule-show-favorites-only",
   shoutCache: "shout-cache",
   pushSubscribed: "push-subscribed",
 } as const

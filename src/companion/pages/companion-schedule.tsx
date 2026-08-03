@@ -5,6 +5,7 @@ import { useFavorites } from "../data/use-favorites"
 import { flattenDaySessions } from "../data/schedule-utils"
 import { formatDate, formatTimeDetailed } from "../../utils/time-formatting"
 import type { Session } from "../../hooks/use-sessionize"
+import { getItem, setItem, StorageKeys } from "../data/storage"
 
 const StarIcon: React.FC<{ filled: boolean }> = ({ filled }) => (
   <svg
@@ -60,7 +61,16 @@ const CompanionSchedule: React.FC = () => {
   const { schedule, isOffline, isFromCache } = useOfflineSchedule()
   const { isFavorite, toggleFavorite } = useFavorites()
   const navigate = useNavigate()
-  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
+  // Persisted across navigation (not just component state) — switching to
+  // another tab and back used to always reset this to "Full schedule",
+  // which was annoying for people who live on "My schedule".
+  const [showFavoritesOnly, setShowFavoritesOnlyState] = useState(() =>
+    getItem<boolean>(StorageKeys.scheduleShowFavoritesOnly, false)
+  )
+  const setShowFavoritesOnly = (value: boolean) => {
+    setShowFavoritesOnlyState(value)
+    setItem(StorageKeys.scheduleShowFavoritesOnly, value)
+  }
 
   return (
     <div className="px-4 py-4">
