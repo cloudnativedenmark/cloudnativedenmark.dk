@@ -64,6 +64,10 @@ const CompanionSchedule: React.FC = () => {
 
   return (
     <div className="px-4 py-4">
+      <div className="mb-4 rounded-lg bg-cnd-sand px-3 py-2 text-center text-xs font-semibold text-cnd-slate">
+        Showcase preview — showing the 2025 schedule until 2026's is ready.
+      </div>
+
       {(isOffline || isFromCache) && (
         <div className="mb-4 rounded-lg bg-cnd-sand px-3 py-2 text-center text-xs font-semibold text-cnd-slate">
           {isOffline ? "You're offline — " : ""}Showing the last downloaded

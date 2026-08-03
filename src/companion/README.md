@@ -79,6 +79,13 @@ this matters says so explicitly in the UI rather than silently failing.
 
 ## Known gaps / next steps
 
+- **Schedule data is temporarily pinned to the 2025 event**
+  (`src/companion/data/use-offline-schedule.ts`) rather than the live 2026
+  one, since the 2026 Sessionize schedule isn't fully populated yet — this
+  lets people actually try the app now instead of seeing an empty
+  schedule. A banner on the Schedule tab says so. Swap the hardcoded
+  `DEMO_SESSIONIZE_ID` back to a no-arg `useSessionizeSchedule()` call once
+  2026 has real session data.
 - Feedback/shout REST endpoints have no per-request rate limiting.
 - Push delivery uses the `web-push` library but hasn't been live-tested
   end to end (impossible without deploying) — worth a manual check after
