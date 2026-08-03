@@ -22,6 +22,9 @@ const CompanionShell: React.FC = () => {
     ...(role === "speaker"
       ? [{ label: "My Sessions", to: "/companion/speaker" }]
       : []),
+    ...(role === "attendee" || role === "speaker"
+      ? [{ label: "My Feedback", to: "/companion/my-feedback" }]
+      : []),
     ...(role === "admin"
       ? [{ label: "Moderate", to: "/companion/admin" }]
       : []),

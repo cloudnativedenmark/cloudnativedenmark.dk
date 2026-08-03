@@ -5,6 +5,7 @@ import PassphraseGate from "./components/passphrase-gate"
 import CompanionShell from "./components/companion-shell"
 import CompanionSchedule from "./pages/companion-schedule"
 import CompanionSessionDetail from "./pages/companion-session"
+import CompanionMyFeedback from "./pages/companion-my-feedback"
 import CompanionShout from "./pages/companion-shout"
 import CompanionSpeaker from "./pages/companion-speaker"
 import CompanionAdmin from "./pages/companion-admin"
@@ -22,6 +23,7 @@ const CompanionRoutes: React.FC = () => {
       <Route element={<CompanionShell />}>
         <Route index element={<CompanionSchedule />} />
         <Route path="session/:sessionId" element={<CompanionSessionDetail />} />
+        <Route path="my-feedback" element={<CompanionMyFeedback />} />
         <Route path="shout" element={<CompanionShout />} />
         <Route
           path="speaker"

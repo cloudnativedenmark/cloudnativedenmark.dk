@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import type { FeedbackEntry } from "./types"
 import { getItem, setItem, StorageKeys } from "./storage"
 import { apiRequest, isApiConfigured, adminHeaders } from "./api-client"
@@ -43,7 +43,16 @@ export function useMyFeedback() {
     [deviceId]
   )
 
-  return { myFeedbackFor, submitFeedback }
+  const allEntries = useMemo(
+    () =>
+      Object.values(entries).sort(
+        (a, b) =>
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+      ),
+    [entries]
+  )
+
+  return { myFeedbackFor, submitFeedback, allEntries }
 }
 
 // All feedback across all attendees — only possible via the backend, since
