@@ -93,7 +93,7 @@ const CompanionSessionDetail: React.FC = () => {
             onChange={(e) => setComment(e.target.value)}
             placeholder="Optional comment"
             rows={3}
-            className="mt-3 w-full rounded-lg border border-cnd-fog/60 p-3 text-sm outline-none focus:border-cnd-electric"
+            className="mt-3 w-full rounded-lg border border-cnd-fog/60 p-3 text-base outline-none focus:border-cnd-electric"
           />
           <button
             onClick={handleSaveComment}

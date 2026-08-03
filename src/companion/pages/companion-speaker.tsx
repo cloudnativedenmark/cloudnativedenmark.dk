@@ -30,7 +30,7 @@ const SpeakerPicker: React.FC = () => {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search your name"
-        className="mb-4 w-full rounded-lg border border-cnd-fog/60 px-3 py-2.5 text-sm outline-none focus:border-cnd-electric"
+        className="mb-4 w-full rounded-lg border border-cnd-fog/60 px-3 py-2.5 text-base outline-none focus:border-cnd-electric"
       />
       <div className="divide-y divide-cnd-fog/40 rounded-xl bg-white shadow-sm">
         {filtered.map((speaker) => (

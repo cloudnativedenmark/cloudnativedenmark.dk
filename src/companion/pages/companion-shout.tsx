@@ -64,14 +64,14 @@ const CompanionShout: React.FC = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Title"
-            className="mb-2 w-full rounded-lg border border-cnd-fog/60 px-3 py-2 text-sm outline-none focus:border-cnd-electric"
+            className="mb-2 w-full rounded-lg border border-cnd-fog/60 px-3 py-2 text-base outline-none focus:border-cnd-electric"
           />
           <textarea
             value={body}
             onChange={(e) => setBody(e.target.value)}
             placeholder="Message"
             rows={3}
-            className="w-full rounded-lg border border-cnd-fog/60 p-3 text-sm outline-none focus:border-cnd-electric"
+            className="w-full rounded-lg border border-cnd-fog/60 p-3 text-base outline-none focus:border-cnd-electric"
           />
           <button
             onClick={handleSend}
