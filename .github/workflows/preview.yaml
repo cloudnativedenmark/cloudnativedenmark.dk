@@ -53,8 +53,8 @@ jobs:
           # cross-device sync. Set these once workers/companion-api is
           # deployed to make previews reflect the real backend too.
           VITE_AUTH_CONFIG_KEY: ${{ secrets.VITE_AUTH_CONFIG_KEY }}
-          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
-          VITE_VAPID_PUBLIC_KEY: ${{ secrets.VITE_VAPID_PUBLIC_KEY }}
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+          VITE_VAPID_PUBLIC_KEY: ${{ vars.VITE_VAPID_PUBLIC_KEY }}
           VITE_ADMIN_API_KEY: ${{ secrets.VITE_ADMIN_API_KEY }}
 
       - name: Create Pages project (if needed)

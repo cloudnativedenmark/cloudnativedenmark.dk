@@ -57,8 +57,8 @@ jobs:
           # src/companion/README.md) and runs in local-only mode with no
           # cross-device sync.
           VITE_AUTH_CONFIG_KEY: ${{ secrets.VITE_AUTH_CONFIG_KEY }}
-          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
-          VITE_VAPID_PUBLIC_KEY: ${{ secrets.VITE_VAPID_PUBLIC_KEY }}
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+          VITE_VAPID_PUBLIC_KEY: ${{ vars.VITE_VAPID_PUBLIC_KEY }}
           VITE_ADMIN_API_KEY: ${{ secrets.VITE_ADMIN_API_KEY }}
 
       - name: Upload artifact
