@@ -51,6 +51,15 @@ jobs:
 
       - name: Build website
         run: yarn build
+        env:
+          # Companion app (/companion) config — all optional. Unset,
+          # the app falls back to a bundled demo key (see
+          # src/companion/README.md) and runs in local-only mode with no
+          # cross-device sync.
+          VITE_AUTH_CONFIG_KEY: ${{ secrets.VITE_AUTH_CONFIG_KEY }}
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_VAPID_PUBLIC_KEY: ${{ secrets.VITE_VAPID_PUBLIC_KEY }}
+          VITE_ADMIN_API_KEY: ${{ secrets.VITE_ADMIN_API_KEY }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
