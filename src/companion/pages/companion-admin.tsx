@@ -9,6 +9,8 @@ import FeedbackList from "../components/feedback-list"
 interface SessionGroup {
   sessionId: string
   title: string
+  speakerNames: string[]
+  startsAt: string | undefined
   entries: FeedbackEntry[]
   averageRating: number
   hasHidden: boolean
@@ -39,17 +41,31 @@ const CompanionAdmin: React.FC = () => {
         return {
           sessionId,
           title: session?.title || session?.name || sessionId,
+          speakerNames: session?.speakers?.map((s) => s.fullName) ?? [],
+          startsAt: session?.startsAt,
           entries: sessionEntries,
           averageRating,
           hasHidden: sessionEntries.some((e) => e.hidden),
         }
       })
-      .filter((g) => !q || g.title.toLowerCase().includes(q))
+      .filter((g) => {
+        if (!q) return true
+        if (g.title.toLowerCase().includes(q)) return true
+        return g.speakerNames.some((name) => name.toLowerCase().includes(q))
+      })
       .sort((a, b) => {
-        // Sessions with something already flagged surface first, then most
-        // responses first — that's where moderation attention is needed.
-        if (a.hasHidden !== b.hasHidden) return a.hasHidden ? -1 : 1
-        return b.entries.length - a.entries.length
+        // Chronological, matching the schedule itself — stable regardless
+        // of moderation actions or new feedback coming in, so admins can
+        // scan through sessions in a consistent order. Flagged entries are
+        // still called out with a badge, just not used to reorder things.
+        const aTime = a.startsAt
+          ? new Date(a.startsAt).getTime()
+          : Number.POSITIVE_INFINITY
+        const bTime = b.startsAt
+          ? new Date(b.startsAt).getTime()
+          : Number.POSITIVE_INFINITY
+        if (aTime !== bTime) return aTime - bTime
+        return a.title.localeCompare(b.title)
       })
   }, [entries, schedule, query])
 
@@ -87,7 +103,7 @@ const CompanionAdmin: React.FC = () => {
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search sessions"
+          placeholder="Search sessions or speakers"
           className="mb-4 w-full rounded-lg border border-cnd-fog/60 px-3 py-2.5 text-base outline-none focus:border-cnd-electric"
         />
       )}
