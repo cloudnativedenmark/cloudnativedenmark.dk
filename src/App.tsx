@@ -11,6 +11,7 @@ import Team from "./pages/team"
 import Venue from "./pages/venue"
 import VenuePlan from "./pages/venue-plan"
 import BecomeASponsor from "./pages/become-a-sponsor"
+import SponsorInfo from "./pages/sponsor-info"
 import NotFound from "./pages/404"
 
 function App() {
@@ -27,6 +28,8 @@ function App() {
         <Route path="venue" element={<Venue />} />
         <Route path="venue-plan" element={<VenuePlan />} />
         <Route path="become-a-sponsor" element={<BecomeASponsor />} />
+        {/* Not in nav — link directly to confirmed/prospective sponsors */}
+        <Route path="sponsor-info" element={<SponsorInfo />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
