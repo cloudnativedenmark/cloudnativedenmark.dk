@@ -20,18 +20,72 @@ const faqGroups: FAQGroup[] = [
     entries: [
       {
         question: "What's included with our booth?",
-        answer:
-          "Booth space includes standard furniture (table, chairs, power). Booth size scales with your tier — Extra Large for Platinum, Large for Gold, Regular for Bronze. If you need anything beyond standard furniture (screens, extra power, custom builds), let us know and we'll confirm what Scandic can provide.",
+        answer: (
+          <>
+            <p>Booth area sizes depend on your sponsorship tier:</p>
+            <ul className="mt-2 list-disc pl-5 space-y-1">
+              <li>
+                <strong>Platinum</strong>: 5x3 meters
+              </li>
+              <li>
+                <strong>Gold</strong>: 4x2 meters
+              </li>
+              <li>
+                <strong>Bronze</strong>: 3x2 meters
+              </li>
+            </ul>
+            <p className="mt-2">
+              Each booth area is provided with a standing-height table and power
+              outlets. All other equipment, displays, roll-ups, or additional
+              booth materials are the sponsor's own responsibility.
+            </p>
+          </>
+        ),
       },
       {
         question: "Can we rent a screen or get roll-ups printed on site?",
         answer:
-          "We're still confirming exact options and pricing with the venue for screen rental and on-site printing. If you need either, email us and we'll get you a straight answer as soon as we have one — don't wait until the week of the event.",
+          "We will share the delivery address for shipping goods to Scandic Copenhagen and rental options for extra equipment like TV screens or additional AV as soon as the venue finalizes them.",
+      },
+      {
+        question: "Is there a hotel booking discount code?",
+        answer: (
+          <>
+            <p>
+              Yes. We have arranged a booking code for discounted rooms at
+              Scandic Copenhagen. This code is sent by email to confirmed
+              sponsors.
+            </p>
+            <p className="mt-2">
+              If you did not receive your code or need it resent, please email{" "}
+              <a
+                href="mailto:sponsor@cloudnativedenmark.dk"
+                className="text-cnd-red underline decoration-2 underline-offset-4 hover:text-cnd-coral"
+              >
+                sponsor@cloudnativedenmark.dk
+              </a>
+              .
+            </p>
+            <p className="mt-2">
+              The booking code is valid for stays from November 18 to November
+              20, 2026. If any of your team members wish to stay outside these
+              dates, remove the code to book those additional nights separately,
+              then email{" "}
+              <a
+                href="mailto:copenhagen@scandichotels.com"
+                className="text-cnd-red underline decoration-2 underline-offset-4 hover:text-cnd-coral"
+              >
+                copenhagen@scandichotels.com
+              </a>{" "}
+              to request staying in the same room.
+            </p>
+          </>
+        ),
       },
       {
         question: "When can we set up, and when do we need to be packed down?",
         answer:
-          "Exact setup/teardown windows will be sent to confirmed sponsors closer to the event (November 19–20, 2026, Scandic Copenhagen). If you have travel or shipping constraints that need an earlier answer, reach out and we'll prioritize it.",
+          "We will send exact setup and teardown windows closer to the event. The conference runs November 19–20, 2026 at Scandic Copenhagen. If you have travel or shipping constraints that require an earlier answer, let us know and we will prioritize it.",
       },
     ],
   },
@@ -40,13 +94,69 @@ const faqGroups: FAQGroup[] = [
     entries: [
       {
         question: "How many tickets come with our tier?",
-        answer:
-          "Platinum: 6 tickets. Gold: 4 tickets. Bronze: 2 tickets. Community: 5 tickets. All paid tiers also come with a discount code for additional guest tickets, subject to general ticket availability.",
+        answer: (
+          <>
+            <p>Ticket allocations and guest discounts by tier:</p>
+            <ul className="mt-2 list-disc pl-5 space-y-1">
+              <li>
+                <strong>Platinum</strong>: 6 complimentary tickets + 10 tickets
+                at a 30% discount
+              </li>
+              <li>
+                <strong>Gold</strong>: 4 complimentary tickets + 10 tickets at a
+                30% discount
+              </li>
+              <li>
+                <strong>Bronze</strong>: 2 complimentary tickets + 4 tickets at
+                a 30% discount
+              </li>
+              <li>
+                <strong>Community</strong>: 5 complimentary tickets
+              </li>
+            </ul>
+            <p className="mt-2 text-sm italic">
+              Important: Ticket registrations (including sponsor codes) are
+              subject to general ticket availability. We recommend claiming and
+              registering your tickets as soon as possible to secure your seats.
+            </p>
+          </>
+        ),
       },
       {
         question: "Do we get access to attendee leads?",
         answer:
-          "Platinum, Gold, and Bronze sponsors get access to the lead scanner app for badge scanning at your booth.",
+          "Yes. Platinum, Gold, and Bronze sponsors get access to the TicketButler lead scanner. This is a standard mobile application you install on your own devices, accompanied by an event code for badge scanning. We will share the setup details closer to the event.",
+      },
+    ],
+  },
+  {
+    title: "Audience insights",
+    entries: [
+      {
+        question: "What is the attendee profile and size?",
+        answer:
+          "Last year, 477 active attendees represented 180 unique companies, including major Danish and international corporate enterprises.",
+      },
+      {
+        question: "What roles and job titles are represented?",
+        answer: (
+          <>
+            <p>The audience consists of practitioners and leaders:</p>
+            <ul className="mt-2 list-disc pl-5 space-y-1">
+              <li>
+                <strong>Core Engineering (58%+)</strong>: Practitioners holding
+                roles like Platform Engineer, Software Engineer, and DevOps
+                Engineer. Perfect for showcasing infrastructure tools, developer
+                platforms, or recruiting talent.
+              </li>
+              <li>
+                <strong>Technical Leadership (13% approx.)</strong>:
+                Decision-makers including CTOs, Directors, Team Leads, and
+                Product Managers.
+              </li>
+            </ul>
+          </>
+        ),
       },
     ],
   },
@@ -56,12 +166,38 @@ const faqGroups: FAQGroup[] = [
       {
         question: "Where does our logo appear?",
         answer:
-          "On the sponsors section of cloudnativedenmark.dk, in tier order, plus marketing material and swag as described in your tier. Send us a high-resolution SVG (dark-on-light works best against our site background) and we'll get it live — usually within a day.",
+          "On the sponsors section of cloudnativedenmark.dk in tier order, as well as on marketing material and swag described in your package. Send us a high-resolution SVG (dark-on-light works best) and we will publish it live, usually within a day.",
       },
       {
         question: "Can we add a keynote mention or stage time?",
-        answer:
-          "Platinum sponsors get a 15-minute keynote presentation slot; Gold gets 2 minutes of keynote presence; Bronze and Community get a keynote mention. These are coordinated directly with the organizing team ahead of the schedule going out.",
+        answer: (
+          <>
+            <p>
+              Stage presence and keynote presentation options depend on your
+              tier:
+            </p>
+            <ul className="mt-2 list-disc pl-5 space-y-1">
+              <li>
+                <strong>Platinum</strong>: A 15-minute technical keynote
+                presentation. This must be a strictly technical presentation,
+                not a product pitch.
+              </li>
+              <li>
+                <strong>Gold</strong>: A 2-minute stage key pitch to introduce
+                your company or message to the full audience (you are free to
+                present anything you'd like).
+              </li>
+              <li>
+                <strong>Bronze &amp; Community</strong>: Keynote mention only
+                (no active stage time).
+              </li>
+            </ul>
+            <p className="mt-2">
+              We coordinate these slots directly with your team before
+              publishing the schedule.
+            </p>
+          </>
+        ),
       },
     ],
   },
