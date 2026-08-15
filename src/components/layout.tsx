@@ -28,6 +28,10 @@ const menuLinks = [
     name: "Team",
     link: "/team",
   },
+  {
+    name: "Companion App",
+    link: "/companion",
+  },
 ]
 
 const Layout = () => {

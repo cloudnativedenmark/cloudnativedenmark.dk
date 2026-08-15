@@ -13,10 +13,14 @@ import VenuePlan from "./pages/venue-plan"
 import BecomeASponsor from "./pages/become-a-sponsor"
 import SponsorInfo from "./pages/sponsor-info"
 import NotFound from "./pages/404"
+import CompanionApp from "./companion/companion-app"
 
 function App() {
   return (
     <Routes>
+      {/* No marketing header/footer — the companion app is its own
+          full-screen shell with its own nav. */}
+      <Route path="/companion/*" element={<CompanionApp />} />
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="convince-your-boss" element={<ConvinceYourBoss />} />

@@ -1,0 +1,23 @@
+name = "cnd-companion-api"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"] # needed by the `web-push` package
+
+# Created via: wrangler d1 create cnd-companion
+# then paste the returned database_id below.
+[[d1_databases]]
+binding = "DB"
+database_name = "cnd-companion"
+database_id = "REPLACE_WITH_REAL_D1_DATABASE_ID"
+
+# Set with: wrangler secret put ADMIN_API_KEY
+# Same value the Pages build's VITE_ADMIN_API_KEY should be set to, so the
+# companion app's admin-only writes (send shout, hide/unhide feedback) can
+# authenticate. Deliberately NOT a repo secret/config file like the
+# passphrase — this one only needs to exist server-side.
+#
+# Set with: wrangler secret put VAPID_PRIVATE_KEY
+# Set with: wrangler secret put VAPID_PUBLIC_KEY
+# Generate a pair with: npx web-push generate-vapid-keys
+# The public key also needs to be set as VITE_VAPID_PUBLIC_KEY in the Pages
+# build env so the frontend can subscribe.
