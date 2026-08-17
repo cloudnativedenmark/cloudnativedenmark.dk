@@ -112,6 +112,12 @@ export const siteMetadata = {
       image: "team/organizer-alek.jpg",
       linkedin: "aleknowak",
     },
+    {
+      name: "Robert Jensen",
+      position: "Consulting Field Solutions Architect @ EverPure",
+      image: "team/organizer-robert-jensen.jpg",
+      linkedin: "robertjensen",
+    },
   ],
 }
 
