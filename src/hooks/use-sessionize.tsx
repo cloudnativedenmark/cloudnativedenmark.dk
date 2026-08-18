@@ -1,9 +1,5 @@
 import { useEffect, useState, useCallback } from "react"
-import {
-  type SessionType,
-  getSessionDurationMinutes,
-  getSessionType,
-} from "../utils/session-type"
+import { type SessionType, deduceSessionType } from "../utils/session-type"
 
 export const MainSessionizeId = "6dzu68z1"
 
@@ -93,13 +89,14 @@ export const useSessionizeSpeakers = (sessionId: string = MainSessionizeId) => {
         grid.forEach((day) => {
           day.rooms.forEach((room) => {
             room.sessions.forEach((session) => {
-              const duration = getSessionDurationMinutes(
-                session.startsAt,
-                session.endsAt
-              )
               sessionTypeById.set(
                 session.id,
-                getSessionType(duration, room.name)
+                deduceSessionType({
+                  startsAt: session.startsAt,
+                  endsAt: session.endsAt,
+                  room: room.name,
+                  isServiceSession: session.isServiceSession,
+                })
               )
             })
           })

@@ -2,15 +2,8 @@ import * as React from "react"
 import { createPortal } from "react-dom"
 import { Link } from "react-router-dom"
 import { type Speaker } from "../hooks/use-sessionize"
-import { type SessionType } from "../utils/session-type"
+import { sessionTypeBadgeClasses } from "../utils/session-type"
 import Button from "./ui/button"
-
-const sessionTypeBadgeClasses: Record<SessionType, string> = {
-  Keynote: "bg-cnd-red/10 text-cnd-red",
-  Session: "bg-cnd-electric/10 text-cnd-electric",
-  Workshop: "bg-cnd-amber/10 text-cnd-amber",
-  "Lightning Talk": "bg-cnd-sky/10 text-cnd-harbor",
-}
 
 const SpeakerModal: React.FC<{ speaker: Speaker; onClose: () => void }> = ({
   speaker,

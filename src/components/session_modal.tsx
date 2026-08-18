@@ -5,6 +5,10 @@ import {
   formatTimeDetailed,
   calculateSessionDuration,
 } from "../utils/time-formatting"
+import {
+  deduceSessionType,
+  sessionTypeBadgeClasses,
+} from "../utils/session-type"
 import SpeakerList from "./speaker-list"
 import Button from "./ui/button"
 
@@ -14,6 +18,12 @@ const SessionModal: React.FC<{
   onSpeakerClick: (speaker: Speaker) => void
 }> = ({ session, onClose, onSpeakerClick }) => {
   const duration = calculateSessionDuration(session.startsAt, session.endsAt)
+  const sessionType = deduceSessionType({
+    startsAt: session.startsAt,
+    endsAt: session.endsAt,
+    room: session.room,
+    isServiceSession: session.isServiceSession,
+  })
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -51,6 +61,13 @@ const SessionModal: React.FC<{
           onClick={(e) => e.stopPropagation()}
         >
           <div className="overflow-y-auto p-8 flex-grow">
+            {sessionType && (
+              <span
+                className={`mb-3 inline-block rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-wide ${sessionTypeBadgeClasses[sessionType]}`}
+              >
+                {sessionType}
+              </span>
+            )}
             <h2 className="text-3xl font-bold text-primary mb-4">
               {session.title || session.name}
             </h2>
