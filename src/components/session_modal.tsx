@@ -23,6 +23,7 @@ const SessionModal: React.FC<{
     endsAt: session.endsAt,
     room: session.room,
     isServiceSession: session.isServiceSession,
+    speakers: session.speakers,
   })
 
   React.useEffect(() => {

@@ -1,3 +1,5 @@
+import { isExcludedSpeaker } from "../config/excluded-speakers"
+
 export type SessionType = "Keynote" | "Session" | "Workshop" | "Lightning Talk"
 
 /** Duration, in whole minutes, between two ISO timestamps. */
@@ -29,22 +31,44 @@ export const getSessionType = (
   return null
 }
 
+export interface SessionSpeakerRef {
+  fullName?: string
+  name?: string
+}
+
 export interface SessionTiming {
   startsAt: string
   endsAt: string
   room?: string | null
   isServiceSession?: boolean
+  speakers?: SessionSpeakerRef[]
+}
+
+/**
+ * True when every listed speaker is an admin-only host (see
+ * config/excluded-speakers) — e.g. welcome/keynote-wrap-up/closing-remarks
+ * segments — rather than someone delivering an actual talk.
+ */
+export const isAdminOnlySession = (speakers?: SessionSpeakerRef[]): boolean => {
+  if (!speakers || speakers.length === 0) return false
+  return speakers.every((speaker) =>
+    isExcludedSpeaker(speaker.fullName ?? speaker.name ?? "")
+  )
 }
 
 /**
  * Same deduction as getSessionType, but for a full session/timing record:
- * service sessions (breaks, registration, etc.) never get a type, even if
- * their duration happens to coincide with a real talk length.
+ * - service sessions (breaks, registration, etc.) never get a type
+ * - sessions hosted only by admin-only speakers (welcome, keynote wrap-ups,
+ *   closing remarks) never get a type either, even if their duration happens
+ *   to coincide with a real talk length (e.g. a 5 minute wrap-up otherwise
+ *   reading as a Lightning Talk)
  */
 export const deduceSessionType = (
   session: SessionTiming
 ): SessionType | null => {
   if (session.isServiceSession) return null
+  if (isAdminOnlySession(session.speakers)) return null
   const duration = getSessionDurationMinutes(session.startsAt, session.endsAt)
   return getSessionType(duration, session.room)
 }

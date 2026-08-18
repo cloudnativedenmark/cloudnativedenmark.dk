@@ -1,5 +1,9 @@
 import { useEffect, useState, useCallback } from "react"
-import { type SessionType, deduceSessionType } from "../utils/session-type"
+import {
+  type SessionType,
+  deduceSessionType,
+  isAdminOnlySession,
+} from "../utils/session-type"
 
 export const MainSessionizeId = "6dzu68z1"
 
@@ -78,8 +82,13 @@ export const useSessionizeSpeakers = (sessionId: string = MainSessionizeId) => {
 
     // Cross-reference the grid so each speaker's sessions can carry a
     // deduced talk type (Keynote/Session/Workshop) for display in the
-    // speaker bio modal. Best-effort: if this fails, sessions just have no type.
+    // speaker bio modal, and so admin-only sessions (welcome, keynote
+    // wrap-ups, closing remarks — hosted only by the admin-only speakers in
+    // config/excluded-speakers) can be dropped from the list entirely rather
+    // than shown with no type. Best-effort: if this fails, sessions just have
+    // no type and nothing is dropped.
     const sessionTypeById = new Map<string, SessionType | null>()
+    const adminOnlySessionIds = new Set<string>()
     try {
       const gridResponse = await fetch(
         `https://sessionize.com/api/v2/${sessionId}/view/Grid`
@@ -96,8 +105,12 @@ export const useSessionizeSpeakers = (sessionId: string = MainSessionizeId) => {
                   endsAt: session.endsAt,
                   room: room.name,
                   isServiceSession: session.isServiceSession,
+                  speakers: session.speakers,
                 })
               )
+              if (isAdminOnlySession(session.speakers)) {
+                adminOnlySessionIds.add(session.id)
+              }
             })
           })
         })
@@ -109,10 +122,12 @@ export const useSessionizeSpeakers = (sessionId: string = MainSessionizeId) => {
     setSpeakers(
       data.map((speaker) => ({
         ...speaker,
-        sessions: speaker.sessions.map((session) => ({
-          ...session,
-          type: sessionTypeById.get(String(session.id)) ?? null,
-        })),
+        sessions: speaker.sessions
+          .filter((session) => !adminOnlySessionIds.has(String(session.id)))
+          .map((session) => ({
+            ...session,
+            type: sessionTypeById.get(String(session.id)) ?? null,
+          })),
       }))
     )
   }, [sessionId])
