@@ -195,31 +195,33 @@ describe("useModalManagement", () => {
   })
 
   describe("integration scenarios", () => {
-    it("should handle both session and speaker modals independently", () => {
+    it("should make session and speaker modals mutually exclusive", () => {
+      // Session and speaker modals never coexist: opening one closes the
+      // other, so at most one backdrop is ever mounted and "session ->
+      // speaker -> a different session" replaces rather than stacks.
       const { result } = renderHook(() => useModalManagement())
 
-      // Select both session and speaker
       act(() => {
         result.current.handleSessionClick(mockSession)
+      })
+      expect(result.current.selectedSession).toBe(mockSession)
+      expect(result.current.selectedSpeaker).toBeNull()
+
+      // Clicking a speaker from within the open session modal closes the
+      // session modal.
+      act(() => {
         result.current.handleSpeakerClick(mockSpeaker)
       })
-
-      expect(result.current.selectedSession).toBe(mockSession)
       expect(result.current.selectedSpeaker).toBe(mockSpeaker)
-
-      // Close only session modal
-      act(() => {
-        result.current.handleCloseSessionModal()
-      })
-
       expect(result.current.selectedSession).toBeNull()
-      expect(result.current.selectedSpeaker).toBe(mockSpeaker)
 
-      // Close speaker modal
+      // Clicking a (different) session from within the open speaker modal
+      // closes the speaker modal and opens the new session.
+      const otherSession = { ...mockSession, id: "session-2" }
       act(() => {
-        result.current.handleCloseSpeakerModal()
+        result.current.handleSessionClick(otherSession)
       })
-
+      expect(result.current.selectedSession).toBe(otherSession)
       expect(result.current.selectedSpeaker).toBeNull()
     })
   })

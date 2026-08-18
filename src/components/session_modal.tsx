@@ -1,9 +1,15 @@
 import * as React from "react"
+import { createPortal } from "react-dom"
 import { type Session, type Speaker } from "../hooks/use-sessionize"
 import {
   formatTimeDetailed,
   calculateSessionDuration,
 } from "../utils/time-formatting"
+import {
+  deduceSessionType,
+  sessionTypeBadgeClasses,
+  getSessionTags,
+} from "../utils/session-type"
 import SpeakerList from "./speaker-list"
 import Button from "./ui/button"
 
@@ -13,6 +19,14 @@ const SessionModal: React.FC<{
   onSpeakerClick: (speaker: Speaker) => void
 }> = ({ session, onClose, onSpeakerClick }) => {
   const duration = calculateSessionDuration(session.startsAt, session.endsAt)
+  const sessionType = deduceSessionType({
+    startsAt: session.startsAt,
+    endsAt: session.endsAt,
+    room: session.room,
+    isServiceSession: session.isServiceSession,
+    speakers: session.speakers,
+  })
+  const tags = getSessionTags(session.categories)
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -21,16 +35,20 @@ const SessionModal: React.FC<{
       }
     }
 
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth
     document.body.style.overflow = "hidden"
+    document.body.style.paddingRight = `${scrollbarWidth}px`
     document.addEventListener("keydown", handleKeyDown)
 
     return () => {
       document.body.style.overflow = "unset"
+      document.body.style.paddingRight = "0px"
       document.removeEventListener("keydown", handleKeyDown)
     }
   }, [onClose])
 
-  return (
+  return createPortal(
     <>
       <div
         className="fixed inset-0 bg-white z-40"
@@ -38,15 +56,21 @@ const SessionModal: React.FC<{
         onClick={onClose}
       ></div>
       <div
-        className="fixed inset-x-0 bottom-0 z-50 flex justify-center items-center p-4"
-        style={{ top: "76px" }}
+        className="fixed inset-0 z-50 flex justify-center items-center overflow-y-auto p-4"
         onClick={onClose}
       >
         <div
-          className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-full flex flex-col relative border border-gray-200"
+          className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[85vh] my-auto flex flex-col relative border border-gray-200"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="overflow-y-auto p-8 flex-grow">
+            {sessionType && (
+              <span
+                className={`mb-3 inline-block rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-wide ${sessionTypeBadgeClasses[sessionType]}`}
+              >
+                {sessionType}
+              </span>
+            )}
             <h2 className="text-3xl font-bold text-primary mb-4">
               {session.title || session.name}
             </h2>
@@ -60,6 +84,19 @@ const SessionModal: React.FC<{
                 <strong>Room:</strong> {session.room}
               </span>
             </div>
+
+            {tags.length > 0 && (
+              <div className="mb-6 flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
 
             {session.speakers && session.speakers.length > 0 && (
               <div className="mb-6">
@@ -96,7 +133,8 @@ const SessionModal: React.FC<{
           </div>
         </div>
       </div>
-    </>
+    </>,
+    document.body
   )
 }
 
