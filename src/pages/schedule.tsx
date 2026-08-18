@@ -20,6 +20,19 @@ const SchedulePage: React.FC = () => {
     handleCloseSpeakerModal,
   } = useModalManagement({ schedule })
 
+  const findSessionById = (id: number | string) => {
+    for (const day of schedule) {
+      for (const timeSlot of day.timeSlots) {
+        for (const room of timeSlot.rooms) {
+          if (room.session && room.session.id === String(id)) {
+            return room.session
+          }
+        }
+      }
+    }
+    return undefined
+  }
+
   return (
     <>
       <SEOHead title="Schedule" pathname={location.pathname} />
@@ -256,6 +269,12 @@ const SchedulePage: React.FC = () => {
         <SpeakerModal
           speaker={selectedSpeaker}
           onClose={handleCloseSpeakerModal}
+          onSessionClick={(sessionId) => {
+            const session = findSessionById(sessionId)
+            if (session) {
+              handleSessionClick(session)
+            }
+          }}
         />
       )}
     </>

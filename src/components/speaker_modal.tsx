@@ -5,10 +5,11 @@ import { type Speaker } from "../hooks/use-sessionize"
 import { sessionTypeBadgeClasses } from "../utils/session-type"
 import Button from "./ui/button"
 
-const SpeakerModal: React.FC<{ speaker: Speaker; onClose: () => void }> = ({
-  speaker,
-  onClose,
-}) => {
+const SpeakerModal: React.FC<{
+  speaker: Speaker
+  onClose: () => void
+  onSessionClick?: (sessionId: number) => void
+}> = ({ speaker, onClose, onSessionClick }) => {
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -78,32 +79,48 @@ const SpeakerModal: React.FC<{ speaker: Speaker; onClose: () => void }> = ({
                   Tap a talk to view it in the schedule.
                 </p>
                 <div className="space-y-2">
-                  {speaker.sessions.map((session) => (
-                    <Link
-                      key={session.id}
-                      to={`/schedule#${session.id}`}
-                      className="group flex items-center justify-between gap-3 rounded-lg border border-gray-200 px-4 py-3 transition-colors hover:border-primary hover:bg-primary/5"
-                    >
-                      <span className="flex flex-wrap items-center gap-2">
-                        {session.type && (
-                          <span
-                            className={`rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-wide ${sessionTypeBadgeClasses[session.type]}`}
-                          >
-                            {session.type}
+                  {speaker.sessions.map((session) => {
+                    const rowInner = (
+                      <>
+                        <span className="flex flex-wrap items-center gap-2">
+                          {session.type && (
+                            <span
+                              className={`rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-wide ${sessionTypeBadgeClasses[session.type]}`}
+                            >
+                              {session.type}
+                            </span>
+                          )}
+                          <span className="font-medium text-gray-800 group-hover:text-primary">
+                            {session.name}
                           </span>
-                        )}
-                        <span className="font-medium text-gray-800 group-hover:text-primary">
-                          {session.name}
                         </span>
-                      </span>
-                      <span
-                        aria-hidden="true"
-                        className="shrink-0 text-primary transition-transform group-hover:translate-x-0.5"
+                        <span
+                          aria-hidden="true"
+                          className="shrink-0 text-primary transition-transform group-hover:translate-x-0.5"
+                        >
+                          →
+                        </span>
+                      </>
+                    )
+                    return onSessionClick ? (
+                      <button
+                        key={session.id}
+                        type="button"
+                        onClick={() => onSessionClick(session.id)}
+                        className="group flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 px-4 py-3 text-left transition-colors hover:border-primary hover:bg-primary/5"
                       >
-                        →
-                      </span>
-                    </Link>
-                  ))}
+                        {rowInner}
+                      </button>
+                    ) : (
+                      <Link
+                        key={session.id}
+                        to={`/schedule#${session.id}`}
+                        className="group flex items-center justify-between gap-3 rounded-lg border border-gray-200 px-4 py-3 transition-colors hover:border-primary hover:bg-primary/5"
+                      >
+                        {rowInner}
+                      </Link>
+                    )
+                  })}
                 </div>
               </div>
             )}

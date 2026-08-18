@@ -17,9 +17,24 @@ export const useModalManagement = ({
   // already on the schedule page), not just the initial mount.
   const currentHash = typeof window !== "undefined" ? window.location.hash : ""
 
+  const clearHash = () => {
+    if (typeof window !== "undefined") {
+      window.history.pushState(
+        null,
+        "",
+        window.location.pathname + window.location.search
+      )
+    }
+  }
+
+  // Session and speaker modals are mutually exclusive: opening one always
+  // closes the other, so at most one backdrop is ever mounted at a time and
+  // navigating deeper (session -> speaker -> a different session) replaces
+  // rather than stacks.
   const handleSessionClick = (session: Session) => {
     if (session && session.id) {
       setSelectedSession(session)
+      setSelectedSpeaker(null)
       onSessionSelect?.(session)
       if (typeof window !== "undefined") {
         window.history.pushState(null, "", `#${session.id}`)
@@ -29,17 +44,13 @@ export const useModalManagement = ({
 
   const handleSpeakerClick = (speaker: Speaker) => {
     setSelectedSpeaker(speaker)
+    setSelectedSession(null)
+    clearHash()
   }
 
   const handleCloseSessionModal = () => {
     setSelectedSession(null)
-    if (typeof window !== "undefined") {
-      window.history.pushState(
-        null,
-        "",
-        window.location.pathname + window.location.search
-      )
-    }
+    clearHash()
   }
 
   const handleCloseSpeakerModal = () => {
