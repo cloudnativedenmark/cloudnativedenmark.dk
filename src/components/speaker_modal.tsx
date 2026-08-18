@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import { type Speaker } from "../hooks/use-sessionize"
 import { sessionTypeBadgeClasses } from "../utils/session-type"
 import Button from "./ui/button"
+import { features } from "../config/features"
 
 const SpeakerModal: React.FC<{
   speaker: Speaker
@@ -29,6 +30,9 @@ const SpeakerModal: React.FC<{
       document.removeEventListener("keydown", handleKeyDown)
     }
   }, [onClose])
+
+  const isSessionInteractive =
+    Boolean(onSessionClick) || features.scheduleAndSpeakers
 
   return createPortal(
     <>
@@ -75,9 +79,11 @@ const SpeakerModal: React.FC<{
                 <h3 className="text-xl font-bold text-gray-800 mb-1">
                   Sessions
                 </h3>
-                <p className="text-sm text-gray-500 mb-3">
-                  Tap a talk to view it in the schedule.
-                </p>
+                {isSessionInteractive && (
+                  <p className="text-sm text-gray-500 mb-3">
+                    Tap a talk to view it in the schedule.
+                  </p>
+                )}
                 <div className="space-y-2">
                   {speaker.sessions.map((session) => {
                     const rowInner = (
@@ -94,12 +100,14 @@ const SpeakerModal: React.FC<{
                             {session.name}
                           </span>
                         </span>
-                        <span
-                          aria-hidden="true"
-                          className="shrink-0 text-primary transition-transform group-hover:translate-x-0.5"
-                        >
-                          →
-                        </span>
+                        {isSessionInteractive && (
+                          <span
+                            aria-hidden="true"
+                            className="shrink-0 text-primary transition-transform group-hover:translate-x-0.5"
+                          >
+                            →
+                          </span>
+                        )}
                       </>
                     )
                     return onSessionClick ? (
@@ -111,7 +119,7 @@ const SpeakerModal: React.FC<{
                       >
                         {rowInner}
                       </button>
-                    ) : (
+                    ) : features.scheduleAndSpeakers ? (
                       <Link
                         key={session.id}
                         to={`/schedule#${session.id}`}
@@ -119,6 +127,13 @@ const SpeakerModal: React.FC<{
                       >
                         {rowInner}
                       </Link>
+                    ) : (
+                      <div
+                        key={session.id}
+                        className="flex items-center justify-between gap-3 rounded-lg border border-gray-200 px-4 py-3"
+                      >
+                        {rowInner}
+                      </div>
                     )
                   })}
                 </div>

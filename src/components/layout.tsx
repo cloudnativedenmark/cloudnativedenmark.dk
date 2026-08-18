@@ -2,8 +2,9 @@ import React, { useEffect } from "react"
 import { Outlet, useLocation } from "react-router-dom"
 import Header from "./header"
 import Footer from "./footer"
+import { features } from "../config/features"
 
-const menuLinks = [
+const allMenuLinks = [
   // {
   //   name: "Talk Archive",
   //   link: "/talk-archive",
@@ -37,6 +38,12 @@ const menuLinks = [
     link: "/team",
   },
 ]
+
+const hiddenLinks = features.scheduleAndSpeakers
+  ? []
+  : ["/schedule", "/speakers"]
+
+const menuLinks = allMenuLinks.filter(({ link }) => !hiddenLinks.includes(link))
 
 const Layout = () => {
   const { pathname } = useLocation()
