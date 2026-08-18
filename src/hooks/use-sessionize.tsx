@@ -1,10 +1,17 @@
 import { useEffect, useState, useCallback } from "react"
+import {
+  type SessionType,
+  getSessionDurationMinutes,
+  getSessionType,
+} from "../utils/session-type"
 
 export const MainSessionizeId = "6dzu68z1"
 
 export interface SpeakerSession {
   id: number
   name: string
+  /** Deduced talk type (Keynote/Session/Workshop) — null when it can't be deduced. */
+  type?: SessionType | null
 }
 export interface Speaker {
   id: string
@@ -72,7 +79,45 @@ export const useSessionizeSpeakers = (sessionId: string = MainSessionizeId) => {
       return
     }
     const data: Speaker[] = await response.json()
-    setSpeakers(data)
+
+    // Cross-reference the grid so each speaker's sessions can carry a
+    // deduced talk type (Keynote/Session/Workshop) for display in the
+    // speaker bio modal. Best-effort: if this fails, sessions just have no type.
+    const sessionTypeById = new Map<string, SessionType | null>()
+    try {
+      const gridResponse = await fetch(
+        `https://sessionize.com/api/v2/${sessionId}/view/Grid`
+      )
+      if (gridResponse.ok) {
+        const grid: GridEntry[] = await gridResponse.json()
+        grid.forEach((day) => {
+          day.rooms.forEach((room) => {
+            room.sessions.forEach((session) => {
+              const duration = getSessionDurationMinutes(
+                session.startsAt,
+                session.endsAt
+              )
+              sessionTypeById.set(
+                session.id,
+                getSessionType(duration, room.name)
+              )
+            })
+          })
+        })
+      }
+    } catch {
+      // Ignore — talk type is a nice-to-have, not required for the speaker list.
+    }
+
+    setSpeakers(
+      data.map((speaker) => ({
+        ...speaker,
+        sessions: speaker.sessions.map((session) => ({
+          ...session,
+          type: sessionTypeById.get(String(session.id)) ?? null,
+        })),
+      }))
+    )
   }, [sessionId])
 
   useEffect(() => {

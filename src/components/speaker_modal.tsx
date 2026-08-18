@@ -1,6 +1,14 @@
 import * as React from "react"
+import { Link } from "react-router-dom"
 import { type Speaker } from "../hooks/use-sessionize"
+import { type SessionType } from "../utils/session-type"
 import Button from "./ui/button"
+
+const sessionTypeBadgeClasses: Record<SessionType, string> = {
+  Keynote: "bg-cnd-red/10 text-cnd-red",
+  Session: "bg-cnd-electric/10 text-cnd-electric",
+  Workshop: "bg-cnd-amber/10 text-cnd-amber",
+}
 
 const SpeakerModal: React.FC<{ speaker: Speaker; onClose: () => void }> = ({
   speaker,
@@ -68,14 +76,40 @@ const SpeakerModal: React.FC<{ speaker: Speaker; onClose: () => void }> = ({
 
             {speaker.sessions && speaker.sessions.length > 0 && (
               <div>
-                <h3 className="text-xl font-bold text-gray-800 mb-3">
+                <h3 className="text-xl font-bold text-gray-800 mb-1">
                   Sessions
                 </h3>
-                <ul className="list-disc list-inside text-gray-700 space-y-2">
+                <p className="text-sm text-gray-500 mb-3">
+                  Tap a talk to view it in the schedule.
+                </p>
+                <div className="space-y-2">
                   {speaker.sessions.map((session) => (
-                    <li key={session.id}>{session.name}</li>
+                    <Link
+                      key={session.id}
+                      to={`/schedule#${session.id}`}
+                      className="group flex items-center justify-between gap-3 rounded-lg border border-gray-200 px-4 py-3 transition-colors hover:border-primary hover:bg-primary/5"
+                    >
+                      <span className="flex flex-wrap items-center gap-2">
+                        {session.type && (
+                          <span
+                            className={`rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-wide ${sessionTypeBadgeClasses[session.type]}`}
+                          >
+                            {session.type}
+                          </span>
+                        )}
+                        <span className="font-medium text-gray-800 group-hover:text-primary">
+                          {session.name}
+                        </span>
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className="shrink-0 text-primary transition-transform group-hover:translate-x-0.5"
+                      >
+                        →
+                      </span>
+                    </Link>
                   ))}
-                </ul>
+                </div>
               </div>
             )}
           </div>

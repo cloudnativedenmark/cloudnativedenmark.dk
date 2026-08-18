@@ -12,6 +12,10 @@ export const useModalManagement = ({
 }: UseModalManagementProps = {}) => {
   const [selectedSession, setSelectedSession] = useState<Session | null>(null)
   const [selectedSpeaker, setSelectedSpeaker] = useState<Speaker | null>(null)
+  // Re-read on every render so the effect below also reacts to hash-only
+  // navigations (e.g. a Link from the speaker modal to /schedule#<id> while
+  // already on the schedule page), not just the initial mount.
+  const currentHash = typeof window !== "undefined" ? window.location.hash : ""
 
   const handleSessionClick = (session: Session) => {
     if (session && session.id) {
@@ -42,7 +46,8 @@ export const useModalManagement = ({
     setSelectedSpeaker(null)
   }
 
-  // Handle initial session selection from URL hash
+  // Handle session selection from the URL hash — both on initial mount and
+  // on later hash-only navigations (deep links from the speaker modal).
   useEffect(() => {
     if (schedule.length > 0 && typeof window !== "undefined") {
       const hash = window.location.hash
@@ -57,11 +62,12 @@ export const useModalManagement = ({
           const session = allSessions.find((s) => s?.id === sessionId)
           if (session) {
             setSelectedSession(session)
+            setSelectedSpeaker(null)
           }
         }
       }
     }
-  }, [schedule])
+  }, [schedule, currentHash])
 
   return {
     selectedSession,
