@@ -14,6 +14,7 @@ import VenuePlan from "./pages/venue-plan"
 import BecomeASponsor from "./pages/become-a-sponsor"
 import SponsorInfo from "./pages/sponsor-info"
 import NotFound from "./pages/404"
+import { features } from "./config/features"
 
 function App() {
   return (
@@ -23,8 +24,12 @@ function App() {
         <Route path="convince-your-boss" element={<ConvinceYourBoss />} />
         <Route path="mission" element={<Mission />} />
         <Route path="privacy" element={<Privacy />} />
-        <Route path="schedule" element={<Schedule />} />
-        <Route path="speakers" element={<Speakers />} />
+        {features.scheduleAndSpeakers && (
+          <>
+            <Route path="schedule" element={<Schedule />} />
+            <Route path="speakers" element={<Speakers />} />
+          </>
+        )}
         <Route path="talk-archive" element={<TalkArchive />} />
         <Route path="team" element={<Team />} />
         <Route path="venue" element={<Venue />} />

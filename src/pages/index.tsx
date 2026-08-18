@@ -15,6 +15,7 @@ import FeaturedSpeakersSection from "../components/content/featured-speakers-sec
 import SpeakerModal from "../components/speaker_modal"
 import Section from "../components/ui/section"
 import Button from "../components/ui/button"
+import { features } from "../config/features"
 
 const IndexPage: React.FC = () => {
   const location = useLocation()
@@ -64,11 +65,15 @@ const IndexPage: React.FC = () => {
             onClick: scrollToTicketRates,
             variant: "primary",
           },
-          {
-            text: "Schedule →",
-            href: "/schedule",
-            variant: "midnight",
-          },
+          ...(features.scheduleAndSpeakers
+            ? [
+                {
+                  text: "Schedule →",
+                  href: "/schedule",
+                  variant: "midnight" as const,
+                },
+              ]
+            : []),
           {
             text: "Merch →",
             href: "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/?extras_flow=true",
@@ -155,9 +160,11 @@ const IndexPage: React.FC = () => {
               >
                 <Button>Get your ticket →</Button>
               </a>
-              <Link to="/schedule">
-                <Button variant="ghost">Schedule →</Button>
-              </Link>
+              {features.scheduleAndSpeakers && (
+                <Link to="/schedule">
+                  <Button variant="ghost">Schedule →</Button>
+                </Link>
+              )}
               <a
                 href="https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/?extras_flow=true"
                 target="_blank"

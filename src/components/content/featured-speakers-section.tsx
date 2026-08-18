@@ -2,6 +2,7 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { useSessionizeSpeakers } from "../../hooks/use-sessionize"
 import { filterPublicSpeakers } from "../../config/excluded-speakers"
+import { features } from "../../config/features"
 import Section from "../ui/section"
 import Button from "../ui/button"
 import SpeakerCard from "./speaker-card"
@@ -35,11 +36,13 @@ const FeaturedSpeakersSection: React.FC<FeaturedSpeakersSectionProps> = ({
         >
           Featured speakers.
         </h2>
-        <div className="mt-6 flex justify-center">
-          <Link to="/speakers">
-            <Button variant="midnight">View all speakers →</Button>
-          </Link>
-        </div>
+        {features.scheduleAndSpeakers && (
+          <div className="mt-6 flex justify-center">
+            <Link to="/speakers">
+              <Button variant="midnight">View all speakers →</Button>
+            </Link>
+          </div>
+        )}
       </div>
       {topSpeakers.length > 0 && (
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-14">
