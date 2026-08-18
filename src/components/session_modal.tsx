@@ -21,7 +21,8 @@ const SessionModal: React.FC<{
       }
     }
 
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth
     document.body.style.overflow = "hidden"
     document.body.style.paddingRight = `${scrollbarWidth}px`
     document.addEventListener("keydown", handleKeyDown)
