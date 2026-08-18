@@ -6,6 +6,7 @@ import ConvinceYourBoss from "./pages/convince-your-boss"
 import Mission from "./pages/mission"
 import Privacy from "./pages/privacy"
 import Schedule from "./pages/schedule"
+import Speakers from "./pages/speakers"
 import TalkArchive from "./pages/talk-archive"
 import Team from "./pages/team"
 import Venue from "./pages/venue"
@@ -23,6 +24,7 @@ function App() {
         <Route path="mission" element={<Mission />} />
         <Route path="privacy" element={<Privacy />} />
         <Route path="schedule" element={<Schedule />} />
+        <Route path="speakers" element={<Speakers />} />
         <Route path="talk-archive" element={<TalkArchive />} />
         <Route path="team" element={<Team />} />
         <Route path="venue" element={<Venue />} />

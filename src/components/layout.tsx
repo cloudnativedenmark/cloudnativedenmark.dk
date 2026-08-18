@@ -17,6 +17,10 @@ const menuLinks = [
     link: "/schedule",
   },
   {
+    name: "Speakers",
+    link: "/speakers",
+  },
+  {
     name: "Venue",
     link: "/venue",
   },

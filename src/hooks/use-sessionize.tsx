@@ -72,7 +72,7 @@ export const useSessionizeSpeakers = (sessionId: string = MainSessionizeId) => {
       return
     }
     const data: Speaker[] = await response.json()
-    setSpeakers(data.filter((speaker) => speaker.profilePicture !== null))
+    setSpeakers(data)
   }, [sessionId])
 
   useEffect(() => {
