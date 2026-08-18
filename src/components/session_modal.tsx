@@ -1,4 +1,5 @@
 import * as React from "react"
+import { createPortal } from "react-dom"
 import { type Session, type Speaker } from "../hooks/use-sessionize"
 import {
   formatTimeDetailed,
@@ -34,7 +35,7 @@ const SessionModal: React.FC<{
     }
   }, [onClose])
 
-  return (
+  return createPortal(
     <>
       <div
         className="fixed inset-0 bg-white z-40"
@@ -99,7 +100,8 @@ const SessionModal: React.FC<{
           </div>
         </div>
       </div>
-    </>
+    </>,
+    document.body
   )
 }
 

@@ -1,4 +1,5 @@
 import * as React from "react"
+import { createPortal } from "react-dom"
 import { Link } from "react-router-dom"
 import { type Speaker } from "../hooks/use-sessionize"
 import { type SessionType } from "../utils/session-type"
@@ -35,7 +36,7 @@ const SpeakerModal: React.FC<{ speaker: Speaker; onClose: () => void }> = ({
     }
   }, [onClose])
 
-  return (
+  return createPortal(
     <>
       <div
         className="fixed inset-0 bg-white z-40"
@@ -122,7 +123,8 @@ const SpeakerModal: React.FC<{ speaker: Speaker; onClose: () => void }> = ({
           </div>
         </div>
       </div>
-    </>
+    </>,
+    document.body
   )
 }
 
