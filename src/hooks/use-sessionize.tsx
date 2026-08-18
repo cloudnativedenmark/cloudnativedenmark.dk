@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react"
 import {
   type SessionType,
+  type SessionCategoryGroup,
   deduceSessionType,
   isAdminOnlySession,
 } from "../utils/session-type"
@@ -37,6 +38,7 @@ export interface Session {
   speakers: Speaker[]
   roomId: number
   room: string
+  categories?: SessionCategoryGroup[]
   questionAnswers: QuestionAnswer[]
   recordingUrl: string
 

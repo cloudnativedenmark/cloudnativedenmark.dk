@@ -80,3 +80,32 @@ export const sessionTypeBadgeClasses: Record<SessionType, string> = {
   Workshop: "bg-cnd-amber/10 text-cnd-amber",
   "Lightning Talk": "bg-cnd-sky/10 text-cnd-harbor",
 }
+
+export interface SessionCategoryItem {
+  id: number
+  name: string
+}
+
+export interface SessionCategoryGroup {
+  id: number
+  name: string
+  categoryItems: SessionCategoryItem[]
+  sort: number
+}
+
+/**
+ * Topic/level tags for a session (e.g. "Platform Engineering", "Beginner"),
+ * sourced from Sessionize's own category assignments. Deliberately excludes
+ * the "Session format" group (Session/Workshop/Lightning talk) — that's
+ * already covered by deduceSessionType, and Keynote vs. Session there is a
+ * duration distinction Sessionize doesn't model, so format categories aren't
+ * used for the type badge.
+ */
+export const getSessionTags = (
+  categories?: SessionCategoryGroup[] | null
+): string[] => {
+  if (!categories) return []
+  return categories
+    .filter((group) => !group.name.trim().toLowerCase().includes("format"))
+    .flatMap((group) => group.categoryItems.map((item) => item.name))
+}

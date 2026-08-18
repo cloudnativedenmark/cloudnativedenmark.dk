@@ -8,6 +8,7 @@ import {
 import {
   deduceSessionType,
   sessionTypeBadgeClasses,
+  getSessionTags,
 } from "../utils/session-type"
 import SpeakerList from "./speaker-list"
 import Button from "./ui/button"
@@ -25,6 +26,7 @@ const SessionModal: React.FC<{
     isServiceSession: session.isServiceSession,
     speakers: session.speakers,
   })
+  const tags = getSessionTags(session.categories)
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -82,6 +84,19 @@ const SessionModal: React.FC<{
                 <strong>Room:</strong> {session.room}
               </span>
             </div>
+
+            {tags.length > 0 && (
+              <div className="mb-6 flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
 
             {session.speakers && session.speakers.length > 0 && (
               <div className="mb-6">
