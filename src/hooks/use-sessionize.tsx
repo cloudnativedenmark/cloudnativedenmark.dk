@@ -68,6 +68,59 @@ export interface TimeSlot {
 export interface SessionList {
   sessions: Session[]
 }
+interface SessionInsights {
+  sessionTypeById: Map<string, SessionType | null>
+  adminOnlySessionIds: Set<string>
+}
+
+/**
+ * Walks a grid once to build the shared lookups used to enrich raw
+ * Speaker/Session data everywhere it's consumed: a deduced talk type per
+ * session id, and the set of admin-only sessions (welcome, keynote
+ * wrap-ups, closing remarks — hosted only by the admin-only speakers in
+ * config/excluded-speakers) that should never be listed under a speaker's
+ * bio, regardless of which hook fetched that speaker.
+ */
+const buildSessionInsights = (grid: GridEntry[]): SessionInsights => {
+  const sessionTypeById = new Map<string, SessionType | null>()
+  const adminOnlySessionIds = new Set<string>()
+  grid.forEach((day) => {
+    day.rooms.forEach((room) => {
+      room.sessions.forEach((session) => {
+        sessionTypeById.set(
+          session.id,
+          deduceSessionType({
+            startsAt: session.startsAt,
+            endsAt: session.endsAt,
+            room: room.name,
+            isServiceSession: session.isServiceSession,
+            speakers: session.speakers,
+          })
+        )
+        if (isAdminOnlySession(session.speakers)) {
+          adminOnlySessionIds.add(session.id)
+        }
+      })
+    })
+  })
+  return { sessionTypeById, adminOnlySessionIds }
+}
+
+/** Applies buildSessionInsights' lookups to a speaker list's sessions. */
+const enrichSpeakerSessions = (
+  speakers: Speaker[],
+  { sessionTypeById, adminOnlySessionIds }: SessionInsights
+): Speaker[] =>
+  speakers.map((speaker) => ({
+    ...speaker,
+    sessions: speaker.sessions
+      .filter((session) => !adminOnlySessionIds.has(String(session.id)))
+      .map((session) => ({
+        ...session,
+        type: sessionTypeById.get(String(session.id)) ?? null,
+      })),
+  }))
+
 export const useSessionizeSpeakers = (sessionId: string = MainSessionizeId) => {
   const [speakers, setSpeakers] = useState<Speaker[]>([])
 
@@ -83,55 +136,26 @@ export const useSessionizeSpeakers = (sessionId: string = MainSessionizeId) => {
     const data: Speaker[] = await response.json()
 
     // Cross-reference the grid so each speaker's sessions can carry a
-    // deduced talk type (Keynote/Session/Workshop) for display in the
-    // speaker bio modal, and so admin-only sessions (welcome, keynote
-    // wrap-ups, closing remarks — hosted only by the admin-only speakers in
-    // config/excluded-speakers) can be dropped from the list entirely rather
-    // than shown with no type. Best-effort: if this fails, sessions just have
-    // no type and nothing is dropped.
-    const sessionTypeById = new Map<string, SessionType | null>()
-    const adminOnlySessionIds = new Set<string>()
+    // deduced talk type and have admin-only sessions dropped, as everywhere
+    // else. Best-effort: if this fails, sessions just have no type and
+    // nothing is dropped.
+    let insights: SessionInsights = {
+      sessionTypeById: new Map(),
+      adminOnlySessionIds: new Set(),
+    }
     try {
       const gridResponse = await fetch(
         `https://sessionize.com/api/v2/${sessionId}/view/Grid`
       )
       if (gridResponse.ok) {
         const grid: GridEntry[] = await gridResponse.json()
-        grid.forEach((day) => {
-          day.rooms.forEach((room) => {
-            room.sessions.forEach((session) => {
-              sessionTypeById.set(
-                session.id,
-                deduceSessionType({
-                  startsAt: session.startsAt,
-                  endsAt: session.endsAt,
-                  room: room.name,
-                  isServiceSession: session.isServiceSession,
-                  speakers: session.speakers,
-                })
-              )
-              if (isAdminOnlySession(session.speakers)) {
-                adminOnlySessionIds.add(session.id)
-              }
-            })
-          })
-        })
+        insights = buildSessionInsights(grid)
       }
     } catch {
       // Ignore — talk type is a nice-to-have, not required for the speaker list.
     }
 
-    setSpeakers(
-      data.map((speaker) => ({
-        ...speaker,
-        sessions: speaker.sessions
-          .filter((session) => !adminOnlySessionIds.has(String(session.id)))
-          .map((session) => ({
-            ...session,
-            type: sessionTypeById.get(String(session.id)) ?? null,
-          })),
-      }))
-    )
+    setSpeakers(enrichSpeakerSessions(data, insights))
   }, [sessionId])
 
   useEffect(() => {
@@ -216,11 +240,18 @@ export const useSessionizeSchedule = (sessionId: string = MainSessionizeId) => {
       setSchedule([])
       return
     }
+    // Same enrichment as useSessionizeSpeakers (deduced talk type,
+    // admin-only sessions dropped) so a speaker's bio modal looks identical
+    // whether it was opened from the schedule or from /speakers.
+    const enrichedSpeakers = enrichSpeakerSessions(
+      speakers,
+      buildSessionInsights(grid)
+    )
     const schedule = grid.map((entry) => {
       const timeSlots = entry.timeSlots.map((timeSlot) => {
         const rooms = timeSlot.rooms.map((room) => {
           const sessionSpeakers = room.session.speakers.map((speaker) => {
-            return speakers.find((s) => s.id === speaker.id)
+            return enrichedSpeakers.find((s) => s.id === speaker.id)
           })
           room.session.speakers = sessionSpeakers.filter(
             (s): s is Speaker => s !== undefined
