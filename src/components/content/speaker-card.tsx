@@ -17,10 +17,32 @@ const accentFor = (name: string) => {
   return ACCENT_COLORS[Math.abs(h) % ACCENT_COLORS.length]
 }
 
-const SpeakerCard: React.FC<{ speaker: Speaker }> = ({ speaker }) => {
+interface SpeakerCardProps {
+  speaker: Speaker
+  onClick?: (speaker: Speaker) => void
+}
+
+const SpeakerCard: React.FC<SpeakerCardProps> = ({ speaker, onClick }) => {
   const accent = accentFor(speaker.fullName)
   return (
-    <div className="flex w-full max-w-[280px] flex-col items-center text-center">
+    <div
+      className={`flex w-full max-w-[280px] flex-col items-center text-center${
+        onClick ? " cursor-pointer transition-opacity hover:opacity-80" : ""
+      }`}
+      onClick={onClick ? () => onClick(speaker) : undefined}
+      role={onClick ? "button" : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={
+        onClick
+          ? (event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault()
+                onClick(speaker)
+              }
+            }
+          : undefined
+      }
+    >
       <CNDPortrait
         src={speaker.profilePicture || "/default-avatar.jpg"}
         alt={speaker.fullName}
