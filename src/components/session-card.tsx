@@ -35,7 +35,7 @@ const SessionCard: React.FC<SessionCardProps> = ({
             {session.speakers.map((speaker) => (
               <div key={speaker.id} className="flex items-center gap-2">
                 <img
-                  src={speaker.profilePicture || "/default-avatar.png"}
+                  src={speaker.profilePicture || "/default-avatar.jpg"}
                   alt={speaker.fullName}
                   className="w-8 h-8 rounded-full object-cover"
                 />

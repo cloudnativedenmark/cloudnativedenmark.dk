@@ -34,13 +34,11 @@ const SpeakerList: React.FC<SpeakerListProps> = ({
             className="flex flex-col items-center w-60 cursor-pointer hover:opacity-80 transition-opacity"
             onClick={() => onSpeakerClick?.(speaker)}
           >
-            {speaker.profilePicture && (
-              <img
-                className={`${size === "large" ? "w-48 h-48" : sizeClasses[size]} rounded-full object-cover mx-auto shadow-lg`}
-                src={speaker.profilePicture}
-                alt={speaker.fullName}
-              />
-            )}
+            <img
+              className={`${size === "large" ? "w-48 h-48" : sizeClasses[size]} rounded-full object-cover mx-auto shadow-lg`}
+              src={speaker.profilePicture || "/default-avatar.jpg"}
+              alt={speaker.fullName}
+            />
             <p
               className={`mt-4 font-bold ${size === "large" ? "text-xl text-gray-900" : "text-gray-700"}`}
             >
@@ -69,7 +67,7 @@ const SpeakerList: React.FC<SpeakerListProps> = ({
           onClick={() => onSpeakerClick?.(speaker)}
         >
           <img
-            src={speaker.profilePicture || "/default-avatar.png"}
+            src={speaker.profilePicture || "/default-avatar.jpg"}
             alt={speaker.fullName}
             className={`${sizeClasses[size]} rounded-full object-cover shadow-md`}
           />

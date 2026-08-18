@@ -21,11 +21,14 @@ const SessionModal: React.FC<{
       }
     }
 
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
     document.body.style.overflow = "hidden"
+    document.body.style.paddingRight = `${scrollbarWidth}px`
     document.addEventListener("keydown", handleKeyDown)
 
     return () => {
       document.body.style.overflow = "unset"
+      document.body.style.paddingRight = "0px"
       document.removeEventListener("keydown", handleKeyDown)
     }
   }, [onClose])
@@ -38,12 +41,11 @@ const SessionModal: React.FC<{
         onClick={onClose}
       ></div>
       <div
-        className="fixed inset-x-0 bottom-0 z-50 flex justify-center items-center p-4"
-        style={{ top: "76px" }}
+        className="fixed inset-0 z-50 flex justify-center items-center overflow-y-auto p-4"
         onClick={onClose}
       >
         <div
-          className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-full flex flex-col relative border border-gray-200"
+          className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[85vh] my-auto flex flex-col relative border border-gray-200"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="overflow-y-auto p-8 flex-grow">

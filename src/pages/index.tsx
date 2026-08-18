@@ -1,5 +1,5 @@
 import React from "react"
-import { useLocation } from "react-router-dom"
+import { useLocation, Link } from "react-router-dom"
 import SEOHead from "../components/seo-head"
 import { useModalManagement } from "../hooks/use-modal-management"
 import { useSponsors } from "../hooks/use-sponsors"
@@ -65,9 +65,8 @@ const IndexPage: React.FC = () => {
             variant: "primary",
           },
           {
-            text: "Submit a talk",
-            href: "http://cloudnativedenmark.dk/cfp",
-            isExternal: true,
+            text: "Schedule →",
+            href: "/schedule",
             variant: "midnight",
           },
           {
@@ -156,13 +155,9 @@ const IndexPage: React.FC = () => {
               >
                 <Button>Get your ticket →</Button>
               </a>
-              <a
-                href="http://cloudnativedenmark.dk/cfp"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button variant="ghost">Submit a talk</Button>
-              </a>
+              <Link to="/schedule">
+                <Button variant="ghost">Schedule →</Button>
+              </Link>
               <a
                 href="https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/?extras_flow=true"
                 target="_blank"
