@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import { type Speaker } from "../hooks/use-sessionize"
 import Button from "./ui/button"
 import SessionTypeBadge from "./session-type-badge"
+import { formatPlainTextToHtml } from "../utils/text-formatting"
 import { features } from "../config/features"
 
 const SpeakerModal: React.FC<{
@@ -33,6 +34,7 @@ const SpeakerModal: React.FC<{
 
   const isSessionInteractive =
     Boolean(onSessionClick) || features.scheduleAndSpeakers
+  const formattedBio = formatPlainTextToHtml(speaker.bio)
 
   return createPortal(
     <>
@@ -64,12 +66,12 @@ const SpeakerModal: React.FC<{
               </div>
             </div>
 
-            {speaker.bio && (
+            {formattedBio && (
               <div className="mb-6">
                 <h3 className="text-xl font-bold text-gray-800 mb-3">About</h3>
                 <div
-                  className="text-gray-700 space-y-4"
-                  dangerouslySetInnerHTML={{ __html: speaker.bio }}
+                  className="text-gray-700 space-y-4 leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_li+li]:mt-1"
+                  dangerouslySetInnerHTML={{ __html: formattedBio }}
                 />
               </div>
             )}
