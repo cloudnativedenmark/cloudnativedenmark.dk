@@ -77,8 +77,8 @@ interface SessionInsights {
  * Walks a grid once to build the shared lookups used to enrich raw
  * Speaker/Session data everywhere it's consumed: a deduced talk type per
  * session id, and the set of admin-only sessions (welcome, keynote
- * wrap-ups, closing remarks — hosted only by the admin-only speakers in
- * config/excluded-speakers) that should never be listed under a speaker's
+ * wrap-ups, closing remarks — hosted only by the administrative hosts in
+ * config/admin-hosts) that should never be listed under a speaker's
  * bio, regardless of which hook fetched that speaker.
  */
 const buildSessionInsights = (grid: GridEntry[]): SessionInsights => {

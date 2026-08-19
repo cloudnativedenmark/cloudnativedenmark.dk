@@ -1,7 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import { useSessionizeSpeakers } from "../../hooks/use-sessionize"
-import { filterPublicSpeakers } from "../../config/excluded-speakers"
 import { features } from "../../config/features"
 import Section from "../ui/section"
 import Button from "../ui/button"
@@ -15,8 +14,8 @@ const FeaturedSpeakersSection: React.FC<FeaturedSpeakersSectionProps> = ({
   sectionNumber,
 }) => {
   const { speakers } = useSessionizeSpeakers()
-  const topSpeakers = filterPublicSpeakers(speakers).filter(
-    (s) => s.isTopSpeaker && s.profilePicture
+  const topSpeakers = speakers.filter(
+    (speaker) => speaker.isTopSpeaker && speaker.profilePicture
   )
 
   if (speakers.length === 0) return null

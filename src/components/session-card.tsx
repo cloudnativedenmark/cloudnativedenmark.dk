@@ -1,5 +1,7 @@
 import React from "react"
 import { type Session } from "../hooks/use-sessionize"
+import { deduceSessionType } from "../utils/session-type"
+import SessionTypeBadge from "./session-type-badge"
 
 interface SessionCardProps {
   session: Session
@@ -49,6 +51,14 @@ const SessionCard: React.FC<SessionCardProps> = ({
     )
   }
 
+  const sessionType = deduceSessionType({
+    startsAt: session.startsAt,
+    endsAt: session.endsAt,
+    room: session.room,
+    isServiceSession: session.isServiceSession,
+    speakers: session.speakers,
+  })
+
   // Schedule variant (default)
   return (
     <div
@@ -56,6 +66,11 @@ const SessionCard: React.FC<SessionCardProps> = ({
       onClick={onClick}
     >
       <div>
+        <SessionTypeBadge
+          type={sessionType}
+          compact
+          className="mb-1 block w-fit"
+        />
         <h3 className="font-bold text-md text-primary">
           {session.title || session.name}
         </h3>

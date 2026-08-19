@@ -7,7 +7,6 @@ import SpeakerGrid from "../components/content/speaker-grid"
 import SpeakerModal from "../components/speaker_modal"
 import { useSessionizeSpeakers } from "../hooks/use-sessionize"
 import { useModalManagement } from "../hooks/use-modal-management"
-import { filterPublicSpeakers } from "../config/excluded-speakers"
 
 const SpeakersPage: React.FC = () => {
   const location = useLocation()
@@ -16,10 +15,7 @@ const SpeakersPage: React.FC = () => {
     useModalManagement()
 
   const sortedSpeakers = useMemo(
-    () =>
-      filterPublicSpeakers(speakers).sort((a, b) =>
-        a.fullName.localeCompare(b.fullName)
-      ),
+    () => [...speakers].sort((a, b) => a.fullName.localeCompare(b.fullName)),
     [speakers]
   )
 
