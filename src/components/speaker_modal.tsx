@@ -2,8 +2,8 @@ import * as React from "react"
 import { createPortal } from "react-dom"
 import { Link } from "react-router-dom"
 import { type Speaker } from "../hooks/use-sessionize"
-import { sessionTypeBadgeClasses } from "../utils/session-type"
 import Button from "./ui/button"
+import SessionTypeBadge from "./session-type-badge"
 import { features } from "../config/features"
 
 const SpeakerModal: React.FC<{
@@ -89,13 +89,7 @@ const SpeakerModal: React.FC<{
                     const rowInner = (
                       <>
                         <span className="flex flex-wrap items-center gap-2">
-                          {session.type && (
-                            <span
-                              className={`rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-wide ${sessionTypeBadgeClasses[session.type]}`}
-                            >
-                              {session.type}
-                            </span>
-                          )}
+                          <SessionTypeBadge type={session.type} />
                           <span className="font-medium text-gray-800 group-hover:text-primary">
                             {session.name}
                           </span>
