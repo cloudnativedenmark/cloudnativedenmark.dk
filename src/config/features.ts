@@ -17,5 +17,5 @@ export interface FeatureFlags {
 }
 
 export const features: FeatureFlags = {
-  scheduleAndSpeakers: false,
+  scheduleAndSpeakers: true,
 }
