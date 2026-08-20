@@ -5,6 +5,7 @@ import {
   formatTimeDetailed,
   calculateSessionDuration,
 } from "../utils/time-formatting"
+import { formatPlainTextToHtml } from "../utils/text-formatting"
 import { deduceSessionType, getSessionTags } from "../utils/session-type"
 import SpeakerList from "./speaker-list"
 import SessionTypeBadge from "./session-type-badge"
@@ -24,6 +25,7 @@ const SessionModal: React.FC<{
     speakers: session.speakers,
   })
   const tags = getSessionTags(session.categories)
+  const formattedDescription = formatPlainTextToHtml(session.description)
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -103,14 +105,14 @@ const SessionModal: React.FC<{
               </div>
             )}
 
-            {session.description && (
+            {formattedDescription && (
               <div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">
                   Description
                 </h3>
                 <div
-                  className="text-gray-700 space-y-4"
-                  dangerouslySetInnerHTML={{ __html: session.description }}
+                  className="text-gray-700 space-y-4 leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_li+li]:mt-1"
+                  dangerouslySetInnerHTML={{ __html: formattedDescription }}
                 />
               </div>
             )}

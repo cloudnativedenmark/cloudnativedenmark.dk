@@ -20,7 +20,7 @@ export interface Speaker {
   firstName: string
   lastName: string
   fullName: string
-  bio: string
+  bio: string | null
   tagLine: string
   profilePicture: string | null
   isTopSpeaker: boolean
@@ -30,7 +30,7 @@ export interface Session {
   id: string
   name: string
   title: string
-  description: string
+  description: string | null
   startsAt: string
   endsAt: string
   isServiceSession: boolean
