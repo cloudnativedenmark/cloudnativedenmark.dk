@@ -60,7 +60,7 @@ export const siteMetadata = {
     {
       name: "Jinhong Brejnholt",
       position:
-        "Chief Cloud Architect & Global Head of Cloud and Container Platform Engineering @ Saxo Bank A/S",
+        "Senior Director, Software Engineering @ Unity | Founder, Bitecloud",
       image: "team/organizer-jinhong-brejnholt.jpg",
       linkedin: "jbrejnholt",
     },
