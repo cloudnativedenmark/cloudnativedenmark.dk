@@ -13,7 +13,7 @@ export const getSessionDurationMinutes = (
 }
 
 /**
- * Talk type is deduced rather than sourced from Sessionize directly:
+ * Fallback classification for sessions without an explicit Sessionize format:
  * - anything scheduled in the "Workshop" track/room is a Workshop
  * - a 5 minute slot is a Lightning Talk
  * - a 25 minute slot is a Keynote
@@ -30,6 +30,27 @@ export const getSessionType = (
   if (durationMinutes === 35) return "Session"
   return null
 }
+const SESSION_TYPE_BY_FORMAT: Record<string, SessionType> = {
+  keynote: "Keynote",
+  session: "Session",
+  workshop: "Workshop",
+  "lightning talk": "Lightning Talk",
+}
+
+const getExplicitSessionType = (
+  categories?: SessionCategoryGroup[] | null
+): SessionType | null => {
+  const formatItems =
+    categories?.find(
+      (category) => category.name.trim().toLowerCase() === "session format"
+    )?.categoryItems ?? []
+
+  for (const item of formatItems) {
+    const type = SESSION_TYPE_BY_FORMAT[item.name.trim().toLowerCase()]
+    if (type) return type
+  }
+  return null
+}
 
 export interface SessionSpeakerRef {
   fullName?: string
@@ -42,6 +63,7 @@ export interface SessionTiming {
   room?: string | null
   isServiceSession?: boolean
   speakers?: SessionSpeakerRef[]
+  categories?: SessionCategoryGroup[] | null
 }
 
 /**
@@ -57,18 +79,20 @@ export const isAdminOnlySession = (speakers?: SessionSpeakerRef[]): boolean => {
 }
 
 /**
- * Same deduction as getSessionType, but for a full session/timing record:
+ * Classifies a full session/timing record:
  * - service sessions (breaks, registration, etc.) never get a type
  * - sessions hosted only by administrative hosts (welcome, keynote wrap-ups,
- *   closing remarks) never get a type either, even if their duration happens
- *   to coincide with a real talk length (e.g. a 5 minute wrap-up otherwise
- *   reading as a Lightning Talk)
+ *   closing remarks) never get a type either
+ * - an explicit Sessionize "Session format" is authoritative
+ * - duration and room inference is retained as a fallback for unclassified data
  */
 export const deduceSessionType = (
   session: SessionTiming
 ): SessionType | null => {
   if (session.isServiceSession) return null
   if (isAdminOnlySession(session.speakers)) return null
+  const explicitType = getExplicitSessionType(session.categories)
+  if (explicitType) return explicitType
   const duration = getSessionDurationMinutes(session.startsAt, session.endsAt)
   return getSessionType(duration, session.room)
 }
@@ -95,11 +119,8 @@ export interface SessionCategoryGroup {
 
 /**
  * Topic/level tags for a session (e.g. "Platform Engineering", "Beginner"),
- * sourced from Sessionize's own category assignments. Deliberately excludes
- * the "Session format" group (Session/Workshop/Lightning talk) — that's
- * already covered by deduceSessionType, and Keynote vs. Session there is a
- * duration distinction Sessionize doesn't model, so format categories aren't
- * used for the type badge.
+ * sourced from Sessionize's own category assignments. Excludes the
+ * "Session format" group because that is represented by the type badge.
  */
 export const getSessionTags = (
   categories?: SessionCategoryGroup[] | null
