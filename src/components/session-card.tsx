@@ -57,6 +57,7 @@ const SessionCard: React.FC<SessionCardProps> = ({
     room: session.room,
     isServiceSession: session.isServiceSession,
     speakers: session.speakers,
+    categories: session.categories,
   })
 
   // Schedule variant (default)

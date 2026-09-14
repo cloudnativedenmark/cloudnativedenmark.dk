@@ -11,7 +11,7 @@ export const MainSessionizeId = "6dzu68z1"
 export interface SpeakerSession {
   id: number
   name: string
-  /** Deduced talk type (Keynote/Session/Workshop) — null when it can't be deduced. */
+  /** Session type from explicit event metadata, with schedule inference as fallback. */
   type?: SessionType | null
 }
 export interface Speaker {
@@ -95,6 +95,7 @@ const buildSessionInsights = (grid: GridEntry[]): SessionInsights => {
             room: room.name,
             isServiceSession: session.isServiceSession,
             speakers: session.speakers,
+            categories: session.categories,
           })
         )
         if (isAdminOnlySession(session.speakers)) {

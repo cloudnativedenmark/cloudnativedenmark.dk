@@ -43,6 +43,27 @@ describe("SessionCard", () => {
     expect(screen.getByText("A regular talk")).toBeInTheDocument()
   })
 
+  it("prefers an explicit Sessionize format over duration inference", () => {
+    const explicitKeynote = {
+      ...session,
+      startsAt: "2026-11-19T09:15:00Z",
+      endsAt: "2026-11-19T09:25:00Z",
+      categories: [
+        {
+          id: 115158,
+          name: "Session format",
+          categoryItems: [{ id: 511770, name: "Keynote" }],
+          sort: 0,
+        },
+      ],
+    }
+
+    render(<SessionCard session={explicitKeynote} />)
+
+    expect(screen.getByText("Keynote")).toBeInTheDocument()
+    expect(screen.getByText("A regular talk")).toBeInTheDocument()
+  })
+
   it("does not render a type for an administrative host segment", () => {
     const hostOnlySession = {
       ...session,

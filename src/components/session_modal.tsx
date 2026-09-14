@@ -23,6 +23,7 @@ const SessionModal: React.FC<{
     room: session.room,
     isServiceSession: session.isServiceSession,
     speakers: session.speakers,
+    categories: session.categories,
   })
   const tags = getSessionTags(session.categories)
   const formattedDescription = formatPlainTextToHtml(session.description)
