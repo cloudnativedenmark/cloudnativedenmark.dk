@@ -2,3 +2,4 @@ logo: images/cloudnative.svg
 title: Cloud Native Computing Foundation
 url: https://cncf.io/
 scale: 100%
+enabled: true
