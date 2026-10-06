@@ -28,8 +28,8 @@ const ticketTiers: TicketTier[] = [
   {
     name: "Standard",
     price: 1999,
-    availableUntil: new Date("2026-11-17"),
-    displayDate: "Through Nov 17",
+    availableUntil: new Date("2026-11-10T23:45:00+01:00"),
+    displayDate: "Through Nov 10",
   },
   {
     name: "Late Bird",
