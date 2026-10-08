@@ -45,6 +45,14 @@ describe("SponsorsSection", () => {
       ).toBeInTheDocument()
     })
 
+    it("should show that sponsorships are sold out", () => {
+      renderWithRouter(<SponsorsSection {...defaultProps} />)
+
+      expect(
+        screen.getByText("All CND/2026 sponsorships are sold out")
+      ).toBeInTheDocument()
+    })
+
     it("should link to the become-a-sponsor page", () => {
       renderWithRouter(<SponsorsSection {...defaultProps} />)
 

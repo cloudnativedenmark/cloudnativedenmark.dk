@@ -5,6 +5,7 @@ import PageHeader from "../components/layout/page-header"
 import Section from "../components/ui/section"
 import Button from "../components/ui/button"
 import CNDShape from "../components/ui/cnd-shape"
+import StatusPill from "../components/ui/status-pill"
 
 type TierType = "platinum" | "gold" | "bronze" | "community"
 
@@ -16,6 +17,7 @@ interface SponsorTier {
   highlights: string[]
   availability?: string
   addons?: string[]
+  soldOut?: boolean
 }
 
 interface TierTheme {
@@ -92,6 +94,7 @@ const sponsorTiers: SponsorTier[] = [
       "20,000 DKK: Logo on lanyard",
     ],
     availability: "Limited to 2 sponsorships or 1 sponsorship with 300,000 DKK",
+    soldOut: true,
   },
   {
     name: "Gold",
@@ -109,6 +112,7 @@ const sponsorTiers: SponsorTier[] = [
     ],
     addons: ["20,000 DKK: Logo on lanyard"],
     availability: "Limited to 4 sponsorships",
+    soldOut: true,
   },
   {
     name: "Bronze",
@@ -125,6 +129,7 @@ const sponsorTiers: SponsorTier[] = [
     ],
     addons: ["20,000 DKK: Logo on lanyard"],
     availability: "Limited to 5 sponsorships",
+    soldOut: true,
   },
   {
     name: "Community",
@@ -137,6 +142,7 @@ const sponsorTiers: SponsorTier[] = [
       "Keynote mention",
       "Branding in common areas and logo on website",
     ],
+    soldOut: true,
   },
 ]
 
@@ -189,6 +195,9 @@ const BecomeASponsorPage: React.FC = () => {
       {/* Intro CTAs */}
       <Section className="bg-cnd-bone py-12 lg:py-16">
         <div className="mx-auto max-w-4xl text-center">
+          <StatusPill className="mb-8">
+            All CND/2026 sponsorships are sold out
+          </StatusPill>
           <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <a href="mailto:sponsor@cloudnativedenmark.dk">
               <Button>Get in touch →</Button>
@@ -474,7 +483,7 @@ const BecomeASponsorPage: React.FC = () => {
                       )}
                     </div>
 
-                    {tier.tier === "community" && (
+                    {tier.tier === "community" && !tier.soldOut && (
                       <div className="mt-8 flex items-center gap-4">
                         <a
                           href="https://cloudnativedenmark.ticketbutler.io/da/e/cloud-native-denmark-26/"
@@ -491,23 +500,10 @@ const BecomeASponsorPage: React.FC = () => {
                       </div>
                     )}
 
-                    {tier.availability && (
-                      <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-cnd-coral/15 px-4 py-2">
-                        <span
-                          aria-hidden="true"
-                          className="inline-block h-1.5 w-1.5 rounded-full bg-cnd-coral"
-                        />
-                        <span
-                          className="eyebrow text-cnd-coral"
-                          style={{
-                            fontSize: 11,
-                            letterSpacing: "0.18em",
-                            color: "var(--color-cnd-red)",
-                          }}
-                        >
-                          {tier.availability}
-                        </span>
-                      </div>
+                    {(tier.soldOut || tier.availability) && (
+                      <StatusPill className="mt-6">
+                        {tier.soldOut ? "Sold out" : tier.availability}
+                      </StatusPill>
                     )}
                   </div>
                 </div>
@@ -532,17 +528,17 @@ const BecomeASponsorPage: React.FC = () => {
                 letterSpacing: "0.22em",
               }}
             >
-              READY TO TALK?
+              SOLD OUT
             </div>
             <h3
               className="display"
               style={{ fontSize: 32, letterSpacing: "-0.03em" }}
             >
-              Let's build CND/2026 together.
+              Thank you, sponsors.
             </h3>
             <p className="max-w-xl text-cnd-fog">
-              Reach out and we'll send the latest prospectus and reserve your
-              tier.
+              Every CND/2026 sponsorship has been claimed. Reach out to hear
+              about future sponsorship opportunities.
             </p>
             <div className="mt-2 flex flex-wrap justify-center gap-3">
               <a href="mailto:sponsor@cloudnativedenmark.dk">
