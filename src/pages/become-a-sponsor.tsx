@@ -5,6 +5,7 @@ import PageHeader from "../components/layout/page-header"
 import Section from "../components/ui/section"
 import Button from "../components/ui/button"
 import CNDShape from "../components/ui/cnd-shape"
+import StatusPill from "../components/ui/status-pill"
 
 type TierType = "platinum" | "gold" | "bronze" | "community"
 
@@ -194,22 +195,9 @@ const BecomeASponsorPage: React.FC = () => {
       {/* Intro CTAs */}
       <Section className="bg-cnd-bone py-12 lg:py-16">
         <div className="mx-auto max-w-4xl text-center">
-          <div className="mb-8 inline-flex items-center gap-2 rounded-full bg-cnd-coral/15 px-4 py-2">
-            <span
-              aria-hidden="true"
-              className="inline-block h-1.5 w-1.5 rounded-full bg-cnd-coral"
-            />
-            <span
-              className="eyebrow"
-              style={{
-                fontSize: 11,
-                letterSpacing: "0.18em",
-                color: "var(--color-cnd-red)",
-              }}
-            >
-              All CND/2026 sponsorships are sold out
-            </span>
-          </div>
+          <StatusPill className="mb-8">
+            All CND/2026 sponsorships are sold out
+          </StatusPill>
           <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <a href="mailto:sponsor@cloudnativedenmark.dk">
               <Button>Get in touch →</Button>
@@ -513,22 +501,9 @@ const BecomeASponsorPage: React.FC = () => {
                     )}
 
                     {(tier.soldOut || tier.availability) && (
-                      <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-cnd-coral/15 px-4 py-2">
-                        <span
-                          aria-hidden="true"
-                          className="inline-block h-1.5 w-1.5 rounded-full bg-cnd-coral"
-                        />
-                        <span
-                          className="eyebrow text-cnd-coral"
-                          style={{
-                            fontSize: 11,
-                            letterSpacing: "0.18em",
-                            color: "var(--color-cnd-red)",
-                          }}
-                        >
-                          {tier.soldOut ? "Sold out" : tier.availability}
-                        </span>
-                      </div>
+                      <StatusPill className="mt-6">
+                        {tier.soldOut ? "Sold out" : tier.availability}
+                      </StatusPill>
                     )}
                   </div>
                 </div>

@@ -4,6 +4,7 @@ import Section from "../ui/section"
 import SponsorGrid from "./sponsor-grid"
 import Button from "../ui/button"
 import CNDShape from "../ui/cnd-shape"
+import StatusPill from "../ui/status-pill"
 
 interface Sponsor {
   title: string
@@ -75,7 +76,10 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
             Cloud Native Denmark is community-driven and powered by the
             companies who care about the Nordic cloud native scene.
           </p>
-          <div className="mt-8">
+          <StatusPill className="mt-8">
+            All CND/2026 sponsorships are sold out
+          </StatusPill>
+          <div className="mt-6">
             <Link to="/become-a-sponsor">
               <Button variant="primary">Become a sponsor →</Button>
             </Link>
