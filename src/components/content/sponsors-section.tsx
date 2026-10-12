@@ -77,7 +77,7 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
             companies who care about the Nordic cloud native scene.
           </p>
           <StatusPill className="mt-8">
-            All CND/2026 sponsorships are sold out
+            Platinum, Gold & Bronze sold out · Community still available
           </StatusPill>
           <div className="mt-6">
             <Link to="/become-a-sponsor">
