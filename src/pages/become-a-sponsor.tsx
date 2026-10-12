@@ -142,7 +142,6 @@ const sponsorTiers: SponsorTier[] = [
       "Keynote mention",
       "Branding in common areas and logo on website",
     ],
-    soldOut: true,
   },
 ]
 
@@ -196,7 +195,7 @@ const BecomeASponsorPage: React.FC = () => {
       <Section className="bg-cnd-bone py-12 lg:py-16">
         <div className="mx-auto max-w-4xl text-center">
           <StatusPill className="mb-8">
-            All CND/2026 sponsorships are sold out
+            Platinum, Gold & Bronze sold out · Community still available
           </StatusPill>
           <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <a href="mailto:sponsor@cloudnativedenmark.dk">
@@ -528,17 +527,17 @@ const BecomeASponsorPage: React.FC = () => {
                 letterSpacing: "0.22em",
               }}
             >
-              SOLD OUT
+              COMMUNITY STILL OPEN
             </div>
             <h3
               className="display"
               style={{ fontSize: 32, letterSpacing: "-0.03em" }}
             >
-              Thank you, sponsors.
+              Let's build CND/2026 together.
             </h3>
             <p className="max-w-xl text-cnd-fog">
-              Every CND/2026 sponsorship has been claimed. Reach out to hear
-              about future sponsorship opportunities.
+              Platinum, Gold and Bronze are sold out, but Community sponsorships
+              are still available. Claim one online or reach out with questions.
             </p>
             <div className="mt-2 flex flex-wrap justify-center gap-3">
               <a href="mailto:sponsor@cloudnativedenmark.dk">

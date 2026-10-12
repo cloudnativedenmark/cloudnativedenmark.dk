@@ -45,11 +45,13 @@ describe("SponsorsSection", () => {
       ).toBeInTheDocument()
     })
 
-    it("should show that sponsorships are sold out", () => {
+    it("should show which sponsorships are sold out", () => {
       renderWithRouter(<SponsorsSection {...defaultProps} />)
 
       expect(
-        screen.getByText("All CND/2026 sponsorships are sold out")
+        screen.getByText(
+          "Platinum, Gold & Bronze sold out · Community still available"
+        )
       ).toBeInTheDocument()
     })
 
