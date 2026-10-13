@@ -268,7 +268,7 @@ const faqGroups: FAQGroup[] = [
       {
         question: "Do we get access to attendee leads?",
         answer:
-          "Yes. Platinum, Gold, and Bronze sponsors get access to the TicketButler lead scanner. This is a standard mobile application you install on your own devices, accompanied by an event code for badge scanning. We will share the setup details closer to the event.",
+          "Yes. Every sponsorship that includes a presence at the conference gets access to the TicketButler lead scanner. This is a standard mobile application you install on your own devices, accompanied by an event code for badge scanning. We will share the setup details closer to the event.",
       },
     ],
   },
