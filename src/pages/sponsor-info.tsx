@@ -4,6 +4,15 @@ import SEOHead from "../components/seo-head"
 import PageHeader from "../components/layout/page-header"
 import Section from "../components/ui/section"
 
+const MailLink: React.FC<{ address: string }> = ({ address }) => (
+  <a
+    href={`mailto:${address}`}
+    className="text-cnd-red underline decoration-2 underline-offset-4 hover:text-cnd-coral"
+  >
+    {address}
+  </a>
+)
+
 interface FAQEntry {
   question: string
   answer: React.ReactNode
@@ -34,18 +43,96 @@ const faqGroups: FAQGroup[] = [
                 <strong>Bronze</strong>: 3x2 meters
               </li>
             </ul>
+            <p className="mt-2">Scandic Copenhagen provides each stand with:</p>
+            <ul className="mt-2 list-disc pl-5 space-y-1">
+              <li>1 school table or café table with a tablecloth</li>
+              <li>1 or 2 chairs (or high chairs)</li>
+              <li>1 extension cable</li>
+              <li>Wi-Fi</li>
+              <li>Cleaning before the exhibition area opens each day</li>
+            </ul>
             <p className="mt-2">
-              Each booth area is provided with a standing-height table and power
-              outlets. All other equipment, displays, roll-ups, or additional
-              booth materials are the sponsor's own responsibility.
+              All other equipment, displays, roll-ups, or additional booth
+              materials are the sponsor's own responsibility. Extra equipment
+              can be rented from the venue (see below).
             </p>
           </>
         ),
       },
       {
-        question: "Can we rent a screen or get roll-ups printed on site?",
-        answer:
-          "We will share the delivery address for shipping goods to Scandic Copenhagen and rental options for extra equipment like TV screens or additional AV as soon as the venue finalizes them.",
+        question: "Can we ship materials to the venue before the event?",
+        answer: (
+          <>
+            <p>
+              Yes. Shipments may arrive at the earliest two days before the
+              event, so no earlier than November 17, 2026. Label every package
+              like this:
+            </p>
+            <address className="mt-2 not-italic rounded-lg bg-cnd-bone px-4 py-3 font-mono text-sm">
+              Cloud Native Denmark 19.11-20.11.2026
+              <br />
+              C/O Scandic Copenhagen – Att: Camilla Olesen
+              <br />
+              Vester Søgade 6
+              <br />
+              DK-1601 Copenhagen V
+              <br />
+              Denmark
+            </address>
+            <p className="mt-2">
+              If you are bringing larger items, contact the venue in advance to
+              agree on which entrance to use.
+            </p>
+          </>
+        ),
+      },
+      {
+        question: "How do we get our materials back after the event?",
+        answer: (
+          <>
+            <p>
+              You are responsible for booking the pick-up with your carrier. The
+              venue does not schedule pick-ups during the weekend, so plan for
+              collection on Friday afternoon or the following week.
+            </p>
+            <p className="mt-2">
+              Everything must be packed, wrapped, and labeled by you before you
+              leave the venue.
+            </p>
+          </>
+        ),
+      },
+      {
+        question: "Can we rent a screen or other extra equipment?",
+        answer: (
+          <>
+            <p>
+              Yes, directly from Scandic Copenhagen. Email{" "}
+              <MailLink address="meeting.copenhagen@scandichotels.com" /> at
+              least 20 days before the event with what you need, and agree on
+              payment terms at the same time. Indicative prices from the venue:
+            </p>
+            <ul className="mt-2 list-disc pl-5 space-y-1">
+              <li>High café table: DKK 250 per piece per day</li>
+              <li>High bar chair: DKK 250 per piece per day</li>
+              <li>Extra tablecloth: DKK 25 per piece per day</li>
+              <li>Extra power outlet or cable: DKK 15 per piece per day</li>
+              <li>Screens, AV equipment, and flowers: ask for a quote</li>
+            </ul>
+          </>
+        ),
+      },
+      {
+        question: "Can we serve food or drinks from our booth?",
+        answer: (
+          <>
+            Only if agreed with the hotel beforehand. Scandic offers a range of
+            food and beverage options for stands. Email{" "}
+            <MailLink address="meeting.copenhagen@scandichotels.com" /> at least
+            two weeks before the event for an offer. Walking around between the
+            stands with tastings is not allowed.
+          </>
+        ),
       },
       {
         question: "Is there a hotel booking discount code?",
@@ -58,34 +145,90 @@ const faqGroups: FAQGroup[] = [
             </p>
             <p className="mt-2">
               If you did not receive your code or need it resent, please email{" "}
-              <a
-                href="mailto:sponsor@cloudnativedenmark.dk"
-                className="text-cnd-red underline decoration-2 underline-offset-4 hover:text-cnd-coral"
-              >
-                sponsor@cloudnativedenmark.dk
-              </a>
-              .
+              <MailLink address="sponsor@cloudnativedenmark.dk" />.
             </p>
             <p className="mt-2">
               The booking code is valid for stays from November 18 to November
               20, 2026. If any of your team members wish to stay outside these
               dates, remove the code to book those additional nights separately,
-              then email{" "}
-              <a
-                href="mailto:copenhagen@scandichotels.com"
-                className="text-cnd-red underline decoration-2 underline-offset-4 hover:text-cnd-coral"
-              >
-                copenhagen@scandichotels.com
-              </a>{" "}
-              to request staying in the same room.
+              then email <MailLink address="copenhagen@scandichotels.com" /> to
+              request staying in the same room.
             </p>
           </>
         ),
       },
       {
         question: "When can we set up, and when do we need to be packed down?",
+        answer: (
+          <>
+            <p>The venue has confirmed the following windows:</p>
+            <ul className="mt-2 list-disc pl-5 space-y-1">
+              <li>
+                <strong>Setup</strong>: Wednesday, November 18, 2026 from 07:30
+              </li>
+              <li>
+                <strong>Teardown</strong>: Friday, November 20, 2026 at 14:00
+              </li>
+            </ul>
+            <p className="mt-2">
+              The conference itself runs November 19–20, 2026 at Scandic
+              Copenhagen.
+            </p>
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    title: "Venue rules & practical details",
+    entries: [
+      {
+        question: "What are the house rules for the stand?",
+        answer: (
+          <ul className="list-disc pl-5 space-y-1">
+            <li>
+              No nails, screws, or anything else that could damage the walls,
+              floors, or interior.
+            </li>
+            <li>
+              Roll-ups and other marketing material must stay inside your stand
+              area. Respect the floor markings for the stand corners.
+            </li>
+            <li>
+              Empty boxes and waste must be cleared from the area before the
+              exhibition opens. Nothing may be stored visibly at the stand.
+            </li>
+            <li>
+              Stand locations cannot be changed without written agreement from
+              both Scandic Copenhagen and us. Never block emergency exits.
+            </li>
+            <li>
+              Don't leave valuables at an unattended stand. The hotel is not
+              liable for theft or damage to the stand or equipment.
+            </li>
+          </ul>
+        ),
+      },
+      {
+        question: "Is there Wi-Fi for the stand?",
+        answer: (
+          <>
+            <p>
+              Yes. Connect to the open network <strong>Scandic_easy</strong>,
+              open a browser, and you're online. There is no password.
+            </p>
+            <p className="mt-2">
+              If you need a dedicated network or a wired connection, contact the
+              venue at{" "}
+              <MailLink address="meeting.copenhagen@scandichotels.com" />.
+            </p>
+          </>
+        ),
+      },
+      {
+        question: "Where can we park?",
         answer:
-          "We will send exact setup and teardown windows closer to the event. The conference runs November 19–20, 2026 at Scandic Copenhagen. If you have travel or shipping constraints that require an earlier answer, let us know and we will prioritize it.",
+          "There is public street parking along Vester Søgade (operated by EasyPark) and an underground car park run by Q-Park Vesterport at Nyropsgade 39-41.",
       },
     ],
   },
@@ -208,14 +351,20 @@ const faqGroups: FAQGroup[] = [
         question: "Who do we contact with questions that aren't covered here?",
         answer: (
           <>
-            Email{" "}
-            <a
-              href="mailto:sponsor@cloudnativedenmark.dk"
-              className="text-cnd-red underline decoration-2 underline-offset-4 hover:text-cnd-coral"
-            >
-              sponsor@cloudnativedenmark.dk
-            </a>{" "}
-            and we'll get back to you directly rather than leave you guessing.
+            Email <MailLink address="sponsor@cloudnativedenmark.dk" /> and we'll
+            get back to you directly rather than leave you guessing.
+          </>
+        ),
+      },
+      {
+        question: "Who do we contact at the venue?",
+        answer: (
+          <>
+            For anything about the stand itself, such as shipping, extra
+            equipment, catering, or network, email Scandic Copenhagen's meeting
+            team at <MailLink address="meeting.copenhagen@scandichotels.com" />.
+            Keep <MailLink address="sponsor@cloudnativedenmark.dk" /> in copy so
+            we can help if anything gets stuck.
           </>
         ),
       },
