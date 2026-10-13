@@ -4,11 +4,13 @@ import { type Session, type Speaker, type GridEntry } from "./use-sessionize"
 interface UseModalManagementProps {
   schedule?: GridEntry[]
   onSessionSelect?: (session: Session) => void
+  urlMode?: "hash" | "path"
 }
 
 export const useModalManagement = ({
   schedule = [],
   onSessionSelect,
+  urlMode = "hash",
 }: UseModalManagementProps = {}) => {
   const [selectedSession, setSelectedSession] = useState<Session | null>(null)
   const [selectedSpeaker, setSelectedSpeaker] = useState<Speaker | null>(null)
@@ -18,7 +20,7 @@ export const useModalManagement = ({
   const currentHash = typeof window !== "undefined" ? window.location.hash : ""
 
   const clearHash = () => {
-    if (typeof window !== "undefined") {
+    if (urlMode === "hash" && typeof window !== "undefined") {
       window.history.pushState(
         null,
         "",
@@ -36,7 +38,7 @@ export const useModalManagement = ({
       setSelectedSession(session)
       setSelectedSpeaker(null)
       onSessionSelect?.(session)
-      if (typeof window !== "undefined") {
+      if (urlMode === "hash" && typeof window !== "undefined") {
         window.history.pushState(null, "", `#${session.id}`)
       }
     }

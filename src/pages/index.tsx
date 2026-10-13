@@ -20,7 +20,8 @@ import { features } from "../config/features"
 const IndexPage: React.FC = () => {
   const location = useLocation()
   const { sponsors } = useSponsors()
-  const { selectedSpeaker, handleCloseSpeakerModal } = useModalManagement()
+  const { selectedSpeaker, handleSpeakerClick, handleCloseSpeakerModal } =
+    useModalManagement({ urlMode: "path" })
 
   // Section numbering derives from call order — reorder JSX, numbers follow automatically
   let _sec = 0
@@ -94,7 +95,10 @@ const IndexPage: React.FC = () => {
         variant="dark"
       />
 
-      <FeaturedSpeakersSection sectionNumber={sec()} />
+      <FeaturedSpeakersSection
+        sectionNumber={sec()}
+        onSpeakerClick={handleSpeakerClick}
+      />
 
       <TicketRatesSection sectionNumber={sec()} id="ticket-rates" />
 

@@ -92,6 +92,17 @@ describe("useModalManagement", () => {
       expect(mockPushState).toHaveBeenCalledWith(null, "", "#session-1")
     })
 
+    it("does not write a hash when using path links", () => {
+      const { result } = renderHook(() =>
+        useModalManagement({ urlMode: "path" })
+      )
+
+      act(() => result.current.handleSessionClick(mockSession))
+
+      expect(result.current.selectedSession).toBe(mockSession)
+      expect(mockPushState).not.toHaveBeenCalled()
+    })
+
     it("should call onSessionSelect callback when provided", () => {
       const mockOnSessionSelect = jest.fn()
       const { result } = renderHook(() =>

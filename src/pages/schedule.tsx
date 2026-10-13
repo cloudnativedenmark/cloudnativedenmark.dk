@@ -1,5 +1,5 @@
-import React from "react"
-import { useLocation } from "react-router-dom"
+import React, { useEffect } from "react"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import SEOHead from "../components/seo-head"
 import { useSessionizeSchedule } from "../hooks/use-sessionize"
 import { useModalManagement } from "../hooks/use-modal-management"
@@ -7,9 +7,13 @@ import { formatDate, formatTime } from "../utils/time-formatting"
 import SessionCard from "../components/session-card"
 import SessionModal from "../components/session_modal"
 import SpeakerModal from "../components/speaker_modal"
+import { speakerPath } from "../utils/speaker-link"
+import { talkPath } from "../utils/talk-link"
 
 const SchedulePage: React.FC = () => {
   const location = useLocation()
+  const navigate = useNavigate()
+  const { talkId } = useParams()
   const { schedule, isLoading } = useSessionizeSchedule()
   const {
     selectedSession,
@@ -18,13 +22,17 @@ const SchedulePage: React.FC = () => {
     handleSpeakerClick,
     handleCloseSessionModal,
     handleCloseSpeakerModal,
-  } = useModalManagement({ schedule })
+  } = useModalManagement({ schedule, urlMode: "path" })
 
   const findSessionById = (id: number | string) => {
     for (const day of schedule) {
       for (const timeSlot of day.timeSlots) {
         for (const room of timeSlot.rooms) {
-          if (room.session && room.session.id === String(id)) {
+          if (
+            room.session &&
+            (room.session.id === String(id) ||
+              String(id).endsWith(`-${room.session.id}`))
+          ) {
             return room.session
           }
         }
@@ -33,9 +41,35 @@ const SchedulePage: React.FC = () => {
     return undefined
   }
 
+  useEffect(() => {
+    if (!talkId) {
+      if (!location.hash) handleCloseSessionModal()
+      return
+    }
+
+    const session = findSessionById(talkId)
+    if (session) handleSessionClick(session)
+    // Only sync when the route or data changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [talkId, schedule])
+
+  const openSession = (session: NonNullable<typeof selectedSession>) => {
+    handleSessionClick(session)
+    navigate(talkPath(session))
+  }
+
+  const closeSession = () => {
+    handleCloseSessionModal()
+    navigate("/schedule")
+  }
+
   return (
     <>
-      <SEOHead title="Schedule" pathname={location.pathname} />
+      <SEOHead
+        title={selectedSession?.title || "Schedule"}
+        description={selectedSession?.description || undefined}
+        pathname={location.pathname}
+      />
       <section className="pt-24 pb-12 bg-background-dark">
         <div className="mx-auto max-w-6xl text-white text-center px-6">
           <h1 className="text-6xl font-bold">Schedule</h1>
@@ -215,7 +249,7 @@ const SchedulePage: React.FC = () => {
                         >
                           <SessionCard
                             session={sessionForRoom}
-                            onClick={() => handleSessionClick(sessionForRoom)}
+                            onClick={() => openSession(sessionForRoom)}
                             variant="schedule"
                           />
                         </div>,
@@ -244,7 +278,7 @@ const SchedulePage: React.FC = () => {
                             </div>
                             <SessionCard
                               session={room.session}
-                              onClick={() => handleSessionClick(room.session)}
+                              onClick={() => openSession(room.session)}
                               variant="schedule"
                             />
                           </div>
@@ -261,8 +295,11 @@ const SchedulePage: React.FC = () => {
       {selectedSession && (
         <SessionModal
           session={selectedSession}
-          onClose={handleCloseSessionModal}
-          onSpeakerClick={handleSpeakerClick}
+          onClose={closeSession}
+          onSpeakerClick={(speaker) => {
+            handleSpeakerClick(speaker)
+            navigate(speakerPath(speaker))
+          }}
         />
       )}
       {selectedSpeaker && (
@@ -272,7 +309,7 @@ const SchedulePage: React.FC = () => {
           onSessionClick={(sessionId) => {
             const session = findSessionById(sessionId)
             if (session) {
-              handleSessionClick(session)
+              openSession(session)
             }
           }}
         />
