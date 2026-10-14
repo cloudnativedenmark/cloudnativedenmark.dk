@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto"
 import { speakerKey, speakerPath } from "../src/utils/speaker-link.ts"
-import { talkPath } from "../src/utils/talk-link.ts"
+import { talkPath, talkType } from "../src/utils/talk-link.ts"
 
 // Keep in sync with MainSessionizeId in src/hooks/use-sessionize.tsx.
 const sessionizeId = "6dzu68z1"
@@ -53,7 +53,7 @@ export const pagesFor = ({ Grid, Sessions, Speakers }) => {
     .filter((session) => ids.has(session.id) && !session.isServiceSession)
     .map((session) => ({
       pathname: talkPath(session),
-      title: `${text(session.title)} | Cloud Native Denmark`,
+      title: `${talkType(session) || "Talk"}: ${text(session.title)} | Cloud Native Denmark`,
       description:
         text(session.description).slice(0, 300) ||
         "View this talk at Cloud Native Denmark.",

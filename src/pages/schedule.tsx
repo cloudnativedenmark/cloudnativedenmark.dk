@@ -8,7 +8,7 @@ import SessionCard from "../components/session-card"
 import SessionModal from "../components/session_modal"
 import SpeakerModal from "../components/speaker_modal"
 import { speakerPath } from "../utils/speaker-link"
-import { talkPath } from "../utils/talk-link"
+import { talkPath, talkType } from "../utils/talk-link"
 
 const SchedulePage: React.FC = () => {
   const location = useLocation()
@@ -66,7 +66,11 @@ const SchedulePage: React.FC = () => {
   return (
     <>
       <SEOHead
-        title={selectedSession?.title || "Schedule"}
+        title={
+          selectedSession
+            ? `${talkType(selectedSession) || "Talk"}: ${selectedSession.title || selectedSession.name}`
+            : "Schedule"
+        }
         description={selectedSession?.description || undefined}
         pathname={location.pathname}
       />

@@ -38,7 +38,7 @@ test("creates talk and speaker pages from Sessionize", () => {
   assert.equal(
     pages.find((page) => page.pathname === "/schedule/talk/workshop-a-b-1/")
       ?.title,
-    'A & "B" | Cloud Native Denmark'
+    'Workshop: A & "B" | Cloud Native Denmark'
   )
   assert.equal(
     pages.find((page) => page.pathname === "/speakers/jane-doe-speaker1/")
@@ -54,6 +54,20 @@ test("digest ignores unrelated API fields and response order", () => {
   assert.equal(digest(data), digest(updated))
   updated.Sessions[0].sessions[0].title = "Updated"
   assert.notEqual(digest(data), digest(updated))
+})
+
+test("falls back to Talk when Sessionize has no type", () => {
+  const changed = structuredClone(data)
+  const session = changed.Sessions[0].sessions[0]
+  session.room = "Main stage"
+  session.endsAt = session.startsAt
+  session.categories = []
+  assert.equal(
+    pagesFor(changed).find((page) =>
+      page.pathname.startsWith("/schedule/talk/")
+    )?.title,
+    'Talk: A & "B" | Cloud Native Denmark'
+  )
 })
 
 test("talk links show title and type while retaining the Sessionize id", () => {
