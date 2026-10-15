@@ -178,6 +178,9 @@ The site is automatically deployed to GitHub Pages on every push to the main bra
 - **Production**: `https://cloudnativedenmark.dk`
 - **GitHub Pages**: `https://cloudnativedenmark.github.io/cloudnativedenmark.dk`
 
+Talk and speaker social previews refresh periodically. See the `schedule` trigger
+in `.github/workflows/deploy-on-sessionize-change.yaml` for the current interval.
+
 ### Preview Environments
 
 Per-PR preview deployments to Cloudflare Pages, gated by a label (workflow: `.github/workflows/preview.yaml`).

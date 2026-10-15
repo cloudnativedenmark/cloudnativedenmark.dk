@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import { useSessionizeSpeakers } from "../../hooks/use-sessionize"
+import { useSessionizeSpeakers, type Speaker } from "../../hooks/use-sessionize"
 import { features } from "../../config/features"
 import Section from "../ui/section"
 import Button from "../ui/button"
@@ -8,10 +8,12 @@ import SpeakerCard from "./speaker-card"
 
 interface FeaturedSpeakersSectionProps {
   sectionNumber: number
+  onSpeakerClick: (speaker: Speaker) => void
 }
 
 const FeaturedSpeakersSection: React.FC<FeaturedSpeakersSectionProps> = ({
   sectionNumber,
+  onSpeakerClick,
 }) => {
   const { speakers } = useSessionizeSpeakers()
   const topSpeakers = speakers.filter(
@@ -46,7 +48,11 @@ const FeaturedSpeakersSection: React.FC<FeaturedSpeakersSectionProps> = ({
       {topSpeakers.length > 0 && (
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-14">
           {topSpeakers.map((speaker) => (
-            <SpeakerCard key={speaker.id} speaker={speaker} />
+            <SpeakerCard
+              key={speaker.id}
+              speaker={speaker}
+              onClick={onSpeakerClick}
+            />
           ))}
         </div>
       )}

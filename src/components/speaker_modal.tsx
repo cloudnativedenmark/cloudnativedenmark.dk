@@ -3,9 +3,12 @@ import { createPortal } from "react-dom"
 import { Link } from "react-router-dom"
 import { type Speaker } from "../hooks/use-sessionize"
 import Button from "./ui/button"
+import CopyLinkButton from "./copy-link-button"
 import SessionTypeBadge from "./session-type-badge"
 import { formatPlainTextToHtml } from "../utils/text-formatting"
 import { features } from "../config/features"
+import { speakerPath } from "../utils/speaker-link"
+import { talkPath } from "../utils/talk-link"
 
 const SpeakerModal: React.FC<{
   speaker: Speaker
@@ -118,7 +121,7 @@ const SpeakerModal: React.FC<{
                     ) : features.scheduleAndSpeakers ? (
                       <Link
                         key={session.id}
-                        to={`/schedule#${session.id}`}
+                        to={talkPath(session)}
                         className="group flex items-center justify-between gap-3 rounded-lg border border-gray-200 px-4 py-3 transition-colors hover:border-primary hover:bg-primary/5"
                       >
                         {rowInner}
@@ -136,8 +139,12 @@ const SpeakerModal: React.FC<{
               </div>
             )}
           </div>
-          <div className="p-4 pb-8 text-center bg-white flex-shrink-0 relative">
+          <div className="p-4 pb-8 text-center bg-white flex-shrink-0 relative flex justify-center gap-4">
             <div className="absolute bottom-full left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+            <CopyLinkButton
+              path={speakerPath(speaker)}
+              label="Copy speaker link"
+            />
             <Button onClick={onClose} variant="primary">
               Back
             </Button>

@@ -1,4 +1,4 @@
-import { isAdminHost } from "../config/admin-hosts"
+import { isAdminHost } from "../config/admin-hosts.ts"
 
 export type SessionType = "Keynote" | "Session" | "Workshop" | "Lightning Talk"
 

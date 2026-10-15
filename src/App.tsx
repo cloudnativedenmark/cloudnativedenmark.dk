@@ -27,7 +27,9 @@ function App() {
         {features.scheduleAndSpeakers && (
           <>
             <Route path="schedule" element={<Schedule />} />
+            <Route path="schedule/talk/:talkId" element={<Schedule />} />
             <Route path="speakers" element={<Speakers />} />
+            <Route path="speakers/:speakerId" element={<Speakers />} />
           </>
         )}
         <Route path="talk-archive" element={<TalkArchive />} />

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react"
+import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import SessionModal from "../session_modal"
 import { type Session } from "../../hooks/use-sessionize"
 
@@ -30,6 +30,25 @@ const renderSessionModal = (description: string | null) =>
       onSpeakerClick={() => {}}
     />
   )
+
+describe("SessionModal sharing", () => {
+  it("copies a path-based talk link", async () => {
+    const writeText = jest.fn().mockResolvedValue(undefined)
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText },
+    })
+
+    renderSessionModal("Talk")
+    fireEvent.click(screen.getByRole("button", { name: "Copy talk link" }))
+
+    await waitFor(() =>
+      expect(writeText).toHaveBeenCalledWith(
+        `${window.location.origin}/schedule/talk/session-a-regular-talk-session-1/`
+      )
+    )
+  })
+})
 
 describe("SessionModal description", () => {
   it("renders CRLF-separated descriptions as two paragraphs", () => {
