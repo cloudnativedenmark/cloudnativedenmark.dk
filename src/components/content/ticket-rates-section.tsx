@@ -9,6 +9,7 @@ interface TicketTier {
   availableUntil: Date
   displayDate: string
   soldOut?: boolean
+  sellingFast?: boolean
 }
 
 const ticketTiers: TicketTier[] = [
@@ -28,6 +29,7 @@ const ticketTiers: TicketTier[] = [
   {
     name: "Standard",
     price: 1999,
+    sellingFast: true,
     availableUntil: new Date("2026-11-10T23:45:00+01:00"),
     displayDate: "Through Nov 10",
   },
@@ -105,6 +107,18 @@ const TierCard: React.FC<{
         status
       )}`}
     >
+      {status === "active" && tier.sellingFast && (
+        <span
+          className="eyebrow absolute -top-3 left-1/2 flex -translate-x-1/2 items-center gap-2.5 whitespace-nowrap rounded-full bg-cnd-red px-3.5 py-1.5 text-white shadow-[0_6px_16px_rgba(224,19,42,0.35)]"
+          style={{ fontSize: 10, letterSpacing: "0.2em" }}
+        >
+          <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-white motion-safe:animate-ping" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white" />
+          </span>
+          SELLING OUT FAST
+        </span>
+      )}
       <div className="mb-6 flex items-center justify-between">
         <span
           className={`eyebrow rounded-full px-3 py-1 ${tierBadgeClasses(status)}`}
