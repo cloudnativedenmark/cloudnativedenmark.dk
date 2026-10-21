@@ -1,49 +1,67 @@
 import React from "react"
 import { Link, useLocation } from "react-router-dom"
 import SEOHead from "../components/seo-head"
-import PageHeader from "../components/layout/page-header"
-import Section from "../components/ui/section"
-import Button from "../components/ui/button"
 import VenueMap from "../components/content/venue-map"
 import { venueMap } from "../config/venue-map"
 import { useSponsors } from "../hooks/use-sponsors"
 import type { SponsorData } from "../utils/data-loader"
 
-const roomAccents = [
-  "var(--color-cnd-red)",
-  "var(--color-cnd-coral)",
-  "var(--color-cnd-amber)",
-]
-
-interface InfoCard {
+interface Note {
   title: string
   body: React.ReactNode
   accent: string
 }
 
-const goodToKnow: InfoCard[] = [
+const listRooms = (rooms: string[]) =>
+  rooms.length > 1
+    ? `${rooms.slice(0, -1).join(", ")} and ${rooms[rooms.length - 1]}`
+    : rooms[0]
+
+const notes: Note[] = [
   {
-    title: "Registration & help desk",
-    body: "Just inside the entrance, next to the conference office. Head here when you arrive and whenever you need a hand.",
+    title: "Registration",
+    body: "Registration and the help desk are just inside the entrance, next to the conference office.",
     accent: "var(--color-cnd-electric)",
   },
   {
-    title: "Coffee & water",
-    body: "Stations along the Vestlounge and in the Nordlounge, right outside the main stage.",
+    title: "Toilets",
+    body: "Off the Mellemlounge, at the far end of the Vestlounge past stand 4.",
+    accent: "var(--color-cnd-slate)",
+  },
+  {
+    title: "Coffee, water & lunch",
+    body: "Coffee and water stations line both lounges. Lunch is served from buffets between the stands.",
     accent: "var(--color-cnd-coral)",
   },
   {
-    title: "Lunch",
-    body: "Served from buffets in the Vestlounge and the Nordlounge, right between the sponsor stands.",
-    accent: "var(--color-cnd-amber)",
+    title: "Emergency exits",
+    body: "Marked in green on the map. In an emergency, follow the green exit signs and the venue staff.",
+    accent: "#00915a",
   },
   {
     title: "Wi-Fi",
     body: (
       <>
-        Free throughout the venue. Join the open{" "}
+        Join the open{" "}
         <strong className="text-cnd-midnight">Scandic_easy</strong> network and
         open a browser. No password needed.
+      </>
+    ),
+    accent: "var(--color-cnd-amber)",
+  },
+  {
+    title: "Room signs",
+    body: (
+      <>
+        Scandic signposts its own room names:{" "}
+        {venueMap.rooms.map((room, i) => (
+          <React.Fragment key={room.id}>
+            {i > 0 && "; "}
+            <strong className="text-cnd-midnight">{room.name}</strong> is{" "}
+            {listRooms(room.venueRooms)}
+          </React.Fragment>
+        ))}
+        .
       </>
     ),
     accent: "var(--color-cnd-red)",
@@ -64,181 +82,78 @@ const VenueMapPage: React.FC = () => {
     <>
       <SEOHead
         title="Venue Map"
-        description="Find your way around Cloud Native Denmark 2026 at Scandic Copenhagen: the stages, the workshop room, sponsor stands, coffee and lunch."
+        description="Find your way around Cloud Native Denmark 2026 at Scandic Copenhagen: stages, sponsor stands, registration, toilets, coffee and lunch."
         pathname={location.pathname}
       />
-      <PageHeader
-        eyebrow="VENUE MAP"
-        title="Find your way."
-        description="Both stages, the workshop room and every sponsor stand sit on a single floor of Scandic Copenhagen."
-        variant="dark"
-        size="large"
-      />
 
-      {/* Venue overview */}
-      <Section className="bg-cnd-bone py-16 lg:py-20">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 gap-10 lg:grid-cols-5">
-            <div className="lg:col-span-2">
+      <section className="bg-cnd-bone">
+        <div className="mx-auto max-w-6xl px-4 pb-14 pt-6 sm:px-8 sm:pt-10">
+          <div className="mb-5 flex flex-wrap items-end justify-between gap-x-8 gap-y-2">
+            <div>
               <div
-                className="eyebrow mb-3"
-                style={{
-                  color: "var(--color-cnd-red)",
-                  letterSpacing: "0.22em",
-                }}
+                className="eyebrow text-cnd-red"
+                style={{ letterSpacing: "0.22em" }}
               >
-                THE FLOOR
+                Venue map · Scandic Copenhagen
               </div>
-              <h2
-                className="display text-cnd-midnight"
+              <h1
+                className="display mt-2 text-cnd-midnight"
                 style={{
-                  fontSize: "clamp(28px, 3.6vw, 44px)",
-                  letterSpacing: "-0.03em",
-                  lineHeight: 1.05,
+                  fontSize: "clamp(30px, 4.2vw, 46px)",
+                  letterSpacing: "-0.035em",
                 }}
               >
-                The Grand Ball Complex.
-              </h2>
-              <p
-                className="mt-5 text-cnd-slate"
-                style={{ fontSize: 17, lineHeight: 1.6 }}
-              >
-                We take over the Grand Ball Complex at Scandic Copenhagen, the
-                hotel&apos;s main conference floor at Vester Søgade 6, a
-                five-minute walk from Copenhagen Central Station. Scandic opens
-                up its meeting rooms into two large halls for the stages, and
-                the lounges around them hold the sponsor stands, coffee and
-                lunch.
-              </p>
+                Find your way.
+              </h1>
+            </div>
+            <p className="text-sm text-cnd-slate">
+              Vester Søgade 6, Copenhagen V ·{" "}
               <Link
                 to="/venue"
-                className="eyebrow mt-5 inline-flex items-center gap-1 text-cnd-red hover:text-cnd-coral"
+                className="font-semibold text-cnd-red hover:text-cnd-coral"
               >
-                TRAVEL & ACCOMMODATION →
+                Getting there →
               </Link>
-            </div>
-
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:col-span-3">
-              {venueMap.rooms.map((room, i) => (
-                <div
-                  key={room.id}
-                  className="relative overflow-hidden rounded-2xl border-2 border-cnd-fog/40 bg-white p-6"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="absolute left-0 top-0 h-full w-1.5"
-                    style={{ background: roomAccents[i % roomAccents.length] }}
-                  />
-                  <div
-                    className="display"
-                    style={{
-                      fontSize: 40,
-                      lineHeight: 1,
-                      letterSpacing: "-0.04em",
-                      color: roomAccents[i % roomAccents.length],
-                    }}
-                  >
-                    {room.areaM2}
-                    <span style={{ fontSize: 18 }}> m²</span>
-                  </div>
-                  <h3
-                    className="display mt-3 text-cnd-midnight"
-                    style={{ fontSize: 20, letterSpacing: "-0.02em" }}
-                  >
-                    {room.name}
-                  </h3>
-                  <p className="mt-2 text-sm text-cnd-ash">
-                    {room.venueRooms.join(" · ")}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      {/* Map */}
-      <Section className="bg-white py-16 lg:py-20">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-8 text-center">
-            <div
-              className="eyebrow mb-3"
-              style={{
-                color: "var(--color-cnd-red)",
-                letterSpacing: "0.22em",
-              }}
-            >
-              FLOOR PLAN
-            </div>
-            <h2
-              className="display text-cnd-midnight"
-              style={{
-                fontSize: "clamp(32px, 5vw, 52px)",
-                letterSpacing: "-0.035em",
-              }}
-            >
-              Stages, stands and coffee.
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-cnd-slate">
-              Stands are numbered from the entrance. Hover over an exhibitor to
-              find their stand.
             </p>
           </div>
+
           <VenueMap config={venueMap} sponsors={sponsorsById} />
         </div>
-      </Section>
+      </section>
 
-      {/* Good to know */}
-      <Section className="bg-cnd-bone py-16 lg:py-20">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-10 text-center">
-            <div
-              className="eyebrow mb-3"
-              style={{
-                color: "var(--color-cnd-red)",
-                letterSpacing: "0.22em",
-              }}
-            >
-              ON SITE
-            </div>
-            <h2
-              className="display text-cnd-midnight"
-              style={{
-                fontSize: "clamp(28px, 4vw, 44px)",
-                letterSpacing: "-0.03em",
-              }}
-            >
-              Good to know.
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {goodToKnow.map((card) => (
+      <section className="bg-white">
+        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-8">
+          <h2
+            className="display text-cnd-midnight"
+            style={{
+              fontSize: "clamp(24px, 3vw, 32px)",
+              letterSpacing: "-0.03em",
+            }}
+          >
+            Good to know
+          </h2>
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {notes.map((note) => (
               <div
-                key={card.title}
-                className="relative overflow-hidden rounded-2xl border-2 border-cnd-fog/40 bg-white p-6"
+                key={note.title}
+                className="relative overflow-hidden rounded-2xl border-2 border-cnd-fog/40 bg-white p-5 pl-6"
               >
                 <span
                   aria-hidden="true"
                   className="absolute left-0 top-0 h-full w-1.5"
-                  style={{ background: card.accent }}
+                  style={{ background: note.accent }}
                 />
-                <h3
-                  className="display text-cnd-midnight"
-                  style={{ fontSize: 18, letterSpacing: "-0.02em" }}
-                >
-                  {card.title}
+                <h3 className="font-semibold text-cnd-midnight">
+                  {note.title}
                 </h3>
-                <p className="mt-2 text-sm text-cnd-slate">{card.body}</p>
+                <p className="mt-1.5 text-sm leading-relaxed text-cnd-slate">
+                  {note.body}
+                </p>
               </div>
             ))}
           </div>
-          <div className="mt-10 flex justify-center">
-            <Link to="/venue">
-              <Button variant="primary">Getting to the venue →</Button>
-            </Link>
-          </div>
         </div>
-      </Section>
+      </section>
     </>
   )
 }

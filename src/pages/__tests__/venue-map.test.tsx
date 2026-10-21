@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react"
+import { render, screen, within } from "@testing-library/react"
 import { HelmetProvider } from "react-helmet-async"
 import { MemoryRouter } from "react-router-dom"
 import App from "../../App"
@@ -67,8 +67,21 @@ it("shows the venue map with its exhibitors", () => {
     screen.getByRole("heading", { level: 1, name: /find your way/i })
   ).toBeInTheDocument()
   expect(
-    screen.getByRole("link", { name: /team\.blue \(ScanNet\)/ })
+    within(screen.getByRole("region", { name: "Exhibitors" })).getByRole(
+      "button",
+      { name: "Stand 5: team.blue (ScanNet), Platinum" }
+    )
   ).toBeInTheDocument()
+})
+
+it("puts the map before the practical information", () => {
+  renderAt("/venue-map")
+
+  const map = screen.getAllByRole("group", { name: /floor plan/i })[0]
+  const notes = screen.getByRole("heading", { name: /good to know/i })
+  expect(
+    map.compareDocumentPosition(notes) & Node.DOCUMENT_POSITION_FOLLOWING
+  ).toBeTruthy()
 })
 
 it("redirects the old venue plan address", () => {

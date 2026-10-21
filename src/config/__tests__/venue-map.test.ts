@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "fs"
 import { join } from "path"
 import yaml from "js-yaml"
 import { venueMap } from "../venue-map"
+import { plan } from "../../components/content/venue-map/plan"
 
 const sponsorsDirectory = join(__dirname, "../../data/sponsors")
 
@@ -39,5 +40,17 @@ describe("venue map config", () => {
       "Breakout",
       "Workshop",
     ])
+  })
+
+  it("lists exactly the stands drawn on the floor plan", () => {
+    expect(venueMap.stands.map((stand) => stand.id).sort()).toEqual(
+      Object.keys(plan.stands).sort()
+    )
+  })
+
+  it("has a drawn position for every room", () => {
+    for (const room of venueMap.rooms) {
+      expect(plan.rooms[room.id]).toBeDefined()
+    }
   })
 })
