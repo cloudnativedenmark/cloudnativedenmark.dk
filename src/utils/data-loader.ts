@@ -1,6 +1,8 @@
 import yaml from "js-yaml"
 
 export interface SponsorData {
+  /** Path under src/data/sponsors without extension, e.g. "gold/aws" */
+  id: string
   title: string
   url: string
   scale?: string
@@ -208,6 +210,7 @@ export async function loadSponsors() {
 
       // Transform YAML data to component interface
       const sponsor: SponsorData = {
+        id: `${category}/${parts[5].replace(/\.yaml$/, "")}`,
         title: sponsorYaml.title,
         url: sponsorYaml.url,
         scale: sponsorYaml.scale,

@@ -1,5 +1,5 @@
 import React from "react"
-import { useLocation } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import SEOHead from "../components/seo-head"
 import PageHeader from "../components/layout/page-header"
 import Section from "../components/ui/section"
@@ -270,6 +270,12 @@ const VenuePage: React.FC = () => {
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="mt-12 flex justify-center">
+            <Link to="/venue-map">
+              <Button>See the venue map →</Button>
+            </Link>
           </div>
         </div>
       </Section>
