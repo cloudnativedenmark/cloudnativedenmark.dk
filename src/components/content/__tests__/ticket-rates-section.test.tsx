@@ -46,4 +46,25 @@ describe("TicketRatesSection", () => {
       screen.getByRole("link", { name: "Enter the raffle →" })
     ).toBeInTheDocument()
   })
+
+  it("flags the active Standard tier as selling out fast", () => {
+    jest.useFakeTimers()
+    jest.setSystemTime(new Date("2026-10-22T12:00:00Z"))
+
+    render(<TicketRatesSection sectionNumber={4} />)
+
+    const badge = screen.getByText("SELLING OUT FAST")
+    expect(
+      within(badge.parentElement as HTMLElement).getByText("Standard")
+    ).toBeInTheDocument()
+  })
+
+  it("drops the badge once Standard is no longer on sale", () => {
+    jest.useFakeTimers()
+    jest.setSystemTime(new Date("2026-11-12T12:00:00Z"))
+
+    render(<TicketRatesSection sectionNumber={4} />)
+
+    expect(screen.queryByText("SELLING OUT FAST")).not.toBeInTheDocument()
+  })
 })
