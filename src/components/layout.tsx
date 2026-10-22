@@ -22,8 +22,8 @@ const allMenuLinks = [
     link: "/venue",
   },
   {
-    name: "Venue Map",
-    link: "/venue-map",
+    name: "Conference Map",
+    link: "/conference-map",
   },
   {
     name: "Become a Sponsor",

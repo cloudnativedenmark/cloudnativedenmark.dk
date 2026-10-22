@@ -273,8 +273,8 @@ const VenuePage: React.FC = () => {
           </div>
 
           <div className="mt-12 flex justify-center">
-            <Link to="/venue-map">
-              <Button>See the venue map →</Button>
+            <Link to="/conference-map">
+              <Button>See the conference map →</Button>
             </Link>
           </div>
         </div>

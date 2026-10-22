@@ -60,8 +60,8 @@ const renderAt = (path: string) =>
     </HelmetProvider>
   )
 
-it("shows the venue map with its exhibitors", () => {
-  renderAt("/venue-map")
+it("shows the conference map with its exhibitors", () => {
+  renderAt("/conference-map")
 
   expect(
     screen.getByRole("heading", { level: 1, name: /find your way/i })
@@ -75,7 +75,7 @@ it("shows the venue map with its exhibitors", () => {
 })
 
 it("puts the map before the practical information", () => {
-  renderAt("/venue-map")
+  renderAt("/conference-map")
 
   const map = screen.getAllByRole("group", { name: /floor plan/i })[0]
   const notes = screen.getByRole("heading", { name: /good to know/i })
@@ -84,19 +84,22 @@ it("puts the map before the practical information", () => {
   ).toBeTruthy()
 })
 
-it("redirects the old venue plan address", () => {
-  renderAt("/venue-plan")
+it.each(["/venue-plan", "/venue-map"])(
+  "redirects the old %s address",
+  (path) => {
+    renderAt(path)
 
-  expect(
-    screen.getByRole("heading", { level: 1, name: /find your way/i })
-  ).toBeInTheDocument()
-})
+    expect(
+      screen.getByRole("heading", { level: 1, name: /find your way/i })
+    ).toBeInTheDocument()
+  }
+)
 
-it("links to the venue map from the navigation", () => {
+it("links to the conference map from the navigation", () => {
   renderAt("/")
 
-  expect(screen.getByRole("link", { name: "Venue Map" })).toHaveAttribute(
+  expect(screen.getByRole("link", { name: "Conference Map" })).toHaveAttribute(
     "href",
-    "/venue-map"
+    "/conference-map"
   )
 })

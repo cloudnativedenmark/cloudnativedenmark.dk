@@ -81,7 +81,7 @@ const VenueMapPage: React.FC = () => {
   return (
     <>
       <SEOHead
-        title="Venue Map"
+        title="Conference Map"
         description="Find your way around Cloud Native Denmark 2026 at Scandic Copenhagen: stages, sponsor stands, registration, toilets, coffee and lunch."
         pathname={location.pathname}
       />
@@ -94,7 +94,7 @@ const VenueMapPage: React.FC = () => {
                 className="eyebrow text-cnd-red"
                 style={{ letterSpacing: "0.22em" }}
               >
-                Venue map · Scandic Copenhagen
+                Conference map · Scandic Copenhagen
               </div>
               <h1
                 className="display mt-2 text-cnd-midnight"

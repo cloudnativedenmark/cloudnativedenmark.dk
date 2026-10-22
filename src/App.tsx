@@ -35,11 +35,14 @@ function App() {
         <Route path="talk-archive" element={<TalkArchive />} />
         <Route path="team" element={<Team />} />
         <Route path="venue" element={<Venue />} />
-        <Route path="venue-map" element={<VenueMap />} />
-        <Route
-          path="venue-plan"
-          element={<Navigate to="/venue-map" replace />}
-        />
+        <Route path="conference-map" element={<VenueMap />} />
+        {["venue-plan", "venue-map"].map((path) => (
+          <Route
+            key={path}
+            path={path}
+            element={<Navigate to="/conference-map" replace />}
+          />
+        ))}
         <Route path="become-a-sponsor" element={<BecomeASponsor />} />
         {/* Not in nav — link directly to confirmed/prospective sponsors */}
         <Route path="sponsor-info" element={<SponsorInfo />} />
