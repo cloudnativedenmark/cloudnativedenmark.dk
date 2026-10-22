@@ -593,9 +593,9 @@ const FloorPlan: React.FC<FloorPlanProps> = ({
                   {sponsor && (
                     <image
                       href={sponsor.logo.publicURL}
-                      x={shape.x + 1.4}
+                      x={shape.x + 1}
                       y={shape.y + 2.2}
-                      width={shape.width - 2.8}
+                      width={shape.width - 2}
                       height={shape.height - 3.4}
                       preserveAspectRatio="xMidYMid meet"
                     />

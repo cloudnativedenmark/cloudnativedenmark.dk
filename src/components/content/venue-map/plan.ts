@@ -67,7 +67,7 @@ export const plan = {
 
   // Nordlounge, Vestlounge, Mellemlounge and the toilet corridor as one outline
   floor:
-    "M 0 0 H 30 V 60 H 128 V 86 H 56 V 108 H 30 V 100.5 H 1 V 96.5 H 30 V 86 H 0 Z",
+    "M 0 0 H 30 V 60 H 128 V 86 H 58 V 108 H 30 V 100.5 H 1 V 96.5 H 30 V 86 H 0 Z",
 
   rooms: {
     "main-stage": {
@@ -119,10 +119,10 @@ export const plan = {
 
   // Venue rooms along the Vestlounge that the conference doesn't use
   closedRooms: [
-    { x: 56, y: 86, width: 10.5, height: 12 },
-    { x: 66.5, y: 86, width: 10, height: 12 },
-    { x: 76.5, y: 86, width: 11, height: 12 },
-    { x: 87.5, y: 86, width: 11.5, height: 12 },
+    { x: 58, y: 86, width: 10.5, height: 12 },
+    { x: 68.5, y: 86, width: 10, height: 12 },
+    { x: 78.5, y: 86, width: 10, height: 12 },
+    { x: 88.5, y: 86, width: 10.5, height: 12 },
   ] as Rect[],
 
   office: { x: 99, y: 86, width: 16, height: 12 } as Rect,
@@ -185,13 +185,13 @@ export const plan = {
     "6": {
       x: 30.6,
       y: 87.2,
-      width: 12,
+      width: 10.5,
       height: 8.8,
       zone: "Mellemlounge",
       size: "5x3",
     },
     // Facing stand 6 across the Mellemlounge
-    "7": { x: 46, y: 87.2, width: 9.4, height: 8.8, zone: "Mellemlounge" },
+    "7": { x: 43.6, y: 87.2, width: 13.8, height: 8.8, zone: "Mellemlounge" },
     "8": {
       x: 1.5,
       y: 44.5,
@@ -236,11 +236,11 @@ export const plan = {
 
   amenities: [
     { kind: "registration", x: 106, y: 77 },
-    { kind: "coffee", x: 60, y: 82.3 },
-    { kind: "water", x: 71.5, y: 82.3 },
-    { kind: "coffee", x: 82, y: 82.3 },
-    { kind: "lunch", x: 59, y: 76.2 },
-    { kind: "lunch", x: 82.5, y: 76.2 },
+    { kind: "coffee", x: 62, y: 82.3 },
+    { kind: "water", x: 73.5, y: 82.3 },
+    { kind: "coffee", x: 83.5, y: 82.3 },
+    { kind: "lunch", x: 61, y: 76.2 },
+    { kind: "lunch", x: 84, y: 76.2 },
     { kind: "coffee", x: 27, y: 29 },
     { kind: "coffee", x: 27, y: 37.7 },
     { kind: "water", x: 26.5, y: 51 },
@@ -261,7 +261,7 @@ export const plan = {
     { x: 66, y: 12, direction: "up" },
     { x: 80.5, y: 12, direction: "up" },
     { x: 96, y: 12, direction: "up" },
-    { x: 43.5, y: 108, direction: "down" },
+    { x: 44.6, y: 108, direction: "down" },
   ] as Exit[],
 
   entrance: {
@@ -276,7 +276,7 @@ export const plan = {
     { text: "VESTLOUNGE", x: 112, y: 66, angle: 0, compactAngle: -90 },
     {
       text: "MELLEMLOUNGE",
-      x: 43,
+      x: 44,
       y: 104.2,
       angle: 0,
       compactAngle: -90,
