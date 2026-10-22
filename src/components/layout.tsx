@@ -9,10 +9,6 @@ const allMenuLinks = [
   //   name: "Talk Archive",
   //   link: "/talk-archive",
   // },
-  // {
-  //   name: "Venue Plan",
-  //   link: "/venue-plan",
-  // },
   {
     name: "Schedule",
     link: "/schedule",
@@ -24,6 +20,10 @@ const allMenuLinks = [
   {
     name: "Venue",
     link: "/venue",
+  },
+  {
+    name: "Conference Map",
+    link: "/conference-map",
   },
   {
     name: "Become a Sponsor",

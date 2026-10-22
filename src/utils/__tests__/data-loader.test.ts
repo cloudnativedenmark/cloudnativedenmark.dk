@@ -6,7 +6,7 @@ function processSponsorYaml(
   sponsorYaml: Partial<SponsorYamlData>,
   category: string,
   imageUrlMap: Record<string, string>
-): SponsorData | null {
+): Omit<SponsorData, "id"> | null {
   // Skip disabled sponsors
   if (!sponsorYaml.enabled) {
     return null

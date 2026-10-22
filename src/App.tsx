@@ -1,5 +1,5 @@
 import React from "react"
-import { Routes, Route } from "react-router-dom"
+import { Routes, Route, Navigate } from "react-router-dom"
 import Layout from "./components/layout"
 import Home from "./pages/index"
 import ConvinceYourBoss from "./pages/convince-your-boss"
@@ -10,7 +10,7 @@ import Speakers from "./pages/speakers"
 import TalkArchive from "./pages/talk-archive"
 import Team from "./pages/team"
 import Venue from "./pages/venue"
-import VenuePlan from "./pages/venue-plan"
+import VenueMap from "./pages/venue-map"
 import BecomeASponsor from "./pages/become-a-sponsor"
 import SponsorInfo from "./pages/sponsor-info"
 import NotFound from "./pages/404"
@@ -35,7 +35,14 @@ function App() {
         <Route path="talk-archive" element={<TalkArchive />} />
         <Route path="team" element={<Team />} />
         <Route path="venue" element={<Venue />} />
-        <Route path="venue-plan" element={<VenuePlan />} />
+        <Route path="conference-map" element={<VenueMap />} />
+        {["venue-plan", "venue-map"].map((path) => (
+          <Route
+            key={path}
+            path={path}
+            element={<Navigate to="/conference-map" replace />}
+          />
+        ))}
         <Route path="become-a-sponsor" element={<BecomeASponsor />} />
         {/* Not in nav — link directly to confirmed/prospective sponsors */}
         <Route path="sponsor-info" element={<SponsorInfo />} />
