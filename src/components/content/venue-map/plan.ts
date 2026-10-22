@@ -36,6 +36,8 @@ export type Zone = "Vestlounge" | "Mellemlounge" | "Nordlounge"
 
 export interface StandShape extends Rect {
   zone: Zone
+  /** Stand size on Scandic's plan, in metres */
+  size: "5x3" | "4x2" | "3x2"
 }
 
 export type AmenityKind = "coffee" | "water" | "lunch" | "registration"
@@ -55,13 +57,16 @@ export interface ZoneLabel extends Point {
   angle: number
   /** Rotation on the upright mobile map */
   compactAngle: number
+  /** Font size on the mobile map, where the default doesn't fit */
+  compactSize?: number
 }
 
 export const plan = {
-  view: { x: -4, y: -4, width: 146, height: 114 } as Rect,
+  view: { x: -4, y: -4, width: 146, height: 115 } as Rect,
 
-  // Nordlounge, Vestlounge and Mellemlounge as one outline
-  floor: "M 0 0 H 30 V 60 H 128 V 86 H 42 V 105 H 16 V 86 H 0 Z",
+  // Nordlounge, Vestlounge, Mellemlounge and the toilet corridor as one outline
+  floor:
+    "M 0 0 H 30 V 60 H 128 V 86 H 50 V 108 H 30 V 100.5 H 1 V 96.5 H 30 V 86 H 0 Z",
 
   rooms: {
     "main-stage": {
@@ -75,8 +80,8 @@ export const plan = {
         { x: 36.5, y: 38.5, width: 34, height: 19 },
       ],
       doors: [
-        { x: 49.5, y: 60, wall: "horizontal" },
-        { x: 67.5, y: 60, wall: "horizontal" },
+        { x: 36.3, y: 60, wall: "horizontal" },
+        { x: 67, y: 60, wall: "horizontal" },
         { x: 30, y: 16, wall: "vertical" },
         { x: 30, y: 56, wall: "vertical" },
       ],
@@ -92,7 +97,10 @@ export const plan = {
         { x: 79.5, y: 14.5, width: 21.5, height: 19 },
         { x: 79.5, y: 38.5, width: 21.5, height: 19 },
       ],
-      doors: [{ x: 85.5, y: 60, wall: "horizontal" }],
+      doors: [
+        { x: 81.3, y: 60, wall: "horizontal" },
+        { x: 96.6, y: 60, wall: "horizontal" },
+      ],
       label: { x: 90.25, y: 36 },
     },
     workshop: {
@@ -101,66 +109,154 @@ export const plan = {
       width: 13,
       height: 26,
       seats: [{ x: 107, y: 40, width: 9, height: 17 }],
-      doors: [{ x: 111.5, y: 60, wall: "horizontal" }],
+      doors: [{ x: 107.5, y: 60, wall: "horizontal" }],
       label: { x: 111.5, y: 45 },
     },
   } as Record<string, RoomShape>,
 
   // Venue rooms along the Vestlounge that the conference doesn't use
   closedRooms: [
-    { x: 42, y: 86, width: 15, height: 12 },
-    { x: 57, y: 86, width: 15, height: 12 },
-    { x: 72, y: 86, width: 15, height: 12 },
+    { x: 50, y: 86, width: 12, height: 12 },
+    { x: 62, y: 86, width: 12.5, height: 12 },
+    { x: 74.5, y: 86, width: 13, height: 12 },
+    { x: 87.5, y: 86, width: 11.5, height: 12 },
   ] as Rect[],
 
-  office: { x: 88, y: 86, width: 13, height: 12 } as Rect,
+  office: { x: 99, y: 86, width: 16, height: 12 } as Rect,
 
+  // Behind the wall at the end of the Vestlounge, reached through the
+  // Mellemlounge and a short corridor
   toilets: {
-    x: 1.5,
-    y: 86,
-    width: 13,
-    height: 12.5,
-    door: { x: 8, y: 86, wall: "horizontal" } as Door,
+    rooms: [
+      { x: 1, y: 86, width: 14, height: 10.5 },
+      { x: 15, y: 86, width: 15, height: 10.5 },
+    ] as Rect[],
+    doors: [
+      { x: 8, y: 96.5, wall: "horizontal" },
+      { x: 22.5, y: 96.5, wall: "horizontal" },
+    ] as Door[],
+    label: { x: 15.5, y: 98.5 } as Point,
   },
 
   stands: {
-    "1": { x: 87, y: 61.5, width: 15, height: 10, zone: "Vestlounge" },
-    "2": { x: 69, y: 61.5, width: 15, height: 10, zone: "Vestlounge" },
-    "3": { x: 51, y: 61.5, width: 15, height: 10, zone: "Vestlounge" },
-    "4": { x: 33, y: 61.5, width: 15, height: 10, zone: "Vestlounge" },
-    "5": { x: 2.5, y: 68, width: 20, height: 13, zone: "Vestlounge" },
-    "6": { x: 21.5, y: 88.5, width: 16, height: 11, zone: "Mellemlounge" },
-    "7": { x: 1.5, y: 44, width: 15, height: 10, zone: "Nordlounge" },
-    "8": { x: 1.5, y: 30.5, width: 15, height: 10, zone: "Nordlounge" },
-    "9": { x: 1.5, y: 17, width: 15, height: 10, zone: "Nordlounge" },
-    "10": { x: 15.5, y: 1.5, width: 13, height: 9, zone: "Nordlounge" },
-    "11": { x: 1.5, y: 1.5, width: 13, height: 9, zone: "Nordlounge" },
+    "1": {
+      x: 87,
+      y: 61.5,
+      width: 15,
+      height: 10,
+      zone: "Vestlounge",
+      size: "4x2",
+    },
+    "2": {
+      x: 69,
+      y: 61.5,
+      width: 15,
+      height: 10,
+      zone: "Vestlounge",
+      size: "4x2",
+    },
+    "3": {
+      x: 51,
+      y: 61.5,
+      width: 15,
+      height: 10,
+      zone: "Vestlounge",
+      size: "4x2",
+    },
+    "4": {
+      x: 33,
+      y: 61.5,
+      width: 15,
+      height: 10,
+      zone: "Vestlounge",
+      size: "4x2",
+    },
+    "5": {
+      x: 6.5,
+      y: 72.5,
+      width: 20,
+      height: 13,
+      zone: "Vestlounge",
+      size: "5x3",
+    },
+    "6": {
+      x: 30.6,
+      y: 87.2,
+      width: 13,
+      height: 8.8,
+      zone: "Mellemlounge",
+      size: "5x3",
+    },
+    "7": {
+      x: 1.5,
+      y: 44.5,
+      width: 14,
+      height: 10,
+      zone: "Nordlounge",
+      size: "3x2",
+    },
+    "8": {
+      x: 1.5,
+      y: 31,
+      width: 14,
+      height: 10,
+      zone: "Nordlounge",
+      size: "3x2",
+    },
+    "9": {
+      x: 1.5,
+      y: 15.5,
+      width: 14,
+      height: 10,
+      zone: "Nordlounge",
+      size: "3x2",
+    },
+    "10": {
+      x: 15.5,
+      y: 1.5,
+      width: 13,
+      height: 9,
+      zone: "Nordlounge",
+      size: "3x2",
+    },
+    "11": {
+      x: 1.5,
+      y: 1.5,
+      width: 13,
+      height: 9,
+      zone: "Nordlounge",
+      size: "3x2",
+    },
   } as Record<string, StandShape>,
 
   amenities: [
-    { kind: "registration", x: 95, y: 81.5 },
-    { kind: "coffee", x: 47.5, y: 82.3 },
-    { kind: "water", x: 63.5, y: 82.3 },
-    { kind: "coffee", x: 79, y: 82.3 },
-    { kind: "lunch", x: 51, y: 76.5 },
-    { kind: "lunch", x: 77, y: 76.5 },
-    { kind: "coffee", x: 26, y: 29.5 },
-    { kind: "coffee", x: 26, y: 40 },
-    { kind: "water", x: 26, y: 51.5 },
-    { kind: "lunch", x: 21, y: 34.5 },
-    { kind: "lunch", x: 21, y: 47 },
+    { kind: "registration", x: 106, y: 77 },
+    { kind: "coffee", x: 53, y: 82.3 },
+    { kind: "water", x: 66.5, y: 82.3 },
+    { kind: "coffee", x: 80.5, y: 82.3 },
+    { kind: "lunch", x: 52, y: 76.2 },
+    { kind: "lunch", x: 80, y: 76.2 },
+    { kind: "coffee", x: 27, y: 29 },
+    { kind: "coffee", x: 27, y: 37.7 },
+    { kind: "water", x: 26.5, y: 51 },
+    { kind: "lunch", x: 20, y: 34.8 },
+    { kind: "lunch", x: 20, y: 55.5 },
   ] as Amenity[],
 
-  // Outside doors on Scandic's stand plan
+  // Outside doors on Scandic's stand plan: the Nordlounge's glass wall, the
+  // Mellemlounge's double doors and the halls' back doors to the rear corridor
   exits: [
-    { x: 0, y: 13.75, direction: "left" },
-    { x: 0, y: 28.75, direction: "left" },
-    { x: 0, y: 42.25, direction: "left" },
-    { x: 0, y: 64, direction: "left" },
-    { x: 41, y: 12, direction: "up" },
-    { x: 62, y: 12, direction: "up" },
-    { x: 88, y: 12, direction: "up" },
-    { x: 40.5, y: 105, direction: "down" },
+    { x: 0, y: 13.2, direction: "left" },
+    { x: 0, y: 28.5, direction: "left" },
+    { x: 0, y: 42.75, direction: "left" },
+    { x: 0, y: 56.6, direction: "left" },
+    { x: 0, y: 68.8, direction: "left" },
+    { x: 36.3, y: 12, direction: "up" },
+    { x: 52, y: 12, direction: "up" },
+    { x: 66, y: 12, direction: "up" },
+    { x: 80.5, y: 12, direction: "up" },
+    { x: 96, y: 12, direction: "up" },
+    { x: 40.4, y: 108, direction: "down" },
   ] as Exit[],
 
   entrance: {
@@ -171,8 +267,15 @@ export const plan = {
   },
 
   labels: [
-    { text: "NORDLOUNGE", x: 21, y: 21.5, angle: -90, compactAngle: 0 },
-    { text: "VESTLOUNGE", x: 115, y: 66.5, angle: 0, compactAngle: -90 },
-    { text: "MELLEMLOUNGE", x: 27.5, y: 101.8, angle: 0, compactAngle: -90 },
+    { text: "NORDLOUNGE", x: 21, y: 21, angle: -90, compactAngle: 0 },
+    { text: "VESTLOUNGE", x: 112, y: 66, angle: 0, compactAngle: -90 },
+    {
+      text: "MELLEMLOUNGE",
+      x: 47,
+      y: 97.5,
+      angle: -90,
+      compactAngle: 0,
+      compactSize: 2.1,
+    },
   ] as ZoneLabel[],
 }

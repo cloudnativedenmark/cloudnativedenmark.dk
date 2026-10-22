@@ -48,6 +48,26 @@ describe("venue map config", () => {
     )
   })
 
+  it("puts every gold sponsor on a 4x2 m stand", () => {
+    const gold = assignedStands.filter((stand) =>
+      stand.sponsor?.startsWith("gold/")
+    )
+
+    expect(gold.length).toBeGreaterThan(0)
+    gold.forEach((stand) => expect(plan.stands[stand.id].size).toBe("4x2"))
+  })
+
+  it("gives the best 5x3 m stand to platinum and the other to bronze", () => {
+    const large = venueMap.stands
+      .filter((stand) => plan.stands[stand.id].size === "5x3")
+      .sort((a, b) => Number(a.id) - Number(b.id))
+
+    expect(large.map((stand) => stand.sponsor?.split("/")[0])).toEqual([
+      "platinum",
+      "bronze",
+    ])
+  })
+
   it("has a drawn position for every room", () => {
     for (const room of venueMap.rooms) {
       expect(plan.rooms[room.id]).toBeDefined()

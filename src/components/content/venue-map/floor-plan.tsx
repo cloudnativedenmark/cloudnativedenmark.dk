@@ -215,22 +215,18 @@ const FloorPlan: React.FC<FloorPlanProps> = ({
 
         <g>
           <title>Toilets</title>
-          <rect
-            x={plan.toilets.x}
-            y={plan.toilets.y}
-            width={plan.toilets.width}
-            height={plan.toilets.height}
-            fill={colors.room}
-            stroke={colors.midnight}
-            strokeWidth={0.3}
-          />
-          <rect {...doorRect(plan.toilets.door)} fill={colors.floor} />
-          {(() => {
-            const cx = plan.toilets.x + plan.toilets.width / 2
-            const cy = plan.toilets.y + (compact ? 6.25 : 5.4)
+          {plan.toilets.rooms.map((room) => {
+            const cx = room.x + room.width / 2
+            const cy = room.y + room.height / 2
             const r = size.amenity * 1.05
             return (
-              <>
+              <g key={room.x}>
+                <rect
+                  {...room}
+                  fill={colors.room}
+                  stroke={colors.midnight}
+                  strokeWidth={0.3}
+                />
                 <circle
                   cx={cx}
                   cy={cy}
@@ -252,23 +248,27 @@ const FloorPlan: React.FC<FloorPlanProps> = ({
                 >
                   WC
                 </text>
-                {!compact && (
-                  <text
-                    x={cx}
-                    y={cy + 4.6}
-                    textAnchor="middle"
-                    fill={colors.slate}
-                    style={{ fontFamily: fonts.mono }}
-                    fontSize={1.15}
-                    fontWeight={700}
-                    letterSpacing={0.12}
-                  >
-                    TOILETS
-                  </text>
-                )}
-              </>
+              </g>
             )
-          })()}
+          })}
+          {plan.toilets.doors.map((door) => (
+            <rect key={door.x} {...doorRect(door)} fill={colors.floor} />
+          ))}
+          {!compact && (
+            <text
+              x={plan.toilets.label.x}
+              y={plan.toilets.label.y}
+              textAnchor="middle"
+              dominantBaseline="central"
+              fill={colors.slate}
+              style={{ fontFamily: fonts.mono }}
+              fontSize={1.15}
+              fontWeight={700}
+              letterSpacing={0.3}
+            >
+              TOILETS
+            </text>
+          )}
         </g>
 
         {Object.entries(plan.rooms).map(([id, room]) => {
@@ -355,23 +355,28 @@ const FloorPlan: React.FC<FloorPlanProps> = ({
           )
         })}
 
-        {plan.labels.map((label) => (
-          <text
-            key={label.text}
-            x={label.x}
-            y={label.y}
-            transform={`rotate(${compact ? label.compactAngle - 90 : label.angle} ${label.x} ${label.y})`}
-            textAnchor="middle"
-            dominantBaseline="central"
-            fill={colors.ash}
-            style={{ fontFamily: fonts.mono }}
-            fontSize={size.zone}
-            fontWeight={600}
-            letterSpacing={size.zone * (compact ? 0.14 : 0.25)}
-          >
-            {label.text}
-          </text>
-        ))}
+        {plan.labels.map((label) => {
+          const fontSize = compact
+            ? (label.compactSize ?? size.zone)
+            : size.zone
+          return (
+            <text
+              key={label.text}
+              x={label.x}
+              y={label.y}
+              transform={`rotate(${compact ? label.compactAngle - 90 : label.angle} ${label.x} ${label.y})`}
+              textAnchor="middle"
+              dominantBaseline="central"
+              fill={colors.ash}
+              style={{ fontFamily: fonts.mono }}
+              fontSize={fontSize}
+              fontWeight={600}
+              letterSpacing={fontSize * (compact ? 0.14 : 0.25)}
+            >
+              {label.text}
+            </text>
+          )
+        })}
 
         {plan.amenities.map((amenity) => {
           const style = amenityStyles[amenity.kind]
