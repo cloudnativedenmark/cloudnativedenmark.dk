@@ -71,7 +71,7 @@ const Legend: React.FC<{ tiers: string[] }> = ({ tiers }) => {
           className="h-3.5 w-1.5 rounded-sm"
           style={{ background: colors.red }}
         />
-        Stage
+        Stage / screen
       </li>
       <li className="flex items-center gap-2">
         <LegendMarker color={colors.red}>

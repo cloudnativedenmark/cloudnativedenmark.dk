@@ -26,7 +26,8 @@ export interface Door extends Point {
 }
 
 export interface RoomShape extends Rect {
-  stage?: Rect
+  /** Stage or screen, labelled "STAGE" unless given a label */
+  stage?: Rect & { label?: string }
   seats: Rect[]
   doors: Door[]
   label: Point
@@ -36,8 +37,8 @@ export type Zone = "Vestlounge" | "Mellemlounge" | "Nordlounge"
 
 export interface StandShape extends Rect {
   zone: Zone
-  /** Stand size on Scandic's plan, in metres */
-  size: "5x3" | "4x2" | "3x2"
+  /** Stand size on Scandic's plan, in metres; absent for stands added since */
+  size?: "5x3" | "4x2" | "3x2"
 }
 
 export type AmenityKind = "coffee" | "water" | "lunch" | "registration"
@@ -66,7 +67,7 @@ export const plan = {
 
   // Nordlounge, Vestlounge, Mellemlounge and the toilet corridor as one outline
   floor:
-    "M 0 0 H 30 V 60 H 128 V 86 H 50 V 108 H 30 V 100.5 H 1 V 96.5 H 30 V 86 H 0 Z",
+    "M 0 0 H 30 V 60 H 128 V 86 H 56 V 108 H 30 V 100.5 H 1 V 96.5 H 30 V 86 H 0 Z",
 
   rooms: {
     "main-stage": {
@@ -108,17 +109,19 @@ export const plan = {
       y: 34,
       width: 13,
       height: 26,
-      seats: [{ x: 107, y: 40, width: 9, height: 17 }],
+      // Screen on the short wall opposite the door
+      stage: { x: 106.5, y: 34.7, width: 10, height: 1.4, label: "SCREEN" },
+      seats: [{ x: 107, y: 38, width: 9, height: 19.5 }],
       doors: [{ x: 107.5, y: 60, wall: "horizontal" }],
-      label: { x: 111.5, y: 45 },
+      label: { x: 111.5, y: 47 },
     },
   } as Record<string, RoomShape>,
 
   // Venue rooms along the Vestlounge that the conference doesn't use
   closedRooms: [
-    { x: 50, y: 86, width: 12, height: 12 },
-    { x: 62, y: 86, width: 12.5, height: 12 },
-    { x: 74.5, y: 86, width: 13, height: 12 },
+    { x: 56, y: 86, width: 10.5, height: 12 },
+    { x: 66.5, y: 86, width: 10, height: 12 },
+    { x: 76.5, y: 86, width: 11, height: 12 },
     { x: 87.5, y: 86, width: 11.5, height: 12 },
   ] as Rect[],
 
@@ -182,12 +185,14 @@ export const plan = {
     "6": {
       x: 30.6,
       y: 87.2,
-      width: 13,
+      width: 12,
       height: 8.8,
       zone: "Mellemlounge",
       size: "5x3",
     },
-    "7": {
+    // Facing stand 6 across the Mellemlounge
+    "7": { x: 46, y: 87.2, width: 9.4, height: 8.8, zone: "Mellemlounge" },
+    "8": {
       x: 1.5,
       y: 44.5,
       width: 14,
@@ -195,7 +200,7 @@ export const plan = {
       zone: "Nordlounge",
       size: "3x2",
     },
-    "8": {
+    "9": {
       x: 1.5,
       y: 31,
       width: 14,
@@ -203,7 +208,7 @@ export const plan = {
       zone: "Nordlounge",
       size: "3x2",
     },
-    "9": {
+    "10": {
       x: 1.5,
       y: 15.5,
       width: 14,
@@ -211,7 +216,7 @@ export const plan = {
       zone: "Nordlounge",
       size: "3x2",
     },
-    "10": {
+    "11": {
       x: 15.5,
       y: 1.5,
       width: 13,
@@ -219,7 +224,7 @@ export const plan = {
       zone: "Nordlounge",
       size: "3x2",
     },
-    "11": {
+    "12": {
       x: 1.5,
       y: 1.5,
       width: 13,
@@ -231,11 +236,11 @@ export const plan = {
 
   amenities: [
     { kind: "registration", x: 106, y: 77 },
-    { kind: "coffee", x: 53, y: 82.3 },
-    { kind: "water", x: 66.5, y: 82.3 },
-    { kind: "coffee", x: 80.5, y: 82.3 },
-    { kind: "lunch", x: 52, y: 76.2 },
-    { kind: "lunch", x: 80, y: 76.2 },
+    { kind: "coffee", x: 60, y: 82.3 },
+    { kind: "water", x: 71.5, y: 82.3 },
+    { kind: "coffee", x: 82, y: 82.3 },
+    { kind: "lunch", x: 59, y: 76.2 },
+    { kind: "lunch", x: 82.5, y: 76.2 },
     { kind: "coffee", x: 27, y: 29 },
     { kind: "coffee", x: 27, y: 37.7 },
     { kind: "water", x: 26.5, y: 51 },
@@ -256,7 +261,7 @@ export const plan = {
     { x: 66, y: 12, direction: "up" },
     { x: 80.5, y: 12, direction: "up" },
     { x: 96, y: 12, direction: "up" },
-    { x: 40.4, y: 108, direction: "down" },
+    { x: 43.5, y: 108, direction: "down" },
   ] as Exit[],
 
   entrance: {
@@ -271,10 +276,10 @@ export const plan = {
     { text: "VESTLOUNGE", x: 112, y: 66, angle: 0, compactAngle: -90 },
     {
       text: "MELLEMLOUNGE",
-      x: 47,
-      y: 97.5,
-      angle: -90,
-      compactAngle: 0,
+      x: 43,
+      y: 104.2,
+      angle: 0,
+      compactAngle: -90,
       compactSize: 2.1,
     },
   ] as ZoneLabel[],

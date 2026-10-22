@@ -68,6 +68,21 @@ describe("venue map config", () => {
     ])
   })
 
+  it("places Hack Your Future opposite EDB in the Mellemlounge", () => {
+    const standOf = (sponsor: string) => {
+      const stand = venueMap.stands.find((s) => s.sponsor === sponsor)
+      expect(stand).toBeDefined()
+      return plan.stands[stand!.id]
+    }
+    const edb = standOf("bronze/edb")
+    const hyf = standOf("partner/hackyourfuture")
+
+    expect(hyf.zone).toBe("Mellemlounge")
+    expect(hyf.x).toBeGreaterThan(edb.x + edb.width)
+    expect(hyf.y).toBeLessThan(edb.y + edb.height)
+    expect(hyf.y + hyf.height).toBeGreaterThan(edb.y)
+  })
+
   it("has a drawn position for every room", () => {
     for (const room of venueMap.rooms) {
       expect(plan.rooms[room.id]).toBeDefined()

@@ -296,22 +296,34 @@ const FloorPlan: React.FC<FloorPlanProps> = ({
               {room.stage && (
                 <>
                   <rect {...room.stage} rx={0.3} fill={colors.red} />
-                  {!compact && (
-                    <text
-                      x={room.stage.x + room.stage.width / 2}
-                      y={room.stage.y + room.stage.height / 2}
-                      transform={`rotate(-90 ${room.stage.x + room.stage.width / 2} ${room.stage.y + room.stage.height / 2})`}
-                      textAnchor="middle"
-                      dominantBaseline="central"
-                      fill="#ffffff"
-                      style={{ fontFamily: fonts.mono }}
-                      fontSize={1}
-                      fontWeight={700}
-                      letterSpacing={0.5}
-                    >
-                      STAGE
-                    </text>
-                  )}
+                  {!compact &&
+                    (() => {
+                      const { stage } = room
+                      const cx = stage.x + stage.width / 2
+                      const cy = stage.y + stage.height / 2
+                      const vertical = stage.height > stage.width
+                      return (
+                        <text
+                          x={cx}
+                          y={cy}
+                          transform={
+                            vertical ? `rotate(-90 ${cx} ${cy})` : undefined
+                          }
+                          textAnchor="middle"
+                          dominantBaseline="central"
+                          fill="#ffffff"
+                          style={{ fontFamily: fonts.mono }}
+                          fontSize={Math.min(
+                            1,
+                            Math.min(stage.width, stage.height) * 0.65
+                          )}
+                          fontWeight={700}
+                          letterSpacing={0.5}
+                        >
+                          {stage.label ?? "STAGE"}
+                        </text>
+                      )
+                    })()}
                 </>
               )}
               {room.doors.map((door) => (

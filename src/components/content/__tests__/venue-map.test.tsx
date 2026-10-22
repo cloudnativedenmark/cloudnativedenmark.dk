@@ -77,6 +77,12 @@ describe("VenueMap", () => {
     )
   })
 
+  it("shows the screen in the workshop room", () => {
+    render(<VenueMap config={config} sponsors={sponsors} />)
+
+    expect(screen.getByText("SCREEN")).toBeInTheDocument()
+  })
+
   it("lists exhibitors in stand order with their tier", () => {
     render(<VenueMap config={config} sponsors={sponsors} />)
 
