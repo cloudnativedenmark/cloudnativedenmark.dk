@@ -1,6 +1,7 @@
 import React, { useId, useRef, useState } from "react"
 import type { Stand, VenueMapConfig } from "../../../config/venue-map"
 import type { SponsorData } from "../../../utils/data-loader"
+import { mapPdf, mapSvg, saveFile } from "./download"
 import FloorPlan from "./floor-plan"
 import { GlyphIcon } from "./icons"
 import { plan, type AmenityKind, type Zone } from "./plan"
@@ -159,6 +160,53 @@ interface VenueMapProps {
   sponsors: Record<string, SponsorData>
 }
 
+type DownloadFormat = "svg" | "pdf"
+
+const Downloads: React.FC<VenueMapProps> = ({ config, sponsors }) => {
+  const [preparing, setPreparing] = useState<DownloadFormat | null>(null)
+  const [failed, setFailed] = useState(false)
+
+  const download = async (format: DownloadFormat) => {
+    setPreparing(format)
+    setFailed(false)
+    try {
+      const file =
+        format === "svg"
+          ? new Blob([await mapSvg(config, sponsors, 1460)], {
+              type: "image/svg+xml",
+            })
+          : await mapPdf(config, sponsors)
+      saveFile(file, `cloud-native-denmark-2026-conference-map.${format}`)
+    } catch {
+      setFailed(true)
+    } finally {
+      setPreparing(null)
+    }
+  }
+
+  return (
+    <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+      <span className="text-cnd-slate">Download the map:</span>
+      {(["svg", "pdf"] as const).map((format) => (
+        <button
+          key={format}
+          type="button"
+          disabled={preparing !== null}
+          onClick={() => download(format)}
+          className="font-semibold text-cnd-red hover:text-cnd-coral disabled:text-cnd-ash"
+        >
+          {preparing === format ? "Preparing…" : `${format.toUpperCase()} ↓`}
+        </button>
+      ))}
+      {failed && (
+        <span role="alert" className="text-cnd-ash">
+          Couldn&apos;t create the file. Please try again.
+        </span>
+      )}
+    </div>
+  )
+}
+
 const VenueMap: React.FC<VenueMapProps> = ({ config, sponsors }) => {
   const [hovered, setHovered] = useState<string | null>(null)
   const [selected, setSelected] = useState<string | null>(null)
@@ -250,6 +298,7 @@ const VenueMap: React.FC<VenueMapProps> = ({ config, sponsors }) => {
             Schematic, not to scale. Stands are numbered in the order you pass
             them from the entrance.
           </p>
+          <Downloads config={config} sponsors={sponsors} />
         </div>
       </div>
 
