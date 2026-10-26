@@ -1,8 +1,17 @@
 import React from "react"
-import { fireEvent, render, screen, within } from "@testing-library/react"
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react"
 import VenueMap from "../venue-map"
 import type { VenueMapConfig } from "../../../config/venue-map"
 import type { SponsorData } from "../../../utils/data-loader"
+import { mapPdf, mapSvg, saveFile } from "../venue-map/download"
+
+jest.mock("../venue-map/download")
 
 const config: VenueMapConfig = {
   rooms: [
@@ -144,5 +153,32 @@ describe("VenueMap", () => {
     fireEvent.click(stand)
 
     expect(screen.getByRole("status")).not.toHaveTextContent("Acme")
+  })
+
+  it("downloads the map as an SVG file", async () => {
+    jest.mocked(mapSvg).mockResolvedValue("<svg/>")
+    render(<VenueMap config={config} sponsors={sponsors} />)
+
+    fireEvent.click(screen.getByRole("button", { name: "SVG ↓" }))
+
+    await waitFor(() =>
+      expect(saveFile).toHaveBeenCalledWith(
+        expect.any(Blob),
+        "cloud-native-denmark-2026-conference-map.svg"
+      )
+    )
+    expect(mapSvg).toHaveBeenCalledWith(config, sponsors, 1460)
+  })
+
+  it("says so when the PDF can't be made", async () => {
+    jest.mocked(mapPdf).mockRejectedValue(new Error("no canvas"))
+    render(<VenueMap config={config} sponsors={sponsors} />)
+
+    fireEvent.click(screen.getByRole("button", { name: "PDF ↓" }))
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Couldn't create the file"
+    )
+    expect(screen.getByRole("button", { name: "PDF ↓" })).toBeEnabled()
   })
 })
