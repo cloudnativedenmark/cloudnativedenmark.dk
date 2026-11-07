@@ -28,16 +28,6 @@ const IndexPage: React.FC = () => {
   const sec = () => ++_sec
   const pad = (n: number) => String(n).padStart(2, "0")
 
-  const scrollToTicketRates = () => {
-    const element = document.getElementById("ticket-rates")
-    if (element) {
-      const headerOffset = 70
-      const elementPosition = element.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.scrollY - headerOffset
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" })
-    }
-  }
-
   return (
     <>
       <SEOHead title="Cloud Native Denmark 2026" pathname={location.pathname} />
@@ -62,9 +52,8 @@ const IndexPage: React.FC = () => {
         description="Two days in Copenhagen with the platform engineers, SREs, and architects shipping the Nordics' most demanding cloud native systems to production."
         actions={[
           {
-            text: "Ticket rates →",
-            onClick: scrollToTicketRates,
-            variant: "primary",
+            text: "Sold out",
+            disabled: true,
           },
           ...(features.scheduleAndSpeakers
             ? [

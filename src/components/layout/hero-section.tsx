@@ -9,6 +9,7 @@ interface HeroAction {
   isExternal?: boolean
   variant?: "primary" | "secondary" | "ghost" | "light" | "midnight"
   onClick?: () => void
+  disabled?: boolean
 }
 
 interface HeroSectionProps {
@@ -53,6 +54,13 @@ interface HeroSectionProps {
 }
 
 const renderAction = (action: HeroAction, index: number) => {
+  if (action.disabled) {
+    return (
+      <Button key={index} disabled>
+        {action.text}
+      </Button>
+    )
+  }
   const button = (
     <Button variant={action.variant ?? "primary"} onClick={action.onClick}>
       {action.text}
