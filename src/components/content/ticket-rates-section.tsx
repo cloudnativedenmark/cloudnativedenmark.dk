@@ -29,13 +29,14 @@ const ticketTiers: TicketTier[] = [
   {
     name: "Standard",
     price: 1999,
-    sellingFast: true,
+    soldOut: true,
     availableUntil: new Date("2026-11-10T23:45:00+01:00"),
     displayDate: "Through Nov 10",
   },
   {
     name: "Late Bird",
     price: 2499,
+    soldOut: true,
     availableUntil: new Date("2026-11-20"),
     displayDate: "From Nov 11",
   },
@@ -48,7 +49,7 @@ const getTierStatus = (
   index: number,
   activeTierIndex: number
 ): TierStatus => {
-  if (index < activeTierIndex) return "expired"
+  if (activeTierIndex === -1 || index < activeTierIndex) return "expired"
   if (index === activeTierIndex) return "active"
   return "upcoming"
 }
@@ -206,17 +207,15 @@ const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({
                 letterSpacing: "-0.035em",
               }}
             >
-              Book early.
-              <br />
-              Pay less.
+              Sold out.
             </h2>
           </div>
           <p
             className="mt-4 max-w-md text-cnd-slate md:mt-0 md:text-right"
             style={{ fontSize: 16, lineHeight: 1.55 }}
           >
-            Four tiers, sliding price, capped Blind Bird seats. The earlier you
-            commit, the better the deal — and the schedule rewards you for it.
+            Cloud Native Denmark 2026 is completely sold out. Late Bird tickets
+            will not be released. Thank you — see you in Copenhagen.
           </p>
         </div>
 
@@ -240,18 +239,11 @@ const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({
 
         <p className="mt-8 text-center text-sm italic text-cnd-ash">
           Visible prices include 25% VAT. Additional Ticketbutler service fees
-          apply at checkout. Blind Bird availability is capped at 100 tickets,
-          and may be limited given early release of the conference schedule.
+          apply at checkout.
         </p>
 
         <div className="mt-10 flex justify-center">
-          <a
-            href="https://cloudnativedenmark.ticketbutler.io/da/e/cloud-native-denmark-26/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button>Buy tickets →</Button>
-          </a>
+          <Button disabled>Sold out</Button>
         </div>
 
         <aside

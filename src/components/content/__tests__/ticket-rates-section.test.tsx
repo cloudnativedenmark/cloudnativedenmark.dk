@@ -10,7 +10,7 @@ describe("TicketRatesSection", () => {
     jest.useRealTimers()
   })
 
-  it("shows a short raffle notice below the purchase link", () => {
+  it("shows a short raffle notice below the sold out button", () => {
     render(<TicketRatesSection sectionNumber={4} id="ticket-rates" />)
 
     const notice = screen.getByRole("complementary", {
@@ -21,8 +21,8 @@ describe("TicketRatesSection", () => {
     ).toBeInTheDocument()
     expect(document.getElementById("ticket-rates")).toContainElement(notice)
 
-    const purchaseLink = screen.getByRole("link", { name: "Buy tickets →" })
-    expect(purchaseLink.compareDocumentPosition(notice)).toBe(
+    const soldOut = screen.getByRole("button", { name: "Sold out" })
+    expect(soldOut.compareDocumentPosition(notice)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING
     )
   })
@@ -47,24 +47,19 @@ describe("TicketRatesSection", () => {
     ).toBeInTheDocument()
   })
 
-  it("flags the active Standard tier as selling out fast", () => {
+  it("marks every tier as sold out with nothing on sale", () => {
     jest.useFakeTimers()
-    jest.setSystemTime(new Date("2026-10-22T12:00:00Z"))
+    jest.setSystemTime(new Date("2026-11-07T12:00:00Z"))
 
     render(<TicketRatesSection sectionNumber={4} />)
 
-    const badge = screen.getByText("SELLING OUT FAST")
-    expect(
-      within(badge.parentElement as HTMLElement).getByText("Standard")
-    ).toBeInTheDocument()
-  })
-
-  it("drops the badge once Standard is no longer on sale", () => {
-    jest.useFakeTimers()
-    jest.setSystemTime(new Date("2026-11-12T12:00:00Z"))
-
-    render(<TicketRatesSection sectionNumber={4} />)
-
+    expect(screen.queryByText("ON SALE")).not.toBeInTheDocument()
     expect(screen.queryByText("SELLING OUT FAST")).not.toBeInTheDocument()
+    expect(screen.queryByText(/UPCOMING/)).not.toBeInTheDocument()
+    expect(screen.getAllByText("SOLD OUT")).toHaveLength(3)
+    expect(screen.getByRole("button", { name: "Sold out" })).toBeDisabled()
+    expect(
+      screen.queryByRole("link", { name: "Buy tickets →" })
+    ).not.toBeInTheDocument()
   })
 })

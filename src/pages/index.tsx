@@ -154,16 +154,10 @@ const IndexPage: React.FC = () => {
               className="max-w-xl text-cnd-fog"
               style={{ fontSize: 17, lineHeight: 1.55 }}
             >
-              Two days of talks, workshops, and community — don't miss out.
+              Tickets are sold out. Thank you for an incredible response!
             </p>
             <div className="mt-2 flex flex-wrap justify-center gap-3">
-              <a
-                href="https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button>Get your ticket →</Button>
-              </a>
+              <Button disabled>Sold out</Button>
               {features.scheduleAndSpeakers && (
                 <Link to="/schedule">
                   <Button variant="ghost">Schedule →</Button>
