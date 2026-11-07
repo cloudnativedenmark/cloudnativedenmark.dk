@@ -328,42 +328,28 @@ const CodeOfConductPage: React.FC = () => {
 
           <Heading>Acknowledgements</Heading>
           <p>
-            This Code of Conduct is adapted from the{" "}
+            Adapted, with changes, from the{" "}
             <ExternalLink
               href="https://github.com/cncf/foundation/blob/main/code-of-conduct.md"
               className={linkClass}
             >
               CNCF Community Code of Conduct
             </ExternalLink>{" "}
-            v1.3, licensed under{" "}
+            v1.3 (
             <ExternalLink
               href="https://creativecommons.org/licenses/by/4.0/"
               className={linkClass}
             >
               CC BY 4.0
             </ExternalLink>
-            , which is based on the{" "}
-            <ExternalLink
-              href="https://www.contributor-covenant.org/version/2/0/code_of_conduct/"
-              className={linkClass}
-            >
-              Contributor Covenant
-            </ExternalLink>{" "}
-            v2.0. It also draws on the{" "}
+            ) and the{" "}
             <ExternalLink
               href="https://events.linuxfoundation.org/about/code-of-conduct/"
               className={linkClass}
             >
               Linux Foundation Events Code of Conduct
             </ExternalLink>
-            . We changed the text to fit Cloud Native Denmark. Thanks to{" "}
-            <ExternalLink
-              href="https://2026.cloudnativedays.no/conduct"
-              className={linkClass}
-            >
-              Cloud Native Days Norway
-            </ExternalLink>{" "}
-            for the inspiration.
+            .
           </p>
         </article>
       </Section>
