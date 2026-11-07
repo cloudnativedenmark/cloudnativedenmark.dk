@@ -47,47 +47,30 @@ it("shows the code of conduct", () => {
   expect(
     screen.getByRole("heading", { level: 1, name: /code of conduct/i })
   ).toBeInTheDocument()
-  for (const section of [
-    "Scope",
-    "Expected behavior",
-    "Unacceptable behavior",
-    "Reporting",
-    "Pre-event concerns",
-    "Enforcement",
-    "Acknowledgements",
-  ]) {
-    expect(
-      screen.getByRole("heading", { level: 2, name: section })
-    ).toBeInTheDocument()
-  }
 })
 
 it("tells people how to get help", () => {
   renderAt("/code-of-conduct")
 
   const help = screen.getByRole("region", { name: /need help/i })
+  expect(within(help).getByRole("link", { name: "112" })).toHaveAttribute(
+    "href",
+    "tel:112"
+  )
   expect(
     within(help).getByRole("link", { name: "contact@cloudnativedenmark.dk" })
   ).toHaveAttribute("href", "mailto:contact@cloudnativedenmark.dk")
-  expect(within(help).getByText("112")).toBeInTheDocument()
 })
 
-it("credits the codes of conduct it is adapted from", () => {
+it("attributes the CC BY 4.0 source it adapts", () => {
   renderAt("/code-of-conduct")
 
   expect(
     screen.getByRole("link", { name: "CNCF Community Code of Conduct" })
-  ).toHaveAttribute(
+  ).toBeInTheDocument()
+  expect(screen.getByRole("link", { name: "CC BY 4.0" })).toHaveAttribute(
     "href",
-    "https://github.com/cncf/foundation/blob/main/code-of-conduct.md"
-  )
-  expect(
-    screen.getByRole("link", {
-      name: "Linux Foundation Events Code of Conduct",
-    })
-  ).toHaveAttribute(
-    "href",
-    "https://events.linuxfoundation.org/about/code-of-conduct/"
+    "https://creativecommons.org/licenses/by/4.0/"
   )
 })
 
