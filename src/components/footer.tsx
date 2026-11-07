@@ -69,12 +69,12 @@ const Footer = () => {
             </div>
             <ul className="grid grid-cols-1 gap-3">
               <li>
-                <ExternalLink
-                  href="https://events.linuxfoundation.org/about/code-of-conduct/"
+                <Link
+                  to="/code-of-conduct"
                   className="text-sm font-semibold text-white hover:text-cnd-coral"
                 >
                   Code of Conduct
-                </ExternalLink>
+                </Link>
               </li>
               <li>
                 <Link
