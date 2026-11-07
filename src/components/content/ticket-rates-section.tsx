@@ -1,7 +1,6 @@
 import React from "react"
 import Section from "../ui/section"
 import Button from "../ui/button"
-import ExternalLink from "../ui/external-link"
 
 interface TicketTier {
   name: string
@@ -29,13 +28,14 @@ const ticketTiers: TicketTier[] = [
   {
     name: "Standard",
     price: 1999,
-    sellingFast: true,
+    soldOut: true,
     availableUntil: new Date("2026-11-10T23:45:00+01:00"),
     displayDate: "Through Nov 10",
   },
   {
     name: "Late Bird",
     price: 2499,
+    soldOut: true,
     availableUntil: new Date("2026-11-20"),
     displayDate: "From Nov 11",
   },
@@ -48,7 +48,7 @@ const getTierStatus = (
   index: number,
   activeTierIndex: number
 ): TierStatus => {
-  if (index < activeTierIndex) return "expired"
+  if (activeTierIndex === -1 || index < activeTierIndex) return "expired"
   if (index === activeTierIndex) return "active"
   return "upcoming"
 }
@@ -206,17 +206,15 @@ const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({
                 letterSpacing: "-0.035em",
               }}
             >
-              Book early.
-              <br />
-              Pay less.
+              Sold out.
             </h2>
           </div>
           <p
             className="mt-4 max-w-md text-cnd-slate md:mt-0 md:text-right"
             style={{ fontSize: 16, lineHeight: 1.55 }}
           >
-            Four tiers, sliding price, capped Blind Bird seats. The earlier you
-            commit, the better the deal — and the schedule rewards you for it.
+            Cloud Native Denmark 2026 is completely sold out. Late Bird tickets
+            will not be released. Thank you — see you in Copenhagen.
           </p>
         </div>
 
@@ -240,35 +238,12 @@ const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({
 
         <p className="mt-8 text-center text-sm italic text-cnd-ash">
           Visible prices include 25% VAT. Additional Ticketbutler service fees
-          apply at checkout. Blind Bird availability is capped at 100 tickets,
-          and may be limited given early release of the conference schedule.
+          apply at checkout.
         </p>
 
         <div className="mt-10 flex justify-center">
-          <a
-            href="https://cloudnativedenmark.ticketbutler.io/da/e/cloud-native-denmark-26/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button>Buy tickets →</Button>
-          </a>
+          <Button disabled>Sold out</Button>
         </div>
-
-        <aside
-          aria-labelledby="ticket-raffle-heading"
-          className="mx-auto mt-8 max-w-xl border-t border-cnd-fog/60 pt-6 text-center text-sm text-cnd-slate"
-        >
-          <h3 id="ticket-raffle-heading" className="font-semibold">
-            Student or unemployed?
-          </h3>
-          <p className="mt-2">Enter our raffle for a free conference ticket.</p>
-          <ExternalLink
-            href="https://docs.google.com/forms/d/e/1FAIpQLSdsjLcbFPb0YO5uc6PdgHX2apbfxVFsEcucuaLEnB4Zkhp3jg/viewform"
-            className="mt-3 inline-block underline underline-offset-4 hover:text-cnd-midnight focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cnd-midnight"
-          >
-            Enter the raffle →
-          </ExternalLink>
-        </aside>
       </div>
     </Section>
   )

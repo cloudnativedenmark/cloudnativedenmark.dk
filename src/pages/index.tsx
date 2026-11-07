@@ -28,16 +28,6 @@ const IndexPage: React.FC = () => {
   const sec = () => ++_sec
   const pad = (n: number) => String(n).padStart(2, "0")
 
-  const scrollToTicketRates = () => {
-    const element = document.getElementById("ticket-rates")
-    if (element) {
-      const headerOffset = 70
-      const elementPosition = element.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.scrollY - headerOffset
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" })
-    }
-  }
-
   return (
     <>
       <SEOHead title="Cloud Native Denmark 2026" pathname={location.pathname} />
@@ -62,9 +52,8 @@ const IndexPage: React.FC = () => {
         description="Two days in Copenhagen with the platform engineers, SREs, and architects shipping the Nordics' most demanding cloud native systems to production."
         actions={[
           {
-            text: "Ticket rates →",
-            onClick: scrollToTicketRates,
-            variant: "primary",
+            text: "Sold out",
+            disabled: true,
           },
           ...(features.scheduleAndSpeakers
             ? [
@@ -154,16 +143,10 @@ const IndexPage: React.FC = () => {
               className="max-w-xl text-cnd-fog"
               style={{ fontSize: 17, lineHeight: 1.55 }}
             >
-              Two days of talks, workshops, and community — don't miss out.
+              Tickets are sold out. Thank you for an incredible response!
             </p>
             <div className="mt-2 flex flex-wrap justify-center gap-3">
-              <a
-                href="https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button>Get your ticket →</Button>
-              </a>
+              <Button disabled>Sold out</Button>
               {features.scheduleAndSpeakers && (
                 <Link to="/schedule">
                   <Button variant="ghost">Schedule →</Button>
