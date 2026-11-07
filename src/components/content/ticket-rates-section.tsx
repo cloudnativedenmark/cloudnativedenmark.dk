@@ -1,7 +1,6 @@
 import React from "react"
 import Section from "../ui/section"
 import Button from "../ui/button"
-import ExternalLink from "../ui/external-link"
 
 interface TicketTier {
   name: string
@@ -245,22 +244,6 @@ const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({
         <div className="mt-10 flex justify-center">
           <Button disabled>Sold out</Button>
         </div>
-
-        <aside
-          aria-labelledby="ticket-raffle-heading"
-          className="mx-auto mt-8 max-w-xl border-t border-cnd-fog/60 pt-6 text-center text-sm text-cnd-slate"
-        >
-          <h3 id="ticket-raffle-heading" className="font-semibold">
-            Student or unemployed?
-          </h3>
-          <p className="mt-2">Enter our raffle for a free conference ticket.</p>
-          <ExternalLink
-            href="https://docs.google.com/forms/d/e/1FAIpQLSdsjLcbFPb0YO5uc6PdgHX2apbfxVFsEcucuaLEnB4Zkhp3jg/viewform"
-            className="mt-3 inline-block underline underline-offset-4 hover:text-cnd-midnight focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cnd-midnight"
-          >
-            Enter the raffle →
-          </ExternalLink>
-        </aside>
       </div>
     </Section>
   )
