@@ -16,7 +16,7 @@ jest.mock("../../images/logo.svg", () => "/logo.svg")
 afterEach(() => document.body.replaceChildren())
 
 const makeDay = (date: string): GridEntry => {
-  const sessions = [
+  const sessions: Session[] = [
     {
       id: `${date}-main`,
       title: `Main talk ${date}`,
@@ -36,23 +36,21 @@ const makeDay = (date: string): GridEntry => {
       room: "Main stage",
       isServiceSession: true,
     },
-  ].map(
-    (entry): Session => ({
-      name: entry.title,
-      description: "Talk abstract",
-      startsAt: `${date}T${entry.isServiceSession ? "11:00" : "10:25"}:00`,
-      endsAt: `${date}T${entry.isServiceSession ? "11:20" : "11:00"}:00`,
-      isServiceSession: false,
-      isPlenumSession: false,
-      speakers: [],
-      questionAnswers: [],
-      recordingUrl: "",
-      slideDeck: "",
-      video: "",
-      rate: "",
-      ...entry,
-    })
-  )
+  ].map((entry) => ({
+    name: entry.title,
+    description: "Talk abstract",
+    startsAt: `${date}T${entry.isServiceSession ? "11:00" : "10:25"}:00`,
+    endsAt: `${date}T${entry.isServiceSession ? "11:20" : "11:00"}:00`,
+    isServiceSession: false,
+    isPlenumSession: false,
+    speakers: [],
+    questionAnswers: [],
+    recordingUrl: "",
+    slideDeck: "",
+    video: "",
+    rate: "",
+    ...entry,
+  }))
 
   return {
     date,
