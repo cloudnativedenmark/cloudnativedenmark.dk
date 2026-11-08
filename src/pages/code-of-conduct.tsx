@@ -101,8 +101,8 @@ const CodeOfConductPage: React.FC = () => {
                 Vester Søgade 6. Then tell an organizer.
               </li>
               <li>
-                <strong>At the conference:</strong> find any organizer (see
-                the <TeamLink />
+                <strong>At the conference:</strong> find any organizer (see the{" "}
+                <TeamLink />
                 ), or find us in the info-desk where you checked in.
               </li>
               <li>
