@@ -25,6 +25,12 @@ const pages = [
     description:
       "Meet everyone speaking at Cloud Native Denmark 2026 — the platform engineers, SREs, and architects sharing what they've learned running cloud native systems in production.",
   },
+  {
+    pathname: "/code-of-conduct",
+    title: "Code of Conduct | Cloud Native Denmark",
+    description:
+      "How we expect everyone at Cloud Native Denmark to behave, and how to get help or report a problem.",
+  },
 ]
 
 const escapeHtml = (value) =>

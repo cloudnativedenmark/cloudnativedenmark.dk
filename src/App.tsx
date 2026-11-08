@@ -2,6 +2,7 @@ import React from "react"
 import { Routes, Route, Navigate } from "react-router-dom"
 import Layout from "./components/layout"
 import Home from "./pages/index"
+import CodeOfConduct from "./pages/code-of-conduct"
 import ConvinceYourBoss from "./pages/convince-your-boss"
 import Mission from "./pages/mission"
 import Privacy from "./pages/privacy"
@@ -21,6 +22,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
+        <Route path="code-of-conduct" element={<CodeOfConduct />} />
         <Route path="convince-your-boss" element={<ConvinceYourBoss />} />
         <Route path="mission" element={<Mission />} />
         <Route path="privacy" element={<Privacy />} />
