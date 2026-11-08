@@ -3,6 +3,7 @@ import {
   hostTime,
   hostTimeline,
   hostTalks,
+  hostSections,
   paginateHostCards,
 } from "../host-pack"
 
@@ -100,4 +101,53 @@ it("limits paired pages and keeps an oversized abstract without dropping later t
     [3],
     [4],
   ])
+})
+
+it("selects all requested day and track combinations in schedule order", () => {
+  const rooms = [
+    { id: 1, name: "Main stage" },
+    { id: 2, name: "Breakout" },
+  ]
+  const first = { ...dayWith([]), rooms } as GridEntry
+  const second = { ...first, date: "2026-11-20T00:00:00" }
+  const sections = hostSections(
+    [second, first],
+    ["2026-11-20", "2026-11-19", "2026-11-19"],
+    [2, 1, 2]
+  )
+
+  expect(
+    sections.map(({ day, room }) => [day.date.slice(0, 10), room.id])
+  ).toEqual([
+    ["2026-11-19", 1],
+    ["2026-11-19", 2],
+    ["2026-11-20", 1],
+    ["2026-11-20", 2],
+  ])
+})
+
+it("does not substitute another track when a selected track is absent on a day", () => {
+  const first = {
+    ...dayWith([]),
+    rooms: [
+      { id: 1, name: "Main stage" },
+      { id: 2, name: "Breakout" },
+    ],
+  } as GridEntry
+  const second = {
+    ...first,
+    date: "2026-11-20T00:00:00",
+    rooms: first.rooms.slice(0, 1),
+  }
+  const sections = hostSections(
+    [first, second],
+    ["2026-11-19", "2026-11-20"],
+    [2]
+  )
+
+  expect(
+    sections.map(({ day, room }) => [day.date.slice(0, 10), room.id])
+  ).toEqual([["2026-11-19", 2]])
+  expect(hostSections([first, second], [], [1])).toEqual([])
+  expect(hostSections([first, second], ["2026-11-19"], [])).toEqual([])
 })

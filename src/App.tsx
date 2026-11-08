@@ -25,7 +25,9 @@ function App() {
       <Route
         path="/host-pack"
         element={
-          <React.Suspense fallback={<p role="status">Loading host pack…</p>}>
+          <React.Suspense
+            fallback={<p role="status">Loading track overview…</p>}
+          >
             <HostPack />
           </React.Suspense>
         }

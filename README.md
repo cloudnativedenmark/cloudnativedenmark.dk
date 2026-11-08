@@ -115,23 +115,26 @@ src/components/
 - 📅 **Event Management**: Dynamic conference schedule and speaker profiles
 - 💼 **Sponsor Management**: Tiered sponsor system with dynamic logos
 
-### Track host packs
+### Track overviews
 
 Open `/host-pack` directly; it is not linked from the site navigation.
-Select a date, track, and print format, then use **Copy pack link** to share
-the selection.
+Select one or more days and tracks, then use **Copy link** to share the
+selection. Output is grouped by day, then track, with a separate overview
+for each selected day and track.
 
 - `format=spacious`: one session starts on each sheet, with 12 pt text.
 - `format=paired`: up to two sessions per sheet, with 11 pt text.
 - `format=compact`: fit sessions to each sheet, with 10 pt text.
-- `overview=0`: omit the day overview from the pack. **Print overview only**
-  still prints the overview.
+- `overview=0`: omit day overviews. **Print overview only** still prints
+  the selected day and track overviews.
 
-Example: `/host-pack?date=2026-11-19&room=75248&format=compact`.
+Repeat `date` and `room` parameters to select multiple days and tracks:
+`/host-pack?date=2026-11-19&date=2026-11-20&room=75248&room=75249&format=compact`.
 
 Print on A4 portrait at 100% scale, with browser headers and footers off.
-All formats retain full abstracts and speaker photos. Long sessions can
-continue onto another sheet. Times use Copenhagen time.
+All formats retain full abstracts and speaker photos. Print headers use
+the CND logo and site fonts. Long sessions can continue onto another sheet.
+Times use Copenhagen time.
 
 The page is public, with `noindex` metadata, not access control. Do not add
 speaker email addresses or other private data.

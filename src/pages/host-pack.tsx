@@ -11,6 +11,8 @@ import Button from "../components/ui/button"
 import CopyLinkButton from "../components/copy-link-button"
 import {
   useSessionizeSchedule,
+  type GridEntry,
+  type Room,
   type Session,
   type Speaker,
 } from "../hooks/use-sessionize"
@@ -19,9 +21,11 @@ import {
   hostTime,
   hostTalks,
   hostTimeline,
+  hostSections,
   paginateHostCards,
 } from "../utils/host-pack"
 import { formatPlainTextToHtml } from "../utils/text-formatting"
+import Logo from "../images/logo.svg"
 import "../styles/host-pack.css"
 
 const formats = {
@@ -113,9 +117,18 @@ function Sheet({
   return (
     <section className="host-sheet" aria-label={label}>
       <header className="host-sheet-header">
-        <div>
-          <p>Cloud Native Denmark · Track host pack</p>
-          <h2>{room}</h2>
+        <div className="host-brand">
+          <img
+            className="host-logo"
+            src={Logo}
+            width={44}
+            height={44}
+            alt="Cloud Native Denmark"
+          />
+          <div>
+            <p>Cloud Native Denmark · Track overview</p>
+            <h2>{room}</h2>
+          </div>
         </div>
         <p>
           {hostDate(date)}
@@ -144,32 +157,27 @@ function Sheet({
   )
 }
 
-export default function HostPack() {
-  const { schedule, isLoading } = useSessionizeSchedule()
-  const [params, setParams] = useSearchParams()
-  const [fetchedAt, setFetchedAt] = useState<Date | null>(null)
+function TrackSection({
+  day,
+  room,
+  format,
+  fetchedAt,
+  includeOverview,
+}: {
+  day: GridEntry
+  room: Room
+  format: Format
+  fetchedAt: Date | null
+  includeOverview: boolean
+}) {
   const [groups, setGroups] = useState<number[][]>([])
   const [hasLongSessions, setHasLongSessions] = useState(false)
-  const [printing, setPrinting] = useState(false)
-  const [overviewOnly, setOverviewOnly] = useState(false)
   const measureRef = useRef<HTMLDivElement>(null)
-  const requestedFormat = params.get("format")
-  const format: Format =
-    requestedFormat && Object.hasOwn(formats, requestedFormat)
-      ? (requestedFormat as Format)
-      : "paired"
-  const date = params.get("date") || schedule[0]?.date.slice(0, 10) || ""
-  const day = schedule.find((entry) => entry.date.slice(0, 10) === date)
-  const roomId = Number(params.get("room") || day?.rooms[0]?.id)
-  const room = day?.rooms.find((entry) => entry.id === roomId)
-  const sessions = day && room ? hostTalks(day, roomId) : []
-  const timeline = day && room ? hostTimeline(day, roomId) : []
-  const includeOverview = params.get("overview") !== "0"
+  const date = day.date.slice(0, 10)
+  const roomId = room.id
+  const sessions = hostTalks(day, roomId)
+  const timeline = hostTimeline(day, roomId)
   const pageCount = groups.length + (includeOverview ? 1 : 0)
-
-  useEffect(() => {
-    if (!isLoading && schedule.length) setFetchedAt(new Date())
-  }, [isLoading, schedule])
 
   useLayoutEffect(() => {
     const root = measureRef.current
@@ -208,13 +216,147 @@ export default function HostPack() {
       observer.disconnect()
     }
   }, [day, roomId, format])
+  return (
+    <section className="host-track-section" data-date={date} data-room={roomId}>
+      <div className="host-section-heading">
+        <h2>
+          {hostDate(date)} · {room.name}
+        </h2>
+        <p>
+          {sessions.length} sessions · {hasLongSessions ? "at least " : ""}
+          {pageCount} {pageCount === 1 ? "sheet" : "sheets"}
+        </p>
+      </div>
+      <div className="host-measure" ref={measureRef} aria-hidden="true">
+        <div className="host-measure-budget" />
+        {sessions.map((session) => (
+          <TalkCard session={session} key={session.id} />
+        ))}
+      </div>
+      <div className="host-sheets">
+        <div className="host-overview">
+          <Sheet
+            room={room.name}
+            date={date}
+            fetchedAt={fetchedAt}
+            label="Day overview"
+          >
+            <h1 className="host-overview-title">Day overview</h1>
+            <p className="host-overview-intro">
+              Shaded rows: events in other rooms.
+            </p>
+            <table className="host-timeline">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Session / speakers</th>
+                  <th>Location</th>
+                </tr>
+              </thead>
+              <tbody>
+                {timeline.map((session) => (
+                  <tr
+                    className={
+                      session.roomId !== roomId ? "host-elsewhere" : ""
+                    }
+                    key={session.id}
+                  >
+                    <td>
+                      {hostTime(session.startsAt)}–{hostTime(session.endsAt)}
+                    </td>
+                    <td>
+                      <strong>{session.title || session.name}</strong>
+                      <span>
+                        {session.speakers
+                          .map((speaker) => speaker.fullName || speaker.name)
+                          .join(" · ")}
+                      </span>
+                    </td>
+                    <td>{session.room}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Sheet>
+        </div>
+        <div className="host-talk-sheets">
+          {groups.map((group, index) => (
+            <Sheet
+              key={group.join("-")}
+              room={room.name}
+              date={date}
+              fetchedAt={fetchedAt}
+              label={`Sessions · ${index + 1} / ${groups.length}`}
+            >
+              {group.map(
+                (sessionIndex) =>
+                  sessions[sessionIndex] && (
+                    <TalkCard
+                      session={sessions[sessionIndex]}
+                      key={sessions[sessionIndex].id}
+                    />
+                  )
+              )}
+            </Sheet>
+          ))}
+          {!sessions.length && (
+            <p className="host-empty">
+              No talks are scheduled for this track on this date.
+            </p>
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}
 
-  const update = (values: Record<string, string>) => {
-    const next = new URLSearchParams(params)
-    next.set("date", date)
-    next.set("room", String(roomId))
-    next.set("format", format)
-    Object.entries(values).forEach(([key, value]) => next.set(key, value))
+export default function HostPack() {
+  const { schedule, isLoading } = useSessionizeSchedule()
+  const [params, setParams] = useSearchParams()
+  const [fetchedAt, setFetchedAt] = useState<Date | null>(null)
+  const [printing, setPrinting] = useState(false)
+  const [overviewOnly, setOverviewOnly] = useState(false)
+  const requestedFormat = params.get("format")
+  const format: Format =
+    requestedFormat && Object.hasOwn(formats, requestedFormat)
+      ? (requestedFormat as Format)
+      : "paired"
+  const dates = params.has("date")
+    ? params.getAll("date").filter(Boolean)
+    : schedule.slice(0, 1).map((day) => day.date.slice(0, 10))
+  const rooms = [
+    ...new Map(
+      schedule.flatMap((day) =>
+        day.rooms.map((room) => [room.id, room] as const)
+      )
+    ).values(),
+  ]
+  const roomIds = params.has("room")
+    ? params.getAll("room").filter(Boolean).map(Number)
+    : rooms.slice(0, 1).map((room) => room.id)
+  const sections = hostSections(schedule, dates, roomIds)
+  const includeOverview = params.get("overview") !== "0"
+  const linkParams = new URLSearchParams({
+    format,
+    overview: includeOverview ? "1" : "0",
+  })
+  if (!dates.length) linkParams.set("date", "")
+  dates.forEach((date) => linkParams.append("date", date))
+  if (!roomIds.length) linkParams.set("room", "")
+  roomIds.forEach((roomId) => linkParams.append("room", String(roomId)))
+
+  useEffect(() => {
+    if (!isLoading && schedule.length) setFetchedAt(new Date())
+  }, [isLoading, schedule])
+
+  const update = (values: Record<string, string | string[]>) => {
+    const next = new URLSearchParams(linkParams)
+    Object.entries(values).forEach(([key, value]) => {
+      next.delete(key)
+      const entries = Array.isArray(value) ? value : [value]
+      if (!entries.length) next.set(key, "")
+      entries.forEach((entry) => next.append(key, entry))
+    })
     setParams(next)
   }
 
@@ -224,7 +366,7 @@ export default function HostPack() {
       await document.fonts.ready
       await Promise.all(
         Array.from(
-          document.querySelectorAll<HTMLImageElement>(".host-talk-sheets img")
+          document.querySelectorAll<HTMLImageElement>(".host-sheets img")
         ).map((image) => {
           if (image.complete) return
           const { promise, resolve } = Promise.withResolvers<void>()
@@ -242,77 +384,70 @@ export default function HostPack() {
     }
   }
 
-  const linkParams = new URLSearchParams({
-    date,
-    room: String(roomId),
-    format,
-    overview: includeOverview ? "1" : "0",
-  })
-
   return (
     <main
       className={`host-pack host-format-${format}${overviewOnly ? " host-overview-only" : ""}${!includeOverview ? " host-no-overview" : ""}`}
     >
-      <title>{`${room ? `${room.name} · ${date} · Host pack` : "Track host pack"} | Cloud Native Denmark`}</title>
+      <title>Track overview | Cloud Native Denmark</title>
       <meta name="robots" content="noindex, nofollow" />
       <div className="host-controls">
         <Link to="/" className="host-back">
           ← Cloud Native Denmark
         </Link>
-        <p className="eyebrow">For organisers and track hosts</p>
-        <h1 className="display">Track host pack</h1>
-        <p className="host-intro">
-          Read up. Meet your speakers. Keep the day on track.
-        </p>
-        <p className="host-public">
-          Unlisted, not private. This page uses public speaker information only.
-        </p>
+        <h1 className="display">Track overview</h1>
         {schedule.length > 0 && (
           <>
             <div className="host-selectors">
-              <label>
-                Date
-                <select
-                  value={date}
-                  onChange={(event) => {
-                    const nextDay = schedule.find((entry) =>
-                      entry.date.startsWith(event.target.value)
-                    )!
-                    update({
-                      date: event.target.value,
-                      room: String(
-                        nextDay.rooms.some((entry) => entry.id === roomId)
-                          ? roomId
-                          : nextDay.rooms[0]?.id
-                      ),
-                    })
-                  }}
-                >
-                  {!day && <option value={date}>Unknown date: {date}</option>}
-                  {schedule.map((entry) => (
-                    <option key={entry.date} value={entry.date.slice(0, 10)}>
-                      {hostDate(entry.date)}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                Track
-                <select
-                  value={roomId}
-                  onChange={(event) => update({ room: event.target.value })}
-                >
-                  {!room && <option value={roomId}>Select a track</option>}
-                  {day?.rooms.map((entry) => (
-                    <option key={entry.id} value={entry.id}>
-                      {entry.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <fieldset>
+                <legend>Days</legend>
+                {schedule.map((day) => {
+                  const date = day.date.slice(0, 10)
+                  return (
+                    <label key={date}>
+                      <input
+                        type="checkbox"
+                        name="date"
+                        value={date}
+                        checked={dates.includes(date)}
+                        onChange={(event) =>
+                          update({
+                            date: event.target.checked
+                              ? [...dates, date]
+                              : dates.filter((value) => value !== date),
+                          })
+                        }
+                      />
+                      {hostDate(date)}
+                    </label>
+                  )
+                })}
+              </fieldset>
+              <fieldset>
+                <legend>Tracks</legend>
+                {rooms.map((room) => (
+                  <label key={room.id}>
+                    <input
+                      type="checkbox"
+                      name="room"
+                      value={room.id}
+                      checked={roomIds.includes(room.id)}
+                      onChange={(event) =>
+                        update({
+                          room: event.target.checked
+                            ? [...roomIds, room.id].map(String)
+                            : roomIds
+                                .filter((value) => value !== room.id)
+                                .map(String),
+                        })
+                      }
+                    />
+                    {room.name}
+                  </label>
+                ))}
+              </fieldset>
             </div>
             <fieldset className="host-formats">
-              <legend>Compare print formats</legend>
+              <legend>Print format</legend>
               {(
                 Object.entries(formats) as [Format, (typeof formats)[Format]][]
               ).map(([key, entry]) => (
@@ -345,19 +480,19 @@ export default function HostPack() {
                 onChange={(event) =>
                   update({ overview: event.target.checked ? "1" : "0" })
                 }
-              />{" "}
+              />
               Include day overview
             </label>
             <div className="host-actions">
               <Button
-                disabled={!room || !groups.length || printing}
+                disabled={!sections.length || printing}
                 onClick={() => void print(false)}
               >
                 {printing ? "Preparing print…" : "Print / save PDF"}
               </Button>
               <Button
                 variant="secondary"
-                disabled={!room || printing}
+                disabled={!sections.length || printing}
                 onClick={() => void print(true)}
               >
                 Print overview only
@@ -365,24 +500,11 @@ export default function HostPack() {
               <CopyLinkButton
                 key={linkParams.toString()}
                 path={`/host-pack?${linkParams}`}
-                label="Copy pack link"
+                label="Copy link"
               />
             </div>
-            <p className="host-print-help">
-              A4 portrait · 100% scale · Turn off browser headers and footers.
-              Full abstracts in every format. Long sessions get their own sheet
-              and continue onto another sheet if needed.
-            </p>
-            {room && (
-              <p className="host-count" aria-live="polite">
-                {sessions.length} sessions ·{" "}
-                {hasLongSessions ? "at least " : ""}
-                {pageCount} {pageCount === 1 ? "sheet" : "sheets"} including{" "}
-                {includeOverview ? "the overview" : "no overview"}.
-                {hasLongSessions
-                  ? " Long abstracts continue when printed."
-                  : " Compare the previews below."}
-              </p>
+            {!sections.length && (
+              <p role="status">Select at least one listed day and track.</p>
             )}
           </>
         )}
@@ -392,100 +514,17 @@ export default function HostPack() {
             Schedule unavailable. Reload this page to try again.
           </p>
         )}
-        {schedule.length > 0 && (!day || !room) && (
-          <p role="alert">
-            This date or track is not in the schedule. Select a listed date and
-            track.
-          </p>
-        )}
       </div>
-      {day && room && (
-        <>
-          <div className="host-measure" ref={measureRef} aria-hidden="true">
-            <div className="host-measure-budget" />
-            {sessions.map((session) => (
-              <TalkCard session={session} key={session.id} />
-            ))}
-          </div>
-          <div className="host-sheets">
-            <div className="host-overview">
-              <Sheet
-                room={room.name}
-                date={date}
-                fetchedAt={fetchedAt}
-                label="Day overview"
-              >
-                <h1 className="host-overview-title">Your day at a glance</h1>
-                <p className="host-overview-intro">
-                  Shaded rows take place elsewhere while this track is idle.
-                  Locations are shown below.
-                </p>
-                <table className="host-timeline">
-                  <thead>
-                    <tr>
-                      <th>Time</th>
-                      <th>Session / speakers</th>
-                      <th>Location</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {timeline.map((session) => (
-                      <tr
-                        className={
-                          session.roomId !== roomId ? "host-elsewhere" : ""
-                        }
-                        key={session.id}
-                      >
-                        <td>
-                          {hostTime(session.startsAt)}–
-                          {hostTime(session.endsAt)}
-                        </td>
-                        <td>
-                          <strong>{session.title || session.name}</strong>
-                          <span>
-                            {session.speakers
-                              .map(
-                                (speaker) => speaker.fullName || speaker.name
-                              )
-                              .join(" · ")}
-                          </span>
-                        </td>
-                        <td>{session.room}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </Sheet>
-            </div>
-            <div className="host-talk-sheets">
-              {groups.map((group, index) => (
-                <Sheet
-                  key={group.join("-")}
-                  room={room.name}
-                  date={date}
-                  fetchedAt={fetchedAt}
-                  label={`Sessions · ${index + 1} / ${groups.length}`}
-                >
-                  {group.map(
-                    (sessionIndex) =>
-                      sessions[sessionIndex] && (
-                        <TalkCard
-                          session={sessions[sessionIndex]}
-                          key={sessions[sessionIndex].id}
-                        />
-                      )
-                  )}
-                </Sheet>
-              ))}
-              {!sessions.length && (
-                <p className="host-empty">
-                  No talks are scheduled for this track on this date.
-                </p>
-              )}
-            </div>
-          </div>
-        </>
-      )}
+      {sections.map(({ day, room }) => (
+        <TrackSection
+          key={`${day.date}-${room.id}`}
+          day={day}
+          room={room}
+          format={format}
+          fetchedAt={fetchedAt}
+          includeOverview={includeOverview}
+        />
+      ))}
     </main>
   )
 }

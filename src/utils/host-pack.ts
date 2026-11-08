@@ -57,6 +57,20 @@ export const hostTimeline = (day: GridEntry, roomId: number): Session[] => {
   })
 }
 
+export const hostSections = (
+  schedule: GridEntry[],
+  dates: string[],
+  roomIds: number[]
+) =>
+  schedule
+    .filter((day) => dates.includes(day.date.slice(0, 10)))
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .flatMap((day) =>
+      day.rooms
+        .filter((room) => roomIds.includes(room.id))
+        .map((room) => ({ day, room }))
+    )
+
 export const paginateHostCards = (
   heights: number[],
   available: number,

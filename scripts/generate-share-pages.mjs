@@ -33,7 +33,7 @@ const pages = [
   },
   {
     pathname: "/host-pack",
-    title: "Track host pack | Cloud Native Denmark",
+    title: "Track overview | Cloud Native Denmark",
     description:
       "Printable track schedules, speaker photos, and talk abstracts.",
     noindex: true,
