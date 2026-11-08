@@ -61,7 +61,7 @@ it("includes shared items with their location, but not breaks during a workshop"
   const parallel = session("parallel", 1, "10:25", "11:00")
   const timeline = hostTimeline(
     dayWith([morning, coffee, lunch, workshop, parallel]),
-    2
+    [2]
   )
 
   expect(timeline.map((item) => item.id)).toEqual([
@@ -78,7 +78,27 @@ it("shows an external break that starts exactly when a track talk ends", () => {
     session("break", 1, "11:00", "11:20", { isServiceSession: true }),
   ])
 
-  expect(hostTimeline(day, 2).map((item) => item.id)).toEqual(["talk", "break"])
+  expect(hostTimeline(day, [2]).map((item) => item.id)).toEqual([
+    "talk",
+    "break",
+  ])
+})
+
+it("combines selected concurrent tracks and lists a shared break only once", () => {
+  const main = session("main", 1, "10:25", "11:00")
+  const breakout = session("breakout", 2, "10:25", "11:00")
+  const coffee = session("coffee", 1, "11:00", "11:20", {
+    isServiceSession: true,
+  })
+  const workshop = session("workshop", 3, "10:25", "11:55")
+  const day = dayWith([main, breakout, coffee, coffee, workshop])
+
+  expect(hostTimeline(day, [1, 2]).map((item) => item.id)).toEqual([
+    "main",
+    "breakout",
+    "coffee",
+  ])
+  expect(hostTimeline(day, [])).toEqual([])
 })
 
 it("preserves event-local times and converts offset timestamps to Copenhagen time", () => {

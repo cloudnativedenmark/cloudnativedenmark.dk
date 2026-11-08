@@ -119,14 +119,15 @@ src/components/
 
 Open `/host-pack` directly; it is not linked from the site navigation.
 Select one or more days and tracks, then use **Copy link** to share the
-selection. Output is grouped by day, then track, with a separate overview
-for each selected day and track.
+selection. Each selected day starts with one combined overview of its
+selected tracks, followed by the talk sheets grouped by track. Shared
+events appear once in the daily overview.
 
 - `format=spacious`: one session starts on each sheet, with 12 pt text.
 - `format=paired`: up to two sessions per sheet, with 11 pt text.
 - `format=compact`: fit sessions to each sheet, with 10 pt text.
 - `overview=0`: omit day overviews. **Print overview only** still prints
-  the selected day and track overviews.
+  the combined overviews for the selected days.
 
 Repeat `date` and `room` parameters to select multiple days and tracks:
 `/host-pack?date=2026-11-19&date=2026-11-20&room=75248&room=75249&format=compact`.

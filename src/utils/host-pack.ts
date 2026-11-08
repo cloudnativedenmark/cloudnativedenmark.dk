@@ -42,12 +42,14 @@ export const hostTalks = (day: GridEntry, roomId: number): Session[] =>
       !isAdminOnlySession(session.speakers)
   )
 
-export const hostTimeline = (day: GridEntry, roomId: number): Session[] => {
+export const hostTimeline = (day: GridEntry, roomIds: number[]): Session[] => {
+  if (!roomIds.length) return []
+
   const all = daySessions(day)
-  const own = all.filter((session) => session.roomId === roomId)
+  const own = all.filter((session) => roomIds.includes(session.roomId))
 
   return all.filter((session) => {
-    if (session.roomId === roomId) return true
+    if (roomIds.includes(session.roomId)) return true
     if (own.some((item) => overlaps(item, session))) return false
     if (session.isServiceSession || session.isPlenumSession) return true
 

@@ -157,18 +157,77 @@ function Sheet({
   )
 }
 
+function DayOverview({
+  day,
+  rooms,
+  fetchedAt,
+}: {
+  day: GridEntry
+  rooms: Room[]
+  fetchedAt: Date | null
+}) {
+  const roomIds = rooms.map((room) => room.id)
+  const timeline = hostTimeline(day, roomIds)
+
+  return (
+    <div className="host-sheets host-overview">
+      <Sheet
+        room={rooms.map((room) => room.name).join(" · ")}
+        date={day.date.slice(0, 10)}
+        fetchedAt={fetchedAt}
+        label="Day overview"
+      >
+        <p className="host-overview-intro">
+          Shaded rows: events in other rooms.
+        </p>
+        <table className="host-timeline">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Session / speakers</th>
+              <th>Location</th>
+            </tr>
+          </thead>
+          <tbody>
+            {timeline.map((session) => (
+              <tr
+                className={
+                  roomIds.includes(session.roomId) ? "" : "host-elsewhere"
+                }
+                key={session.id}
+              >
+                <td>
+                  {hostTime(session.startsAt)}–{hostTime(session.endsAt)}
+                </td>
+                <td>
+                  <strong>{session.title || session.name}</strong>
+                  <span>
+                    {session.speakers.length > 0 && " · "}
+                    {session.speakers
+                      .map((speaker) => speaker.fullName || speaker.name)
+                      .join(" · ")}
+                  </span>
+                </td>
+                <td>{session.room}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Sheet>
+    </div>
+  )
+}
+
 function TrackSection({
   day,
   room,
   format,
   fetchedAt,
-  includeOverview,
 }: {
   day: GridEntry
   room: Room
   format: Format
   fetchedAt: Date | null
-  includeOverview: boolean
 }) {
   const [groups, setGroups] = useState<number[][]>([])
   const [hasLongSessions, setHasLongSessions] = useState(false)
@@ -176,8 +235,7 @@ function TrackSection({
   const date = day.date.slice(0, 10)
   const roomId = room.id
   const sessions = hostTalks(day, roomId)
-  const timeline = hostTimeline(day, roomId)
-  const pageCount = groups.length + (includeOverview ? 1 : 0)
+  const pageCount = groups.length
 
   useLayoutEffect(() => {
     const root = measureRef.current
@@ -234,51 +292,6 @@ function TrackSection({
         ))}
       </div>
       <div className="host-sheets">
-        <div className="host-overview">
-          <Sheet
-            room={room.name}
-            date={date}
-            fetchedAt={fetchedAt}
-            label="Day overview"
-          >
-            <h1 className="host-overview-title">Day overview</h1>
-            <p className="host-overview-intro">
-              Shaded rows: events in other rooms.
-            </p>
-            <table className="host-timeline">
-              <thead>
-                <tr>
-                  <th>Time</th>
-                  <th>Session / speakers</th>
-                  <th>Location</th>
-                </tr>
-              </thead>
-              <tbody>
-                {timeline.map((session) => (
-                  <tr
-                    className={
-                      session.roomId !== roomId ? "host-elsewhere" : ""
-                    }
-                    key={session.id}
-                  >
-                    <td>
-                      {hostTime(session.startsAt)}–{hostTime(session.endsAt)}
-                    </td>
-                    <td>
-                      <strong>{session.title || session.name}</strong>
-                      <span>
-                        {session.speakers
-                          .map((speaker) => speaker.fullName || speaker.name)
-                          .join(" · ")}
-                      </span>
-                    </td>
-                    <td>{session.room}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </Sheet>
-        </div>
         <div className="host-talk-sheets">
           {groups.map((group, index) => (
             <Sheet
@@ -335,6 +348,9 @@ export default function HostPack() {
     ? params.getAll("room").filter(Boolean).map(Number)
     : rooms.slice(0, 1).map((room) => room.id)
   const sections = hostSections(schedule, dates, roomIds)
+  const selectedDays = [
+    ...new Map(sections.map(({ day }) => [day.date, day])).values(),
+  ]
   const includeOverview = params.get("overview") !== "0"
   const linkParams = new URLSearchParams({
     format,
@@ -515,16 +531,33 @@ export default function HostPack() {
           </p>
         )}
       </div>
-      {sections.map(({ day, room }) => (
-        <TrackSection
-          key={`${day.date}-${room.id}`}
-          day={day}
-          room={room}
-          format={format}
-          fetchedAt={fetchedAt}
-          includeOverview={includeOverview}
-        />
-      ))}
+      {selectedDays.map((day) => {
+        const selectedRooms = day.rooms.filter((room) =>
+          roomIds.includes(room.id)
+        )
+        return (
+          <section
+            className="host-day-section"
+            data-date={day.date.slice(0, 10)}
+            key={day.date}
+          >
+            <DayOverview
+              day={day}
+              rooms={selectedRooms}
+              fetchedAt={fetchedAt}
+            />
+            {selectedRooms.map((room) => (
+              <TrackSection
+                key={room.id}
+                day={day}
+                room={room}
+                format={format}
+                fetchedAt={fetchedAt}
+              />
+            ))}
+          </section>
+        )
+      })}
     </main>
   )
 }
