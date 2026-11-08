@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { useLocation, useNavigate, useParams } from "react-router-dom"
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 import SEOHead from "../components/seo-head"
 import { useSessionizeSchedule } from "../hooks/use-sessionize"
 import { useModalManagement } from "../hooks/use-modal-management"
@@ -23,6 +23,22 @@ const SchedulePage: React.FC = () => {
     handleCloseSessionModal,
     handleCloseSpeakerModal,
   } = useModalManagement({ schedule, urlMode: "path" })
+  const dayHash = location.hash.slice(1)
+  const linkedDay = schedule.find((day, index) => {
+    if (!dayHash) return false
+    if (dayHash === `day${index + 1}` || dayHash === day.date.slice(0, 10)) {
+      return true
+    }
+
+    const weekday = new Date(day.date.slice(0, 10)).toLocaleDateString(
+      "en-US",
+      {
+        weekday: "long",
+        timeZone: "UTC",
+      }
+    )
+    return dayHash === weekday.toLowerCase()
+  })
 
   const findSessionById = (id: number | string) => {
     for (const day of schedule) {
@@ -43,7 +59,9 @@ const SchedulePage: React.FC = () => {
 
   useEffect(() => {
     if (!talkId) {
-      if (!location.hash) handleCloseSessionModal()
+      if (!location.hash || linkedDay) {
+        handleCloseSessionModal()
+      }
       return
     }
 
@@ -51,7 +69,20 @@ const SchedulePage: React.FC = () => {
     if (session) handleSessionClick(session)
     // Only sync when the route or data changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [talkId, schedule])
+  }, [talkId, schedule, location.hash, linkedDay])
+
+  useEffect(() => {
+    if (!linkedDay) return
+
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById(linkedDay.date.slice(0, 10))?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      })
+    })
+
+    return () => window.cancelAnimationFrame(frame)
+  }, [linkedDay, location.key])
 
   const openSession = (session: NonNullable<typeof selectedSession>) => {
     handleSessionClick(session)
@@ -102,27 +133,18 @@ const SchedulePage: React.FC = () => {
 
           {schedule.length > 0 && (
             <div className="flex justify-center space-x-4">
-              {schedule.map((day) => (
-                <button
+              {schedule.map((day, index) => (
+                <Link
                   key={day.date}
-                  onClick={() => {
-                    const element = document.getElementById(day.date)
-                    if (element) {
-                      const elementPosition =
-                        element.getBoundingClientRect().top
-                      const offsetPosition =
-                        elementPosition + window.pageYOffset - 76
-
-                      window.scrollTo({
-                        top: offsetPosition,
-                        behavior: "smooth",
-                      })
-                    }
+                  to={{
+                    pathname: "/schedule",
+                    search: location.search,
+                    hash: `#day${index + 1}`,
                   }}
                   className="bg-background hover:bg-hover text-white text-l font-semibold py-3 px-6 rounded-full transition-colors duration-200"
                 >
                   {formatDate(day.date)}
-                </button>
+                </Link>
               ))}
             </div>
           )}
@@ -130,7 +152,11 @@ const SchedulePage: React.FC = () => {
           {schedule.map((day) => {
             const renderedSessions = new Map<string, Set<number>>()
             return (
-              <div key={day.date} id={day.date} className="mb-16">
+              <div
+                key={day.date}
+                id={day.date.slice(0, 10)}
+                className="mb-16 scroll-mt-[76px]"
+              >
                 <h2 className="text-3xl font-bold text-gray-900 my-8 text-center">
                   {formatDate(day.date)}
                 </h2>
