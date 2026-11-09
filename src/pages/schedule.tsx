@@ -154,14 +154,6 @@ const SchedulePage: React.FC = () => {
                   {formatDate(day.date)}
                 </Link>
               ))}
-              <Link
-                to="/schedule/print"
-                target="_blank"
-                rel="noopener"
-                className="btn-pill bg-cnd-red text-white hover:bg-cnd-red/90"
-              >
-                Print schedule
-              </Link>
             </div>
           )}
 

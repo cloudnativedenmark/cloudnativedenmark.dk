@@ -117,7 +117,8 @@ src/components/
 
 ### Attendee schedule printing
 
-Use **Print schedule** on `/schedule`, or open `/schedule/print`.
+Open `/schedule/print` directly. It is not linked from the public schedule
+while the team reviews it.
 The preview has one fixed A4 portrait layout for both days, with parallel
 talks side by side and workshops in a separate panel. It keeps full titles
 and speaker names, without talk abstracts or portraits. Plenary service
