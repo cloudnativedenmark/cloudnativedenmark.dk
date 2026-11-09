@@ -127,6 +127,9 @@ The site integrates with Sessionize API to fetch:
 
 Configuration is managed in `src/hooks/use-sessionize.tsx`.
 
+Lightning talk labels use a yellow background with dark text for contrast.
+Workshop labels use blue.
+
 ### Plenary Sessions
 
 Sessionize's `isPlenumSession` flag makes an event span all track columns.
