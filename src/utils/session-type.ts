@@ -101,8 +101,8 @@ export const deduceSessionType = (
 export const sessionTypeBadgeClasses: Record<SessionType, string> = {
   Keynote: "bg-cnd-red/10 text-cnd-red",
   Session: "bg-cnd-electric/10 text-cnd-electric",
-  Workshop: "bg-cnd-amber/10 text-cnd-amber",
-  "Lightning Talk": "bg-cnd-sky/10 text-cnd-harbor",
+  Workshop: "bg-cnd-sky/10 text-cnd-harbor",
+  "Lightning Talk": "bg-cnd-amber/10 text-cnd-amber",
 }
 
 export interface SessionCategoryItem {
