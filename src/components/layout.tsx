@@ -47,10 +47,14 @@ const menuLinks = allMenuLinks.filter(({ link }) => !hiddenLinks.includes(link))
 
 const Layout = () => {
   const { pathname } = useLocation()
+  const pagePath = pathname.replace(
+    /^\/schedule(?:\/talk\/[^/]+)?\/?$/,
+    "/schedule"
+  )
 
   useEffect(() => {
     window.scrollTo(0, 0)
-  }, [pathname])
+  }, [pagePath])
 
   return (
     <div className="flex min-h-screen flex-col bg-cnd-bone font-sans text-cnd-slate antialiased">
