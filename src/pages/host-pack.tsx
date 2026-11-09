@@ -456,7 +456,7 @@ export default function HostPack() {
               </Button>
               <CopyLinkButton
                 key={linkParams.toString()}
-                path={`/host-pack?${linkParams}`}
+                path={`/schedule/track-overview?${linkParams}`}
                 label="Copy link"
               />
             </div>

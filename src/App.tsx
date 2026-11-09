@@ -24,7 +24,7 @@ function App() {
   return (
     <Routes>
       <Route
-        path="/host-pack"
+        path="/schedule/track-overview"
         element={
           <React.Suspense
             fallback={<p role="status">Loading track overview…</p>}

@@ -84,7 +84,7 @@ const view = (dates: string[], schedule = dates.map(makeDay)) => {
   const root = document.createElement("div")
   document.body.append(root)
   root.innerHTML = renderToStaticMarkup(
-    <MemoryRouter initialEntries={[`/host-pack?${params}`]}>
+    <MemoryRouter initialEntries={[`/schedule/track-overview?${params}`]}>
       <HostPack />
     </MemoryRouter>
   )

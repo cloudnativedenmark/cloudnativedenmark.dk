@@ -32,7 +32,7 @@ const pages = [
       "How we expect everyone at Cloud Native Denmark to behave, and how to get help or report a problem.",
   },
   {
-    pathname: "/host-pack",
+    pathname: "/schedule/track-overview",
     title: "Track overview | Cloud Native Denmark",
     description:
       "Printable track schedules, speaker photos, and talk abstracts.",
