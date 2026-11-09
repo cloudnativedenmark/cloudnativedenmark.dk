@@ -1,7 +1,7 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 import SEOHead from "../components/seo-head"
-import { useSessionizeSchedule } from "../hooks/use-sessionize"
+import { type Session, useSessionizeSchedule } from "../hooks/use-sessionize"
 import { useModalManagement } from "../hooks/use-modal-management"
 import { formatDate, formatTime } from "../utils/time-formatting"
 import SessionCard from "../components/session-card"
@@ -14,6 +14,7 @@ const SchedulePage: React.FC = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const { talkId } = useParams()
+  const previousTalkId = useRef(talkId)
   const { schedule, isLoading } = useSessionizeSchedule()
   const {
     selectedSession,
@@ -72,7 +73,9 @@ const SchedulePage: React.FC = () => {
   }, [talkId, schedule, location.hash, linkedDay])
 
   useEffect(() => {
-    if (!linkedDay) return
+    const closedTalk = previousTalkId.current && !talkId
+    previousTalkId.current = talkId
+    if (!linkedDay || closedTalk) return
 
     const frame = window.requestAnimationFrame(() => {
       document.getElementById(linkedDay.date.slice(0, 10))?.scrollIntoView({
@@ -82,7 +85,7 @@ const SchedulePage: React.FC = () => {
     })
 
     return () => window.cancelAnimationFrame(frame)
-  }, [linkedDay, location.key])
+  }, [linkedDay, location.key, talkId])
 
   const openSession = (session: NonNullable<typeof selectedSession>) => {
     handleSessionClick(session)
@@ -151,6 +154,14 @@ const SchedulePage: React.FC = () => {
 
           {schedule.map((day) => {
             const renderedSessions = new Map<string, Set<number>>()
+            const serviceSessions: Session[] = []
+            for (const slot of day.timeSlots) {
+              for (const room of slot.rooms) {
+                if (room.session.isServiceSession) {
+                  serviceSessions.push(room.session)
+                }
+              }
+            }
             return (
               <div
                 key={day.date}
@@ -161,7 +172,7 @@ const SchedulePage: React.FC = () => {
                   {formatDate(day.date)}
                 </h2>
                 <div
-                  className="hidden md:grid gap-px bg-gray-200 border border-gray-300 rounded-lg overflow-hidden"
+                  className="hidden md:grid isolate gap-px bg-gray-200 border border-gray-300 rounded-lg overflow-hidden"
                   style={{
                     gridTemplateColumns: `minmax(80px, 0.5fr) repeat(${day.rooms.length}, 1fr)`,
                   }}
@@ -187,104 +198,141 @@ const SchedulePage: React.FC = () => {
                         ? timeSlot.rooms[0].session
                         : null
 
-                    if (plenumSession) {
-                      const concurrent =
-                        renderedSessions.get(timeSlot.slotStart)?.size || 0
-                      return [
-                        <div
-                          key={`${timeSlot.slotStart}-time`}
-                          className="bg-white p-4 text-center font-semibold flex items-center justify-center"
-                        >
-                          {formatTime(timeSlot.slotStart)}
-                        </div>,
-                        <div
-                          key={`${timeSlot.slotStart}-session`}
-                          className="bg-white p-1"
-                          style={{
-                            gridColumn: `span ${day.rooms.length - concurrent}`,
-                          }}
-                        >
-                          <SessionCard
-                            session={plenumSession}
-                            onClick={() => handleSessionClick(plenumSession)}
-                            variant="schedule"
-                          />
-                        </div>,
-                      ]
-                    }
-
                     const timeCell = (
                       <div
                         key={`${timeSlot.slotStart}-time`}
                         className="bg-white p-4 text-center font-semibold flex items-center justify-center"
+                        style={{ gridColumn: 1, gridRow: timeSlotIndex + 2 }}
                       >
                         {formatTime(timeSlot.slotStart)}
                       </div>
                     )
 
-                    const sessionCells = day.rooms.flatMap((room) => {
-                      // This room already has a continued session for the timeslot
-                      if (
-                        renderedSessions.get(timeSlot.slotStart)?.has(room.id)
-                      ) {
-                        return []
-                      }
+                    if (plenumSession) {
+                      const isOverlay =
+                        plenumSession.isServiceSession &&
+                        (renderedSessions.get(timeSlot.slotStart)?.size || 0) >
+                          0
+                      return [
+                        timeCell,
+                        isOverlay &&
+                          day.rooms.map((room, roomIndex) => {
+                            if (
+                              renderedSessions
+                                .get(timeSlot.slotStart)
+                                ?.has(room.id)
+                            )
+                              return null
 
-                      // Nothing happens in the room at this time
-                      const sessionForRoom = timeSlot.rooms.find(
-                        (r) => r.id === room.id
-                      )?.session
-                      if (!sessionForRoom || !sessionForRoom.id) {
+                            return (
+                              <div
+                                key={`${timeSlot.slotStart}-${room.id}-background`}
+                                className="bg-white"
+                                style={{
+                                  gridColumn: roomIndex + 2,
+                                  gridRow: timeSlotIndex + 2,
+                                }}
+                              />
+                            )
+                          }),
+                        <div
+                          key={`${timeSlot.slotStart}-session`}
+                          className={
+                            isOverlay
+                              ? "relative z-10 p-1 pointer-events-none"
+                              : "bg-white p-1 flex flex-col"
+                          }
+                          style={{
+                            gridColumn: "2 / -1",
+                            gridRow: timeSlotIndex + 2,
+                          }}
+                        >
+                          {!plenumSession.isServiceSession && (
+                            <p className="p-3 font-bold text-gray-600">
+                              {plenumSession.room}
+                            </p>
+                          )}
+                          <SessionCard
+                            session={plenumSession}
+                            onClick={() => openSession(plenumSession)}
+                            variant={isOverlay ? "overlay" : "schedule"}
+                          />
+                        </div>,
+                      ]
+                    }
+
+                    const sessionCells = day.rooms.flatMap(
+                      (room, roomIndex) => {
+                        // This room already has a continued session for the timeslot
+                        if (
+                          renderedSessions.get(timeSlot.slotStart)?.has(room.id)
+                        ) {
+                          return []
+                        }
+
+                        // Nothing happens in the room at this time
+                        const sessionForRoom = timeSlot.rooms.find(
+                          (r) => r.id === room.id
+                        )?.session
+                        if (!sessionForRoom || !sessionForRoom.id) {
+                          return [
+                            <div
+                              key={`${timeSlot.slotStart}-${room.id}`}
+                              className="bg-white p-1"
+                              style={{
+                                gridColumn: roomIndex + 2,
+                                gridRow: timeSlotIndex + 2,
+                              }}
+                            />,
+                          ]
+                        }
+
+                        // A session is schedules for this timeslot
+                        let rowSpan = 1
+                        const ends = new Date(sessionForRoom.endsAt)
+                        for (
+                          let i = timeSlotIndex + 1;
+                          i < day.timeSlots.length;
+                          i++
+                        ) {
+                          const slotStart = new Date(
+                            day.timeSlots[i].rooms[0].session.startsAt
+                          )
+                          if (slotStart < ends) {
+                            rowSpan++
+                            if (
+                              !renderedSessions.has(day.timeSlots[i].slotStart)
+                            ) {
+                              renderedSessions.set(
+                                day.timeSlots[i].slotStart,
+                                new Set()
+                              )
+                            }
+                            renderedSessions
+                              .get(day.timeSlots[i].slotStart)
+                              ?.add(room.id)
+                          } else {
+                            break
+                          }
+                        }
                         return [
                           <div
                             key={`${timeSlot.slotStart}-${room.id}`}
                             className="bg-white p-1"
-                          />,
+                            style={{
+                              gridColumn: roomIndex + 2,
+                              gridRow: `${timeSlotIndex + 2} / span ${rowSpan}`,
+                            }}
+                          >
+                            <SessionCard
+                              session={sessionForRoom}
+                              onClick={() => openSession(sessionForRoom)}
+                              variant="schedule"
+                            />
+                          </div>,
                         ]
                       }
-
-                      // A session is schedules for this timeslot
-                      let rowSpan = 1
-                      const ends = new Date(sessionForRoom.endsAt)
-                      for (
-                        let i = timeSlotIndex + 1;
-                        i < day.timeSlots.length;
-                        i++
-                      ) {
-                        const slotStart = new Date(
-                          day.timeSlots[i].rooms[0].session.startsAt
-                        )
-                        if (slotStart < ends) {
-                          rowSpan++
-                          if (
-                            !renderedSessions.has(day.timeSlots[i].slotStart)
-                          ) {
-                            renderedSessions.set(
-                              day.timeSlots[i].slotStart,
-                              new Set()
-                            )
-                          }
-                          renderedSessions
-                            .get(day.timeSlots[i].slotStart)
-                            ?.add(room.id)
-                        } else {
-                          break
-                        }
-                      }
-                      return [
-                        <div
-                          key={`${timeSlot.slotStart}-${room.id}`}
-                          className="bg-white p-1"
-                          style={{ gridRow: `span ${rowSpan}` }}
-                        >
-                          <SessionCard
-                            session={sessionForRoom}
-                            onClick={() => openSession(sessionForRoom)}
-                            variant="schedule"
-                          />
-                        </div>,
-                      ]
-                    })
+                    )
 
                     return [timeCell, ...sessionCells]
                   })}
@@ -301,15 +349,21 @@ const SchedulePage: React.FC = () => {
                             key={room.id}
                             className="bg-white p-1 rounded-lg shadow-sm border border-gray-300"
                           >
-                            <div className="p-3">
-                              <p className="font-bold text-gray-600">
-                                {room.name}
-                              </p>
-                            </div>
+                            {!(
+                              room.session.isPlenumSession &&
+                              room.session.isServiceSession
+                            ) && (
+                              <div className="p-3">
+                                <p className="font-bold text-gray-600">
+                                  {room.name}
+                                </p>
+                              </div>
+                            )}
                             <SessionCard
                               session={room.session}
                               onClick={() => openSession(room.session)}
-                              variant="schedule"
+                              variant="mobile"
+                              serviceSessions={serviceSessions}
                             />
                           </div>
                         ))}

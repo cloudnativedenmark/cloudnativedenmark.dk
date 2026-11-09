@@ -127,6 +127,28 @@ The site integrates with Sessionize API to fetch:
 
 Configuration is managed in `src/hooks/use-sessionize.tsx`.
 
+### Plenary Sessions
+
+Sessionize's `isPlenumSession` flag makes an event span all track columns.
+Plenary presentations show their assigned room and open a shareable talk URL.
+Opening or closing a talk keeps the schedule's scroll position, including
+when browser back returns to a day link.
+
+Plenary service sessions have no location label. Put any directions in their
+description; the schedule shows that description on desktop and mobile.
+When a plenary service session overlaps a workshop, a partly transparent
+break band covers all tracks. The rounded band has a gray fill; unused
+track cells behind it stay white. The workshop card stays continuous and
+clickable through the band.
+
+Desktop entries longer than 60 minutes have a 12rem minimum card height.
+Mobile cards do not use this minimum.
+
+Schedule cards show start and end times next to the session type badge, or
+above the title when there is no badge, on desktop and mobile. Mobile workshop
+cards list overlapping service sessions with their time ranges. Sessions that
+only meet at an end or start time do not overlap.
+
 ### Schedule Day Links
 
 Use either format to link to a conference day:
