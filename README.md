@@ -131,7 +131,7 @@ formatting are shared with the track overviews.
 
 ### Track overviews
 
-Open `/host-pack` directly; it is not linked from the site navigation.
+Open `/schedule/track-overview` directly; it is not linked from the site navigation.
 Select one or more days and tracks, then use **Copy link** to share the
 selection. Each selected day starts with one combined overview of its
 selected tracks, followed by the talk sheets grouped by track. Shared
@@ -150,7 +150,7 @@ Sessionize.
   the combined overviews for the selected days.
 
 Repeat `date` and `room` parameters to select multiple days and tracks:
-`/host-pack?date=2026-11-19&date=2026-11-20&room=75248&room=75249&format=compact`.
+`/schedule/track-overview?date=2026-11-19&date=2026-11-20&room=75248&room=75249&format=compact`.
 
 Print on A4 portrait at 100% scale, with browser headers and footers off.
 All formats retain full abstracts and speaker photos. Print headers use
