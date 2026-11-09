@@ -17,9 +17,34 @@ import SponsorInfo from "./pages/sponsor-info"
 import NotFound from "./pages/404"
 import { features } from "./config/features"
 
+const HostPack = React.lazy(() => import("./pages/host-pack"))
+const SchedulePrint = React.lazy(() => import("./pages/schedule-print"))
+
 function App() {
   return (
     <Routes>
+      <Route
+        path="/host-pack"
+        element={
+          <React.Suspense
+            fallback={<p role="status">Loading track overview…</p>}
+          >
+            <HostPack />
+          </React.Suspense>
+        }
+      />
+      {features.scheduleAndSpeakers && (
+        <Route
+          path="/schedule/print"
+          element={
+            <React.Suspense
+              fallback={<p role="status">Loading print schedule…</p>}
+            >
+              <SchedulePrint />
+            </React.Suspense>
+          }
+        />
+      )}
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="code-of-conduct" element={<CodeOfConduct />} />

@@ -115,6 +115,51 @@ src/components/
 - 📅 **Event Management**: Dynamic conference schedule and speaker profiles
 - 💼 **Sponsor Management**: Tiered sponsor system with dynamic logos
 
+### Attendee schedule printing
+
+Open `/schedule/print` directly. It is not linked from the public schedule
+while the team reviews it.
+The preview has one fixed A4 portrait layout for both days, with parallel
+talks side by side and workshops in a separate panel. It keeps full titles
+and speaker names, without talk abstracts or portraits. Plenary service
+events omit room labels and keep directions from Sessionize.
+
+The preview route loads Sessionize data and passes it to
+`AttendeeScheduleDocument`. Schedule views share `timetableRows` for time
+boundaries and row spans. `PrintSheet`, `preparePrint`, and Copenhagen time
+formatting are shared with the track overviews.
+
+### Track overviews
+
+Open `/host-pack` directly; it is not linked from the site navigation.
+Select one or more days and tracks, then use **Copy link** to share the
+selection. Each selected day starts with one combined overview of its
+selected tracks, followed by the talk sheets grouped by track. Shared
+events appear once in the daily overview. Grayscale row backgrounds
+distinguish stages.
+
+Plenary events remain in the overview while a selected workshop continues.
+Shared service events omit the assigned room and show any directions from
+Sessionize.
+
+- `format=spacious`: one session starts on each sheet, with 12 pt text
+  and space for notes.
+- `format=paired`: up to two sessions per sheet, with 11 pt text.
+- `format=compact`: fit sessions to each sheet, with 10 pt text.
+- `overview=0`: omit day overviews. **Print overview only** still prints
+  the combined overviews for the selected days.
+
+Repeat `date` and `room` parameters to select multiple days and tracks:
+`/host-pack?date=2026-11-19&date=2026-11-20&room=75248&room=75249&format=compact`.
+
+Print on A4 portrait at 100% scale, with browser headers and footers off.
+All formats retain full abstracts and speaker photos. Print headers use
+the CND logo and site fonts. Long sessions can continue onto another sheet.
+Times use Copenhagen time.
+
+The page is public, with `noindex` metadata, not access control. Do not add
+speaker email addresses or other private data.
+
 ## 📊 Data Management
 
 ### Sessionize Integration

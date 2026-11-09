@@ -31,6 +31,20 @@ const pages = [
     description:
       "How we expect everyone at Cloud Native Denmark to behave, and how to get help or report a problem.",
   },
+  {
+    pathname: "/host-pack",
+    title: "Track overview | Cloud Native Denmark",
+    description:
+      "Printable track schedules, speaker photos, and talk abstracts.",
+    noindex: true,
+  },
+  {
+    pathname: "/schedule/print",
+    title: "Print schedule | Cloud Native Denmark",
+    description:
+      "Printable conference timetable with talks, speakers, and workshops.",
+    noindex: true,
+  },
 ]
 
 const escapeHtml = (value) =>
@@ -73,7 +87,10 @@ const createSharePage = (html, page) => {
       /<meta name="description" content="[^"]*"\s*\/>/,
       `<meta name="description" content="${description}" data-rh="true" />`
     )
-    .replace("</head>", `${createShareTags(page)}\n</head>`)
+    .replace(
+      "</head>",
+      `${page.noindex ? '<meta name="robots" content="noindex, nofollow" data-rh="true" />' : ""}${createShareTags(page)}\n</head>`
+    )
 }
 
 const template = await readFile(join(distDirectory, "index.html"), "utf8")
