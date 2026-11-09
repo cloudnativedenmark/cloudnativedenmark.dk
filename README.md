@@ -127,7 +127,8 @@ The site integrates with Sessionize API to fetch:
 
 Configuration is managed in `src/hooks/use-sessionize.tsx`.
 
-Session type labels use yellow for lightning talks and blue for workshops.
+Lightning talk labels use a yellow background with dark text for contrast.
+Workshop labels use blue.
 
 ### Plenary Sessions
 
