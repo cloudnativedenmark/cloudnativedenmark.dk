@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import Logo from "../images/logo.svg"
 import { Link } from "react-router-dom"
 import HamburgerMenu from "../images/hamburger-menu.inline.svg"
@@ -13,6 +13,25 @@ interface HeaderProps {
 
 const Header = ({ menuLinks }: HeaderProps) => {
   const [isMenuOpen, setMenuOpen] = useState(false)
+  const headerRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const header = headerRef.current
+    if (!header) return
+
+    const observer = new ResizeObserver(() => {
+      document.documentElement.style.setProperty(
+        "--site-header-height",
+        `${header.getBoundingClientRect().height}px`
+      )
+    })
+    observer.observe(header)
+
+    return () => {
+      observer.disconnect()
+      document.documentElement.style.removeProperty("--site-header-height")
+    }
+  }, [])
 
   useEffect(() => {
     document.body.style.overflow = isMenuOpen ? "hidden" : "unset"
@@ -27,6 +46,7 @@ const Header = ({ menuLinks }: HeaderProps) => {
 
   return (
     <header
+      ref={headerRef}
       className={
         "safe-paddings sticky top-0 z-50 bg-cnd-bone/85 backdrop-blur-md transition-colors border-b border-cnd-fog/40" +
         (isMenuOpen ? " h-screen flex flex-col bg-cnd-bone" : "")
