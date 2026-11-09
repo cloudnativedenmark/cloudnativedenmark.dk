@@ -169,25 +169,25 @@ const SchedulePage: React.FC = () => {
               <div
                 key={day.date}
                 id={day.date.slice(0, 10)}
-                className="mb-16 scroll-mt-[76px]"
+                className="mb-16 scroll-mt-[var(--site-header-height)]"
               >
                 <h2 className="text-3xl font-bold text-gray-900 my-8 text-center">
                   {formatDate(day.date)}
                 </h2>
                 <div
-                  className="hidden md:grid isolate gap-px bg-gray-200 border border-gray-300 rounded-lg overflow-hidden"
+                  className="hidden md:grid isolate gap-px bg-gray-200 border border-gray-300 rounded-lg overflow-clip"
                   style={{
                     gridTemplateColumns: `minmax(80px, 0.5fr) repeat(${day.rooms.length}, 1fr)`,
                   }}
                 >
                   {/* Header Row */}
-                  <div className="bg-gray-100 p-4 font-bold text-center">
+                  <div className="sticky top-[var(--site-header-height)] z-20 bg-gray-100 p-4 font-bold text-center">
                     Time
                   </div>
                   {day.rooms.map((room) => (
                     <div
                       key={room.id}
-                      className="bg-gray-100 p-4 font-bold text-center"
+                      className="sticky top-[var(--site-header-height)] z-20 bg-gray-100 p-4 font-bold text-center"
                     >
                       {room.name}
                     </div>
@@ -287,7 +287,7 @@ const SchedulePage: React.FC = () => {
                 <div className="md:hidden">
                   {day.timeSlots.map((timeSlot) => (
                     <div key={timeSlot.slotStart} className="mb-8">
-                      <h3 className="text-xl font-semibold text-gray-800 mb-4 bg-gray-100 p-3 rounded-t-lg border-b border-gray-200">
+                      <h3 className="sticky top-[var(--site-header-height)] z-20 text-xl font-semibold text-gray-800 mb-4 bg-gray-100 p-3 rounded-t-lg border-b border-gray-200">
                         {formatTime(timeSlot.slotStart)}
                       </h3>
                       <div className="space-y-4">
