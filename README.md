@@ -166,6 +166,20 @@ The site integrates with Sessionize API to fetch:
 
 Configuration is managed in `src/hooks/use-sessionize.tsx`.
 
+### Schedule Day Links
+
+Use either format to link to a conference day:
+
+- Day number: `/schedule#day1` or `/schedule#day2`
+- Weekday: `/schedule#thursday` or `/schedule#friday`
+
+Day numbers follow the schedule order. Weekdays use the conference date,
+not the visitor's time zone. Date links such as `/schedule#2026-11-19` also work.
+
+The day links above the schedule use day numbers and update the URL. Copy a
+link or the browser address to share it. The page scrolls to that day after
+the schedule loads.
+
 ### Content Management
 
 - **Team Data**: Embedded in `src/utils/data-loader.ts` site metadata
