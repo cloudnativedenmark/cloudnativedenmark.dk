@@ -31,8 +31,7 @@ import "../styles/host-pack.css"
 const formats = {
   spacious: {
     name: "One per page",
-    description:
-      "Large portraits and 12 pt text. One session starts on each sheet.",
+    description: "Large portraits, 12 pt text, and space for notes.",
     limit: 1,
   },
   paired: {
