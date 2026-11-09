@@ -71,6 +71,21 @@ it("includes shared items with their location, but not breaks during a workshop"
   expect(timeline[0].room).toBe("Main stage")
 })
 
+it.each([false, true])(
+  "includes a plenary event during a selected workshop (service: %s)",
+  (isServiceSession) => {
+    const workshop = session("workshop", 3, "10:25", "11:55")
+    const shared = session("shared", 1, "11:00", "11:20", {
+      isPlenumSession: true,
+      isServiceSession,
+    })
+
+    expect(
+      hostTimeline(dayWith([workshop, shared]), [3]).map((item) => item.id)
+    ).toEqual(["workshop", "shared"])
+  }
+)
+
 it("shows an external break that starts exactly when a track talk ends", () => {
   const day = dayWith([
     session("talk", 2, "10:25", "11:00"),

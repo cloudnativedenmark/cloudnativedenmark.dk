@@ -130,3 +130,28 @@ it("does not merge a long talk across another track's later start", () => {
   expect(longCell.rowSpan).toBe(2)
   expect(table.getByText(later.title)).toBeInTheDocument()
 })
+
+it.each([false, true])(
+  "prints directions instead of a room only for plenary service events (%s)",
+  (isPlenumSession) => {
+    const directions = "Coffee is in the foyer."
+    const page = view([
+      main,
+      breakout,
+      workshop,
+      { ...coffee, isPlenumSession, description: directions },
+    ])
+    const cell = within(
+      within(page.getByRole("table")).getByText(coffee.title).closest("td")!
+    )
+
+    if (isPlenumSession) {
+      expect(cell.queryByText(coffee.room)).toBeNull()
+      expect(cell.getByText(directions)).toBeInTheDocument()
+      return
+    }
+
+    expect(cell.getByText(coffee.room)).toBeInTheDocument()
+    expect(cell.queryByText(directions)).toBeNull()
+  }
+)

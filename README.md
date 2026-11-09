@@ -120,7 +120,8 @@ src/components/
 Use **Print schedule** on `/schedule`, or open `/schedule/print`.
 The preview has one fixed A4 portrait layout for both days, with parallel
 talks side by side and workshops in a separate panel. It keeps full titles
-and speaker names, without abstracts or portraits.
+and speaker names, without talk abstracts or portraits. Plenary service
+events omit room labels and keep directions from Sessionize.
 
 The preview route loads Sessionize data and passes it to
 `AttendeeScheduleDocument`. Schedule views share `timetableRows` for time
@@ -135,6 +136,10 @@ selection. Each selected day starts with one combined overview of its
 selected tracks, followed by the talk sheets grouped by track. Shared
 events appear once in the daily overview. Grayscale row backgrounds
 distinguish stages.
+
+Plenary events remain in the overview while a selected workshop continues.
+Shared service events omit the assigned room and show any directions from
+Sessionize.
 
 - `format=spacious`: one session starts on each sheet, with 12 pt text
   and space for notes.
@@ -165,6 +170,28 @@ The site integrates with Sessionize API to fetch:
 - Event grid and room assignments
 
 Configuration is managed in `src/hooks/use-sessionize.tsx`.
+
+### Plenary Sessions
+
+Sessionize's `isPlenumSession` flag makes an event span all track columns.
+Plenary presentations show their assigned room and open a shareable talk URL.
+Opening or closing a talk keeps the schedule's scroll position, including
+when browser back returns to a day link.
+
+Plenary service sessions have no location label. Put any directions in their
+description; the schedule shows that description on desktop and mobile.
+When a plenary service session overlaps a workshop, a partly transparent
+break band covers all tracks. The rounded band has a gray fill; unused
+track cells behind it stay white. The workshop card stays continuous and
+clickable through the band.
+
+Desktop entries longer than 60 minutes have a 12rem minimum card height.
+Mobile cards do not use this minimum.
+
+Schedule cards show start and end times next to the session type badge, or
+above the title when there is no badge, on desktop and mobile. Mobile workshop
+cards list overlapping service sessions with their time ranges. Sessions that
+only meet at an end or start time do not overlap.
 
 ### Schedule Day Links
 

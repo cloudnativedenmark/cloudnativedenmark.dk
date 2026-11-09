@@ -11,6 +11,8 @@ function SessionText({
   session: Session
   showRoom?: boolean
 }) {
+  const sharedService = session.isPlenumSession && session.isServiceSession
+
   return (
     <>
       <strong className="attendee-title">
@@ -23,7 +25,12 @@ function SessionText({
             .join(" · ")}
         </span>
       )}
-      {showRoom && <span className="attendee-location">{session.room}</span>}
+      {sharedService && session.description && (
+        <span className="attendee-directions">{session.description}</span>
+      )}
+      {showRoom && !sharedService && (
+        <span className="attendee-location">{session.room}</span>
+      )}
     </>
   )
 }

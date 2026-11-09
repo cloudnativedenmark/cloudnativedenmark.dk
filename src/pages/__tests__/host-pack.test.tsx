@@ -74,9 +74,9 @@ const makeDay = (date: string): GridEntry => {
   }
 }
 
-const view = (dates: string[]) => {
+const view = (dates: string[], schedule = dates.map(makeDay)) => {
   jest.mocked(useSessionizeSchedule).mockReturnValue({
-    schedule: dates.map(makeDay),
+    schedule,
     isLoading: false,
   })
   const params = new URLSearchParams("room=1&room=2&format=compact")
@@ -125,4 +125,24 @@ it("shows one combined overview per day instead of one per selected track", () =
     expect(overview.getByText(`Breakout talk ${date}`)).toBeInTheDocument()
     expect(overview.getAllByText("Coffee break")).toHaveLength(1)
   }
+})
+
+it("keeps talk locations but uses directions for a plenary service event", () => {
+  const date = "2026-11-19"
+  const day = makeDay(date)
+  const coffee = day.timeSlots
+    .flatMap((slot) => slot.rooms)
+    .find(({ session }) => session.isServiceSession)!.session
+  coffee.isPlenumSession = true
+  coffee.description = "Coffee is in the foyer."
+
+  const page = view([date], [day])
+  const overview = within(page.getByRole("region", { name: "Day overview" }))
+  const serviceRow = within(overview.getByText(coffee.title).closest("tr")!)
+  expect(serviceRow.queryByText(coffee.room)).toBeNull()
+  expect(
+    serviceRow.getByText(coffee.description, { exact: false })
+  ).toBeInTheDocument()
+  const talkRow = within(overview.getByText(`Main talk ${date}`).closest("tr")!)
+  expect(talkRow.getByText("Main stage")).toBeInTheDocument()
 })

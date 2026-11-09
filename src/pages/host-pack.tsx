@@ -125,27 +125,42 @@ function DayOverview({
             </tr>
           </thead>
           <tbody>
-            {timeline.map((session) => (
-              <tr
-                className={`host-stage-${stageIds.indexOf(session.roomId)}`}
-                key={session.id}
-              >
-                <td>
-                  {formatEventTime(session.startsAt)}–
-                  {formatEventTime(session.endsAt)}
-                </td>
-                <td>
-                  <strong>{session.title || session.name}</strong>
-                  <span>
-                    {session.speakers.length > 0 && " · "}
-                    {session.speakers
-                      .map((speaker) => speaker.fullName || speaker.name)
-                      .join(" · ")}
-                  </span>
-                </td>
-                <td>{session.room}</td>
-              </tr>
-            ))}
+            {timeline.map((session) => {
+              const sharedService =
+                session.isPlenumSession && session.isServiceSession
+
+              return (
+                <tr
+                  className={
+                    sharedService
+                      ? "host-shared-service"
+                      : `host-stage-${stageIds.indexOf(session.roomId)}`
+                  }
+                  key={session.id}
+                >
+                  <td>
+                    {formatEventTime(session.startsAt)}–
+                    {formatEventTime(session.endsAt)}
+                  </td>
+                  <td>
+                    <strong>{session.title || session.name}</strong>
+                    <span>
+                      {session.speakers.length > 0 && " · "}
+                      {session.speakers
+                        .map((speaker) => speaker.fullName || speaker.name)
+                        .join(" · ")}
+                    </span>
+                    {sharedService && session.description && (
+                      <span className="host-service-directions">
+                        {" · "}
+                        {session.description}
+                      </span>
+                    )}
+                  </td>
+                  <td>{!sharedService && session.room}</td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </PrintSheet>

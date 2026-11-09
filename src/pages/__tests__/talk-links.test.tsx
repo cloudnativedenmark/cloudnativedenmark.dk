@@ -100,19 +100,49 @@ describe("talk links", () => {
     ).toBeInTheDocument()
   })
 
-  it("closes a talk when browser history returns to a day link", async () => {
-    HTMLElement.prototype.scrollIntoView = jest.fn()
-    view("/schedule#thursday")
-    fireEvent.click(screen.getAllByText("A talk")[0])
-    expect(
-      await screen.findByRole("button", { name: "Copy talk link" })
-    ).toBeInTheDocument()
-
-    fireEvent.click(screen.getByRole("button", { name: "Browser back" }))
-    await waitFor(() =>
+  it.each([false, true])(
+    "closes a talk when browser history returns to a day link (plenary: %s)",
+    async (isPlenumSession) => {
+      const talk = { ...session, isPlenumSession }
+      jest.mocked(useSessionizeSchedule).mockReturnValue({
+        isLoading: false,
+        schedule: [
+          {
+            ...schedule[0],
+            timeSlots: [
+              {
+                ...schedule[0].timeSlots[0],
+                rooms: [
+                  { ...schedule[0].timeSlots[0].rooms[0], session: talk },
+                ],
+              },
+            ],
+          },
+        ],
+      })
+      const scrollIntoView = jest.fn()
+      HTMLElement.prototype.scrollIntoView = scrollIntoView
+      view("/schedule#thursday")
+      await waitFor(() => expect(scrollIntoView).toHaveBeenCalled())
+      scrollIntoView.mockClear()
+      fireEvent.click(screen.getAllByText("A talk")[0])
       expect(
-        screen.queryByRole("button", { name: "Copy talk link" })
-      ).not.toBeInTheDocument()
-    )
-  })
+        await screen.findByRole("button", { name: "Copy talk link" })
+      ).toBeInTheDocument()
+
+      fireEvent.click(screen.getByRole("button", { name: "Browser back" }))
+      await waitFor(() =>
+        expect(
+          screen.queryByRole("button", { name: "Copy talk link" })
+        ).not.toBeInTheDocument()
+      )
+      expect(
+        screen.getByRole("heading", { name: "Schedule" })
+      ).toBeInTheDocument()
+      const { promise, resolve } = Promise.withResolvers<void>()
+      window.requestAnimationFrame(() => resolve())
+      await promise
+      expect(scrollIntoView).not.toHaveBeenCalled()
+    }
+  )
 })

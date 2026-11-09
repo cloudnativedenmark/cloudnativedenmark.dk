@@ -20,9 +20,9 @@ export const hostTimeline = (day: GridEntry, roomIds: number[]): Session[] => {
   const own = all.filter((session) => roomIds.includes(session.roomId))
 
   return all.filter((session) => {
-    if (roomIds.includes(session.roomId)) return true
+    if (roomIds.includes(session.roomId) || session.isPlenumSession) return true
     if (own.some((item) => overlaps(item, session))) return false
-    if (session.isServiceSession || session.isPlenumSession) return true
+    if (session.isServiceSession) return true
 
     return !all.some(
       (other) => other.roomId !== session.roomId && overlaps(other, session)

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 import SEOHead from "../components/seo-head"
 import { useSessionizeSchedule } from "../hooks/use-sessionize"
@@ -13,12 +13,13 @@ import SessionModal from "../components/session_modal"
 import SpeakerModal from "../components/speaker_modal"
 import { speakerPath } from "../utils/speaker-link"
 import { talkPath, talkType } from "../utils/talk-link"
-import { timetableRows } from "../utils/schedule-layout"
+import { daySessions, timetableRows } from "../utils/schedule-layout"
 
 const SchedulePage: React.FC = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const { talkId } = useParams()
+  const previousTalkId = useRef(talkId)
   const { schedule, isLoading } = useSessionizeSchedule()
   const {
     selectedSession,
@@ -77,7 +78,9 @@ const SchedulePage: React.FC = () => {
   }, [talkId, schedule, location.hash, linkedDay])
 
   useEffect(() => {
-    if (!linkedDay) return
+    const closedTalk = previousTalkId.current && !talkId
+    previousTalkId.current = talkId
+    if (!linkedDay || closedTalk) return
 
     const frame = window.requestAnimationFrame(() => {
       document.getElementById(linkedDay.date.slice(0, 10))?.scrollIntoView({
@@ -87,7 +90,7 @@ const SchedulePage: React.FC = () => {
     })
 
     return () => window.cancelAnimationFrame(frame)
-  }, [linkedDay, location.key])
+  }, [linkedDay, location.key, talkId])
 
   const openSession = (session: NonNullable<typeof selectedSession>) => {
     handleSessionClick(session)
@@ -167,6 +170,9 @@ const SchedulePage: React.FC = () => {
               day,
               day.rooms.map((room) => room.id)
             )
+            const serviceSessions = daySessions(day).filter(
+              (session) => session.isServiceSession
+            )
             return (
               <div
                 key={day.date}
@@ -177,7 +183,7 @@ const SchedulePage: React.FC = () => {
                   {formatDate(day.date)}
                 </h2>
                 <div
-                  className="hidden md:grid gap-px bg-gray-200 border border-gray-300 rounded-lg overflow-hidden"
+                  className="hidden md:grid isolate gap-px bg-gray-200 border border-gray-300 rounded-lg overflow-hidden"
                   style={{
                     gridTemplateColumns: `minmax(80px, 0.5fr) repeat(${day.rooms.length}, 1fr)`,
                   }}
@@ -196,50 +202,91 @@ const SchedulePage: React.FC = () => {
                   ))}
 
                   {/* Time Slots */}
-                  {rows.map((row) => {
-                    const active = row.cells.filter((cell) => cell.session)
-                    const first = active[0]
-                    const plenum =
-                      active.length === 1 &&
-                      !first.continued &&
-                      first.rowSpan === 1 &&
-                      first.session?.isPlenumSession
-                        ? first.session
-                        : null
+                  {rows.map((row, rowIndex) => {
+                    const plenumCell = row.cells.find(
+                      (cell) => cell.session?.isPlenumSession
+                    )
+                    const plenum = plenumCell?.session
+                    const isOverlay =
+                      plenum?.isServiceSession &&
+                      row.cells.some(
+                        (cell) => cell.continued && cell !== plenumCell
+                      )
                     return (
                       <React.Fragment key={row.startsAt}>
-                        <div className="bg-white p-4 text-center font-semibold flex items-center justify-center">
+                        <div
+                          className="bg-white p-4 text-center font-semibold flex items-center justify-center"
+                          style={{ gridColumn: 1, gridRow: rowIndex + 2 }}
+                        >
                           {formatEventTime(row.startsAt)}
                         </div>
-                        {plenum ? (
-                          <div
-                            className="bg-white p-1"
-                            style={{ gridColumn: `span ${day.rooms.length}` }}
-                          >
-                            <SessionCard
-                              session={plenum}
-                              onClick={() => handleSessionClick(plenum)}
-                              variant="schedule"
-                            />
-                          </div>
+                        {plenum && plenumCell ? (
+                          <>
+                            {isOverlay &&
+                              row.cells.map((cell, index) =>
+                                cell.continued && cell !== plenumCell ? null : (
+                                  <div
+                                    key={cell.roomId}
+                                    className="bg-white"
+                                    style={{
+                                      gridColumn: index + 2,
+                                      gridRow: rowIndex + 2,
+                                    }}
+                                  />
+                                )
+                              )}
+                            {!plenumCell.continued && (
+                              <div
+                                className={
+                                  isOverlay
+                                    ? "relative z-10 p-1 pointer-events-none"
+                                    : "bg-white p-1 flex flex-col"
+                                }
+                                style={{
+                                  gridColumn: "2 / -1",
+                                  gridRow:
+                                    plenumCell.rowSpan === 1
+                                      ? rowIndex + 2
+                                      : `${rowIndex + 2} / span ${plenumCell.rowSpan}`,
+                                }}
+                              >
+                                {!plenum.isServiceSession && (
+                                  <p className="p-3 font-bold text-gray-600">
+                                    {plenum.room}
+                                  </p>
+                                )}
+                                <SessionCard
+                                  session={plenum}
+                                  onClick={() => openSession(plenum)}
+                                  variant={isOverlay ? "overlay" : "schedule"}
+                                />
+                              </div>
+                            )}
+                          </>
                         ) : (
-                          row.cells
-                            .filter((cell) => !cell.continued)
-                            .map((cell) => (
+                          row.cells.map((cell, index) => {
+                            if (cell.continued) return null
+                            const { session } = cell
+
+                            return (
                               <div
                                 key={cell.roomId}
                                 className="bg-white p-1"
-                                style={{ gridRow: `span ${cell.rowSpan}` }}
+                                style={{
+                                  gridColumn: index + 2,
+                                  gridRow: `${rowIndex + 2} / span ${cell.rowSpan}`,
+                                }}
                               >
-                                {cell.session && (
+                                {session && (
                                   <SessionCard
-                                    session={cell.session}
-                                    onClick={() => openSession(cell.session!)}
+                                    session={session}
+                                    onClick={() => openSession(session)}
                                     variant="schedule"
                                   />
                                 )}
                               </div>
-                            ))
+                            )
+                          })
                         )}
                       </React.Fragment>
                     )
@@ -257,15 +304,21 @@ const SchedulePage: React.FC = () => {
                             key={room.id}
                             className="bg-white p-1 rounded-lg shadow-sm border border-gray-300"
                           >
-                            <div className="p-3">
-                              <p className="font-bold text-gray-600">
-                                {room.name}
-                              </p>
-                            </div>
+                            {!(
+                              room.session.isPlenumSession &&
+                              room.session.isServiceSession
+                            ) && (
+                              <div className="p-3">
+                                <p className="font-bold text-gray-600">
+                                  {room.name}
+                                </p>
+                              </div>
+                            )}
                             <SessionCard
                               session={room.session}
                               onClick={() => openSession(room.session)}
-                              variant="schedule"
+                              variant="mobile"
+                              serviceSessions={serviceSessions}
                             />
                           </div>
                         ))}

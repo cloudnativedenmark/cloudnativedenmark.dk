@@ -257,6 +257,12 @@
 .host-stage-2 {
   background: #e5e5e5;
 }
+.host-shared-service {
+  background: #eee;
+}
+.host-service-directions {
+  white-space: pre-line;
+}
 .host-empty {
   text-align: center;
   padding: 30px;

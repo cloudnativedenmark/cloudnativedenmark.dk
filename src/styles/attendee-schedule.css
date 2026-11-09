@@ -79,6 +79,13 @@
 .attendee-location::before {
   content: " · ";
 }
+.attendee-directions {
+  font-size: 8.5pt;
+  white-space: pre-line;
+}
+.attendee-directions::before {
+  content: " · ";
+}
 .attendee-shared .attendee-speakers {
   display: inline;
   margin-top: 0;
