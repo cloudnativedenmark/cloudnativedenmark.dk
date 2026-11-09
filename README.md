@@ -115,6 +115,18 @@ src/components/
 - 📅 **Event Management**: Dynamic conference schedule and speaker profiles
 - 💼 **Sponsor Management**: Tiered sponsor system with dynamic logos
 
+### Attendee schedule printing
+
+Use **Print schedule** on `/schedule`, or open `/schedule/print`.
+The preview has one fixed A4 portrait layout for both days, with parallel
+talks side by side and workshops in a separate panel. It keeps full titles
+and speaker names, without abstracts or portraits.
+
+The preview route loads Sessionize data and passes it to
+`AttendeeScheduleDocument`. Schedule views share `timetableRows` for time
+boundaries and row spans. `PrintSheet`, `preparePrint`, and Copenhagen time
+formatting are shared with the track overviews.
+
 ### Track overviews
 
 Open `/host-pack` directly; it is not linked from the site navigation.

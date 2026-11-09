@@ -33,3 +33,27 @@ export const calculateSessionDuration = (startsAt: string, endsAt: string) => {
   const ends = new Date(endsAt)
   return (ends.getTime() - starts.getTime()) / (1000 * 60) // duration in minutes
 }
+
+const eventTimeFormat = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "Europe/Copenhagen",
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: false,
+})
+
+const eventDateFormat = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "Europe/Copenhagen",
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+})
+
+export const formatEventTime = (value: string): string => {
+  // Sessionize's offset-free timestamps are event-local, not device-local.
+  if (!/(Z|[+-]\d{2}:\d{2})$/i.test(value)) return value.slice(11, 16)
+  return eventTimeFormat.format(new Date(value))
+}
+
+export const formatEventDate = (value: string): string =>
+  eventDateFormat.format(new Date(`${value.slice(0, 10)}T12:00:00Z`))

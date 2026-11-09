@@ -1,14 +1,19 @@
 import React, { useEffect } from "react"
-import { useLocation, useNavigate, useParams } from "react-router-dom"
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 import SEOHead from "../components/seo-head"
 import { useSessionizeSchedule } from "../hooks/use-sessionize"
 import { useModalManagement } from "../hooks/use-modal-management"
-import { formatDate, formatTime } from "../utils/time-formatting"
+import {
+  formatDate,
+  formatTime,
+  formatEventTime,
+} from "../utils/time-formatting"
 import SessionCard from "../components/session-card"
 import SessionModal from "../components/session_modal"
 import SpeakerModal from "../components/speaker_modal"
 import { speakerPath } from "../utils/speaker-link"
 import { talkPath, talkType } from "../utils/talk-link"
+import { timetableRows } from "../utils/schedule-layout"
 
 const SchedulePage: React.FC = () => {
   const location = useLocation()
@@ -101,7 +106,7 @@ const SchedulePage: React.FC = () => {
           )}
 
           {schedule.length > 0 && (
-            <div className="flex justify-center space-x-4">
+            <div className="flex flex-wrap items-center justify-center gap-4">
               {schedule.map((day) => (
                 <button
                   key={day.date}
@@ -124,11 +129,22 @@ const SchedulePage: React.FC = () => {
                   {formatDate(day.date)}
                 </button>
               ))}
+              <Link
+                to="/schedule/print"
+                target="_blank"
+                rel="noopener"
+                className="btn-pill bg-cnd-red text-white hover:bg-cnd-red/90"
+              >
+                Print schedule
+              </Link>
             </div>
           )}
 
           {schedule.map((day) => {
-            const renderedSessions = new Map<string, Set<number>>()
+            const rows = timetableRows(
+              day,
+              day.rooms.map((room) => room.id)
+            )
             return (
               <div key={day.date} id={day.date} className="mb-16">
                 <h2 className="text-3xl font-bold text-gray-900 my-8 text-center">
@@ -154,113 +170,53 @@ const SchedulePage: React.FC = () => {
                   ))}
 
                   {/* Time Slots */}
-                  {day.timeSlots.flatMap((timeSlot, timeSlotIndex) => {
-                    const plenumSession =
-                      timeSlot.rooms.length === 1 &&
-                      timeSlot.rooms[0].session.isPlenumSession
-                        ? timeSlot.rooms[0].session
+                  {rows.map((row) => {
+                    const active = row.cells.filter((cell) => cell.session)
+                    const first = active[0]
+                    const plenum =
+                      active.length === 1 &&
+                      !first.continued &&
+                      first.rowSpan === 1 &&
+                      first.session?.isPlenumSession
+                        ? first.session
                         : null
-
-                    if (plenumSession) {
-                      const concurrent =
-                        renderedSessions.get(timeSlot.slotStart)?.size || 0
-                      return [
-                        <div
-                          key={`${timeSlot.slotStart}-time`}
-                          className="bg-white p-4 text-center font-semibold flex items-center justify-center"
-                        >
-                          {formatTime(timeSlot.slotStart)}
-                        </div>,
-                        <div
-                          key={`${timeSlot.slotStart}-session`}
-                          className="bg-white p-1"
-                          style={{
-                            gridColumn: `span ${day.rooms.length - concurrent}`,
-                          }}
-                        >
-                          <SessionCard
-                            session={plenumSession}
-                            onClick={() => handleSessionClick(plenumSession)}
-                            variant="schedule"
-                          />
-                        </div>,
-                      ]
-                    }
-
-                    const timeCell = (
-                      <div
-                        key={`${timeSlot.slotStart}-time`}
-                        className="bg-white p-4 text-center font-semibold flex items-center justify-center"
-                      >
-                        {formatTime(timeSlot.slotStart)}
-                      </div>
-                    )
-
-                    const sessionCells = day.rooms.flatMap((room) => {
-                      // This room already has a continued session for the timeslot
-                      if (
-                        renderedSessions.get(timeSlot.slotStart)?.has(room.id)
-                      ) {
-                        return []
-                      }
-
-                      // Nothing happens in the room at this time
-                      const sessionForRoom = timeSlot.rooms.find(
-                        (r) => r.id === room.id
-                      )?.session
-                      if (!sessionForRoom || !sessionForRoom.id) {
-                        return [
+                    return (
+                      <React.Fragment key={row.startsAt}>
+                        <div className="bg-white p-4 text-center font-semibold flex items-center justify-center">
+                          {formatEventTime(row.startsAt)}
+                        </div>
+                        {plenum ? (
                           <div
-                            key={`${timeSlot.slotStart}-${room.id}`}
                             className="bg-white p-1"
-                          />,
-                        ]
-                      }
-
-                      // A session is schedules for this timeslot
-                      let rowSpan = 1
-                      const ends = new Date(sessionForRoom.endsAt)
-                      for (
-                        let i = timeSlotIndex + 1;
-                        i < day.timeSlots.length;
-                        i++
-                      ) {
-                        const slotStart = new Date(
-                          day.timeSlots[i].rooms[0].session.startsAt
-                        )
-                        if (slotStart < ends) {
-                          rowSpan++
-                          if (
-                            !renderedSessions.has(day.timeSlots[i].slotStart)
-                          ) {
-                            renderedSessions.set(
-                              day.timeSlots[i].slotStart,
-                              new Set()
-                            )
-                          }
-                          renderedSessions
-                            .get(day.timeSlots[i].slotStart)
-                            ?.add(room.id)
-                        } else {
-                          break
-                        }
-                      }
-                      return [
-                        <div
-                          key={`${timeSlot.slotStart}-${room.id}`}
-                          className="bg-white p-1"
-                          style={{ gridRow: `span ${rowSpan}` }}
-                        >
-                          <SessionCard
-                            session={sessionForRoom}
-                            onClick={() => openSession(sessionForRoom)}
-                            variant="schedule"
-                          />
-                        </div>,
-                      ]
-                    })
-
-                    return [timeCell, ...sessionCells]
+                            style={{ gridColumn: `span ${day.rooms.length}` }}
+                          >
+                            <SessionCard
+                              session={plenum}
+                              onClick={() => handleSessionClick(plenum)}
+                              variant="schedule"
+                            />
+                          </div>
+                        ) : (
+                          row.cells
+                            .filter((cell) => !cell.continued)
+                            .map((cell) => (
+                              <div
+                                key={cell.roomId}
+                                className="bg-white p-1"
+                                style={{ gridRow: `span ${cell.rowSpan}` }}
+                              >
+                                {cell.session && (
+                                  <SessionCard
+                                    session={cell.session}
+                                    onClick={() => openSession(cell.session!)}
+                                    variant="schedule"
+                                  />
+                                )}
+                              </div>
+                            ))
+                        )}
+                      </React.Fragment>
+                    )
                   })}
                 </div>
                 <div className="md:hidden">

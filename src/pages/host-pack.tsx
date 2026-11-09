@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { Link, useSearchParams } from "react-router-dom"
 import Button from "../components/ui/button"
@@ -17,15 +11,15 @@ import {
   type Speaker,
 } from "../hooks/use-sessionize"
 import {
-  hostDate,
-  hostTime,
   hostTalks,
   hostTimeline,
   hostSections,
   paginateHostCards,
 } from "../utils/host-pack"
 import { formatPlainTextToHtml } from "../utils/text-formatting"
-import Logo from "../images/logo.svg"
+import PrintSheet from "../components/print/print-sheet"
+import { formatEventDate, formatEventTime } from "../utils/time-formatting"
+import { preparePrint } from "../utils/print"
 import "../styles/host-pack.css"
 
 const formats = {
@@ -72,7 +66,7 @@ function TalkCard({ session }: { session: Session }) {
     <article className="host-card">
       <div className="host-card-heading">
         <p className="host-time">
-          {hostTime(session.startsAt)}–{hostTime(session.endsAt)}
+          {formatEventTime(session.startsAt)}–{formatEventTime(session.endsAt)}
         </p>
         <h2>{session.title || session.name}</h2>
       </div>
@@ -100,62 +94,6 @@ function TalkCard({ session }: { session: Session }) {
   )
 }
 
-function Sheet({
-  room,
-  date,
-  fetchedAt,
-  label,
-  children,
-}: {
-  room: string
-  date: string
-  fetchedAt: Date | null
-  label: string
-  children: ReactNode
-}) {
-  return (
-    <section className="host-sheet" aria-label={label}>
-      <header className="host-sheet-header">
-        <div className="host-brand">
-          <img
-            className="host-logo"
-            src={Logo}
-            width={44}
-            height={44}
-            alt="Cloud Native Denmark"
-          />
-          <div>
-            <p>Cloud Native Denmark · Track overview</p>
-            <h2>{room}</h2>
-          </div>
-        </div>
-        <p>
-          {hostDate(date)}
-          <br />
-          <strong>{label}</strong>
-        </p>
-      </header>
-      <div className="host-sheet-body">{children}</div>
-      <footer className="host-sheet-footer">
-        <span>All times: Copenhagen · {date}</span>
-        <span>
-          Data fetched:{" "}
-          {fetchedAt
-            ? fetchedAt.toLocaleString("en-GB", {
-                timeZone: "Europe/Copenhagen",
-                day: "2-digit",
-                month: "short",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false,
-              })
-            : "Loading"}
-        </span>
-      </footer>
-    </section>
-  )
-}
-
 function DayOverview({
   day,
   rooms,
@@ -171,8 +109,9 @@ function DayOverview({
 
   return (
     <div className="host-sheets host-overview">
-      <Sheet
-        room={rooms.map((room) => room.name).join(" · ")}
+      <PrintSheet
+        context="Track overview"
+        title={rooms.map((room) => room.name).join(" · ")}
         date={day.date.slice(0, 10)}
         fetchedAt={fetchedAt}
         label="Day overview"
@@ -192,7 +131,8 @@ function DayOverview({
                 key={session.id}
               >
                 <td>
-                  {hostTime(session.startsAt)}–{hostTime(session.endsAt)}
+                  {formatEventTime(session.startsAt)}–
+                  {formatEventTime(session.endsAt)}
                 </td>
                 <td>
                   <strong>{session.title || session.name}</strong>
@@ -208,7 +148,7 @@ function DayOverview({
             ))}
           </tbody>
         </table>
-      </Sheet>
+      </PrintSheet>
     </div>
   )
 }
@@ -273,7 +213,7 @@ function TrackSection({
     <section className="host-track-section" data-date={date} data-room={roomId}>
       <div className="host-section-heading">
         <h2>
-          {hostDate(date)} · {room.name}
+          {formatEventDate(date)} · {room.name}
         </h2>
         <p>
           {sessions.length} sessions · {hasLongSessions ? "at least " : ""}
@@ -289,9 +229,10 @@ function TrackSection({
       <div className="host-sheets">
         <div className="host-talk-sheets">
           {groups.map((group, index) => (
-            <Sheet
+            <PrintSheet
+              context="Track overview"
               key={group.join("-")}
-              room={room.name}
+              title={room.name}
               date={date}
               fetchedAt={fetchedAt}
               label={`Sessions · ${index + 1} / ${groups.length}`}
@@ -305,7 +246,7 @@ function TrackSection({
                     />
                   )
               )}
-            </Sheet>
+            </PrintSheet>
           ))}
           {!sessions.length && (
             <p className="host-empty">
@@ -324,6 +265,7 @@ export default function HostPack() {
   const [fetchedAt, setFetchedAt] = useState<Date | null>(null)
   const [printing, setPrinting] = useState(false)
   const [overviewOnly, setOverviewOnly] = useState(false)
+  const printRef = useRef<HTMLElement>(null)
   const requestedFormat = params.get("format")
   const format: Format =
     requestedFormat && Object.hasOwn(formats, requestedFormat)
@@ -374,19 +316,7 @@ export default function HostPack() {
   const print = async (onlyOverview: boolean) => {
     setPrinting(true)
     try {
-      await document.fonts.ready
-      await Promise.all(
-        Array.from(
-          document.querySelectorAll<HTMLImageElement>(".host-sheets img")
-        ).map((image) => {
-          if (image.complete) return
-          const { promise, resolve } = Promise.withResolvers<void>()
-          const done = () => resolve()
-          image.addEventListener("load", done, { once: true })
-          image.addEventListener("error", done, { once: true })
-          return promise
-        })
-      )
+      await preparePrint(printRef.current!)
       flushSync(() => setOverviewOnly(onlyOverview))
       window.print()
     } finally {
@@ -397,7 +327,8 @@ export default function HostPack() {
 
   return (
     <main
-      className={`host-pack host-format-${format}${overviewOnly ? " host-overview-only" : ""}${!includeOverview ? " host-no-overview" : ""}`}
+      ref={printRef}
+      className={`print-document host-pack host-format-${format}${overviewOnly ? " host-overview-only" : ""}${!includeOverview ? " host-no-overview" : ""}`}
     >
       <title>Track overview | Cloud Native Denmark</title>
       <meta name="robots" content="noindex, nofollow" />
@@ -428,7 +359,7 @@ export default function HostPack() {
                           })
                         }
                       />
-                      {hostDate(date)}
+                      {formatEventDate(date)}
                     </label>
                   )
                 })}

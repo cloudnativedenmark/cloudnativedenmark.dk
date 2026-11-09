@@ -117,66 +117,10 @@
   max-width: 210mm;
   margin: 0 auto;
 }
-.host-sheet {
-  width: 210mm;
-  min-height: 297mm;
-  padding: 12mm;
-  margin: 0 0 28px;
-  background: white;
-  box-shadow: 0 4px 24px #06153114;
-  display: flex;
-  flex-direction: column;
-  gap: 5mm;
-  box-sizing: border-box;
-}
-.host-brand {
-  display: flex;
-  align-items: center;
-  gap: 3mm;
-}
-.host-logo {
-  width: 12mm;
-  height: 12mm;
-  flex-shrink: 0;
-  object-fit: contain;
-}
-.host-sheet-header {
-  min-height: 18mm;
-  display: flex;
-  justify-content: space-between;
-  gap: 8mm;
-  padding-bottom: 3mm;
-  border-bottom: 0.4mm solid var(--color-cnd-ink);
-  font-size: 9pt;
-  line-height: 1.4;
-}
-.host-sheet-header h2 {
-  font-family: var(--font-display);
-  font-size: 21pt;
-  font-weight: 700;
-  margin-top: 1mm;
-  line-height: 1.1;
-}
-.host-sheet-header > p {
-  text-align: right;
-}
-.host-sheet-body,
 .host-measure {
   display: flex;
   flex-direction: column;
   gap: 6mm;
-}
-.host-sheet-footer {
-  min-height: 8mm;
-  margin-top: auto;
-  padding-top: 3mm;
-  border-top: 0.2mm solid #bbc1ca;
-  display: flex;
-  justify-content: space-between;
-  gap: 4mm;
-  font-size: 8pt;
-  line-height: 1.4;
-  color: #3a4558;
 }
 .host-card {
   font-size: 12pt;
@@ -267,7 +211,7 @@
   height: 235mm;
   flex-shrink: 0;
 }
-.host-overview .host-sheet-body {
+.host-overview .print-sheet-body {
   gap: 3mm;
 }
 .host-timeline {
@@ -353,7 +297,7 @@
   font-size: 9pt;
 }
 
-.host-format-compact .host-sheet-body,
+.host-format-compact .print-sheet-body,
 .host-format-compact .host-measure {
   gap: 3mm;
 }
@@ -427,14 +371,8 @@
   }
 }
 
-@page host-pack {
-  size: A4 portrait;
-  margin: 12mm;
-}
-
 @media print {
   .host-pack {
-    page: host-pack;
     padding: 0;
     background: white;
     color: #000;
@@ -453,15 +391,7 @@
   .host-track-section + .host-track-section {
     break-before: page;
   }
-  .host-sheet {
-    width: 186mm;
-    min-height: 272mm;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-    break-after: page;
-  }
-  .host-talk-sheets .host-sheet:last-child {
+  .host-talk-sheets .print-sheet:last-child {
     break-after: auto;
   }
   .host-overview-only .host-overview {
@@ -470,10 +400,9 @@
   .host-overview-only .host-track-section {
     display: none;
   }
-  .host-overview-only .host-sheet {
+  .host-overview-only .print-sheet {
     break-after: auto;
   }
-  .host-sheet-header,
   .host-card-heading {
     break-inside: avoid;
   }

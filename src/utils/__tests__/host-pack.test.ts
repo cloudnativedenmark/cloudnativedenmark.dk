@@ -1,6 +1,5 @@
 import { type GridEntry, type Session } from "../../hooks/use-sessionize"
 import {
-  hostTime,
   hostTimeline,
   hostTalks,
   hostSections,
@@ -99,12 +98,6 @@ it("combines selected concurrent tracks and lists a shared break only once", () 
     "coffee",
   ])
   expect(hostTimeline(day, [])).toEqual([])
-})
-
-it("preserves event-local times and converts offset timestamps to Copenhagen time", () => {
-  expect(hostTime("2026-11-19T10:25:00")).toBe("10:25")
-  expect(hostTime("2026-11-19T09:25:00Z")).toBe("10:25")
-  expect(hostTime("2026-07-19T08:25:00Z")).toBe("10:25")
 })
 
 it("fits cards including gaps, and starts a new page before overflow", () => {

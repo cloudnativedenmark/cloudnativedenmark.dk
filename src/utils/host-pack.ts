@@ -1,35 +1,6 @@
 import { type GridEntry, type Session } from "../hooks/use-sessionize"
 import { isAdminOnlySession } from "./session-type"
-
-export const hostTime = (value: string): string => {
-  // Sessionize's offset-free timestamps are event-local, not device-local.
-  if (!/(Z|[+-]\d{2}:\d{2})$/i.test(value)) return value.slice(11, 16)
-
-  return new Intl.DateTimeFormat("en-GB", {
-    timeZone: "Europe/Copenhagen",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  }).format(new Date(value))
-}
-
-export const hostDate = (value: string): string =>
-  new Intl.DateTimeFormat("en-GB", {
-    timeZone: "Europe/Copenhagen",
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(`${value.slice(0, 10)}T12:00:00Z`))
-
-const daySessions = (day: GridEntry): Session[] =>
-  [
-    ...new Map(
-      day.timeSlots.flatMap((slot) =>
-        slot.rooms.map(({ session }) => [session.id, session] as const)
-      )
-    ).values(),
-  ].sort((a, b) => a.startsAt.localeCompare(b.startsAt))
+import { daySessions } from "./schedule-layout"
 
 const overlaps = (a: Session, b: Session): boolean =>
   a.startsAt < b.endsAt && b.startsAt < a.endsAt
