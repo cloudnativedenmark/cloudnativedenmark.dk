@@ -270,15 +270,12 @@
 .host-overview .host-sheet-body {
   gap: 3mm;
 }
-.host-overview-intro {
-  font-size: 9pt;
-  margin-top: 0;
-}
 .host-timeline {
   width: 100%;
   border-collapse: collapse;
   font-size: 8.5pt;
   line-height: 1.3;
+  print-color-adjust: exact;
 }
 .host-timeline th {
   font-size: 8pt;
@@ -307,8 +304,14 @@
 .host-timeline tr {
   break-inside: avoid;
 }
-.host-elsewhere {
-  background: #f3f4f6;
+.host-stage-0 {
+  background: #fff;
+}
+.host-stage-1 {
+  background: #f1f1f1;
+}
+.host-stage-2 {
+  background: #e5e5e5;
 }
 .host-empty {
   text-align: center;

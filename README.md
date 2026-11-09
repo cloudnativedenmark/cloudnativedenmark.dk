@@ -121,9 +121,11 @@ Open `/host-pack` directly; it is not linked from the site navigation.
 Select one or more days and tracks, then use **Copy link** to share the
 selection. Each selected day starts with one combined overview of its
 selected tracks, followed by the talk sheets grouped by track. Shared
-events appear once in the daily overview.
+events appear once in the daily overview. Grayscale row backgrounds
+distinguish stages.
 
-- `format=spacious`: one session starts on each sheet, with 12 pt text.
+- `format=spacious`: one session starts on each sheet, with 12 pt text
+  and space for notes.
 - `format=paired`: up to two sessions per sheet, with 11 pt text.
 - `format=compact`: fit sessions to each sheet, with 10 pt text.
 - `overview=0`: omit day overviews. **Print overview only** still prints

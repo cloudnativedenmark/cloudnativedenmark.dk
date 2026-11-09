@@ -167,6 +167,7 @@ function DayOverview({
 }) {
   const roomIds = rooms.map((room) => room.id)
   const timeline = hostTimeline(day, roomIds)
+  const stageIds = day.rooms.map((room) => room.id).sort((a, b) => a - b)
 
   return (
     <div className="host-sheets host-overview">
@@ -176,9 +177,6 @@ function DayOverview({
         fetchedAt={fetchedAt}
         label="Day overview"
       >
-        <p className="host-overview-intro">
-          Shaded rows: events in other rooms.
-        </p>
         <table className="host-timeline">
           <thead>
             <tr>
@@ -190,9 +188,7 @@ function DayOverview({
           <tbody>
             {timeline.map((session) => (
               <tr
-                className={
-                  roomIds.includes(session.roomId) ? "" : "host-elsewhere"
-                }
+                className={`host-stage-${stageIds.indexOf(session.roomId)}`}
                 key={session.id}
               >
                 <td>
