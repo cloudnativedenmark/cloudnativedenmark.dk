@@ -9,6 +9,7 @@ import {
   formatEventTime,
 } from "../utils/time-formatting"
 import SessionCard from "../components/session-card"
+import ScheduleHeader from "../components/schedule-header"
 import SessionModal from "../components/session_modal"
 import SpeakerModal from "../components/speaker_modal"
 import { speakerPath } from "../utils/speaker-link"
@@ -165,33 +166,24 @@ const SchedulePage: React.FC = () => {
             const serviceSessions = daySessions(day).filter(
               (session) => session.isServiceSession
             )
+            const weekday = new Date(day.date.slice(0, 10)).toLocaleDateString(
+              "en-US",
+              { weekday: "long", timeZone: "UTC" }
+            )
+
             return (
               <div
                 key={day.date}
                 id={day.date.slice(0, 10)}
                 className="mb-16 scroll-mt-[var(--site-header-height)]"
               >
-                <h2 className="text-3xl font-bold text-gray-900 my-8 text-center">
-                  {formatDate(day.date)}
-                </h2>
                 <div
-                  className="hidden md:grid isolate gap-px bg-gray-200 border border-gray-300 rounded-lg overflow-clip"
+                  className="hidden md:grid isolate gap-px bg-gray-200 border border-gray-300 rounded-lg overflow-clip mt-8"
                   style={{
                     gridTemplateColumns: `minmax(80px, 0.5fr) repeat(${day.rooms.length}, 1fr)`,
                   }}
                 >
-                  {/* Header Row */}
-                  <div className="sticky top-[var(--site-header-height)] z-20 bg-gray-100 p-4 font-bold text-center">
-                    Time
-                  </div>
-                  {day.rooms.map((room) => (
-                    <div
-                      key={room.id}
-                      className="sticky top-[var(--site-header-height)] z-20 bg-gray-100 p-4 font-bold text-center"
-                    >
-                      {room.name}
-                    </div>
-                  ))}
+                  <ScheduleHeader date={day.date} rooms={day.rooms} />
 
                   {/* Time Slots */}
                   {rows.map((row, rowIndex) => {
@@ -285,10 +277,16 @@ const SchedulePage: React.FC = () => {
                   })}
                 </div>
                 <div className="md:hidden">
+                  <h2 className="text-3xl font-bold text-gray-900 my-8 text-center">
+                    {formatDate(day.date)}
+                  </h2>
                   {day.timeSlots.map((timeSlot) => (
                     <div key={timeSlot.slotStart} className="mb-8">
-                      <h3 className="sticky top-[var(--site-header-height)] z-20 text-xl font-semibold text-gray-800 mb-4 bg-gray-100 p-3 rounded-t-lg border-b border-gray-200">
-                        {formatTime(timeSlot.slotStart)}
+                      <h3 className="sticky top-[var(--site-header-height)] z-20 flex items-baseline gap-3 text-xl font-semibold text-gray-800 mb-4 bg-gray-100 p-3 rounded-t-lg border-b border-gray-200">
+                        <span>{formatTime(timeSlot.slotStart)}</span>{" "}
+                        <span className="text-sm font-normal text-gray-500">
+                          {weekday}
+                        </span>
                       </h3>
                       <div className="space-y-4">
                         {timeSlot.rooms.map((room) => (
