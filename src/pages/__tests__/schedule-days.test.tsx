@@ -233,6 +233,31 @@ describe("schedule day links", () => {
     expect(screen.queryByText("Happening now")).not.toBeInTheDocument()
   })
 
+  it("shows go to now in simulation mode and keeps the simulated time", () => {
+    jest.useFakeTimers()
+    jest.setSystemTime(new Date("2026-11-10T09:15:00Z"))
+    jest.mocked(useSessionizeSchedule).mockReturnValue({
+      schedule: [sessionDay],
+      isLoading: false,
+    })
+
+    view("/schedule#now-2026-11-19_10:00")
+
+    const button = screen.getByRole("button", { name: "Go to now" })
+    expect(button).toBeVisible()
+    fireEvent.click(button)
+    expect(screen.getByLabelText("Current URL")).toHaveTextContent(
+      "/schedule#now-2026-11-19_10:00"
+    )
+    jest.advanceTimersByTime(50)
+    expect(scrollIntoView.mock.contexts.at(-1)).toHaveAttribute(
+      "data-now-session",
+      "talk-1"
+    )
+
+    jest.useRealTimers()
+  })
+
   it("shows go to now on an event day and scrolls using the real current time", () => {
     jest.useFakeTimers()
     jest.setSystemTime(new Date("2026-11-19T09:15:00Z"))
@@ -241,7 +266,7 @@ describe("schedule day links", () => {
       isLoading: false,
     })
 
-    view("/schedule#now-2026-11-19_08:00")
+    view("/schedule#day1")
 
     const button = screen.getByRole("button", { name: "Go to now" })
     expect(button).toBeVisible()

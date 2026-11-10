@@ -88,9 +88,11 @@ const SchedulePage: React.FC = () => {
   const realNow = eventNow(currentTime)
   const activeTime = nowHash || realNow
   const actualDay = realNow.slice(0, 10)
-  const showGoToNow = schedule.some(
-    (day) => day.date.slice(0, 10) === actualDay
-  )
+  const simulatedDay = nowHash?.slice(0, 10)
+  const showGoToNow = schedule.some((day) => {
+    const date = day.date.slice(0, 10)
+    return date === actualDay || date === simulatedDay
+  })
   const linkedDay = schedule.find((day, index) => {
     if (!dayHash) return false
     if (dayHash === `day${index + 1}` || dayHash === day.date.slice(0, 10)) {
@@ -170,6 +172,11 @@ const SchedulePage: React.FC = () => {
   }, [location.hash, nowHash, realNow, schedule, scrollToTime, talkId])
 
   const goToNow = () => {
+    if (nowHash) {
+      scrollToTime(nowHash)
+      return
+    }
+
     const time = new Date()
     setCurrentTime(time)
     if (location.hash) {
