@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 import SEOHead from "../components/seo-head"
 import { useSessionizeSchedule } from "../hooks/use-sessionize"
@@ -15,12 +15,65 @@ import SpeakerModal from "../components/speaker_modal"
 import { speakerPath } from "../utils/speaker-link"
 import { talkPath, talkType } from "../utils/talk-link"
 import { daySessions, timetableRows } from "../utils/schedule-layout"
+import { type Session } from "../hooks/use-sessionize"
+
+const eventDateTime = (value: string) => {
+  if (!/(Z|[+-]\d{2}:\d{2})$/i.test(value)) return value.slice(0, 16)
+
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Copenhagen",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(new Date(value))
+  const part = (type: string) => parts.find((item) => item.type === type)?.value
+
+  return `${part("year")}-${part("month")}-${part("day")}T${part("hour")}:${part("minute")}`
+}
+
+const parseNowHash = (hash: string) => {
+  const match = /^#now-(\d{4}-\d{2}-\d{2})_(\d{2}:\d{2})$/.exec(hash)
+  if (!match) return undefined
+
+  const [, date, time] = match
+  const [hour, minute] = time.split(":").map(Number)
+  if (hour > 23 || minute > 59) return undefined
+
+  return `${date}T${time}`
+}
+
+const eventNow = (date: Date) => eventDateTime(date.toISOString())
+
+const isCurrentSession = (session: Session, time: string) =>
+  eventDateTime(session.startsAt) <= time &&
+  eventDateTime(session.endsAt) > time
+
+const stickyBottom = () => {
+  let bottom = 0
+  const headers = Array.from(
+    document.querySelectorAll<HTMLElement>(".sticky")
+  ).sort(
+    (a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top
+  )
+
+  for (const header of headers) {
+    const rect = header.getBoundingClientRect()
+    if (rect.top > bottom + 1 || rect.bottom <= bottom) continue
+    bottom = rect.bottom
+  }
+
+  return bottom
+}
 
 const SchedulePage: React.FC = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const { talkId } = useParams()
   const previousTalkId = useRef(talkId)
+  const [currentTime, setCurrentTime] = useState(() => new Date())
   const { schedule, isLoading } = useSessionizeSchedule()
   const {
     selectedSession,
@@ -31,6 +84,15 @@ const SchedulePage: React.FC = () => {
     handleCloseSpeakerModal,
   } = useModalManagement({ schedule, urlMode: "path" })
   const dayHash = location.hash.slice(1)
+  const nowHash = parseNowHash(location.hash)
+  const realNow = eventNow(currentTime)
+  const activeTime = nowHash || realNow
+  const actualDay = realNow.slice(0, 10)
+  const simulatedDay = nowHash?.slice(0, 10)
+  const showGoToNow = schedule.some((day) => {
+    const date = day.date.slice(0, 10)
+    return date === actualDay || date === simulatedDay
+  })
   const linkedDay = schedule.find((day, index) => {
     if (!dayHash) return false
     if (dayHash === `day${index + 1}` || dayHash === day.date.slice(0, 10)) {
@@ -46,6 +108,85 @@ const SchedulePage: React.FC = () => {
     )
     return dayHash === weekday.toLowerCase()
   })
+
+  const scrollToTime = React.useCallback(
+    (time: string) => {
+      const date = time.slice(0, 10)
+      const sessions = schedule
+        .filter((day) => day.date.slice(0, 10) === date)
+        .flatMap((day) => day.timeSlots.flatMap((slot) => slot.rooms))
+        .map((room) => room.session)
+        .filter(
+          (session, index, all) =>
+            all.findIndex((item) => item.id === session.id) === index
+        )
+        .sort((a, b) =>
+          eventDateTime(a.startsAt).localeCompare(eventDateTime(b.startsAt))
+        )
+      const currentSession = sessions.find(
+        (session) =>
+          eventDateTime(session.startsAt) <= time &&
+          eventDateTime(session.endsAt) > time
+      )
+      const targetSession =
+        currentSession ||
+        sessions.find((session) => eventDateTime(session.startsAt) > time)
+      const matchingElements = targetSession
+        ? Array.from(
+            document.querySelectorAll<HTMLElement>("[data-now-session]")
+          ).filter((element) => element.dataset.nowSession === targetSession.id)
+        : []
+      const target =
+        matchingElements.find(
+          (element) => element.getClientRects().length > 0
+        ) ||
+        matchingElements[0] ||
+        document.getElementById(date)
+
+      window.requestAnimationFrame(() => {
+        if (!target) return
+        target.scrollIntoView({ behavior: "instant", block: "start" })
+
+        window.requestAnimationFrame(() => {
+          const correction = target.getBoundingClientRect().top - stickyBottom()
+          if (Math.abs(correction) > 1) window.scrollBy(0, correction)
+        })
+      })
+    },
+    [schedule]
+  )
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setCurrentTime(new Date()), 60_000)
+    return () => window.clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    if (talkId || (location.hash && !nowHash)) return
+    const time = nowHash || realNow
+    if (!schedule.some((day) => day.date.slice(0, 10) === time.slice(0, 10))) {
+      return
+    }
+
+    scrollToTime(time)
+  }, [location.hash, nowHash, realNow, schedule, scrollToTime, talkId])
+
+  const goToNow = () => {
+    if (nowHash) {
+      scrollToTime(nowHash)
+      return
+    }
+
+    const time = new Date()
+    setCurrentTime(time)
+    if (location.hash) {
+      navigate(
+        { pathname: location.pathname, search: location.search, hash: "" },
+        { replace: true }
+      )
+    }
+    scrollToTime(eventNow(time))
+  }
 
   const findSessionById = (id: number | string) => {
     for (const day of schedule) {
@@ -142,6 +283,15 @@ const SchedulePage: React.FC = () => {
 
           {schedule.length > 0 && (
             <div className="flex flex-wrap items-center justify-center gap-4">
+              {showGoToNow && (
+                <button
+                  type="button"
+                  onClick={goToNow}
+                  className="bg-background hover:bg-hover text-white text-l font-semibold py-3 px-6 rounded-full transition-colors duration-200"
+                >
+                  Go to now
+                </button>
+              )}
               {schedule.map((day, index) => (
                 <Link
                   key={day.date}
@@ -221,10 +371,11 @@ const SchedulePage: React.FC = () => {
                               )}
                             {!plenumCell.continued && (
                               <div
+                                data-now-session={plenum.id}
                                 className={
                                   isOverlay
-                                    ? "relative z-10 p-1 pointer-events-none"
-                                    : "bg-white p-1 flex flex-col"
+                                    ? "relative z-10 p-1 pointer-events-none scroll-mt-[90px]"
+                                    : "bg-white p-1 flex flex-col scroll-mt-[90px]"
                                 }
                                 style={{
                                   gridColumn: "2 / -1",
@@ -242,6 +393,10 @@ const SchedulePage: React.FC = () => {
                                 <SessionCard
                                   session={plenum}
                                   onClick={() => openSession(plenum)}
+                                  isCurrent={isCurrentSession(
+                                    plenum,
+                                    activeTime
+                                  )}
                                   variant={isOverlay ? "overlay" : "schedule"}
                                 />
                               </div>
@@ -254,8 +409,9 @@ const SchedulePage: React.FC = () => {
 
                             return (
                               <div
+                                data-now-session={session?.id}
                                 key={cell.roomId}
-                                className="bg-white p-1"
+                                className="bg-white p-1 scroll-mt-[90px]"
                                 style={{
                                   gridColumn: index + 2,
                                   gridRow: `${rowIndex + 2} / span ${cell.rowSpan}`,
@@ -266,6 +422,10 @@ const SchedulePage: React.FC = () => {
                                     session={session}
                                     onClick={() => openSession(session)}
                                     variant="schedule"
+                                    isCurrent={Boolean(
+                                      session &&
+                                      isCurrentSession(session, activeTime)
+                                    )}
                                   />
                                 )}
                               </div>
@@ -291,8 +451,9 @@ const SchedulePage: React.FC = () => {
                       <div className="space-y-4">
                         {timeSlot.rooms.map((room) => (
                           <div
+                            data-now-session={room.session.id}
                             key={room.id}
-                            className="bg-white p-1 rounded-lg shadow-sm border border-gray-300"
+                            className="bg-white p-1 rounded-lg shadow-sm border border-gray-300 scroll-mt-[90px]"
                           >
                             {!(
                               room.session.isPlenumSession &&
@@ -309,6 +470,10 @@ const SchedulePage: React.FC = () => {
                               onClick={() => openSession(room.session)}
                               variant="mobile"
                               serviceSessions={serviceSessions}
+                              isCurrent={isCurrentSession(
+                                room.session,
+                                activeTime
+                              )}
                             />
                           </div>
                         ))}

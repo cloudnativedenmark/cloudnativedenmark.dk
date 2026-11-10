@@ -9,6 +9,7 @@ interface SessionCardProps {
   onClick?: () => void
   variant?: "schedule" | "archive" | "overlay" | "mobile"
   serviceSessions?: readonly Session[]
+  isCurrent?: boolean
 }
 
 const SessionCard: React.FC<SessionCardProps> = ({
@@ -16,6 +17,7 @@ const SessionCard: React.FC<SessionCardProps> = ({
   onClick,
   variant = "schedule",
   serviceSessions,
+  isCurrent = false,
 }) => {
   if (!session || !session.id) {
     return null
@@ -35,11 +37,18 @@ const SessionCard: React.FC<SessionCardProps> = ({
     return (
       <div
         className={`${sizeClass} p-4 h-full flex flex-col items-center justify-center gap-2 text-center rounded-lg border ${
-          variant === "overlay"
-            ? "bg-gray-100/75 border-dashed border-gray-400"
-            : "bg-gray-100 border-gray-300"
+          isCurrent
+            ? "bg-red-50 border-red-600 ring-2 ring-red-600"
+            : variant === "overlay"
+              ? "bg-gray-100/75 border-dashed border-gray-400"
+              : "bg-gray-100 border-gray-300"
         }`}
       >
+        {isCurrent && (
+          <span className="rounded-full bg-red-700 px-2 py-1 text-xs font-bold text-white">
+            Happening now
+          </span>
+        )}
         {timeRange && (
           <p className="text-xs font-medium text-gray-600 tabular-nums">
             {timeRange}
@@ -92,11 +101,20 @@ const SessionCard: React.FC<SessionCardProps> = ({
   // Schedule variant (default)
   return (
     <div
-      className={`${sizeClass} bg-blue-50 hover:bg-blue-100 p-3 h-full flex flex-col justify-between rounded-lg shadow-sm border border-blue-200 transition-colors duration-200 cursor-pointer`}
+      className={`${sizeClass} ${
+        isCurrent
+          ? "bg-red-50 hover:bg-red-100 border-red-600 ring-2 ring-red-600"
+          : "bg-blue-50 hover:bg-blue-100 border-blue-200"
+      } p-3 h-full flex flex-col justify-between rounded-lg shadow-sm border transition-colors duration-200 cursor-pointer`}
       onClick={onClick}
     >
       <div>
         <div className="mb-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+          {isCurrent && (
+            <span className="rounded-full bg-red-700 px-2 py-1 text-xs font-bold text-white">
+              Happening now
+            </span>
+          )}
           <SessionTypeBadge type={sessionType} compact />
           {timeRange && (
             <span className="text-xs font-medium text-gray-600 tabular-nums whitespace-nowrap">
