@@ -166,6 +166,11 @@ const SchedulePage: React.FC = () => {
             const serviceSessions = daySessions(day).filter(
               (session) => session.isServiceSession
             )
+            const weekday = new Date(day.date.slice(0, 10)).toLocaleDateString(
+              "en-US",
+              { weekday: "long", timeZone: "UTC" }
+            )
+
             return (
               <div
                 key={day.date}
@@ -277,8 +282,11 @@ const SchedulePage: React.FC = () => {
                   </h2>
                   {day.timeSlots.map((timeSlot) => (
                     <div key={timeSlot.slotStart} className="mb-8">
-                      <h3 className="sticky top-[var(--site-header-height)] z-20 text-xl font-semibold text-gray-800 mb-4 bg-gray-100 p-3 rounded-t-lg border-b border-gray-200">
-                        {formatTime(timeSlot.slotStart)}
+                      <h3 className="sticky top-[var(--site-header-height)] z-20 flex items-baseline gap-3 text-xl font-semibold text-gray-800 mb-4 bg-gray-100 p-3 rounded-t-lg border-b border-gray-200">
+                        <span>{formatTime(timeSlot.slotStart)}</span>{" "}
+                        <span className="text-sm font-normal text-gray-500">
+                          {weekday}
+                        </span>
                       </h3>
                       <div className="space-y-4">
                         {timeSlot.rooms.map((room) => (

@@ -97,22 +97,49 @@ const view = (schedule = [day]) => {
 }
 
 describe("plenary schedule", () => {
+  it.each([
+    ["2026-11-19T00:00:00", "Thursday"],
+    ["2026-11-20T00:00:00", "Friday"],
+  ])("shows %s beside each mobile time only", (date, weekday) => {
+    const { container } = view([{ ...day, date }])
+    const mobile = container.querySelector(".md\\:hidden") as HTMLElement
+    const headings = within(mobile)
+      .getAllByRole("heading", { level: 3 })
+      .filter((heading) => heading.classList.contains("sticky"))
+    expect(headings).toHaveLength(day.timeSlots.length)
+
+    headings.forEach((heading, index) => {
+      expect(heading).toHaveClass("sticky", "flex", "items-baseline")
+      expect(heading).toHaveTextContent(
+        `${day.timeSlots[index].slotStart.slice(0, 5)} ${weekday}`
+      )
+      expect(within(heading).getByText(weekday)).toHaveClass(
+        "text-sm",
+        "font-normal",
+        "text-gray-500"
+      )
+    })
+
+    const desktop = container.querySelector(".md\\:grid") as HTMLElement
+    expect(within(desktop).queryByText(weekday, { exact: true })).toBeNull()
+  })
+
   it("hides mobile locations only for plenary service sessions and shows their description", () => {
     const { container } = view()
     const mobile = container.querySelector(".md\\:hidden") as HTMLElement
     const coffeeSlot = within(mobile).getByRole("heading", {
-      name: "10:00",
+      name: "10:00 Thursday",
     }).parentElement!
     expect(within(coffeeSlot).queryByText("Main stage")).not.toBeInTheDocument()
     expect(
       within(coffeeSlot).getByText("Coffee is in the foyer.")
     ).toBeInTheDocument()
     const keynoteSlot = within(mobile).getByRole("heading", {
-      name: "09:00",
+      name: "09:00 Thursday",
     }).parentElement!
     expect(within(keynoteSlot).getByText("Main stage")).toBeInTheDocument()
     const registrationSlot = within(mobile).getByRole("heading", {
-      name: "08:00",
+      name: "08:00 Thursday",
     }).parentElement!
     expect(within(registrationSlot).getByText("Main stage")).toBeInTheDocument()
   })
