@@ -119,7 +119,7 @@ describe("plenary schedule", () => {
 
   it("keeps a workshop continuous under a full-width break", () => {
     view()
-    const grid = screen.getByText("Time").parentElement!
+    const grid = screen.getByText("Time").closest(".md\\:grid")!
     const coffeeCell = Array.from(grid.children).find((element) =>
       within(element as HTMLElement).queryByRole("heading", {
         name: "Coffee break",

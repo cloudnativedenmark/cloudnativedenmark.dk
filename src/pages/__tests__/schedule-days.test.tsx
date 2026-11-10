@@ -105,6 +105,28 @@ describe("schedule day links", () => {
     await expectDay("2026-11-20")
   })
 
+  it("keeps each desktop day heading with its sticky column labels", () => {
+    view("/schedule")
+
+    for (const day of schedule) {
+      const section = document.getElementById(day.date.slice(0, 10))!
+      const grid = section.querySelector(".md\\:grid")!
+      const heading = grid.querySelector("h2")!
+      const header = heading.parentElement!
+
+      expect(header).toHaveClass("sticky")
+      expect(heading).toHaveTextContent(
+        day.date.startsWith("2026-11-19")
+          ? "Thursday, November 19"
+          : "Friday, November 20"
+      )
+      expect(header).toHaveTextContent("Time")
+      expect(section.querySelector(".md\\:hidden h2")).toHaveTextContent(
+        heading.textContent!
+      )
+    }
+  })
+
   it("does not scroll for an unknown day", () => {
     view("/schedule#2026-11-21")
     expect(scrollIntoView).not.toHaveBeenCalled()
