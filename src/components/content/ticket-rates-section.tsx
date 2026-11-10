@@ -191,33 +191,22 @@ const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({
   return (
     <Section id={id} className="bg-cnd-bone text-cnd-midnight">
       <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col items-baseline gap-2 md:flex-row md:items-end md:justify-between">
-          <div>
-            <div
-              className="eyebrow mb-3"
-              style={{ color: "var(--color-cnd-red)" }}
-            >
-              {String(sectionNumber).padStart(2, "0")} · TICKETS
-            </div>
-            <h2
-              className="display"
-              style={{
-                fontSize: "clamp(32px, 5vw, 56px)",
-                letterSpacing: "-0.035em",
-              }}
-            >
-              Book early.
-              <br />
-              Pay less.
-            </h2>
-          </div>
-          <p
-            className="mt-4 max-w-md text-cnd-slate md:mt-0 md:text-right"
-            style={{ fontSize: 16, lineHeight: 1.55 }}
+        <div>
+          <div
+            className="eyebrow mb-3"
+            style={{ color: "var(--color-cnd-red)" }}
           >
-            Four tiers, sliding price, capped Blind Bird seats. The earlier you
-            commit, the better the deal — and the schedule rewards you for it.
-          </p>
+            {String(sectionNumber).padStart(2, "0")} · TICKETS
+          </div>
+          <h2
+            className="display"
+            style={{
+              fontSize: "clamp(32px, 5vw, 56px)",
+              letterSpacing: "-0.035em",
+            }}
+          >
+            Tickets are live.
+          </h2>
         </div>
 
         <h3
