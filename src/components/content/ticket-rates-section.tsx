@@ -35,9 +35,9 @@ const ticketTiers: TicketTier[] = [
   {
     name: "Late Bird",
     price: 2499,
-    soldOut: true,
+    sellingFast: true,
     availableUntil: new Date("2026-11-20"),
-    displayDate: "From Nov 11",
+    displayDate: "From Nov 10",
   },
 ]
 
@@ -206,15 +206,17 @@ const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({
                 letterSpacing: "-0.035em",
               }}
             >
-              Sold out.
+              Book early.
+              <br />
+              Pay less.
             </h2>
           </div>
           <p
             className="mt-4 max-w-md text-cnd-slate md:mt-0 md:text-right"
             style={{ fontSize: 16, lineHeight: 1.55 }}
           >
-            Cloud Native Denmark 2026 is completely sold out. Late Bird tickets
-            will not be released. Thank you — see you in Copenhagen.
+            Four tiers, sliding price, capped Blind Bird seats. The earlier you
+            commit, the better the deal — and the schedule rewards you for it.
           </p>
         </div>
 
@@ -242,7 +244,13 @@ const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({
         </p>
 
         <div className="mt-10 flex justify-center">
-          <Button disabled>Sold out</Button>
+          <a
+            href="https://cloudnativedenmark.ticketbutler.io/da/e/cloud-native-denmark-26/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button>Buy tickets →</Button>
+          </a>
         </div>
       </div>
     </Section>
