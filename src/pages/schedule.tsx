@@ -121,6 +121,13 @@ const SchedulePage: React.FC = () => {
             Plan your conference experience. Here’s the full schedule of talks
             and events.
           </p>
+          <a
+            href="/schedule.pdf"
+            download="cloud-native-denmark-schedule.pdf"
+            className="btn-pill mt-8 bg-cnd-bone text-cnd-midnight hover:bg-white"
+          >
+            Download schedule (PDF)
+          </a>
         </div>
       </section>
 

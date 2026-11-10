@@ -70,6 +70,31 @@ test("falls back to Talk when Sessionize has no type", () => {
   )
 })
 
+test("schedule changes trigger a fresh PDF even when share pages stay the same", () => {
+  for (const changes of [
+    { startsAt: "2026-11-19T11:00:00" },
+    { endsAt: "2026-11-19T12:00:00" },
+    { roomId: 42, room: "New stage" },
+    { isPlenumSession: true },
+    { speakers: [{ id: "speaker-2", name: "New speaker" }] },
+  ]) {
+    const updated = structuredClone(data)
+    Object.assign(updated.Grid[0].timeSlots[0].rooms[0].session, changes)
+    assert.deepEqual(pagesFor(data), pagesFor(updated))
+    assert.notEqual(digest(data), digest(updated))
+  }
+
+  const updated = structuredClone(data)
+  updated.Sessions[0].sessions.push({
+    id: "service",
+    title: "Lunch",
+    description: "Meet in the foyer",
+    isServiceSession: true,
+  })
+  assert.deepEqual(pagesFor(data), pagesFor(updated))
+  assert.notEqual(digest(data), digest(updated))
+})
+
 test("talk links show title and type while retaining the Sessionize id", () => {
   const changed = structuredClone(data)
   changed.Sessions[0].sessions[0].title = "New title"

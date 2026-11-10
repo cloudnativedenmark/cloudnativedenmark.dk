@@ -87,5 +87,14 @@ export const pagesFor = ({ Grid, Sessions, Speakers }) => {
 
 export const digest = (data) =>
   createHash("sha256")
-    .update(JSON.stringify(pagesFor(data)))
+    .update(
+      JSON.stringify({
+        pages: pagesFor(data),
+        // Times, rooms, assignments and service events also change the PDF.
+        grid: data.Grid,
+        sessions: data.Sessions.flatMap((group) => group.sessions || [])
+          .map(({ id, title, description }) => ({ id, title, description }))
+          .sort((a, b) => a.id.localeCompare(b.id)),
+      })
+    )
     .digest("hex")

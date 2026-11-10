@@ -80,6 +80,9 @@ jobs:
       - name: Run tests
         run: yarn test
 
+      - name: Install Chromium for schedule PDF
+        run: yarn playwright install --with-deps --only-shell chromium
+
       - name: Build website
         run: yarn build
 

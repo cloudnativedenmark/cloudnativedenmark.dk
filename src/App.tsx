@@ -1,4 +1,3 @@
-import React from "react"
 import { Routes, Route, Navigate } from "react-router-dom"
 import Layout from "./components/layout"
 import Home from "./pages/index"
@@ -17,34 +16,9 @@ import SponsorInfo from "./pages/sponsor-info"
 import NotFound from "./pages/404"
 import { features } from "./config/features"
 
-const HostPack = React.lazy(() => import("./pages/host-pack"))
-const SchedulePrint = React.lazy(() => import("./pages/schedule-print"))
-
 function App() {
   return (
     <Routes>
-      <Route
-        path="/schedule/track-overview"
-        element={
-          <React.Suspense
-            fallback={<p role="status">Loading track overview…</p>}
-          >
-            <HostPack />
-          </React.Suspense>
-        }
-      />
-      {features.scheduleAndSpeakers && (
-        <Route
-          path="/schedule/print"
-          element={
-            <React.Suspense
-              fallback={<p role="status">Loading print schedule…</p>}
-            >
-              <SchedulePrint />
-            </React.Suspense>
-          }
-        />
-      )}
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="code-of-conduct" element={<CodeOfConduct />} />
@@ -54,6 +28,13 @@ function App() {
         {features.scheduleAndSpeakers && (
           <>
             <Route path="schedule" element={<Schedule />} />
+            {["schedule/print", "schedule/track-overview"].map((path) => (
+              <Route
+                key={path}
+                path={path}
+                element={<Navigate to="/schedule" replace />}
+              />
+            ))}
             <Route path="schedule/talk/:talkId" element={<Schedule />} />
             <Route path="speakers" element={<Speakers />} />
             <Route path="speakers/:speakerId" element={<Speakers />} />
