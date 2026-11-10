@@ -123,7 +123,7 @@ const Header = ({ menuLinks }: HeaderProps) => {
               href={ticketUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-pill mt-3 bg-cnd-red text-white shadow-[0_4px_18px_rgba(224,19,42,0.25)] hover:bg-cnd-red/90"
+              className="my-3 text-2xl font-semibold text-cnd-red hover:text-cnd-coral"
               onClick={toggleMenu}
             >
               Buy tickets →
