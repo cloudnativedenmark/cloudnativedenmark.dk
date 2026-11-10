@@ -13,6 +13,44 @@ const schedule = ["2026-11-19T00:00:00", "2026-11-20T00:00:00"].map((date) => ({
   rooms: [],
   timeSlots: [],
 }))
+const session = {
+  id: "talk-1",
+  title: "A talk",
+  name: "A talk",
+  description: "Talk description",
+  startsAt: "2026-11-19T09:00:00Z",
+  endsAt: "2026-11-19T09:35:00Z",
+  room: "Main stage",
+  roomId: 1,
+  isServiceSession: false,
+  isPlenumSession: false,
+  speakers: [],
+  questionAnswers: [],
+  recordingUrl: "",
+  slideDeck: "",
+  video: "",
+  rate: "",
+}
+const sessionDay = {
+  date: "2026-11-19",
+  rooms: [{ id: 1, name: "Main stage", sessions: [session], session }],
+  timeSlots: [
+    {
+      slotStart: session.startsAt,
+      rooms: [{ id: 1, name: "Main stage", sessions: [session], session }],
+    },
+  ],
+}
+
+const expectSession = async () => {
+  await waitFor(() => {
+    expect(scrollIntoView.mock.contexts.at(-1)).toHaveAttribute(
+      "data-now-session",
+      "talk-1"
+    )
+  })
+}
+
 const scrollIntoView = jest.fn()
 
 const Navigation = () => {
@@ -131,5 +169,108 @@ describe("schedule day links", () => {
     view("/schedule#2026-11-21")
     expect(scrollIntoView).not.toHaveBeenCalled()
     expect(screen.getByRole("heading", { name: "Schedule" })).toBeVisible()
+  })
+
+  it("uses a simulated local time from the now hash to scroll to the active session", async () => {
+    jest.mocked(useSessionizeSchedule).mockReturnValue({
+      schedule: [sessionDay],
+      isLoading: false,
+    })
+
+    view("/schedule#now-2026-11-19_10:00")
+
+    await expectSession()
+    expect(screen.getAllByText("Happening now")).toHaveLength(2)
+  })
+
+  it("aligns the active section below the sticky menu", async () => {
+    jest.mocked(useSessionizeSchedule).mockReturnValue({
+      schedule: [sessionDay],
+      isLoading: false,
+    })
+
+    const siteHeader = document.createElement("header")
+    siteHeader.className = "sticky"
+    document.body.appendChild(siteHeader)
+    const originalRect = HTMLElement.prototype.getBoundingClientRect
+    const rects = jest
+      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this === siteHeader) {
+          return { top: 0, bottom: 73 } as DOMRect
+        }
+        if (this.classList.contains("sticky")) {
+          return { top: 73, bottom: 170 } as DOMRect
+        }
+        if (this.dataset.nowSession === "talk-1") {
+          return { top: 90, bottom: 120 } as DOMRect
+        }
+        return originalRect.call(this)
+      })
+    const scrollBy = jest.spyOn(window, "scrollBy").mockImplementation(() => {})
+
+    try {
+      view("/schedule#now-2026-11-19_10:00")
+
+      await waitFor(() => {
+        expect(scrollBy).toHaveBeenCalledWith(0, -80)
+      })
+    } finally {
+      rects.mockRestore()
+      scrollBy.mockRestore()
+      siteHeader.remove()
+    }
+  })
+
+  it("stops highlighting a session at its end time", () => {
+    jest.mocked(useSessionizeSchedule).mockReturnValue({
+      schedule: [sessionDay],
+      isLoading: false,
+    })
+
+    view("/schedule#now-2026-11-19_10:35")
+
+    expect(screen.queryByText("Happening now")).not.toBeInTheDocument()
+  })
+
+  it("shows go to now on an event day and scrolls using the real current time", () => {
+    jest.useFakeTimers()
+    jest.setSystemTime(new Date("2026-11-19T09:15:00Z"))
+    jest.mocked(useSessionizeSchedule).mockReturnValue({
+      schedule: [sessionDay],
+      isLoading: false,
+    })
+
+    view("/schedule#now-2026-11-19_08:00")
+
+    const button = screen.getByRole("button", { name: "Go to now" })
+    expect(button).toBeVisible()
+    fireEvent.click(button)
+    expect(screen.getByLabelText("Current URL")).toHaveTextContent("/schedule")
+    jest.advanceTimersByTime(20)
+    expect(scrollIntoView.mock.contexts.at(-1)).toHaveAttribute(
+      "data-now-session",
+      "talk-1"
+    )
+    expect(screen.getAllByText("Happening now")).toHaveLength(2)
+
+    jest.useRealTimers()
+  })
+
+  it("does not show go to now outside the scheduled event dates", () => {
+    jest.useFakeTimers()
+    jest.setSystemTime(new Date("2026-11-18T09:15:00Z"))
+    jest.mocked(useSessionizeSchedule).mockReturnValue({
+      schedule: [sessionDay],
+      isLoading: false,
+    })
+
+    view("/schedule")
+
+    expect(
+      screen.queryByRole("button", { name: "Go to now" })
+    ).not.toBeInTheDocument()
+
+    jest.useRealTimers()
   })
 })
