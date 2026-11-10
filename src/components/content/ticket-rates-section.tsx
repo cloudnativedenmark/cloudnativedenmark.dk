@@ -35,9 +35,9 @@ const ticketTiers: TicketTier[] = [
   {
     name: "Late Bird",
     price: 2499,
-    soldOut: true,
+    sellingFast: true,
     availableUntil: new Date("2026-11-20"),
-    displayDate: "From Nov 11",
+    displayDate: "From Nov 10",
   },
 ]
 
@@ -191,31 +191,22 @@ const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({
   return (
     <Section id={id} className="bg-cnd-bone text-cnd-midnight">
       <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col items-baseline gap-2 md:flex-row md:items-end md:justify-between">
-          <div>
-            <div
-              className="eyebrow mb-3"
-              style={{ color: "var(--color-cnd-red)" }}
-            >
-              {String(sectionNumber).padStart(2, "0")} · TICKETS
-            </div>
-            <h2
-              className="display"
-              style={{
-                fontSize: "clamp(32px, 5vw, 56px)",
-                letterSpacing: "-0.035em",
-              }}
-            >
-              Sold out.
-            </h2>
-          </div>
-          <p
-            className="mt-4 max-w-md text-cnd-slate md:mt-0 md:text-right"
-            style={{ fontSize: 16, lineHeight: 1.55 }}
+        <div>
+          <div
+            className="eyebrow mb-3"
+            style={{ color: "var(--color-cnd-red)" }}
           >
-            Cloud Native Denmark 2026 is completely sold out. Late Bird tickets
-            will not be released. Thank you — see you in Copenhagen.
-          </p>
+            {String(sectionNumber).padStart(2, "0")} · TICKETS
+          </div>
+          <h2
+            className="display"
+            style={{
+              fontSize: "clamp(32px, 5vw, 56px)",
+              letterSpacing: "-0.035em",
+            }}
+          >
+            Tickets are live.
+          </h2>
         </div>
 
         <h3
@@ -242,7 +233,13 @@ const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({
         </p>
 
         <div className="mt-10 flex justify-center">
-          <Button disabled>Sold out</Button>
+          <a
+            href="https://cloudnativedenmark.ticketbutler.io/da/e/cloud-native-denmark-26/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button>Buy tickets →</Button>
+          </a>
         </div>
       </div>
     </Section>
