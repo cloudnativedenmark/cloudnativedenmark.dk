@@ -135,8 +135,29 @@ changes. A failed PDF render fails the build instead of publishing a broken
 download. Use `yarn serve` after building to try the download locally.
 
 The renderer runs only during the build and is not published as a page.
-The former `/schedule/print` and `/schedule/track-overview` URLs redirect
-to `/schedule`.
+Open `/schedule/print` to start the same PDF download automatically. The
+page also has a download link if the browser blocks automatic downloads.
+
+### Track overviews
+
+Open `/schedule/track-overview` directly; it is not linked from site navigation.
+Select days and tracks, then use **Copy link** to share the selection.
+Each day has one combined overview, followed by talk sheets grouped by track.
+The sheets include full abstracts and speaker photos.
+
+Print formats:
+
+- `format=spacious`: one session per sheet, with space for notes.
+- `format=paired`: up to two sessions per sheet.
+- `format=compact`: fit sessions to each sheet.
+- `overview=0`: omit day overviews. **Print overview only** still prints them.
+
+Repeat `date` and `room` parameters to select multiple days and tracks:
+`/schedule/track-overview?date=2026-11-19&date=2026-11-20&room=75248&room=75249&format=compact`.
+
+Print on A4 portrait at 100% scale, with browser headers and footers off.
+Times use Copenhagen time. The page is public with `noindex` metadata,
+not access control. Do not add private speaker data.
 
 ## 📊 Data Management
 

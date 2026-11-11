@@ -32,6 +32,19 @@ const pages = [
     description:
       "How we expect everyone at Cloud Native Denmark to behave, and how to get help or report a problem.",
   },
+  {
+    pathname: "/schedule/track-overview",
+    title: "Track overview | Cloud Native Denmark",
+    description:
+      "Printable track schedules, speaker photos, and talk abstracts.",
+    noindex: true,
+  },
+  {
+    pathname: "/schedule/print",
+    title: "Download schedule | Cloud Native Denmark",
+    description: "Download the conference schedule as a PDF.",
+    noindex: true,
+  },
 ]
 
 const escapeHtml = (value) =>
