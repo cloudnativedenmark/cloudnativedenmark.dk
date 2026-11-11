@@ -1,29 +1,9 @@
-.schedule-print {
-  min-height: 100vh;
-  background: var(--color-cnd-bone);
-  color: var(--color-cnd-ink);
-  font-family: var(--font-sans);
-  padding: 32px 20px 64px;
-}
-.schedule-print-controls {
-  max-width: 210mm;
-  margin: 0 auto 32px;
-}
-.schedule-print-controls > a {
-  display: inline-block;
-  font-size: 14px;
-  text-decoration: underline;
-  margin-bottom: 24px;
-}
-.schedule-print-controls h1 {
-  font-family: var(--font-display);
-  font-size: 40px;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
 .attendee-schedule {
   max-width: 210mm;
   margin: 0 auto;
+}
+.attendee-schedule .print-sheet {
+  gap: 4mm;
 }
 .attendee-schedule .print-sheet-body {
   gap: 4mm;
@@ -42,7 +22,7 @@
 .attendee-timetable th,
 .attendee-timetable td {
   border-bottom: 0.2mm solid #c9cdd3;
-  padding: 0.7mm 2mm;
+  padding: 0.5mm 2mm;
   text-align: left;
   vertical-align: top;
 }
@@ -133,23 +113,7 @@
 .attendee-workshop .attendee-title {
   display: block;
 }
-@media screen and (max-width: 850px) {
-  .schedule-print {
-    padding: 24px 12px 40px;
-  }
-  .attendee-schedule {
-    overflow-x: auto;
-  }
-}
 @media print {
-  .schedule-print {
-    padding: 0;
-    background: white;
-    min-height: 0;
-  }
-  .schedule-print-controls {
-    display: none;
-  }
   .attendee-schedule {
     max-width: none;
     margin: 0;

@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { digest, fetchShareData, pagesFor } from "./share-data.mjs"
+import { generateSchedulePdf } from "./generate-schedule-pdf.mjs"
 
 const distDirectory = "dist"
 const siteUrl = "https://cloudnativedenmark.dk"
@@ -30,20 +31,6 @@ const pages = [
     title: "Code of Conduct | Cloud Native Denmark",
     description:
       "How we expect everyone at Cloud Native Denmark to behave, and how to get help or report a problem.",
-  },
-  {
-    pathname: "/schedule/track-overview",
-    title: "Track overview | Cloud Native Denmark",
-    description:
-      "Printable track schedules, speaker photos, and talk abstracts.",
-    noindex: true,
-  },
-  {
-    pathname: "/schedule/print",
-    title: "Print schedule | Cloud Native Denmark",
-    description:
-      "Printable conference timetable with talks, speakers, and workshops.",
-    noindex: true,
   },
 ]
 
@@ -96,6 +83,8 @@ const createSharePage = (html, page) => {
 const template = await readFile(join(distDirectory, "index.html"), "utf8")
 const shareData = await fetchShareData()
 const sharePages = pagesFor(shareData)
+
+await generateSchedulePdf(shareData, join(distDirectory, "schedule.pdf"))
 
 await writeFile(
   join(distDirectory, "share-data-hash.json"),
