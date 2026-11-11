@@ -1,10 +1,10 @@
 import { type GridEntry, type Session } from "../../hooks/use-sessionize"
 import {
-  hostTimeline,
-  hostTalks,
-  hostSections,
-  paginateHostCards,
-} from "../host-pack"
+  trackTimeline,
+  trackTalks,
+  trackSections,
+  paginateTrackCards,
+} from "../track-overview"
 
 const session = (
   id: string,
@@ -45,7 +45,7 @@ it("keeps each track talk once, in time order, without service items", () => {
     session("coffee", 2, "11:00", "11:20", { isServiceSession: true }),
   ])
 
-  expect(hostTalks(day, 2).map((item) => item.id)).toEqual(["first", "later"])
+  expect(trackTalks(day, 2).map((item) => item.id)).toEqual(["first", "later"])
 })
 
 it("includes shared items with their location, but not breaks during a workshop", () => {
@@ -58,7 +58,7 @@ it("includes shared items with their location, but not breaks during a workshop"
   })
   const workshop = session("workshop", 2, "10:25", "11:55")
   const parallel = session("parallel", 1, "10:25", "11:00")
-  const timeline = hostTimeline(
+  const timeline = trackTimeline(
     dayWith([morning, coffee, lunch, workshop, parallel]),
     [2]
   )
@@ -81,7 +81,7 @@ it.each([false, true])(
     })
 
     expect(
-      hostTimeline(dayWith([workshop, shared]), [3]).map((item) => item.id)
+      trackTimeline(dayWith([workshop, shared]), [3]).map((item) => item.id)
     ).toEqual(["workshop", "shared"])
   }
 )
@@ -92,7 +92,7 @@ it("shows an external break that starts exactly when a track talk ends", () => {
     session("break", 1, "11:00", "11:20", { isServiceSession: true }),
   ])
 
-  expect(hostTimeline(day, [2]).map((item) => item.id)).toEqual([
+  expect(trackTimeline(day, [2]).map((item) => item.id)).toEqual([
     "talk",
     "break",
   ])
@@ -107,23 +107,23 @@ it("combines selected concurrent tracks and lists a shared break only once", () 
   const workshop = session("workshop", 3, "10:25", "11:55")
   const day = dayWith([main, breakout, coffee, coffee, workshop])
 
-  expect(hostTimeline(day, [1, 2]).map((item) => item.id)).toEqual([
+  expect(trackTimeline(day, [1, 2]).map((item) => item.id)).toEqual([
     "main",
     "breakout",
     "coffee",
   ])
-  expect(hostTimeline(day, [])).toEqual([])
+  expect(trackTimeline(day, [])).toEqual([])
 })
 
 it("fits cards including gaps, and starts a new page before overflow", () => {
-  expect(paginateHostCards([40, 50, 51, 30], 100, 10, Infinity)).toEqual([
+  expect(paginateTrackCards([40, 50, 51, 30], 100, 10, Infinity)).toEqual([
     [0, 1],
     [2, 3],
   ])
 })
 
 it("limits paired pages and keeps an oversized abstract without dropping later talks", () => {
-  expect(paginateHostCards([20, 20, 20, 150, 20], 100, 5, 2)).toEqual([
+  expect(paginateTrackCards([20, 20, 20, 150, 20], 100, 5, 2)).toEqual([
     [0, 1],
     [2],
     [3],
@@ -138,7 +138,7 @@ it("selects all requested day and track combinations in schedule order", () => {
   ]
   const first = { ...dayWith([]), rooms } as GridEntry
   const second = { ...first, date: "2026-11-20T00:00:00" }
-  const sections = hostSections(
+  const sections = trackSections(
     [second, first],
     ["2026-11-20", "2026-11-19", "2026-11-19"],
     [2, 1, 2]
@@ -167,7 +167,7 @@ it("does not substitute another track when a selected track is absent on a day",
     date: "2026-11-20T00:00:00",
     rooms: first.rooms.slice(0, 1),
   }
-  const sections = hostSections(
+  const sections = trackSections(
     [first, second],
     ["2026-11-19", "2026-11-20"],
     [2]
@@ -176,6 +176,6 @@ it("does not substitute another track when a selected track is absent on a day",
   expect(
     sections.map(({ day, room }) => [day.date.slice(0, 10), room.id])
   ).toEqual([["2026-11-19", 2]])
-  expect(hostSections([first, second], [], [1])).toEqual([])
-  expect(hostSections([first, second], ["2026-11-19"], [])).toEqual([])
+  expect(trackSections([first, second], [], [1])).toEqual([])
+  expect(trackSections([first, second], ["2026-11-19"], [])).toEqual([])
 })

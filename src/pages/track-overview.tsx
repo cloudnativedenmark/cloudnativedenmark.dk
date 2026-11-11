@@ -11,16 +11,16 @@ import {
   type Speaker,
 } from "../hooks/use-sessionize"
 import {
-  hostTalks,
-  hostTimeline,
-  hostSections,
-  paginateHostCards,
-} from "../utils/host-pack"
+  trackTalks,
+  trackTimeline,
+  trackSections,
+  paginateTrackCards,
+} from "../utils/track-overview"
 import { formatPlainTextToHtml } from "../utils/text-formatting"
 import PrintSheet from "../components/print/print-sheet"
 import { formatEventDate, formatEventTime } from "../utils/time-formatting"
 import { preparePrint } from "../utils/print"
-import "../styles/host-pack.css"
+import "../styles/track-overview.css"
 
 const formats = {
   spacious: {
@@ -47,13 +47,15 @@ function Portrait({ speaker }: { speaker: Speaker }) {
 
   if (!speaker.profilePicture || failed) {
     return (
-      <div className="host-photo host-photo-missing">Photo unavailable</div>
+      <div className="track-overview-photo track-overview-photo-missing">
+        Photo unavailable
+      </div>
     )
   }
 
   return (
     <img
-      className="host-photo"
+      className="track-overview-photo"
       src={speaker.profilePicture}
       alt={speaker.fullName || speaker.name}
       onError={() => setFailed(true)}
@@ -63,16 +65,16 @@ function Portrait({ speaker }: { speaker: Speaker }) {
 
 function TalkCard({ session }: { session: Session }) {
   return (
-    <article className="host-card">
-      <div className="host-card-heading">
-        <p className="host-time">
+    <article className="track-overview-card">
+      <div className="track-overview-card-heading">
+        <p className="track-overview-time">
           {formatEventTime(session.startsAt)}–{formatEventTime(session.endsAt)}
         </p>
         <h2>{session.title || session.name}</h2>
       </div>
-      <div className="host-speakers">
+      <div className="track-overview-speakers">
         {session.speakers.map((speaker) => (
-          <div className="host-speaker" key={speaker.id}>
+          <div className="track-overview-speaker" key={speaker.id}>
             <Portrait key={speaker.profilePicture} speaker={speaker} />
             <div>
               <h3>{speaker.fullName || speaker.name}</h3>
@@ -83,7 +85,7 @@ function TalkCard({ session }: { session: Session }) {
         {!session.speakers.length && <p>Speaker information unavailable.</p>}
       </div>
       <div
-        className="host-abstract"
+        className="track-overview-abstract"
         dangerouslySetInnerHTML={{
           __html:
             formatPlainTextToHtml(session.description) ||
@@ -104,11 +106,11 @@ function DayOverview({
   fetchedAt: Date | null
 }) {
   const roomIds = rooms.map((room) => room.id)
-  const timeline = hostTimeline(day, roomIds)
+  const timeline = trackTimeline(day, roomIds)
   const stageIds = day.rooms.map((room) => room.id).sort((a, b) => a - b)
 
   return (
-    <div className="host-sheets host-overview">
+    <div className="track-overview-sheets track-overview-overview">
       <PrintSheet
         context="Track overview"
         title={rooms.map((room) => room.name).join(" · ")}
@@ -116,7 +118,7 @@ function DayOverview({
         fetchedAt={fetchedAt}
         label="Day overview"
       >
-        <table className="host-timeline">
+        <table className="track-overview-timeline">
           <thead>
             <tr>
               <th>Time</th>
@@ -133,8 +135,8 @@ function DayOverview({
                 <tr
                   className={
                     sharedService
-                      ? "host-shared-service"
-                      : `host-stage-${stageIds.indexOf(session.roomId)}`
+                      ? "track-overview-shared-service"
+                      : `track-overview-stage-${stageIds.indexOf(session.roomId)}`
                   }
                   key={session.id}
                 >
@@ -151,7 +153,7 @@ function DayOverview({
                         .join(" · ")}
                     </span>
                     {sharedService && session.description && (
-                      <span className="host-service-directions">
+                      <span className="track-overview-service-directions">
                         {" · "}
                         {session.description}
                       </span>
@@ -184,7 +186,7 @@ function TrackSection({
   const measureRef = useRef<HTMLDivElement>(null)
   const date = day.date.slice(0, 10)
   const roomId = room.id
-  const sessions = hostTalks(day, roomId)
+  const sessions = trackTalks(day, roomId)
   const pageCount = groups.length
 
   useLayoutEffect(() => {
@@ -194,13 +196,17 @@ function TrackSection({
 
     const measure = () => {
       if (!active) return
-      const cards = Array.from(root.querySelectorAll<HTMLElement>(".host-card"))
-      const body = root.querySelector<HTMLElement>(".host-measure-budget")!
+      const cards = Array.from(
+        root.querySelectorAll<HTMLElement>(".track-overview-card")
+      )
+      const body = root.querySelector<HTMLElement>(
+        ".track-overview-measure-budget"
+      )!
       const available = body.getBoundingClientRect().height
       if (!available) return
       const heights = cards.map((card) => card.getBoundingClientRect().height)
       setHasLongSessions(heights.some((height) => height > available))
-      const next = paginateHostCards(
+      const next = paginateTrackCards(
         heights,
         available,
         parseFloat(getComputedStyle(root).rowGap),
@@ -214,7 +220,7 @@ function TrackSection({
     const observer = new ResizeObserver(measure)
     observer.observe(root)
     root
-      .querySelectorAll(".host-card")
+      .querySelectorAll(".track-overview-card")
       .forEach((card) => observer.observe(card))
     void document.fonts.ready.then(measure)
     measure()
@@ -225,8 +231,12 @@ function TrackSection({
     }
   }, [day, roomId, format])
   return (
-    <section className="host-track-section" data-date={date} data-room={roomId}>
-      <div className="host-section-heading">
+    <section
+      className="track-overview-track-section"
+      data-date={date}
+      data-room={roomId}
+    >
+      <div className="track-overview-section-heading">
         <h2>
           {formatEventDate(date)} · {room.name}
         </h2>
@@ -235,14 +245,18 @@ function TrackSection({
           {pageCount} {pageCount === 1 ? "sheet" : "sheets"}
         </p>
       </div>
-      <div className="host-measure" ref={measureRef} aria-hidden="true">
-        <div className="host-measure-budget" />
+      <div
+        className="track-overview-measure"
+        ref={measureRef}
+        aria-hidden="true"
+      >
+        <div className="track-overview-measure-budget" />
         {sessions.map((session) => (
           <TalkCard session={session} key={session.id} />
         ))}
       </div>
-      <div className="host-sheets">
-        <div className="host-talk-sheets">
+      <div className="track-overview-sheets">
+        <div className="track-overview-talk-sheets">
           {groups.map((group, index) => (
             <PrintSheet
               context="Track overview"
@@ -264,7 +278,7 @@ function TrackSection({
             </PrintSheet>
           ))}
           {!sessions.length && (
-            <p className="host-empty">
+            <p className="track-overview-empty">
               No talks are scheduled for this track on this date.
             </p>
           )}
@@ -274,7 +288,7 @@ function TrackSection({
   )
 }
 
-export default function HostPack() {
+export default function TrackOverview() {
   const { schedule, isLoading } = useSessionizeSchedule()
   const [params, setParams] = useSearchParams()
   const [fetchedAt, setFetchedAt] = useState<Date | null>(null)
@@ -299,7 +313,7 @@ export default function HostPack() {
   const roomIds = params.has("room")
     ? params.getAll("room").filter(Boolean).map(Number)
     : rooms.slice(0, 1).map((room) => room.id)
-  const sections = hostSections(schedule, dates, roomIds)
+  const sections = trackSections(schedule, dates, roomIds)
   const selectedDays = [
     ...new Map(sections.map(({ day }) => [day.date, day])).values(),
   ]
@@ -343,18 +357,18 @@ export default function HostPack() {
   return (
     <main
       ref={printRef}
-      className={`print-document host-pack host-format-${format}${overviewOnly ? " host-overview-only" : ""}${!includeOverview ? " host-no-overview" : ""}`}
+      className={`print-document track-overview track-overview-format-${format}${overviewOnly ? " track-overview-overview-only" : ""}${!includeOverview ? " track-overview-no-overview" : ""}`}
     >
       <title>Track overview | Cloud Native Denmark</title>
       <meta name="robots" content="noindex, nofollow" />
-      <div className="host-controls">
-        <Link to="/" className="host-back">
+      <div className="track-overview-controls">
+        <Link to="/" className="track-overview-back">
           ← Cloud Native Denmark
         </Link>
         <h1 className="display">Track overview</h1>
         {schedule.length > 0 && (
           <>
-            <div className="host-selectors">
+            <div className="track-overview-selectors">
               <fieldset>
                 <legend>Days</legend>
                 {schedule.map((day) => {
@@ -403,7 +417,7 @@ export default function HostPack() {
                 ))}
               </fieldset>
             </div>
-            <fieldset className="host-formats">
+            <fieldset className="track-overview-formats">
               <legend>Print format</legend>
               {(
                 Object.entries(formats) as [Format, (typeof formats)[Format]][]
@@ -411,8 +425,8 @@ export default function HostPack() {
                 <label
                   className={
                     key === format
-                      ? "host-format-option host-selected"
-                      : "host-format-option"
+                      ? "track-overview-format-option track-overview-selected"
+                      : "track-overview-format-option"
                   }
                   key={key}
                 >
@@ -430,7 +444,7 @@ export default function HostPack() {
                 </label>
               ))}
             </fieldset>
-            <label className="host-overview-toggle">
+            <label className="track-overview-overview-toggle">
               <input
                 type="checkbox"
                 checked={includeOverview}
@@ -440,7 +454,7 @@ export default function HostPack() {
               />
               Include day overview
             </label>
-            <div className="host-actions">
+            <div className="track-overview-actions">
               <Button
                 disabled={!sections.length || printing}
                 onClick={() => void print(false)}
@@ -478,7 +492,7 @@ export default function HostPack() {
         )
         return (
           <section
-            className="host-day-section"
+            className="track-overview-day-section"
             data-date={day.date.slice(0, 10)}
             key={day.date}
           >

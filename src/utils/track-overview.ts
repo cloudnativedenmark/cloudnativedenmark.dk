@@ -5,7 +5,7 @@ import { daySessions } from "./schedule-layout"
 const overlaps = (a: Session, b: Session): boolean =>
   a.startsAt < b.endsAt && b.startsAt < a.endsAt
 
-export const hostTalks = (day: GridEntry, roomId: number): Session[] =>
+export const trackTalks = (day: GridEntry, roomId: number): Session[] =>
   daySessions(day).filter(
     (session) =>
       session.roomId === roomId &&
@@ -13,7 +13,7 @@ export const hostTalks = (day: GridEntry, roomId: number): Session[] =>
       !isAdminOnlySession(session.speakers)
   )
 
-export const hostTimeline = (day: GridEntry, roomIds: number[]): Session[] => {
+export const trackTimeline = (day: GridEntry, roomIds: number[]): Session[] => {
   if (!roomIds.length) return []
 
   const all = daySessions(day)
@@ -30,7 +30,7 @@ export const hostTimeline = (day: GridEntry, roomIds: number[]): Session[] => {
   })
 }
 
-export const hostSections = (
+export const trackSections = (
   schedule: GridEntry[],
   dates: string[],
   roomIds: number[]
@@ -44,7 +44,7 @@ export const hostSections = (
         .map((room) => ({ day, room }))
     )
 
-export const paginateHostCards = (
+export const paginateTrackCards = (
   heights: number[],
   available: number,
   gap: number,

@@ -1,7 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server"
 import { within } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
-import HostPack from "../host-pack"
+import TrackOverview from "../track-overview"
 import {
   useSessionizeSchedule,
   type GridEntry,
@@ -85,7 +85,7 @@ const view = (dates: string[], schedule = dates.map(makeDay)) => {
   document.body.append(root)
   root.innerHTML = renderToStaticMarkup(
     <MemoryRouter initialEntries={[`/schedule/track-overview?${params}`]}>
-      <HostPack />
+      <TrackOverview />
     </MemoryRouter>
   )
   return within(root)

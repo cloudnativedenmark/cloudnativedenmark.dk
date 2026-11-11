@@ -17,7 +17,7 @@ import SponsorInfo from "./pages/sponsor-info"
 import NotFound from "./pages/404"
 import { features } from "./config/features"
 
-const HostPack = React.lazy(() => import("./pages/host-pack"))
+const TrackOverview = React.lazy(() => import("./pages/track-overview"))
 
 function App() {
   return (
@@ -28,7 +28,7 @@ function App() {
           <React.Suspense
             fallback={<p role="status">Loading track overview…</p>}
           >
-            <HostPack />
+            <TrackOverview />
           </React.Suspense>
         }
       />
