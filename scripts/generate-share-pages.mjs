@@ -39,12 +39,6 @@ const pages = [
       "Printable track schedules, speaker photos, and talk abstracts.",
     noindex: true,
   },
-  {
-    pathname: "/schedule/print",
-    title: "Download schedule | Cloud Native Denmark",
-    description: "Download the conference schedule as a PDF.",
-    noindex: true,
-  },
 ]
 
 const escapeHtml = (value) =>
