@@ -135,8 +135,9 @@ changes. A failed PDF render fails the build instead of publishing a broken
 download. Use `yarn serve` after building to try the download locally.
 
 The renderer runs only during the build and is not published as a page.
-`/schedule/print` redirects directly to `/schedule.pdf` through the
-Cloudflare Pages rules in `public/_redirects`.
+`/schedule/print` and `/schedule/print/` redirect directly to `/schedule.pdf`
+through the Cloudflare Pages rules in `public/_redirects`. Both forms are
+required because browsers can cache the old trailing-slash redirect.
 
 ### Track overviews
 
