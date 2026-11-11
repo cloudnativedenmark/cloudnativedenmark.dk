@@ -139,27 +139,6 @@ The renderer runs only during the build and is not published as a page.
 through the Cloudflare Pages rules in `public/_redirects`. Both forms are
 required because browsers can cache the old trailing-slash redirect.
 
-### Track overviews
-
-Open `/schedule/track-overview` directly; it is not linked from site navigation.
-Select days and tracks, then use **Copy link** to share the selection.
-Each day has one combined overview, followed by talk sheets grouped by track.
-The sheets include full abstracts and speaker photos.
-
-Print formats:
-
-- `format=spacious`: one session per sheet, with space for notes.
-- `format=paired`: up to two sessions per sheet.
-- `format=compact`: fit sessions to each sheet.
-- `overview=0`: omit day overviews. **Print overview only** still prints them.
-
-Repeat `date` and `room` parameters to select multiple days and tracks:
-`/schedule/track-overview?date=2026-11-19&date=2026-11-20&room=75248&room=75249&format=compact`.
-
-Print on A4 portrait at 100% scale, with browser headers and footers off.
-Times use Copenhagen time. The page is public with `noindex` metadata,
-not access control. Do not add private speaker data.
-
 ## 📊 Data Management
 
 ### Sessionize Integration
