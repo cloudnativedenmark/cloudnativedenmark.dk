@@ -67,7 +67,7 @@ export const plan = {
 
   // Nordlounge, Vestlounge, Mellemlounge and the toilet corridor as one outline
   floor:
-    "M 0 0 H 30 V 60 H 128 V 86 H 58 V 108 H 30 V 100.5 H 1 V 96.5 H 30 V 86 H 0 Z",
+    "M 0 0 H 30 V 60 H 128 V 86 H 66 V 108 H 30 V 100.5 H 1 V 96.5 H 30 V 86 H 0 Z",
 
   rooms: {
     "main-stage": {
@@ -119,10 +119,10 @@ export const plan = {
 
   // Venue rooms along the Vestlounge that the conference doesn't use
   closedRooms: [
-    { x: 58, y: 86, width: 10.5, height: 12 },
-    { x: 68.5, y: 86, width: 10, height: 12 },
-    { x: 78.5, y: 86, width: 10, height: 12 },
-    { x: 88.5, y: 86, width: 10.5, height: 12 },
+    { x: 66, y: 86, width: 8.25, height: 12 },
+    { x: 74.25, y: 86, width: 8.25, height: 12 },
+    { x: 82.5, y: 86, width: 8.25, height: 12 },
+    { x: 90.75, y: 86, width: 8.25, height: 12 },
   ] as Rect[],
 
   office: { x: 99, y: 86, width: 16, height: 12 } as Rect,
@@ -175,23 +175,23 @@ export const plan = {
       size: "4x2",
     },
     "5": {
-      x: 6.5,
-      y: 72.5,
-      width: 20,
-      height: 13,
-      zone: "Vestlounge",
-      size: "5x3",
-    },
-    "6": {
       x: 30.6,
-      y: 87.2,
-      width: 10.5,
-      height: 8.8,
+      y: 86.6,
+      width: 20,
+      height: 9.6,
       zone: "Mellemlounge",
       size: "5x3",
     },
-    // Facing stand 6 across the Mellemlounge
-    "7": { x: 43.6, y: 87.2, width: 13.8, height: 8.8, zone: "Mellemlounge" },
+    "6": {
+      x: 8.5,
+      y: 73.5,
+      width: 14,
+      height: 10,
+      zone: "Vestlounge",
+      size: "3x2",
+    },
+    // Facing stand 5 across the Mellemlounge
+    "7": { x: 53, y: 86.6, width: 12.4, height: 9.6, zone: "Mellemlounge" },
     "8": {
       x: 1.5,
       y: 44.5,
@@ -261,7 +261,7 @@ export const plan = {
     { x: 66, y: 12, direction: "up" },
     { x: 80.5, y: 12, direction: "up" },
     { x: 96, y: 12, direction: "up" },
-    { x: 44.6, y: 108, direction: "down" },
+    { x: 48, y: 108, direction: "down" },
   ] as Exit[],
 
   entrance: {
@@ -276,7 +276,7 @@ export const plan = {
     { text: "VESTLOUNGE", x: 112, y: 66, angle: 0, compactAngle: -90 },
     {
       text: "MELLEMLOUNGE",
-      x: 44,
+      x: 48,
       y: 104.2,
       angle: 0,
       compactAngle: -90,

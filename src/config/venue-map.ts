@@ -59,9 +59,9 @@ export const venueMap: VenueMapConfig = {
 
   // Stands are numbered in walking order from the entrance. Each tier
   // gets the stands sized for it on Scandic's plan, earliest sponsors (by
-  // the date they went live on the site) nearest the entrance. With a
-  // single platinum sponsor, the second 5x3 m spot (6) goes to the earliest
-  // bronze sponsor. Stand 7 was added opposite it for HackYourFuture.
+  // the date they went live on the site) nearest the entrance. The
+  // platinum sponsor gets the 5x3 m stand (5) in the Mellemlounge. Stand 7
+  // was added opposite it for HackYourFuture.
   stands: [
     { id: "1", sponsor: "gold/netic" },
     { id: "2", sponsor: "gold/suse" },
