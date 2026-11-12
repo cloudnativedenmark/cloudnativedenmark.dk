@@ -69,7 +69,7 @@ it("shows the conference map with its exhibitors", () => {
   expect(
     within(screen.getByRole("region", { name: "Exhibitors" })).getByRole(
       "button",
-      { name: "Stand 6: team.blue (ScanNet), Platinum" }
+      { name: "Stand 5: team.blue (ScanNet), Platinum" }
     )
   ).toBeInTheDocument()
 })

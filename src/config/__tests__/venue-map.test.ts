@@ -57,15 +57,23 @@ describe("venue map config", () => {
     gold.forEach((stand) => expect(plan.stands[stand.id].size).toBe("4x2"))
   })
 
-  it("gives the Vestlounge 5x3 m stand to bronze and the Mellemlounge one to platinum", () => {
-    const large = venueMap.stands
-      .filter((stand) => plan.stands[stand.id].size === "5x3")
-      .sort((a, b) => Number(a.id) - Number(b.id))
+  it("gives the 5x3 m stand to platinum", () => {
+    const large = venueMap.stands.filter(
+      (stand) => plan.stands[stand.id].size === "5x3"
+    )
 
     expect(large.map((stand) => stand.sponsor?.split("/")[0])).toEqual([
-      "bronze",
       "platinum",
     ])
+  })
+
+  it("puts every bronze sponsor on a 3x2 m stand", () => {
+    const bronze = assignedStands.filter((stand) =>
+      stand.sponsor?.startsWith("bronze/")
+    )
+
+    expect(bronze.length).toBeGreaterThan(0)
+    bronze.forEach((stand) => expect(plan.stands[stand.id].size).toBe("3x2"))
   })
 
   it("places Hack Your Future opposite ScanNet in the Mellemlounge", () => {

@@ -175,14 +175,6 @@ export const plan = {
       size: "4x2",
     },
     "5": {
-      x: 6.5,
-      y: 72.5,
-      width: 20,
-      height: 13,
-      zone: "Vestlounge",
-      size: "5x3",
-    },
-    "6": {
       x: 30.6,
       y: 87.2,
       width: 10.5,
@@ -190,7 +182,15 @@ export const plan = {
       zone: "Mellemlounge",
       size: "5x3",
     },
-    // Facing stand 6 across the Mellemlounge
+    "6": {
+      x: 6.5,
+      y: 72.5,
+      width: 20,
+      height: 13,
+      zone: "Vestlounge",
+      size: "3x2",
+    },
+    // Facing stand 5 across the Mellemlounge
     "7": { x: 43.6, y: 87.2, width: 13.8, height: 8.8, zone: "Mellemlounge" },
     "8": {
       x: 1.5,

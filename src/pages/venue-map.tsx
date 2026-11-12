@@ -25,7 +25,7 @@ const notes: Note[] = [
   },
   {
     title: "Toilets",
-    body: "At the far end of the Vestlounge, go into the Mellemlounge past stand 6 and take the short corridor on your right.",
+    body: "At the far end of the Vestlounge, go into the Mellemlounge past stand 5 and take the short corridor on your right.",
     accent: "var(--color-cnd-slate)",
   },
   {
