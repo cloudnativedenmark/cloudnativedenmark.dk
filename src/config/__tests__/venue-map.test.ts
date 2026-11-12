@@ -57,30 +57,30 @@ describe("venue map config", () => {
     gold.forEach((stand) => expect(plan.stands[stand.id].size).toBe("4x2"))
   })
 
-  it("gives the best 5x3 m stand to platinum and the other to bronze", () => {
+  it("gives the Vestlounge 5x3 m stand to bronze and the Mellemlounge one to platinum", () => {
     const large = venueMap.stands
       .filter((stand) => plan.stands[stand.id].size === "5x3")
       .sort((a, b) => Number(a.id) - Number(b.id))
 
     expect(large.map((stand) => stand.sponsor?.split("/")[0])).toEqual([
-      "platinum",
       "bronze",
+      "platinum",
     ])
   })
 
-  it("places Hack Your Future opposite EDB in the Mellemlounge", () => {
+  it("places Hack Your Future opposite ScanNet in the Mellemlounge", () => {
     const standOf = (sponsor: string) => {
       const stand = venueMap.stands.find((s) => s.sponsor === sponsor)
       expect(stand).toBeDefined()
       return plan.stands[stand!.id]
     }
-    const edb = standOf("bronze/edb")
+    const scannet = standOf("platinum/scannet")
     const hyf = standOf("partner/hackyourfuture")
 
     expect(hyf.zone).toBe("Mellemlounge")
-    expect(hyf.x).toBeGreaterThan(edb.x + edb.width)
-    expect(hyf.y).toBeLessThan(edb.y + edb.height)
-    expect(hyf.y + hyf.height).toBeGreaterThan(edb.y)
+    expect(hyf.x).toBeGreaterThan(scannet.x + scannet.width)
+    expect(hyf.y).toBeLessThan(scannet.y + scannet.height)
+    expect(hyf.y + hyf.height).toBeGreaterThan(scannet.y)
   })
 
   it("has a drawn position for every room", () => {
