@@ -14,6 +14,7 @@ import Venue from "./pages/venue"
 import VenueMap from "./pages/venue-map"
 import BecomeASponsor from "./pages/become-a-sponsor"
 import SponsorInfo from "./pages/sponsor-info"
+import SpeakersGuide from "./pages/speakers-guide"
 import NotFound from "./pages/404"
 import { features } from "./config/features"
 
@@ -60,6 +61,7 @@ function App() {
         <Route path="become-a-sponsor" element={<BecomeASponsor />} />
         {/* Not in nav — link directly to confirmed/prospective sponsors */}
         <Route path="sponsor-info" element={<SponsorInfo />} />
+        <Route path="speakers-guide" element={<SpeakersGuide />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
