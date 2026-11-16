@@ -138,6 +138,13 @@ The renderer runs only during the build and is not published as a page.
 The former `/schedule/print` and `/schedule/track-overview` URLs redirect
 to `/schedule`.
 
+### Speakers guide
+
+`/speakers-guide` tells speakers to use the guide we emailed them. The guide
+lists the track hosts' phone numbers, so it isn't published on the site; it's
+built in the private [graphics](https://github.com/cloudnativedenmark/graphics)
+repo.
+
 ## 📊 Data Management
 
 ### Sessionize Integration
