@@ -19,9 +19,13 @@ export interface FeatureFlags {
    * Does not control merchandise or sponsorship sales. Rebuild after a change.
    */
   ticketSales: boolean
+
+  /** Controls merchandise links independently of ticket sales. */
+  merchandise: boolean
 }
 
 export const features: FeatureFlags = {
   scheduleAndSpeakers: true,
   ticketSales: false,
+  merchandise: false,
 }

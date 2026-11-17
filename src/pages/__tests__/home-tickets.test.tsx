@@ -50,6 +50,35 @@ it("disables home page ticket actions when sales are closed", () => {
   expect(screen.getAllByRole("link", { name: "Schedule →" })).toHaveLength(2)
 })
 
+it.each([false, true])(
+  "controls merchandise links independently of ticket sales (%s)",
+  (ticketSales) => {
+    Object.assign(features, { ticketSales, merchandise: false })
+    const { container, rerender } = view()
+
+    expect(screen.queryAllByRole("link", { name: "Merch →" })).toHaveLength(0)
+    expect(container.querySelector('a[href*="extras_flow"]')).toBeNull()
+
+    Object.assign(features, { merchandise: true })
+    rerender(
+      <HelmetProvider>
+        <MemoryRouter>
+          <IndexPage />
+        </MemoryRouter>
+      </HelmetProvider>
+    )
+
+    const links = screen.getAllByRole("link", { name: "Merch →" })
+    expect(links).toHaveLength(2)
+    for (const link of links) {
+      expect(link).toHaveAttribute(
+        "href",
+        "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/?extras_flow=true"
+      )
+    }
+  }
+)
+
 it("restores home page ticket actions when sales are open", () => {
   Object.assign(features, { ticketSales: true })
   view()

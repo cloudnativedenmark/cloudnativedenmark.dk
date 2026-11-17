@@ -77,12 +77,16 @@ const IndexPage: React.FC = () => {
                 },
               ]
             : []),
-          {
-            text: "Merch →",
-            href: "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/?extras_flow=true",
-            isExternal: true,
-            variant: "secondary",
-          },
+          ...(features.merchandise
+            ? [
+                {
+                  text: "Merch →",
+                  href: "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/?extras_flow=true",
+                  isExternal: true,
+                  variant: "secondary" as const,
+                },
+              ]
+            : []),
         ]}
         dateStamp={{
           label: "COPENHAGEN · CND/2026",
@@ -121,8 +125,6 @@ const IndexPage: React.FC = () => {
         onSpeakerClick={handleSpeakerClick}
         initialSpeakersToShow={4}
       />*/}
-
-      {/*<MerchandiseSection />*/}
 
       <SponsorsSection
         sectionNumber={sec()}
@@ -177,13 +179,15 @@ const IndexPage: React.FC = () => {
                   <Button variant="ghost">Schedule →</Button>
                 </Link>
               )}
-              <a
-                href="https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/?extras_flow=true"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button variant="ghost">Merch →</Button>
-              </a>
+              {features.merchandise && (
+                <a
+                  href="https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/?extras_flow=true"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="ghost">Merch →</Button>
+                </a>
+              )}
             </div>
           </div>
         </div>
