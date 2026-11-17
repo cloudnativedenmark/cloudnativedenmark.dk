@@ -45,6 +45,7 @@ beforeEach(() => {
       ],
       gold: [],
       bronze: [],
+      afterparty: [],
       community: [],
       partners: [],
     },

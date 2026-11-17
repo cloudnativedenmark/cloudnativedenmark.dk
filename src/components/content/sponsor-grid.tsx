@@ -10,7 +10,8 @@ interface Sponsor {
   }
 }
 
-type TierType = "platinum" | "gold" | "bronze" | "community" | "partners"
+type TierType =
+  "platinum" | "gold" | "bronze" | "afterparty" | "community" | "partners"
 
 interface SponsorGridProps {
   sponsors: Sponsor[]
@@ -70,6 +71,11 @@ const SponsorGrid: React.FC<SponsorGridProps> = ({
       dot: "bg-cnd-coral",
       text: "text-cnd-midnight",
       line: "from-transparent via-cnd-coral to-transparent",
+    },
+    afterparty: {
+      dot: "bg-cnd-harbor",
+      text: "text-cnd-midnight",
+      line: "from-transparent via-cnd-harbor/60 to-transparent",
     },
     community: {
       dot: "bg-cnd-electric",

@@ -3,6 +3,13 @@ import { type Session } from "../hooks/use-sessionize"
 import { deduceSessionType } from "../utils/session-type"
 import SessionTypeBadge from "./session-type-badge"
 import { calculateSessionDuration } from "../utils/time-formatting"
+import ExternalLink from "./ui/external-link"
+
+export interface SessionSponsor {
+  title: string
+  url: string
+  logo: { publicURL: string }
+}
 
 interface SessionCardProps {
   session: Session
@@ -10,6 +17,8 @@ interface SessionCardProps {
   variant?: "schedule" | "archive" | "overlay" | "mobile"
   serviceSessions?: readonly Session[]
   isCurrent?: boolean
+  /** Sponsors shown as logos on a service session, e.g. the after party */
+  sponsors?: readonly SessionSponsor[]
 }
 
 const SessionCard: React.FC<SessionCardProps> = ({
@@ -18,6 +27,7 @@ const SessionCard: React.FC<SessionCardProps> = ({
   variant = "schedule",
   serviceSessions,
   isCurrent = false,
+  sponsors,
 }) => {
   if (!session || !session.id) {
     return null
@@ -61,6 +71,23 @@ const SessionCard: React.FC<SessionCardProps> = ({
           <p className="text-sm text-gray-700 whitespace-pre-line">
             {session.description}
           </p>
+        )}
+        {sponsors && sponsors.length > 0 && (
+          <div className="pointer-events-auto mt-1 flex flex-wrap items-center justify-center gap-6">
+            {sponsors.map((sponsor) => (
+              <ExternalLink
+                key={sponsor.title}
+                href={sponsor.url}
+                className="hover:opacity-80 transition-opacity"
+              >
+                <img
+                  src={sponsor.logo.publicURL}
+                  alt={sponsor.title}
+                  className="h-10 w-auto max-w-[200px]"
+                />
+              </ExternalLink>
+            ))}
+          </div>
         )}
       </div>
     )

@@ -20,6 +20,7 @@ interface SponsorsSectionProps {
   platinum: Sponsor[]
   gold: Sponsor[]
   bronze: Sponsor[]
+  afterparty?: Sponsor[]
   community: Sponsor[]
   partners: Sponsor[]
 }
@@ -29,6 +30,7 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
   platinum,
   gold,
   bronze,
+  afterparty = [],
   community,
   partners,
 }) => {
@@ -94,6 +96,12 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
         />
         <SponsorGrid sponsors={gold} title="Gold" size="l" tier="gold" />
         <SponsorGrid sponsors={bronze} title="Bronze" size="m" tier="bronze" />
+        <SponsorGrid
+          sponsors={afterparty}
+          title="After Party"
+          size="m"
+          tier="afterparty"
+        />
         <SponsorGrid
           sponsors={community}
           title="Community"

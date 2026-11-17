@@ -39,6 +39,7 @@ it("opens a featured speaker on the home page and copies the speaker link", asyn
       platinum: [],
       gold: [],
       bronze: [],
+      afterparty: [],
       community: [],
       partners: [],
     },

@@ -5,6 +5,7 @@ export interface SponsorCategories {
   platinum: SponsorData[]
   gold: SponsorData[]
   bronze: SponsorData[]
+  afterparty: SponsorData[]
   community: SponsorData[]
   partners: SponsorData[]
 }
@@ -14,6 +15,7 @@ export const useSponsors = () => {
     platinum: [],
     gold: [],
     bronze: [],
+    afterparty: [],
     community: [],
     partners: [],
   })
@@ -26,6 +28,7 @@ export const useSponsors = () => {
           platinum: sponsorData.platinum || [],
           gold: sponsorData.gold || [],
           bronze: sponsorData.bronze || [],
+          afterparty: sponsorData.afterparty || [],
           community: sponsorData.community || [],
           partners: sponsorData.partner || [],
         })

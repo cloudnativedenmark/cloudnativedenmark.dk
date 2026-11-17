@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 import SEOHead from "../components/seo-head"
 import { useSessionizeSchedule } from "../hooks/use-sessionize"
+import { useSponsors } from "../hooks/use-sponsors"
 import { useModalManagement } from "../hooks/use-modal-management"
 import {
   formatDate,
@@ -75,6 +76,11 @@ const SchedulePage: React.FC = () => {
   const previousTalkId = useRef(talkId)
   const [currentTime, setCurrentTime] = useState(() => new Date())
   const { schedule, isLoading } = useSessionizeSchedule()
+  const { sponsors } = useSponsors()
+  const sessionSponsors = (session: Session) =>
+    session.isServiceSession && /after[\s-]?party/i.test(session.title ?? "")
+      ? sponsors.afterparty
+      : undefined
   const {
     selectedSession,
     selectedSpeaker,
@@ -405,6 +411,7 @@ const SchedulePage: React.FC = () => {
                                     activeTime
                                   )}
                                   variant={isOverlay ? "overlay" : "schedule"}
+                                  sponsors={sessionSponsors(plenum)}
                                 />
                               </div>
                             )}
@@ -429,6 +436,7 @@ const SchedulePage: React.FC = () => {
                                     session={session}
                                     onClick={() => openSession(session)}
                                     variant="schedule"
+                                    sponsors={sessionSponsors(session)}
                                     isCurrent={Boolean(
                                       session &&
                                       isCurrentSession(session, activeTime)
@@ -477,6 +485,7 @@ const SchedulePage: React.FC = () => {
                               onClick={() => openSession(room.session)}
                               variant="mobile"
                               serviceSessions={serviceSessions}
+                              sponsors={sessionSponsors(room.session)}
                               isCurrent={isCurrentSession(
                                 room.session,
                                 activeTime
