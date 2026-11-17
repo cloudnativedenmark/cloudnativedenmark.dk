@@ -1,6 +1,7 @@
 import React from "react"
 import Section from "../ui/section"
 import Button from "../ui/button"
+import { features } from "../../config/features"
 
 interface TicketTier {
   name: string
@@ -134,7 +135,7 @@ const TierCard: React.FC<{
             ON SALE
           </span>
         )}
-        {tier.soldOut && (
+        {(!features.ticketSales || tier.soldOut) && (
           <span
             className="eyebrow text-cnd-ash"
             style={{ fontSize: 10, letterSpacing: "0.2em" }}
@@ -186,7 +187,9 @@ const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({
   id,
   sectionNumber,
 }) => {
-  const activeTierIndex = getActiveTierIndex(ticketTiers)
+  const activeTierIndex = features.ticketSales
+    ? getActiveTierIndex(ticketTiers)
+    : -1
 
   return (
     <Section id={id} className="bg-cnd-bone text-cnd-midnight">
@@ -205,7 +208,7 @@ const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({
               letterSpacing: "-0.035em",
             }}
           >
-            Tickets are live.
+            {features.ticketSales ? "Tickets are live." : "Sold out."}
           </h2>
         </div>
 
@@ -233,13 +236,17 @@ const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({
         </p>
 
         <div className="mt-10 flex justify-center">
-          <a
-            href="https://cloudnativedenmark.ticketbutler.io/da/e/cloud-native-denmark-26/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button>Buy tickets →</Button>
-          </a>
+          {features.ticketSales ? (
+            <a
+              href="https://cloudnativedenmark.ticketbutler.io/da/e/cloud-native-denmark-26/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button>Buy tickets →</Button>
+            </a>
+          ) : (
+            <Button disabled>Sold out</Button>
+          )}
         </div>
       </div>
     </Section>

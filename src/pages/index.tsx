@@ -61,11 +61,13 @@ const IndexPage: React.FC = () => {
         }
         description="Two days in Copenhagen with the platform engineers, SREs, and architects shipping the Nordics' most demanding cloud native systems to production."
         actions={[
-          {
-            text: "Ticket rates →",
-            onClick: scrollToTicketRates,
-            variant: "primary",
-          },
+          features.ticketSales
+            ? {
+                text: "Ticket rates →",
+                onClick: scrollToTicketRates,
+                variant: "primary",
+              }
+            : { text: "Sold out", disabled: true },
           ...(features.scheduleAndSpeakers
             ? [
                 {
@@ -154,16 +156,22 @@ const IndexPage: React.FC = () => {
               className="max-w-xl text-cnd-fog"
               style={{ fontSize: 17, lineHeight: 1.55 }}
             >
-              Two days of talks, workshops, and community — don't miss out.
+              {features.ticketSales
+                ? "Two days of talks, workshops, and community — don't miss out."
+                : "Tickets are sold out. See you in Copenhagen."}
             </p>
             <div className="mt-2 flex flex-wrap justify-center gap-3">
-              <a
-                href="https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button>Get your ticket →</Button>
-              </a>
+              {features.ticketSales ? (
+                <a
+                  href="https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button>Get your ticket →</Button>
+                </a>
+              ) : (
+                <Button disabled>Sold out</Button>
+              )}
               {features.scheduleAndSpeakers && (
                 <Link to="/schedule">
                   <Button variant="ghost">Schedule →</Button>

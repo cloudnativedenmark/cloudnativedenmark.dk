@@ -1,13 +1,18 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import TicketRatesSection from "../ticket-rates-section"
+import { features } from "../../../config/features"
+
+const original = { ...features }
 
 describe("TicketRatesSection", () => {
   afterEach(() => {
     jest.useRealTimers()
+    Object.assign(features, original)
   })
 
   it("opens Late Bird sales on Nov 10", () => {
+    Object.assign(features, { ticketSales: true })
     jest.useFakeTimers()
     jest.setSystemTime(new Date("2026-11-10T12:00:00+01:00"))
 
@@ -23,4 +28,22 @@ describe("TicketRatesSection", () => {
       "https://cloudnativedenmark.ticketbutler.io/da/e/cloud-native-denmark-26/"
     )
   })
+
+  it.each(["2025-12-01", "2026-11-10"])(
+    "shows sold out without sale badges or purchase links on %s",
+    (date) => {
+      Object.assign(features, { ticketSales: false })
+      jest.useFakeTimers()
+      jest.setSystemTime(new Date(date))
+
+      render(<TicketRatesSection sectionNumber={4} />)
+
+      expect(screen.getByRole("heading", { name: "Sold out." })).toBeVisible()
+      expect(screen.getByRole("button", { name: "Sold out" })).toBeDisabled()
+      expect(screen.queryByRole("link")).toBeNull()
+      expect(screen.queryByText("ON SALE")).toBeNull()
+      expect(screen.queryByText("SELLING OUT FAST")).toBeNull()
+      expect(screen.getAllByText("SOLD OUT")).toHaveLength(4)
+    }
+  )
 })

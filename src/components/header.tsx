@@ -3,6 +3,7 @@ import Logo from "../images/logo.svg"
 import { Link } from "react-router-dom"
 import HamburgerMenu from "../images/hamburger-menu.inline.svg"
 import CloseMenu from "../images/close-menu.inline.svg"
+import { features } from "../config/features"
 
 interface HeaderProps {
   menuLinks: {
@@ -91,14 +92,16 @@ const Header = ({ menuLinks }: HeaderProps) => {
               {link.name}
             </Link>
           ))}
-          <a
-            href={ticketUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-pill bg-cnd-red text-white shadow-[0_4px_18px_rgba(224,19,42,0.25)] hover:bg-cnd-red/90"
-          >
-            Buy tickets →
-          </a>
+          {features.ticketSales && (
+            <a
+              href={ticketUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-pill bg-cnd-red text-white shadow-[0_4px_18px_rgba(224,19,42,0.25)] hover:bg-cnd-red/90"
+            >
+              Buy tickets →
+            </a>
+          )}
         </nav>
         <div className="md:hidden">
           <button onClick={toggleMenu} aria-label="Toggle navigation">
@@ -119,15 +122,17 @@ const Header = ({ menuLinks }: HeaderProps) => {
                 {link.name}
               </Link>
             ))}
-            <a
-              href={ticketUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="my-3 text-2xl font-semibold text-cnd-red hover:text-cnd-coral"
-              onClick={toggleMenu}
-            >
-              Buy tickets →
-            </a>
+            {features.ticketSales && (
+              <a
+                href={ticketUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="my-3 text-2xl font-semibold text-cnd-red hover:text-cnd-coral"
+                onClick={toggleMenu}
+              >
+                Buy tickets →
+              </a>
+            )}
           </nav>
         </div>
       )}

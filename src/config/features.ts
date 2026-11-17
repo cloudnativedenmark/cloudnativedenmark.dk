@@ -14,8 +14,14 @@ export interface FeatureFlags {
    * the "Schedule →" CTAs) are hidden.
    */
   scheduleAndSpeakers: boolean
+
+  /** Controls ticket sales links and sold-out messages, including both menus.
+   * Does not control merchandise or sponsorship sales. Rebuild after a change.
+   */
+  ticketSales: boolean
 }
 
 export const features: FeatureFlags = {
   scheduleAndSpeakers: true,
+  ticketSales: false,
 }
