@@ -11,7 +11,12 @@ interface Sponsor {
 }
 
 type TierType =
-  "platinum" | "gold" | "bronze" | "afterparty" | "community" | "partners"
+  | "platinum"
+  | "gold"
+  | "bronze"
+  | "afterparty"
+  | "community"
+  | "partners"
 
 interface SponsorGridProps {
   sponsors: Sponsor[]

@@ -157,6 +157,14 @@ The site integrates with Sessionize API to fetch:
 
 Configuration is managed in `src/hooks/use-sessionize.tsx`.
 
+The schedule cards and talk details link to each session's feedback form.
+Feedback URLs are not included in the public Sessionize API, so the 2026
+links are stored by session ID in `src/config/session-feedback.ts`. They
+come from the same QR codes used in the conference decks:
+[`content/2026-qr.json` in graphics](https://github.com/cloudnativedenmark/graphics/blob/fb6bb64612ccbd9c0eab6173ec0a02aafa9b0b6e/content/2026-qr.json).
+Update this mapping when feedback codes change or a new event is configured.
+Sessions without a mapped URL and service sessions have no feedback link.
+
 Lightning talk labels use a yellow background with dark text for contrast.
 Workshop labels use blue.
 

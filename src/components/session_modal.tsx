@@ -12,6 +12,7 @@ import SessionTypeBadge from "./session-type-badge"
 import Button from "./ui/button"
 import CopyLinkButton from "./copy-link-button"
 import { talkPath } from "../utils/talk-link"
+import SessionFeedbackLink from "./session-feedback-link"
 
 const SessionModal: React.FC<{
   session: Session
@@ -80,6 +81,8 @@ const SessionModal: React.FC<{
                 <strong>Room:</strong> {session.room}
               </span>
             </div>
+
+            <SessionFeedbackLink session={session} className="mb-6" />
 
             {tags.length > 0 && (
               <div className="mb-6 flex flex-wrap gap-2">

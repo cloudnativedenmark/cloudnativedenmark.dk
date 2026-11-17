@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
 import SessionCard from "../session-card"
 import { type Session, type Speaker } from "../../hooks/use-sessionize"
 
@@ -36,6 +36,42 @@ const session: Session = {
 }
 
 describe("SessionCard", () => {
+  it.each(["schedule", "mobile"] as const)(
+    "opens feedback independently of the %s card",
+    (variant) => {
+      const onClick = jest.fn()
+      render(
+        <SessionCard
+          session={{ ...session, id: "1148240" }}
+          variant={variant}
+          onClick={onClick}
+        />
+      )
+
+      const link = screen.getByRole("link", {
+        name: "Give feedback on A regular talk",
+      })
+      expect(link).toHaveAttribute("href", "https://sfeedback.com/NA4OI0")
+      expect(link).toHaveAttribute("target", "_blank")
+      expect(link).toHaveAttribute("rel", "noopener noreferrer nofollow")
+      fireEvent.click(link)
+      expect(onClick).not.toHaveBeenCalled()
+      fireEvent.click(screen.getByText("A regular talk"))
+      expect(onClick).toHaveBeenCalledTimes(1)
+    }
+  )
+
+  it.each([
+    { ...session },
+    { ...session, id: "1148240", isServiceSession: true },
+  ])("omits feedback when it is unavailable", (session) => {
+    render(<SessionCard session={session} />)
+
+    expect(
+      screen.queryByRole("link", { name: /Give feedback/ })
+    ).not.toBeInTheDocument()
+  })
+
   it("shows sponsor logos on a service session", () => {
     const afterParty = {
       ...session,

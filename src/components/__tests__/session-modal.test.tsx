@@ -32,6 +32,24 @@ const renderSessionModal = (description: string | null) =>
   )
 
 describe("SessionModal sharing", () => {
+  it("links to the selected session's feedback without closing the modal", () => {
+    const onClose = jest.fn()
+    render(
+      <SessionModal
+        session={{ ...session, id: "1168958" }}
+        onClose={onClose}
+        onSpeakerClick={() => {}}
+      />
+    )
+
+    const link = screen.getByRole("link", {
+      name: "Give feedback on A regular talk",
+    })
+    expect(link).toHaveAttribute("href", "https://sfeedback.com/gA4U6a")
+    fireEvent.click(link)
+    expect(onClose).not.toHaveBeenCalled()
+  })
+
   it("copies a path-based talk link", async () => {
     const writeText = jest.fn().mockResolvedValue(undefined)
     Object.defineProperty(navigator, "clipboard", {
