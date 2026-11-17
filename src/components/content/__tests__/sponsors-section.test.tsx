@@ -50,31 +50,18 @@ describe("SponsorsSection", () => {
       ).toBeInTheDocument()
     })
 
-    it("should render the Become a Sponsor button", () => {
-      renderWithRouter(<SponsorsSection {...defaultProps} />)
-
-      expect(
-        screen.getByRole("button", { name: "Become a sponsor →" })
-      ).toBeInTheDocument()
-    })
-
     it("should show which sponsorships are sold out", () => {
       renderWithRouter(<SponsorsSection {...defaultProps} />)
 
-      expect(
-        screen.getByText(
-          "Platinum, Gold & Bronze sold out · Community still available"
-        )
-      ).toBeInTheDocument()
+      expect(screen.getByText("All sponsorships sold out")).toBeInTheDocument()
     })
 
-    it("should link to the become-a-sponsor page", () => {
+    it("should not link to the become-a-sponsor page", () => {
       renderWithRouter(<SponsorsSection {...defaultProps} />)
 
-      const sponsorLink = screen.getByRole("link", {
-        name: "Become a sponsor →",
-      })
-      expect(sponsorLink).toHaveAttribute("href", "/become-a-sponsor")
+      expect(
+        screen.queryByRole("link", { name: /become a sponsor/i })
+      ).not.toBeInTheDocument()
     })
   })
 

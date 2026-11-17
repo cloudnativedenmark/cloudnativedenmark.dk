@@ -1,8 +1,6 @@
 import React from "react"
-import { Link } from "react-router-dom"
 import Section from "../ui/section"
 import SponsorGrid from "./sponsor-grid"
-import Button from "../ui/button"
 import CNDShape from "../ui/cnd-shape"
 import StatusPill from "../ui/status-pill"
 
@@ -78,14 +76,7 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
             Cloud Native Denmark is community-driven and powered by the
             companies who care about the Nordic cloud native scene.
           </p>
-          <StatusPill className="mt-8">
-            Platinum, Gold & Bronze sold out · Community still available
-          </StatusPill>
-          <div className="mt-6">
-            <Link to="/become-a-sponsor">
-              <Button variant="primary">Become a sponsor →</Button>
-            </Link>
-          </div>
+          <StatusPill className="mt-8">All sponsorships sold out</StatusPill>
         </div>
 
         <SponsorGrid
