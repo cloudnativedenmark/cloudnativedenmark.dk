@@ -4,6 +4,7 @@ import { deduceSessionType } from "../utils/session-type"
 import SessionTypeBadge from "./session-type-badge"
 import { calculateSessionDuration } from "../utils/time-formatting"
 import ExternalLink from "./ui/external-link"
+import SessionFeedbackLink from "./session-feedback-link"
 
 export interface SessionSponsor {
   title: string
@@ -174,6 +175,7 @@ const SessionCard: React.FC<SessionCardProps> = ({
             )
           })}
       </div>
+      <SessionFeedbackLink session={session} className="mt-2 self-start" />
     </div>
   )
 }
