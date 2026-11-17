@@ -131,6 +131,7 @@ const IndexPage: React.FC = () => {
         platinum={sponsors.platinum}
         gold={sponsors.gold}
         bronze={sponsors.bronze}
+        afterparty={sponsors.afterparty}
         community={sponsors.community}
         partners={sponsors.partners}
       />

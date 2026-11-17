@@ -13,6 +13,7 @@ jest.mock("../../hooks/use-sponsors", () => ({
       platinum: [],
       gold: [],
       bronze: [],
+      afterparty: [],
       community: [],
       partners: [],
     },

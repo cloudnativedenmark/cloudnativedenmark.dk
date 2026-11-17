@@ -4,6 +4,18 @@ import { MemoryRouter, useLocation, useNavigate } from "react-router-dom"
 import SchedulePage from "../schedule"
 import { useSessionizeSchedule } from "../../hooks/use-sessionize"
 
+jest.mock("../../hooks/use-sponsors", () => ({
+  useSponsors: () => ({
+    sponsors: {
+      platinum: [],
+      gold: [],
+      bronze: [],
+      afterparty: [],
+      community: [],
+      partners: [],
+    },
+  }),
+}))
 jest.mock("../../hooks/use-sessionize", () => ({
   useSessionizeSchedule: jest.fn(),
 }))

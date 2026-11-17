@@ -22,11 +22,24 @@ describe("SponsorsSection", () => {
     platinum: [],
     gold: [],
     bronze: [],
+    afterparty: [],
     community: [],
     partners: [],
   }
 
   describe("rendering", () => {
+    it("should render the after party sponsor tier", () => {
+      renderWithRouter(
+        <SponsorsSection
+          {...defaultProps}
+          afterparty={[createMockSponsor("Upwind")]}
+        />
+      )
+
+      expect(screen.getByText("After Party")).toBeInTheDocument()
+      expect(screen.getByRole("img", { name: "Upwind" })).toBeInTheDocument()
+    })
+
     it("should render the Sponsors heading", () => {
       renderWithRouter(<SponsorsSection {...defaultProps} />)
 

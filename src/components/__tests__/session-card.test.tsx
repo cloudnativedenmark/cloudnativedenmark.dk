@@ -36,6 +36,38 @@ const session: Session = {
 }
 
 describe("SessionCard", () => {
+  it("shows sponsor logos on a service session", () => {
+    const afterParty = {
+      ...session,
+      title: "After party - sponsored by Upwind",
+      isServiceSession: true,
+      isPlenumSession: true,
+      speakers: [],
+    }
+
+    render(
+      <SessionCard
+        session={afterParty}
+        sponsors={[
+          {
+            title: "Upwind",
+            url: "https://upwind.io/",
+            logo: { publicURL: "/assets/upwind.svg" },
+          },
+        ]}
+      />
+    )
+
+    expect(screen.getByRole("img", { name: "Upwind" })).toHaveAttribute(
+      "src",
+      "/assets/upwind.svg"
+    )
+    expect(screen.getByRole("link")).toHaveAttribute(
+      "href",
+      "https://upwind.io/"
+    )
+  })
+
   it("renders the deduced session type in the schedule card", () => {
     render(<SessionCard session={session} />)
 
