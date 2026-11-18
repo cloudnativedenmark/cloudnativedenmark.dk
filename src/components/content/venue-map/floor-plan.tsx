@@ -5,7 +5,9 @@ import { plan, type Door, type Exit } from "./plan"
 import { Glyph } from "./icons"
 import { amenityStyles, colors, fonts, styleOfTier, tierOf } from "./theme"
 
-export type FloorPlanVariant = "full" | "compact"
+/** full: the website on desktop; compact: phones, turned upright; tv: the
+ * poster on the screen above the entrance, with fewer details, larger */
+export type FloorPlanVariant = "full" | "compact" | "tv"
 
 const sizes = {
   full: {
@@ -25,6 +27,15 @@ const sizes = {
     smallRoomName: 3.4,
     zone: 2.5,
     stand: 4.2,
+  },
+  tv: {
+    amenity: 2.6,
+    exit: 3.4,
+    entrance: 3.6,
+    roomName: 5,
+    smallRoomName: 2.3,
+    zone: 2,
+    stand: 2.1,
   },
 }
 
@@ -70,6 +81,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({
   className,
 }) => {
   const compact = variant === "compact"
+  const tv = variant === "tv"
   const size = sizes[variant]
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "")
   const seatsId = `${uid}-seats`
@@ -174,7 +186,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({
           }
           const cx = room.x + room.width / 2
           const cy = room.y + room.height / 2
-          const fontSize = compact ? 2 : 1.4
+          const fontSize = compact || tv ? 2 : 1.4
           return (
             <g key={`${room.x}-${room.y}`}>
               {room.closed ? (
@@ -277,7 +289,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({
               dominantBaseline="central"
               fill={colors.slate}
               style={{ fontFamily: fonts.mono }}
-              fontSize={1.15}
+              fontSize={tv ? 1.8 : 1.15}
               fontWeight={700}
               letterSpacing={0.3}
             >
@@ -311,7 +323,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({
               {room.stage && (
                 <>
                   <rect {...room.stage} rx={0.3} fill={colors.red} />
-                  {!compact &&
+                  {variant === "full" &&
                     (() => {
                       const { stage } = room
                       const cx = stage.x + stage.width / 2
@@ -363,7 +375,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({
                   >
                     {name.name}
                   </text>
-                  {!compact && (
+                  {variant === "full" && (
                     <text
                       x={room.label.x}
                       y={room.label.y + nameSize * 0.95}
@@ -433,7 +445,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({
                   dominantBaseline="central"
                   fill={style.color}
                   style={{ fontFamily: fonts.mono }}
-                  fontSize={1.3}
+                  fontSize={tv ? 1.8 : 1.3}
                   fontWeight={700}
                   letterSpacing={0.15}
                 >
@@ -444,28 +456,30 @@ const FloorPlan: React.FC<FloorPlanProps> = ({
           )
         })}
 
-        {plan.exits.map((exit) => (
-          <g key={`${exit.x}-${exit.y}`}>
-            <title>Emergency exit</title>
-            <rect
-              x={exit.x - size.exit / 2}
-              y={exit.y - size.exit / 2}
-              width={size.exit}
-              height={size.exit}
-              rx={0.5}
-              fill={colors.exit}
-              stroke="#ffffff"
-              strokeWidth={0.3}
-            />
-            <Glyph
-              name="exit"
-              x={exit.x}
-              y={exit.y}
-              size={size.exit * 0.68}
-              transform={`rotate(${exitAngles[exit.direction]} ${exit.x} ${exit.y})`}
-            />
-          </g>
-        ))}
+        {/* The venue signposts its own exits; on the TV they're clutter */}
+        {!tv &&
+          plan.exits.map((exit) => (
+            <g key={`${exit.x}-${exit.y}`}>
+              <title>Emergency exit</title>
+              <rect
+                x={exit.x - size.exit / 2}
+                y={exit.y - size.exit / 2}
+                width={size.exit}
+                height={size.exit}
+                rx={0.5}
+                fill={colors.exit}
+                stroke="#ffffff"
+                strokeWidth={0.3}
+              />
+              <Glyph
+                name="exit"
+                x={exit.x}
+                y={exit.y}
+                size={size.exit * 0.68}
+                transform={`rotate(${exitAngles[exit.direction]} ${exit.x} ${exit.y})`}
+              />
+            </g>
+          ))}
 
         {(() => {
           const { marker } = plan.entrance
@@ -497,11 +511,20 @@ const FloorPlan: React.FC<FloorPlanProps> = ({
                 dominantBaseline="central"
                 fill={colors.red}
                 style={{ fontFamily: fonts.mono }}
-                fontSize={compact ? 2.2 : 1.4}
+                fontSize={compact ? 2.2 : tv ? 1.9 : 1.4}
                 fontWeight={700}
                 letterSpacing={compact ? 0.4 : 0.25}
               >
-                ENTRANCE
+                {tv ? (
+                  <>
+                    <tspan x={label.x}>YOU ARE</tspan>
+                    <tspan x={label.x} dy={2.4}>
+                      HERE
+                    </tspan>
+                  </>
+                ) : (
+                  "ENTRANCE"
+                )}
               </text>
             </g>
           )

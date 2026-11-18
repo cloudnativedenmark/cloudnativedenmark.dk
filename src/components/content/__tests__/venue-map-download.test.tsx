@@ -128,7 +128,11 @@ describe("mapSvg", () => {
     expect(svg.textContent).toContain("Cloud Native")
     expect(svg.textContent).toContain("19–20 NOV 2026")
     expect(svg.textContent).toContain("Acme")
-    expect(svg.querySelector("svg [data-variant='full']")).not.toBeNull()
+    expect(svg.querySelector("svg [data-variant='tv']")).not.toBeNull()
+    expect(svg.textContent).toContain("YOU ARE")
+    expect(
+      Array.from(svg.querySelectorAll("title"), (t) => t.textContent)
+    ).not.toContain("Emergency exit")
     const images = Array.from(svg.querySelectorAll("image"))
     expect(images).toHaveLength(2)
     images.forEach((image) =>
