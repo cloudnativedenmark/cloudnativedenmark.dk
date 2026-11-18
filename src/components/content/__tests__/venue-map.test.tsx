@@ -86,24 +86,35 @@ describe("VenueMap", () => {
     )
   })
 
-  it("labels the side rooms the conference uses", () => {
+  it("labels the side rooms and hatches only the venue admin office", () => {
     const { container } = render(
       <VenueMap config={config} sponsors={sponsors} />
     )
-    const labels = Array.from(
-      fullMap(container).querySelectorAll("text"),
-      (text) => text.textContent
-    )
+    const rooms = Array.from(fullMap(container).querySelectorAll("text"))
+      .filter((text) => text.querySelector("tspan"))
+      .map((text) => text.parentElement!)
+      .filter((g) => g.querySelector("rect"))
+      .map((g) => ({
+        label: g.querySelector("text")!.textContent,
+        x: Number(g.querySelector("rect")!.getAttribute("x")),
+        y: Number(g.querySelector("rect")!.getAttribute("y")),
+        hatched: Boolean(g.querySelector('rect[fill*="hatch"]')),
+      }))
+    const vestlounge = rooms
+      .filter((room) => room.y === 86 && room.x >= 66)
+      .sort((a, b) => a.x - b.x)
 
-    expect(labels).toEqual(
-      expect.arrayContaining([
-        "WARDROBE",
-        "STORAGE",
-        "SILENCEROOM",
-        "VENUEADMIN",
-        "ORGANIZEROFFICE",
-        "SPEAKER ROOM",
-      ])
+    expect(vestlounge.map((room) => room.label)).toEqual([
+      "WARDROBE",
+      "STORAGE",
+      "SILENCEROOM",
+      "VENUEADMIN",
+    ])
+    expect(
+      rooms.filter((room) => room.hatched).map((room) => room.label)
+    ).toEqual(["VENUEADMIN"])
+    expect(rooms.map((room) => room.label)).toEqual(
+      expect.arrayContaining(["ORGANIZEROFFICE", "SPEAKER ROOM"])
     )
   })
 

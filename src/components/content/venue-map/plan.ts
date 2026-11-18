@@ -33,7 +33,7 @@ export interface RoomShape extends Rect {
   label: Point
 }
 
-/** A small room off the lounges: labelled if the conference uses it, hatched if not */
+/** A small room off the lounges, hatched when attendees can't go in */
 export interface SideRoom extends Rect {
   label?: string[]
   /** Label on the mobile map, where the room is turned and narrower */

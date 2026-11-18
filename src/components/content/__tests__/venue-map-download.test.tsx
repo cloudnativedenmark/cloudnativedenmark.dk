@@ -130,6 +130,9 @@ describe("mapSvg", () => {
     expect(svg.textContent).toContain("Acme")
     expect(svg.querySelector("svg [data-variant='tv']")).not.toBeNull()
     expect(svg.textContent).toContain("YOU ARE")
+    for (const detail of ["ENTRANCE", "STAGE", "SCREEN", "m²"]) {
+      expect(svg.textContent).not.toContain(detail)
+    }
     expect(
       Array.from(svg.querySelectorAll("title"), (t) => t.textContent)
     ).not.toContain("Emergency exit")
