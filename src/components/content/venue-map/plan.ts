@@ -41,6 +41,8 @@ export interface SideRoom extends Rect {
   /** Label rotation on the mobile map; -90 runs it along a long, narrow room */
   compactAngle?: number
   doors?: Door[]
+  /** Not open to attendees: drawn hatched */
+  closed?: boolean
 }
 
 export type Zone = "Vestlounge" | "Mellemlounge" | "Nordlounge"
@@ -128,19 +130,24 @@ export const plan = {
   } as Record<string, RoomShape>,
 
   sideRooms: [
-    // Two of the venue rooms along the Vestlounge, used as one
+    // Along the Vestlounge, the venue admin office right behind registration
+    { x: 66, y: 86, width: 12.25, height: 12, label: ["WARDROBE"] },
+    { x: 78.25, y: 86, width: 12.25, height: 12, label: ["STORAGE"] },
     {
-      x: 66,
+      x: 90.5,
       y: 86,
-      width: 16.5,
+      width: 12.25,
       height: 12,
-      label: ["WARDROBE", "& STORAGE"],
-      compactLabel: ["WARDROBE"],
+      label: ["SILENCE", "ROOM"],
     },
-    { x: 82.5, y: 86, width: 8.25, height: 12, label: ["SILENCE", "ROOM"] },
-    // The venue's admin office, then a room the conference doesn't get
-    { x: 90.75, y: 86, width: 8.25, height: 12 },
-    { x: 99, y: 86, width: 16, height: 12 },
+    {
+      x: 102.75,
+      y: 86,
+      width: 12.25,
+      height: 12,
+      label: ["VENUE", "ADMIN"],
+      closed: true,
+    },
     // Beside the toilets, off the same corridor
     {
       x: 15,

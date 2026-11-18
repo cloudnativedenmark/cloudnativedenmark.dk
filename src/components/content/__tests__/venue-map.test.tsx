@@ -97,8 +97,10 @@ describe("VenueMap", () => {
 
     expect(labels).toEqual(
       expect.arrayContaining([
-        "WARDROBE& STORAGE",
+        "WARDROBE",
+        "STORAGE",
         "SILENCEROOM",
+        "VENUEADMIN",
         "ORGANIZEROFFICE",
         "SPEAKER ROOM",
       ])

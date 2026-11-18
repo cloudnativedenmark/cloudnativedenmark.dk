@@ -166,28 +166,34 @@ const FloorPlan: React.FC<FloorPlanProps> = ({
 
         {plan.sideRooms.map((room) => {
           const lines = (compact && room.compactLabel) || room.label
+          const rect = {
+            x: room.x,
+            y: room.y,
+            width: room.width,
+            height: room.height,
+          }
           const cx = room.x + room.width / 2
           const cy = room.y + room.height / 2
           const fontSize = compact ? 2 : 1.4
           return (
             <g key={`${room.x}-${room.y}`}>
-              {lines ? (
-                <rect
-                  {...room}
-                  fill={colors.room}
-                  stroke={colors.midnight}
-                  strokeWidth={0.3}
-                />
-              ) : (
+              {room.closed ? (
                 <>
-                  <rect {...room} fill="#ffffff" />
+                  <rect {...rect} fill="#ffffff" />
                   <rect
-                    {...room}
+                    {...rect}
                     fill={`url(#${hatchId})`}
                     stroke={colors.midnight}
                     strokeWidth={0.3}
                   />
                 </>
+              ) : (
+                <rect
+                  {...rect}
+                  fill={colors.room}
+                  stroke={colors.midnight}
+                  strokeWidth={0.3}
+                />
               )}
               {room.doors?.map((door) => (
                 <rect
