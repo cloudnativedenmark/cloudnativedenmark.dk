@@ -164,54 +164,69 @@ const FloorPlan: React.FC<FloorPlanProps> = ({
           strokeWidth={0.9}
         />
 
-        {plan.closedRooms.map((room) => (
-          <g key={`${room.x}-${room.y}`}>
-            <rect {...room} fill="#ffffff" />
-            <rect
-              {...room}
-              fill={`url(#${hatchId})`}
-              stroke={colors.midnight}
-              strokeWidth={0.3}
-            />
-          </g>
-        ))}
-
-        <rect
-          {...plan.office}
-          fill={colors.room}
-          stroke={colors.midnight}
-          strokeWidth={0.3}
-        />
-        {(() => {
-          const cx = plan.office.x + plan.office.width / 2
-          const cy = plan.office.y + plan.office.height / 2
+        {plan.sideRooms.map((room) => {
+          const lines = (compact && room.compactLabel) || room.label
+          const rect = {
+            x: room.x,
+            y: room.y,
+            width: room.width,
+            height: room.height,
+          }
+          const cx = room.x + room.width / 2
+          const cy = room.y + room.height / 2
+          const fontSize = compact ? 2 : 1.4
           return (
-            <text
-              x={cx}
-              y={cy}
-              transform={level(cx, cy)}
-              textAnchor="middle"
-              fill={colors.slate}
-              style={{ fontFamily: fonts.mono }}
-              fontSize={compact ? 2 : 1.15}
-              fontWeight={700}
-              letterSpacing={0.12}
-            >
-              {compact ? (
-                <tspan dominantBaseline="central">OFFICE</tspan>
-              ) : (
+            <g key={`${room.x}-${room.y}`}>
+              {room.closed ? (
                 <>
-                  <tspan x={cx} dy={-0.35}>
-                    CONFERENCE
-                  </tspan>
-                  <tspan x={cx} dy={1.6}>
-                    OFFICE
-                  </tspan>
+                  <rect {...rect} fill="#ffffff" />
+                  <rect
+                    {...rect}
+                    fill={`url(#${hatchId})`}
+                    stroke={colors.midnight}
+                    strokeWidth={0.3}
+                  />
                 </>
+              ) : (
+                <rect
+                  {...rect}
+                  fill={colors.room}
+                  stroke={colors.midnight}
+                  strokeWidth={0.3}
+                />
               )}
-            </text>
+              {room.doors?.map((door) => (
+                <rect
+                  key={`${door.x}-${door.y}`}
+                  {...doorRect(door)}
+                  fill={colors.floor}
+                />
+              ))}
+              {lines && (
+                <text
+                  transform={level(cx, cy, compact ? room.compactAngle : 0)}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fill={colors.slate}
+                  style={{ fontFamily: fonts.mono }}
+                  fontSize={fontSize}
+                  fontWeight={700}
+                  letterSpacing={0.12}
+                >
+                  {lines.map((line, i) => (
+                    <tspan
+                      key={line}
+                      x={cx}
+                      y={cy + (i - (lines.length - 1) / 2) * fontSize * 1.35}
+                    >
+                      {line}
+                    </tspan>
+                  ))}
+                </text>
+              )}
+            </g>
           )
-        })()}
+        })}
 
         <g>
           <title>Toilets</title>

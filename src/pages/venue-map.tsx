@@ -19,8 +19,8 @@ const listRooms = (rooms: string[]) =>
 
 const notes: Note[] = [
   {
-    title: "Registration",
-    body: "Registration and the help desk are just inside the entrance, next to the conference office.",
+    title: "Registration & wardrobe",
+    body: "Registration and the help desk are just inside the entrance. Along the Vestlounge are the wardrobe, across from stand 2, and the silence room, across from stand 1.",
     accent: "var(--color-cnd-electric)",
   },
   {

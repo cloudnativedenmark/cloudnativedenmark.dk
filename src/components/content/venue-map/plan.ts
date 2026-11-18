@@ -33,6 +33,18 @@ export interface RoomShape extends Rect {
   label: Point
 }
 
+/** A small room off the lounges, hatched when attendees can't go in */
+export interface SideRoom extends Rect {
+  label?: string[]
+  /** Label on the mobile map, where the room is turned and narrower */
+  compactLabel?: string[]
+  /** Label rotation on the mobile map; -90 runs it along a long, narrow room */
+  compactAngle?: number
+  doors?: Door[]
+  /** Not open to attendees: drawn hatched */
+  closed?: boolean
+}
+
 export type Zone = "Vestlounge" | "Mellemlounge" | "Nordlounge"
 
 export interface StandShape extends Rect {
@@ -117,28 +129,53 @@ export const plan = {
     },
   } as Record<string, RoomShape>,
 
-  // Venue rooms along the Vestlounge that the conference doesn't use
-  closedRooms: [
-    { x: 66, y: 86, width: 8.25, height: 12 },
-    { x: 74.25, y: 86, width: 8.25, height: 12 },
-    { x: 82.5, y: 86, width: 8.25, height: 12 },
-    { x: 90.75, y: 86, width: 8.25, height: 12 },
-  ] as Rect[],
-
-  office: { x: 99, y: 86, width: 16, height: 12 } as Rect,
+  sideRooms: [
+    // Along the Vestlounge, the venue admin office right behind registration
+    { x: 66, y: 86, width: 12.25, height: 12, label: ["WARDROBE"] },
+    { x: 78.25, y: 86, width: 12.25, height: 12, label: ["STORAGE"] },
+    {
+      x: 90.5,
+      y: 86,
+      width: 12.25,
+      height: 12,
+      label: ["SILENCE", "ROOM"],
+    },
+    {
+      x: 102.75,
+      y: 86,
+      width: 12.25,
+      height: 12,
+      label: ["VENUE", "ADMIN"],
+      closed: true,
+    },
+    // Beside the toilets, off the same corridor
+    {
+      x: 15,
+      y: 86,
+      width: 15,
+      height: 10.5,
+      label: ["ORGANIZER", "OFFICE"],
+      compactLabel: ["OFFICE"],
+      doors: [{ x: 22.5, y: 96.5, wall: "horizontal" }],
+    },
+    // Across the toilet corridor
+    {
+      x: 1,
+      y: 100.5,
+      width: 29,
+      height: 7.5,
+      label: ["SPEAKER ROOM"],
+      compactAngle: -90,
+      doors: [{ x: 30, y: 104.25, wall: "vertical" }],
+    },
+  ] as SideRoom[],
 
   // Behind the wall at the end of the Vestlounge, reached through the
   // Mellemlounge and a short corridor
   toilets: {
-    rooms: [
-      { x: 1, y: 86, width: 14, height: 10.5 },
-      { x: 15, y: 86, width: 15, height: 10.5 },
-    ] as Rect[],
-    doors: [
-      { x: 8, y: 96.5, wall: "horizontal" },
-      { x: 22.5, y: 96.5, wall: "horizontal" },
-    ] as Door[],
-    label: { x: 15.5, y: 98.5 } as Point,
+    rooms: [{ x: 1, y: 86, width: 14, height: 10.5 }] as Rect[],
+    doors: [{ x: 8, y: 96.5, wall: "horizontal" }] as Door[],
+    label: { x: 8, y: 98.5 } as Point,
   },
 
   stands: {

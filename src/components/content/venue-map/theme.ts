@@ -39,6 +39,7 @@ export const colors = {
   ash: "#6b7689",
   fog: "#b9c4d4",
   floor: "#f6ecdf",
+  sand: "#f5e6d3",
   room: "#eef1f6",
   hatch: "#d3dae5",
   red: "#e0132a",
