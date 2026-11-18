@@ -3,65 +3,13 @@ import type { VenueMapConfig } from "../../../config/venue-map"
 import type { SponsorData } from "../../../utils/data-loader"
 import Logo from "../../../images/logo.svg"
 import FloorPlan from "./floor-plan"
-import { Glyph } from "./icons"
-import type { AmenityKind } from "./plan"
-import { amenityStyles, colors, fonts, styleOfTier, tierOf } from "./theme"
+import { colors, fonts, styleOfTier, tierOf } from "./theme"
 
 /** 16:9, for the screen above the conference entrance */
 export const posterSize = { width: 1920, height: 1080 }
 
 const sidebar = { x: 80, right: 550 }
 const card = { x: 610, y: 64, width: 1238, height: 952, padding: 32 }
-const legendHeight = 48
-const legendSize = 20
-
-// Space Grotesk averages a little over half its size per character; legend
-// items are spaced by this estimate since SVG text can't be measured here.
-const textWidth = (text: string, size: number) => text.length * size * 0.56
-
-interface LegendItem {
-  label: string
-  marker: React.ReactNode
-}
-
-const Legend: React.FC<{ items: LegendItem[]; y: number }> = ({ items, y }) => {
-  const starts = items.map(
-    (_, i) =>
-      card.x +
-      card.padding +
-      8 +
-      items
-        .slice(0, i)
-        .reduce((sum, item) => sum + 80 + textWidth(item.label, legendSize), 0)
-  )
-  return (
-    <>
-      {items.map((item, i) => (
-        <g key={item.label} transform={`translate(${starts[i]} ${y})`}>
-          {item.marker}
-          <text
-            x={40}
-            dominantBaseline="central"
-            fill={colors.slate}
-            style={{ fontFamily: fonts.display }}
-            fontSize={legendSize}
-            fontWeight={500}
-          >
-            {item.label}
-          </text>
-        </g>
-      ))}
-    </>
-  )
-}
-
-const circleMarker = (color: string, glyph: React.ReactNode) => (
-  <>
-    <circle cx={14} cy={0} r={14} fill={color} />
-    {glyph}
-  </>
-)
-
 interface PosterProps {
   config: VenueMapConfig
   sponsors: Record<string, SponsorData>
@@ -72,41 +20,11 @@ const Poster: React.FC<PosterProps> = ({ config, sponsors }) => {
     const sponsor = stand.sponsor ? sponsors[stand.sponsor] : undefined
     return sponsor ? [{ stand, sponsor, tier: tierOf(stand) }] : []
   })
-  const amenities: AmenityKind[] = ["registration", "coffee", "water", "lunch"]
-
-  const legend: LegendItem[] = [
-    ...amenities.map((kind) => ({
-      label: amenityStyles[kind].label,
-      marker: circleMarker(
-        amenityStyles[kind].color,
-        <Glyph name={kind} x={14} y={0} size={16} />
-      ),
-    })),
-    {
-      label: "Toilets",
-      marker: circleMarker(
-        colors.toilets,
-        <text
-          x={14}
-          textAnchor="middle"
-          dominantBaseline="central"
-          fill="#ffffff"
-          style={{ fontFamily: fonts.display }}
-          fontSize={10}
-          fontWeight={700}
-        >
-          WC
-        </text>
-      ),
-    },
-  ]
-
-  const legendTop = card.y + card.height - card.padding - legendHeight
   const map = {
     x: card.x + card.padding,
     y: card.y + card.padding,
     width: card.width - 2 * card.padding,
-    height: legendTop - card.y - card.padding - 16,
+    height: card.height - 2 * card.padding,
   }
 
   return (
@@ -116,14 +34,6 @@ const Poster: React.FC<PosterProps> = ({ config, sponsors }) => {
       aria-label="Cloud Native Denmark 2026 conference map"
     >
       <defs>
-        <pattern
-          id="poster-dots"
-          width={26}
-          height={26}
-          patternUnits="userSpaceOnUse"
-        >
-          <circle cx={13} cy={13} r={1.6} fill={colors.fog} opacity={0.5} />
-        </pattern>
         <filter id="poster-shadow" x="-5%" y="-5%" width="110%" height="115%">
           <feDropShadow
             dx={0}
@@ -282,14 +192,6 @@ const Poster: React.FC<PosterProps> = ({ config, sponsors }) => {
         fill="#ffffff"
         filter="url(#poster-shadow)"
       />
-      <rect
-        x={card.x}
-        y={card.y}
-        width={card.width}
-        height={card.height}
-        rx={28}
-        fill="url(#poster-dots)"
-      />
       <svg {...map}>
         <FloorPlan
           variant="tv"
@@ -301,16 +203,6 @@ const Poster: React.FC<PosterProps> = ({ config, sponsors }) => {
           onToggle={() => {}}
         />
       </svg>
-      <line
-        x1={card.x + card.padding}
-        x2={card.x + card.width - card.padding}
-        y1={legendTop}
-        y2={legendTop}
-        stroke={colors.fog}
-        strokeOpacity={0.6}
-        strokeWidth={2}
-      />
-      <Legend items={legend} y={legendTop + 30} />
     </svg>
   )
 }

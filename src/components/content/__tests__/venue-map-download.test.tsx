@@ -136,11 +136,16 @@ describe("mapSvg", () => {
     expect(
       Array.from(svg.querySelectorAll("title"), (t) => t.textContent)
     ).not.toContain("Emergency exit")
-    const images = Array.from(svg.querySelectorAll("image"))
-    expect(images).toHaveLength(2)
-    images.forEach((image) =>
-      expect(image.getAttribute("href")).toMatch(/^data:/)
+    const titles = Array.from(
+      svg.querySelectorAll("title"),
+      (t) => t.textContent
     )
+    expect(titles).not.toContain("Coffee")
+    expect(titles).toContain("Registration & help desk")
+    // Only the conference logo; stands show numbers, not sponsor logos
+    const images = Array.from(svg.querySelectorAll("image"))
+    expect(images).toHaveLength(1)
+    expect(images[0].getAttribute("href")).toMatch(/^data:/)
   })
 
   it("still draws the plan when the fonts can't be fetched", async () => {
