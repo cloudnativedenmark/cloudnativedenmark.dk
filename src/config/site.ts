@@ -91,7 +91,8 @@ export const siteConfig: SiteConfig = {
     },
     {
       name: "Aleksander Nowak",
-      position: "Senior Platform Engineer @ wawa fertility",
+      position:
+        "Member of Technical Staff: Infrastructure & Security @ wawa fertility",
       image: "team/organizer-alek.jpg",
       linkedin: "aleknowak",
     },
