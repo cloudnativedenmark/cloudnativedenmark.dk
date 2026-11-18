@@ -1,6 +1,8 @@
-import { fontsUrl, jpegPdf, mapSvg } from "../venue-map/download"
+import { fontsUrl, jpegPdf, mapSvg, posterSvg } from "../venue-map/download"
 import type { VenueMapConfig } from "../../../config/venue-map"
 import type { SponsorData } from "../../../utils/data-loader"
+
+jest.mock("../../../images/logo.svg", () => "/logo.svg")
 
 const config: VenueMapConfig = {
   rooms: [
@@ -33,9 +35,10 @@ describe("jpegPdf", () => {
   const jpeg = Uint8Array.from([0xff, 0xd8, 0x00, 0xff, 0xd9])
   const pdf = text(jpegPdf(jpeg, 400, 300))
 
-  it("puts the image on an A4 landscape page", () => {
+  it("fills a page with the image's proportions", () => {
     expect(pdf.startsWith("%PDF-1.4\n")).toBe(true)
-    expect(pdf).toContain("/MediaBox [0 0 842 595]")
+    expect(pdf).toContain("/MediaBox [0 0 960 720]")
+    expect(pdf).toContain("q 960 0 0 720 0 0 cm /Map Do Q")
     expect(pdf).toContain("/Width 400 /Height 300")
     expect(pdf).toContain(`/Length 5 >>\nstream\n${text(jpeg)}\nendstream`)
   })
@@ -115,6 +118,20 @@ describe("mapSvg", () => {
     )
     expect(svg.outerHTML).not.toContain("var(--font-display)")
     expect(svg.outerHTML).toContain("Space Grotesk")
+  })
+
+  it("frames the plan in a 16:9 poster with the logo and exhibitors", async () => {
+    const svg = svgOf(await posterSvg(config, sponsors, 3840))
+
+    expect(svg.getAttribute("width")).toBe("3840")
+    expect(svg.getAttribute("height")).toBe("2160")
+    expect(svg.textContent).toContain("Cloud Native")
+    expect(svg.textContent).toContain("19–20 NOV 2026")
+    expect(svg.textContent).toContain("Acme")
+    expect(svg.querySelector("svg [data-variant='full']")).not.toBeNull()
+    svg
+      .querySelectorAll("image")
+      .forEach((image) => expect(image.getAttribute("href")).toMatch(/^data:/))
   })
 
   it("still draws the plan when the fonts can't be fetched", async () => {

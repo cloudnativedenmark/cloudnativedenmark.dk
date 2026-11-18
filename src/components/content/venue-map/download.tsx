@@ -4,28 +4,14 @@ import { createRoot } from "react-dom/client"
 import type { VenueMapConfig } from "../../../config/venue-map"
 import type { SponsorData } from "../../../utils/data-loader"
 import FloorPlan from "./floor-plan"
+import Poster from "./poster"
 
 const xlink = "http://www.w3.org/1999/xlink"
 
-const renderPlan = (
-  config: VenueMapConfig,
-  sponsors: Record<string, SponsorData>
-) => {
+const renderSvg = (element: React.ReactElement) => {
   const container = document.createElement("div")
   const root = createRoot(container)
-  flushSync(() =>
-    root.render(
-      <FloorPlan
-        variant="full"
-        config={config}
-        sponsors={sponsors}
-        highlighted={null}
-        selected={null}
-        onHover={() => {}}
-        onToggle={() => {}}
-      />
-    )
-  )
+  flushSync(() => root.render(element))
   const svg = container.querySelector("svg")!.cloneNode(true) as SVGSVGElement
   root.unmount()
   return svg
@@ -106,13 +92,9 @@ const embedFonts = async (svg: SVGSVGElement) => {
   svg.insertBefore(style, svg.firstChild)
 }
 
-/** The floor plan as a standalone SVG, with logos and fonts embedded */
-export const mapSvg = async (
-  config: VenueMapConfig,
-  sponsors: Record<string, SponsorData>,
-  width: number
-) => {
-  const svg = renderPlan(config, sponsors)
+/** An SVG element as a standalone file, with its images and fonts embedded */
+const standalone = async (element: React.ReactElement, width: number) => {
+  const svg = renderSvg(element)
   const [, , viewWidth, viewHeight] = svg
     .getAttribute("viewBox")!
     .split(" ")
@@ -131,21 +113,41 @@ export const mapSvg = async (
   return new XMLSerializer().serializeToString(svg)
 }
 
+/** The floor plan as a standalone SVG */
+export const mapSvg = (
+  config: VenueMapConfig,
+  sponsors: Record<string, SponsorData>,
+  width: number
+) =>
+  standalone(
+    <FloorPlan
+      variant="full"
+      config={config}
+      sponsors={sponsors}
+      highlighted={null}
+      selected={null}
+      onHover={() => {}}
+      onToggle={() => {}}
+    />,
+    width
+  )
+
+/** The branded poster around the floor plan, as a standalone SVG */
+export const posterSvg = (
+  config: VenueMapConfig,
+  sponsors: Record<string, SponsorData>,
+  width: number
+) => standalone(<Poster config={config} sponsors={sponsors} />, width)
+
 const bytes = (part: string | Uint8Array) =>
   typeof part === "string"
     ? Uint8Array.from(part, (c) => c.charCodeAt(0))
     : part
 
-/** A one-page A4 landscape PDF with the JPEG centred on it */
+/** A one-page PDF with the JPEG filling a 960pt-wide page */
 export const jpegPdf = (jpeg: Uint8Array, width: number, height: number) => {
-  const page = { width: 842, height: 595, margin: 28 }
-  const scale = Math.min(
-    (page.width - 2 * page.margin) / width,
-    (page.height - 2 * page.margin) / height
-  )
-  const [w, h] = [width * scale, height * scale]
-  const [x, y] = [(page.width - w) / 2, (page.height - h) / 2]
-  const content = `q ${w.toFixed(2)} 0 0 ${h.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm /Map Do Q`
+  const page = { width: 960, height: Math.round((960 * height) / width) }
+  const content = `q ${page.width} 0 0 ${page.height} 0 0 cm /Map Do Q`
   const objects: (string | Uint8Array)[][] = [
     ["<< /Type /Catalog /Pages 2 0 R >>"],
     ["<< /Type /Pages /Kids [3 0 R] /Count 1 >>"],
@@ -190,12 +192,12 @@ export const jpegPdf = (jpeg: Uint8Array, width: number, height: number) => {
   return pdf
 }
 
-/** The floor plan as an A4 PDF, drawn at print resolution */
+/** The poster as a 16:9 PDF, drawn at 4K */
 export const mapPdf = async (
   config: VenueMapConfig,
   sponsors: Record<string, SponsorData>
 ) => {
-  const markup = await mapSvg(config, sponsors, 4000)
+  const markup = await posterSvg(config, sponsors, 3840)
   const url = URL.createObjectURL(new Blob([markup], { type: "image/svg+xml" }))
   try {
     const image = new Image()
@@ -204,10 +206,7 @@ export const mapPdf = async (
     const canvas = document.createElement("canvas")
     canvas.width = image.naturalWidth
     canvas.height = image.naturalHeight
-    const context = canvas.getContext("2d")!
-    context.fillStyle = "#ffffff"
-    context.fillRect(0, 0, canvas.width, canvas.height)
-    context.drawImage(image, 0, 0)
+    canvas.getContext("2d")!.drawImage(image, 0, 0)
     const jpeg = await new Promise<Blob>((resolve, reject) =>
       canvas.toBlob(
         (blob) => (blob ? resolve(blob) : reject(new Error("Empty canvas"))),

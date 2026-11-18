@@ -86,6 +86,25 @@ describe("VenueMap", () => {
     )
   })
 
+  it("labels the side rooms the conference uses", () => {
+    const { container } = render(
+      <VenueMap config={config} sponsors={sponsors} />
+    )
+    const labels = Array.from(
+      fullMap(container).querySelectorAll("text"),
+      (text) => text.textContent
+    )
+
+    expect(labels).toEqual(
+      expect.arrayContaining([
+        "WARDROBE& STORAGE",
+        "SILENCEROOM",
+        "ORGANIZEROFFICE",
+        "SPEAKER ROOM",
+      ])
+    )
+  })
+
   it("shows the screen in the workshop room", () => {
     render(<VenueMap config={config} sponsors={sponsors} />)
 

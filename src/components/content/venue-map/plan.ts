@@ -33,6 +33,16 @@ export interface RoomShape extends Rect {
   label: Point
 }
 
+/** A small room off the lounges: labelled if the conference uses it, hatched if not */
+export interface SideRoom extends Rect {
+  label?: string[]
+  /** Label on the mobile map, where the room is turned and narrower */
+  compactLabel?: string[]
+  /** Label rotation on the mobile map; -90 runs it along a long, narrow room */
+  compactAngle?: number
+  doors?: Door[]
+}
+
 export type Zone = "Vestlounge" | "Mellemlounge" | "Nordlounge"
 
 export interface StandShape extends Rect {
@@ -117,28 +127,47 @@ export const plan = {
     },
   } as Record<string, RoomShape>,
 
-  // Venue rooms along the Vestlounge that the conference doesn't use
-  closedRooms: [
-    { x: 66, y: 86, width: 8.25, height: 12 },
-    { x: 74.25, y: 86, width: 8.25, height: 12 },
-    { x: 82.5, y: 86, width: 8.25, height: 12 },
+  sideRooms: [
+    // Two of the venue rooms along the Vestlounge, opened into one
+    {
+      x: 66,
+      y: 86,
+      width: 16.5,
+      height: 12,
+      label: ["WARDROBE", "& STORAGE"],
+      compactLabel: ["WARDROBE"],
+    },
+    { x: 82.5, y: 86, width: 8.25, height: 12, label: ["SILENCE", "ROOM"] },
+    // The venue's admin office, then a room the conference doesn't get
     { x: 90.75, y: 86, width: 8.25, height: 12 },
-  ] as Rect[],
-
-  office: { x: 99, y: 86, width: 16, height: 12 } as Rect,
+    { x: 99, y: 86, width: 16, height: 12 },
+    // Beside the toilets, off the same corridor
+    {
+      x: 15,
+      y: 86,
+      width: 15,
+      height: 10.5,
+      label: ["ORGANIZER", "OFFICE"],
+      compactLabel: ["OFFICE"],
+      doors: [{ x: 22.5, y: 96.5, wall: "horizontal" }],
+    },
+    // Across the toilet corridor
+    {
+      x: 1,
+      y: 100.5,
+      width: 29,
+      height: 7.5,
+      label: ["SPEAKER ROOM"],
+      compactAngle: -90,
+    },
+  ] as SideRoom[],
 
   // Behind the wall at the end of the Vestlounge, reached through the
   // Mellemlounge and a short corridor
   toilets: {
-    rooms: [
-      { x: 1, y: 86, width: 14, height: 10.5 },
-      { x: 15, y: 86, width: 15, height: 10.5 },
-    ] as Rect[],
-    doors: [
-      { x: 8, y: 96.5, wall: "horizontal" },
-      { x: 22.5, y: 96.5, wall: "horizontal" },
-    ] as Door[],
-    label: { x: 15.5, y: 98.5 } as Point,
+    rooms: [{ x: 1, y: 86, width: 14, height: 10.5 }] as Rect[],
+    doors: [{ x: 8, y: 96.5, wall: "horizontal" }] as Door[],
+    label: { x: 8, y: 98.5 } as Point,
   },
 
   stands: {
