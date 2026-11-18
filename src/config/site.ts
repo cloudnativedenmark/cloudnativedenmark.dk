@@ -61,7 +61,7 @@ export const siteConfig: SiteConfig = {
     },
     {
       name: "Mert Gungor",
-      position: "Software Engineer @ Corti",
+      position: "Platform Engineer @ ATP",
       image: "team/organizer-mert-gungor.jpg",
       linkedin: "mert-gungor-tr",
     },
