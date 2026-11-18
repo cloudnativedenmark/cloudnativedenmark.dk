@@ -125,7 +125,8 @@ describe("mapSvg", () => {
 
     expect(svg.getAttribute("width")).toBe("3840")
     expect(svg.getAttribute("height")).toBe("2160")
-    expect(svg.textContent).toContain("Cloud Native")
+    expect(svg.textContent).toContain("CLOUD NATIVE")
+    expect(svg.textContent).toContain("Find your way.")
     expect(svg.querySelector("svg [data-variant='full']")).not.toBeNull()
     // The conference logo and the sponsor's, both embedded
     const images = Array.from(svg.querySelectorAll("image"))
