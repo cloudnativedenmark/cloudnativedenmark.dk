@@ -2,7 +2,6 @@ import React from "react"
 import type { VenueMapConfig } from "../../../config/venue-map"
 import type { SponsorData } from "../../../utils/data-loader"
 import Logo from "../../../images/logo.svg"
-import { CND_SHAPE_PATH } from "../../ui/cnd-shape"
 import FloorPlan from "./floor-plan"
 import { Glyph } from "./icons"
 import { plan, type AmenityKind } from "./plan"
@@ -200,11 +199,6 @@ const Poster: React.FC<PosterProps> = ({ config, sponsors }) => {
         width={posterSize.width}
         height={posterSize.height}
         fill={colors.sand}
-      />
-      <path
-        d={CND_SHAPE_PATH}
-        fill={colors.red}
-        transform="translate(1745 -120) scale(1.5)"
       />
       <rect width={posterSize.width} height={10} fill={colors.red} />
 

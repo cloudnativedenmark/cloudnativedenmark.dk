@@ -191,7 +191,7 @@ const Downloads: React.FC<VenueMapProps> = ({ config, sponsors }) => {
         <button
           key={format}
           type="button"
-          disabled={preparing !== null}
+          disabled={preparing !== null || Object.keys(sponsors).length === 0}
           onClick={() => download(format)}
           className="font-semibold text-cnd-red hover:text-cnd-coral disabled:text-cnd-ash"
         >

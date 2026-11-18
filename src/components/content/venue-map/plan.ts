@@ -128,7 +128,7 @@ export const plan = {
   } as Record<string, RoomShape>,
 
   sideRooms: [
-    // Two of the venue rooms along the Vestlounge, opened into one
+    // Two of the venue rooms along the Vestlounge, used as one
     {
       x: 66,
       y: 86,
@@ -159,6 +159,7 @@ export const plan = {
       height: 7.5,
       label: ["SPEAKER ROOM"],
       compactAngle: -90,
+      doors: [{ x: 30, y: 104.25, wall: "vertical" }],
     },
   ] as SideRoom[],
 

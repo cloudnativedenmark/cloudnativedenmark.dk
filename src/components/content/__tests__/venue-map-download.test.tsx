@@ -129,9 +129,11 @@ describe("mapSvg", () => {
     expect(svg.textContent).toContain("19–20 NOV 2026")
     expect(svg.textContent).toContain("Acme")
     expect(svg.querySelector("svg [data-variant='full']")).not.toBeNull()
-    svg
-      .querySelectorAll("image")
-      .forEach((image) => expect(image.getAttribute("href")).toMatch(/^data:/))
+    const images = Array.from(svg.querySelectorAll("image"))
+    expect(images).toHaveLength(2)
+    images.forEach((image) =>
+      expect(image.getAttribute("href")).toMatch(/^data:/)
+    )
   })
 
   it("still draws the plan when the fonts can't be fetched", async () => {
