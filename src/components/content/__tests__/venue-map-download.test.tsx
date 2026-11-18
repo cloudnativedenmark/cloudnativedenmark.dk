@@ -120,32 +120,19 @@ describe("mapSvg", () => {
     expect(svg.outerHTML).toContain("Space Grotesk")
   })
 
-  it("frames the plan in a 16:9 poster with the logo and exhibitors", async () => {
+  it("frames the website's plan in a 16:9 poster with the logo", async () => {
     const svg = svgOf(await posterSvg(config, sponsors, 3840))
 
     expect(svg.getAttribute("width")).toBe("3840")
     expect(svg.getAttribute("height")).toBe("2160")
     expect(svg.textContent).toContain("Cloud Native")
-    expect(svg.textContent).toContain("19–20 NOV 2026")
-    expect(svg.textContent).toContain("Acme")
-    expect(svg.querySelector("svg [data-variant='tv']")).not.toBeNull()
-    expect(svg.textContent).toContain("YOU ARE")
-    for (const detail of ["ENTRANCE", "STAGE", "SCREEN", "m²"]) {
-      expect(svg.textContent).not.toContain(detail)
-    }
-    expect(
-      Array.from(svg.querySelectorAll("title"), (t) => t.textContent)
-    ).not.toContain("Emergency exit")
-    const titles = Array.from(
-      svg.querySelectorAll("title"),
-      (t) => t.textContent
-    )
-    expect(titles).not.toContain("Coffee")
-    expect(titles).toContain("Registration & help desk")
-    // Only the conference logo; stands show numbers, not sponsor logos
+    expect(svg.querySelector("svg [data-variant='full']")).not.toBeNull()
+    // The conference logo and the sponsor's, both embedded
     const images = Array.from(svg.querySelectorAll("image"))
-    expect(images).toHaveLength(1)
-    expect(images[0].getAttribute("href")).toMatch(/^data:/)
+    expect(images).toHaveLength(2)
+    images.forEach((image) =>
+      expect(image.getAttribute("href")).toMatch(/^data:/)
+    )
   })
 
   it("still draws the plan when the fonts can't be fetched", async () => {
