@@ -165,6 +165,11 @@ come from the same QR codes used in the conference decks:
 Update this mapping when feedback codes change or a new event is configured.
 Sessions without a mapped URL and service sessions have no feedback link.
 
+Talk modals group **Give Feedback**, **Q&A**, and **Copy talk link** as muted
+buttons. **Back to Schedule** stays below them. These buttons are 44px high.
+Q&A URLs are keyed by room name in `src/config/track-questions.ts`.
+They use temporary `example.com` URLs until the track links are supplied.
+
 Lightning talk labels use a yellow background with dark text for contrast.
 Workshop labels use blue.
 

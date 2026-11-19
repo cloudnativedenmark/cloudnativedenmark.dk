@@ -106,6 +106,13 @@
     transform: translateY(0);
 }
 
+.btn-pill.btn-compact {
+    min-height: 44px;
+    padding: 10px 14px;
+    font-size: 14px;
+    line-height: 24px;
+}
+
 /* Hero red diagonal accent line */
 .cnd-top-rule {
     position: absolute;

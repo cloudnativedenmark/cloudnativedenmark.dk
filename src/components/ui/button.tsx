@@ -1,13 +1,19 @@
 import React from "react"
 
-type ButtonVariant = "primary" | "secondary" | "ghost" | "light" | "midnight"
+type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "ghost"
+  | "light"
+  | "midnight"
+  | "muted"
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode
   variant?: ButtonVariant
 }
 
-const variantClasses: Record<ButtonVariant, string> = {
+export const buttonVariants: Record<ButtonVariant, string> = {
   // Danish red — primary CTA
   primary:
     "bg-cnd-red text-white hover:bg-cnd-red/90 shadow-[0_4px_18px_rgba(224,19,42,0.25)]",
@@ -21,6 +27,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   light: "bg-cnd-bone text-cnd-midnight hover:bg-white",
   // Midnight pill — for use on light backgrounds when red would clash with logo
   midnight: "bg-cnd-midnight text-white hover:bg-cnd-harbor",
+  muted: "bg-cnd-bone text-cnd-slate hover:bg-gray-200",
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -35,7 +42,7 @@ const Button: React.FC<ButtonProps> = ({
     "bg-cnd-fog text-cnd-ash cursor-not-allowed shadow-none hover:transform-none"
   const combined = disabled
     ? `${base} ${disabledClasses} ${className}`.trim()
-    : `${base} ${variantClasses[variant]} ${className}`.trim()
+    : `${base} ${buttonVariants[variant]} ${className}`.trim()
 
   return (
     <button className={combined} disabled={disabled} {...props}>
