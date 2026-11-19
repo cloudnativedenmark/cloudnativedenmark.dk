@@ -161,7 +161,7 @@ const SessionModal: React.FC<{
               </div>
             )}
           </div>
-          <div className="shrink-0 px-4 pb-6 pt-4 text-center md:hidden">
+          <div className="hidden shrink-0 px-4 pb-6 pt-4 text-center md:block">
             <Button onClick={onClose} variant="primary" className="btn-compact">
               Back to Schedule
             </Button>
