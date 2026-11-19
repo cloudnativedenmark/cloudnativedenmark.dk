@@ -169,7 +169,8 @@ Talk modals group **Give Feedback**, **Show track Q&A**, and **Copy talk link** 
 red buttons below the time and room.
 These buttons are 44px high.
 The dialog fits the small viewport height, including mobile browser controls.
-Long content scrolls below the top-right close button.
+The top-right close button stays visible. Below 768px, **Back to Schedule**
+also stays at the bottom. Long content scrolls between the close controls.
 Schedule cards also show **Show track Q&A** beside the feedback link.
 Workshops have no Q&A link. Q&A URLs are keyed by room name in
 `src/config/track-questions.ts`.
