@@ -60,16 +60,44 @@ const SessionModal: React.FC<{
         onClick={onClose}
       ></div>
       <div
-        className="fixed inset-0 z-50 flex justify-center items-center overflow-y-auto p-4"
+        className="fixed inset-x-0 top-0 z-50 flex h-svh justify-center items-center overflow-hidden p-4"
         onClick={onClose}
       >
         <div
-          className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[85vh] my-auto flex flex-col relative border border-gray-200"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="session-modal-title"
+          className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-full sm:max-h-[85svh] min-h-0 overflow-hidden flex flex-col relative border border-gray-200"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="overflow-y-auto p-8 flex-grow">
+          <div className="flex shrink-0 justify-end px-3 pt-3">
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close session details"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-cnd-red/10 text-cnd-red hover:bg-cnd-red/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cnd-red"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M6 6l12 12M6 18L18 6" />
+              </svg>
+            </button>
+          </div>
+          <div className="min-h-0 overflow-y-auto overscroll-contain p-6 pt-2 sm:px-8 flex-1">
             <SessionTypeBadge type={sessionType} className="mb-3" />
-            <h2 className="text-3xl font-bold text-primary mb-4">
+            <h2
+              id="session-modal-title"
+              className="text-3xl font-bold text-primary mb-4"
+            >
               {session.title || session.name}
             </h2>
 
@@ -133,9 +161,7 @@ const SessionModal: React.FC<{
               </div>
             )}
           </div>
-
-          <div className="p-4 pb-6 text-center bg-white flex-shrink-0 relative">
-            <div className="absolute bottom-full left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+          <div className="hidden shrink-0 px-4 pb-6 pt-4 text-center md:block">
             <Button onClick={onClose} variant="primary" className="btn-compact">
               Back to Schedule
             </Button>

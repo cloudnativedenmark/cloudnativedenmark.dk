@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react"
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { HelmetProvider } from "react-helmet-async"
 import { MemoryRouter, useLocation, useNavigate } from "react-router-dom"
 import SchedulePage from "../schedule"
@@ -245,6 +245,40 @@ describe("schedule day links", () => {
     expect(screen.queryByText("Happening now")).not.toBeInTheDocument()
   })
 
+  it("updates live highlights without scrolling away from the reader", () => {
+    jest.useFakeTimers()
+    jest.setSystemTime(new Date("2026-11-19T09:34:00Z"))
+    jest.mocked(useSessionizeSchedule).mockReturnValue({
+      schedule: [sessionDay],
+      isLoading: false,
+    })
+    const scrollBy = jest.spyOn(window, "scrollBy").mockImplementation(() => {})
+
+    try {
+      view("/schedule")
+      act(() => jest.advanceTimersToNextFrame())
+      act(() => jest.advanceTimersToNextFrame())
+      expect(scrollIntoView.mock.contexts.at(-1)).toHaveAttribute(
+        "data-now-session",
+        "talk-1"
+      )
+      expect(screen.getAllByText("Happening now")).toHaveLength(2)
+      scrollIntoView.mockClear()
+      scrollBy.mockClear()
+
+      act(() => jest.advanceTimersByTime(60_000))
+      act(() => jest.advanceTimersToNextFrame())
+      act(() => jest.advanceTimersToNextFrame())
+
+      expect(screen.queryByText("Happening now")).not.toBeInTheDocument()
+      expect(scrollIntoView).not.toHaveBeenCalled()
+      expect(scrollBy).not.toHaveBeenCalled()
+    } finally {
+      scrollBy.mockRestore()
+      jest.useRealTimers()
+    }
+  })
+
   it("shows go to now in simulation mode and keeps the simulated time", () => {
     jest.useFakeTimers()
     jest.setSystemTime(new Date("2026-11-10T09:15:00Z"))
@@ -261,7 +295,6 @@ describe("schedule day links", () => {
     expect(screen.getByLabelText("Current URL")).toHaveTextContent(
       "/schedule#now-2026-11-19_10:00"
     )
-    jest.advanceTimersByTime(50)
     expect(scrollIntoView.mock.contexts.at(-1)).toHaveAttribute(
       "data-now-session",
       "talk-1"
@@ -284,7 +317,6 @@ describe("schedule day links", () => {
     expect(button).toBeVisible()
     fireEvent.click(button)
     expect(screen.getByLabelText("Current URL")).toHaveTextContent("/schedule")
-    jest.advanceTimersByTime(20)
     expect(scrollIntoView.mock.contexts.at(-1)).toHaveAttribute(
       "data-now-session",
       "talk-1"
@@ -292,6 +324,41 @@ describe("schedule day links", () => {
     expect(screen.getAllByText("Happening now")).toHaveLength(2)
 
     jest.useRealTimers()
+  })
+
+  it("scrolls the visible mobile session without waiting for an animation frame", () => {
+    jest.useFakeTimers()
+    jest.setSystemTime(new Date("2026-11-19T09:15:00Z"))
+    jest.mocked(useSessionizeSchedule).mockReturnValue({
+      schedule: [sessionDay],
+      isLoading: false,
+    })
+    const frames = jest
+      .spyOn(window, "requestAnimationFrame")
+      .mockReturnValue(0)
+    const rects = jest
+      .spyOn(HTMLElement.prototype, "getClientRects")
+      .mockImplementation(function (this: HTMLElement) {
+        return (this.closest(".md\\:hidden")
+          ? [{}]
+          : []) as unknown as DOMRectList
+      })
+
+    try {
+      view("/schedule#day1")
+      fireEvent.click(screen.getByRole("button", { name: "Go to now" }))
+
+      const target = scrollIntoView.mock.contexts.at(-1)
+      expect(target).toHaveAttribute("data-now-session", "talk-1")
+      expect(target.closest(".md\\:hidden")).not.toBeNull()
+      expect(screen.getByLabelText("Current URL")).toHaveTextContent(
+        "/schedule"
+      )
+    } finally {
+      rects.mockRestore()
+      frames.mockRestore()
+      jest.useRealTimers()
+    }
   })
 
   it("does not show go to now outside the scheduled event dates", () => {

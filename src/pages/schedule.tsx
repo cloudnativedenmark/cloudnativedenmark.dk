@@ -74,6 +74,7 @@ const SchedulePage: React.FC = () => {
   const navigate = useNavigate()
   const { talkId } = useParams()
   const previousTalkId = useRef(talkId)
+  const initialScrollDone = useRef(false)
   const [currentTime, setCurrentTime] = useState(() => new Date())
   const { schedule, isLoading } = useSessionizeSchedule()
   const { sponsors } = useSponsors()
@@ -149,14 +150,12 @@ const SchedulePage: React.FC = () => {
         matchingElements[0] ||
         document.getElementById(date)
 
-      window.requestAnimationFrame(() => {
-        if (!target) return
-        target.scrollIntoView({ behavior: "instant", block: "start" })
+      if (!target) return
+      target.scrollIntoView({ behavior: "auto", block: "start" })
 
-        window.requestAnimationFrame(() => {
-          const correction = target.getBoundingClientRect().top - stickyBottom()
-          if (Math.abs(correction) > 1) window.scrollBy(0, correction)
-        })
+      window.requestAnimationFrame(() => {
+        const correction = target.getBoundingClientRect().top - stickyBottom()
+        if (Math.abs(correction) > 1) window.scrollBy(0, correction)
       })
     },
     [schedule]
@@ -168,13 +167,22 @@ const SchedulePage: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    if (talkId || (location.hash && !nowHash)) return
+    if (initialScrollDone.current || schedule.length === 0) return
     const time = nowHash || realNow
-    if (!schedule.some((day) => day.date.slice(0, 10) === time.slice(0, 10))) {
+    if (
+      talkId ||
+      (location.hash && !nowHash) ||
+      !schedule.some((day) => day.date.slice(0, 10) === time.slice(0, 10))
+    ) {
+      initialScrollDone.current = true
       return
     }
 
-    scrollToTime(time)
+    const frame = window.requestAnimationFrame(() => {
+      initialScrollDone.current = true
+      scrollToTime(time)
+    })
+    return () => window.cancelAnimationFrame(frame)
   }, [location.hash, nowHash, realNow, schedule, scrollToTime, talkId])
 
   const goToNow = () => {
