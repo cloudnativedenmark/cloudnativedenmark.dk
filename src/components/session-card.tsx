@@ -5,6 +5,7 @@ import SessionTypeBadge from "./session-type-badge"
 import { calculateSessionDuration } from "../utils/time-formatting"
 import ExternalLink from "./ui/external-link"
 import SessionFeedbackLink from "./session-feedback-link"
+import RoomQuestionLink from "./room-question-link"
 
 export interface SessionSponsor {
   title: string
@@ -56,7 +57,7 @@ const SessionCard: React.FC<SessionCardProps> = ({
         }`}
       >
         {isCurrent && (
-          <span className="rounded-full bg-red-700 px-2 py-1 text-xs font-bold text-white">
+          <span className="bg-red-700 px-2 py-1 text-xs font-bold text-white">
             Happening now
           </span>
         )}
@@ -139,7 +140,7 @@ const SessionCard: React.FC<SessionCardProps> = ({
       <div>
         <div className="mb-1 flex flex-wrap items-center gap-x-2 gap-y-1">
           {isCurrent && (
-            <span className="rounded-full bg-red-700 px-2 py-1 text-xs font-bold text-white">
+            <span className="bg-red-700 px-2 py-1 text-xs font-bold text-white">
               Happening now
             </span>
           )}
@@ -175,7 +176,10 @@ const SessionCard: React.FC<SessionCardProps> = ({
             )
           })}
       </div>
-      <SessionFeedbackLink session={session} className="mt-2 self-start" />
+      <div className="mt-2 flex flex-wrap items-center gap-x-4">
+        <SessionFeedbackLink session={session} />
+        <RoomQuestionLink session={session} />
+      </div>
     </div>
   )
 }

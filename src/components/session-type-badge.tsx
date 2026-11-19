@@ -19,7 +19,7 @@ const SessionTypeBadge: React.FC<SessionTypeBadgeProps> = ({
 
   return (
     <span
-      className={`inline-block rounded-full font-semibold uppercase tracking-wide ${
+      className={`inline-block font-semibold uppercase tracking-wide ${
         compact
           ? "px-1.5 py-0.5 text-[10px] leading-none"
           : "px-2 py-0.5 text-xs"

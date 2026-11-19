@@ -1,10 +1,12 @@
 import React, { useState } from "react"
 import Button from "./ui/button"
 
-const CopyLinkButton: React.FC<{ path: string; label: string }> = ({
-  path,
-  label,
-}) => {
+const CopyLinkButton: React.FC<{
+  path: string
+  label: string
+  variant?: React.ComponentProps<typeof Button>["variant"]
+  className?: string
+}> = ({ path, label, variant = "primary", className }) => {
   const [status, setStatus] = useState(label)
 
   const copy = async () => {
@@ -19,7 +21,7 @@ const CopyLinkButton: React.FC<{ path: string; label: string }> = ({
   }
 
   return (
-    <Button onClick={copy} variant="primary">
+    <Button onClick={copy} variant={variant} className={className}>
       {status}
     </Button>
   )
