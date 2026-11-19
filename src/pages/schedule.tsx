@@ -149,14 +149,12 @@ const SchedulePage: React.FC = () => {
         matchingElements[0] ||
         document.getElementById(date)
 
-      window.requestAnimationFrame(() => {
-        if (!target) return
-        target.scrollIntoView({ behavior: "instant", block: "start" })
+      if (!target) return
+      target.scrollIntoView({ behavior: "auto", block: "start" })
 
-        window.requestAnimationFrame(() => {
-          const correction = target.getBoundingClientRect().top - stickyBottom()
-          if (Math.abs(correction) > 1) window.scrollBy(0, correction)
-        })
+      window.requestAnimationFrame(() => {
+        const correction = target.getBoundingClientRect().top - stickyBottom()
+        if (Math.abs(correction) > 1) window.scrollBy(0, correction)
       })
     },
     [schedule]
@@ -174,7 +172,8 @@ const SchedulePage: React.FC = () => {
       return
     }
 
-    scrollToTime(time)
+    const frame = window.requestAnimationFrame(() => scrollToTime(time))
+    return () => window.cancelAnimationFrame(frame)
   }, [location.hash, nowHash, realNow, schedule, scrollToTime, talkId])
 
   const goToNow = () => {

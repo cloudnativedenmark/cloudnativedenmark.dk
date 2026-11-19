@@ -112,6 +112,23 @@ describe("talk links", () => {
     ).toBeInTheDocument()
   })
 
+  it("closes a linked talk with the top close control", async () => {
+    view("/schedule/talk/session-a-talk-talk-1/")
+    fireEvent.click(
+      await screen.findByRole("button", { name: "Close session details" })
+    )
+
+    await waitFor(() =>
+      expect(
+        screen.queryByRole("button", { name: "Copy talk link" })
+      ).not.toBeInTheDocument()
+    )
+    expect(
+      screen.getByRole("heading", { name: "Schedule" })
+    ).toBeInTheDocument()
+    expect(document.body.style.overflow).not.toBe("hidden")
+  })
+
   it.each([false, true])(
     "closes a talk when browser history returns to a day link (plenary: %s)",
     async (isPlenumSession) => {
