@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react"
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { HelmetProvider } from "react-helmet-async"
 import { MemoryRouter, useLocation, useNavigate } from "react-router-dom"
 import SchedulePage from "../schedule"
@@ -243,6 +243,40 @@ describe("schedule day links", () => {
     view("/schedule#now-2026-11-19_10:35")
 
     expect(screen.queryByText("Happening now")).not.toBeInTheDocument()
+  })
+
+  it("updates live highlights without scrolling away from the reader", () => {
+    jest.useFakeTimers()
+    jest.setSystemTime(new Date("2026-11-19T09:34:00Z"))
+    jest.mocked(useSessionizeSchedule).mockReturnValue({
+      schedule: [sessionDay],
+      isLoading: false,
+    })
+    const scrollBy = jest.spyOn(window, "scrollBy").mockImplementation(() => {})
+
+    try {
+      view("/schedule")
+      act(() => jest.advanceTimersToNextFrame())
+      act(() => jest.advanceTimersToNextFrame())
+      expect(scrollIntoView.mock.contexts.at(-1)).toHaveAttribute(
+        "data-now-session",
+        "talk-1"
+      )
+      expect(screen.getAllByText("Happening now")).toHaveLength(2)
+      scrollIntoView.mockClear()
+      scrollBy.mockClear()
+
+      act(() => jest.advanceTimersByTime(60_000))
+      act(() => jest.advanceTimersToNextFrame())
+      act(() => jest.advanceTimersToNextFrame())
+
+      expect(screen.queryByText("Happening now")).not.toBeInTheDocument()
+      expect(scrollIntoView).not.toHaveBeenCalled()
+      expect(scrollBy).not.toHaveBeenCalled()
+    } finally {
+      scrollBy.mockRestore()
+      jest.useRealTimers()
+    }
   })
 
   it("shows go to now in simulation mode and keeps the simulated time", () => {

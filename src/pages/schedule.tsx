@@ -74,6 +74,7 @@ const SchedulePage: React.FC = () => {
   const navigate = useNavigate()
   const { talkId } = useParams()
   const previousTalkId = useRef(talkId)
+  const initialScrollDone = useRef(false)
   const [currentTime, setCurrentTime] = useState(() => new Date())
   const { schedule, isLoading } = useSessionizeSchedule()
   const { sponsors } = useSponsors()
@@ -166,13 +167,21 @@ const SchedulePage: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    if (talkId || (location.hash && !nowHash)) return
+    if (initialScrollDone.current || schedule.length === 0) return
     const time = nowHash || realNow
-    if (!schedule.some((day) => day.date.slice(0, 10) === time.slice(0, 10))) {
+    if (
+      talkId ||
+      (location.hash && !nowHash) ||
+      !schedule.some((day) => day.date.slice(0, 10) === time.slice(0, 10))
+    ) {
+      initialScrollDone.current = true
       return
     }
 
-    const frame = window.requestAnimationFrame(() => scrollToTime(time))
+    const frame = window.requestAnimationFrame(() => {
+      initialScrollDone.current = true
+      scrollToTime(time)
+    })
     return () => window.cancelAnimationFrame(frame)
   }, [location.hash, nowHash, realNow, schedule, scrollToTime, talkId])
 

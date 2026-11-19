@@ -9,7 +9,6 @@ import { formatPlainTextToHtml } from "../utils/text-formatting"
 import { deduceSessionType, getSessionTags } from "../utils/session-type"
 import SpeakerList from "./speaker-list"
 import SessionTypeBadge from "./session-type-badge"
-import Button from "./ui/button"
 import CopyLinkButton from "./copy-link-button"
 import { talkPath } from "../utils/talk-link"
 import SessionFeedbackLink from "./session-feedback-link"
@@ -160,13 +159,6 @@ const SessionModal: React.FC<{
                 />
               </div>
             )}
-          </div>
-
-          <div className="p-4 pb-6 text-center bg-white flex-shrink-0 relative">
-            <div className="absolute bottom-full left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
-            <Button onClick={onClose} variant="primary" className="btn-compact">
-              Back to Schedule
-            </Button>
           </div>
         </div>
       </div>

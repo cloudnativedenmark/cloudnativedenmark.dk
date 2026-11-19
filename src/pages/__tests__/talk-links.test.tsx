@@ -97,21 +97,6 @@ describe("talk links", () => {
     )
   })
 
-  it("closes a linked talk without losing the schedule", async () => {
-    view("/schedule/talk/session-a-talk-talk-1/")
-    fireEvent.click(
-      await screen.findByRole("button", { name: "Back to Schedule" })
-    )
-    await waitFor(() =>
-      expect(
-        screen.queryByRole("button", { name: "Copy talk link" })
-      ).not.toBeInTheDocument()
-    )
-    expect(
-      screen.getByRole("heading", { name: "Schedule" })
-    ).toBeInTheDocument()
-  })
-
   it("closes a linked talk with the top close control", async () => {
     view("/schedule/talk/session-a-talk-talk-1/")
     fireEvent.click(
