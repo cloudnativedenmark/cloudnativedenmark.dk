@@ -27,7 +27,7 @@ export const buttonVariants: Record<ButtonVariant, string> = {
   light: "bg-cnd-bone text-cnd-midnight hover:bg-white",
   // Midnight pill — for use on light backgrounds when red would clash with logo
   midnight: "bg-cnd-midnight text-white hover:bg-cnd-harbor",
-  muted: "bg-cnd-bone text-cnd-slate hover:bg-gray-200",
+  muted: "bg-cnd-red/10 text-cnd-red hover:bg-cnd-red/20",
 }
 
 const Button: React.FC<ButtonProps> = ({

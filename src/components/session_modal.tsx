@@ -9,12 +9,11 @@ import { formatPlainTextToHtml } from "../utils/text-formatting"
 import { deduceSessionType, getSessionTags } from "../utils/session-type"
 import SpeakerList from "./speaker-list"
 import SessionTypeBadge from "./session-type-badge"
-import Button, { buttonVariants } from "./ui/button"
+import Button from "./ui/button"
 import CopyLinkButton from "./copy-link-button"
 import { talkPath } from "../utils/talk-link"
 import SessionFeedbackLink from "./session-feedback-link"
-import ExternalLink from "./ui/external-link"
-import { trackQuestionUrls } from "../config/track-questions"
+import RoomQuestionLink from "./room-question-link"
 
 const SessionModal: React.FC<{
   session: Session
@@ -32,9 +31,6 @@ const SessionModal: React.FC<{
   })
   const tags = getSessionTags(session.categories)
   const formattedDescription = formatPlainTextToHtml(session.description)
-  const questionUrl = session.isServiceSession
-    ? undefined
-    : trackQuestionUrls[session.room]
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -87,12 +83,23 @@ const SessionModal: React.FC<{
               </span>
             </div>
 
+            <div className="flex flex-wrap gap-2 mb-6">
+              <SessionFeedbackLink session={session} variant="button" />
+              <RoomQuestionLink session={session} variant="button" />
+              <CopyLinkButton
+                path={talkPath(session)}
+                label="Copy talk link"
+                variant="muted"
+                className="btn-compact"
+              />
+            </div>
+
             {tags.length > 0 && (
               <div className="mb-6 flex flex-wrap gap-2">
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700"
+                    className="bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700"
                   >
                     {tag}
                   </span>
@@ -129,24 +136,6 @@ const SessionModal: React.FC<{
 
           <div className="p-4 pb-6 text-center bg-white flex-shrink-0 relative">
             <div className="absolute bottom-full left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
-            <div className="flex flex-wrap justify-center gap-2 mb-4">
-              <SessionFeedbackLink session={session} variant="button" />
-              {questionUrl && (
-                <ExternalLink
-                  href={questionUrl}
-                  className={`btn-pill btn-compact ${buttonVariants.muted}`}
-                  aria-label={`Q&A for ${session.room}`}
-                >
-                  Q&amp;A
-                </ExternalLink>
-              )}
-              <CopyLinkButton
-                path={talkPath(session)}
-                label="Copy talk link"
-                variant="muted"
-                className="btn-compact"
-              />
-            </div>
             <Button onClick={onClose} variant="primary" className="btn-compact">
               Back to Schedule
             </Button>

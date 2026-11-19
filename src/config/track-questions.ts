@@ -1,6 +1,5 @@
-// Temporary URLs until the event's track Q&A links are supplied.
 export const trackQuestionUrls: Partial<Record<string, string>> = {
-  "Main stage": "https://example.com/qa/main-stage",
-  Breakout: "https://example.com/qa/breakout",
-  Workshop: "https://example.com/qa/workshop",
+  "Main stage":
+    "https://app.sli.do/event/kk1eDkV44Vtytp3u1FvgkR/live/questions",
+  Breakout: "https://app.sli.do/event/4iZ1aiQiwkN4LpQJNUpuaS/live/questions",
 }
