@@ -27,6 +27,7 @@ export const cloudflare =
         "Content-Type": "application/json",
       },
       body: body ? JSON.stringify(body) : undefined,
+      signal: AbortSignal.timeout(30_000),
     })
     const json = await response.json().catch(() => ({}))
     return {
@@ -65,7 +66,7 @@ export const pagesSubdomain = async (call, accountId, { project, branch }) => {
   )
   if (production_branch !== branch) {
     throw new Error(
-      `Pages: ${project} serves production from "${production_branch}", not "${branch}", so this deploy is only a preview. Change its production branch and rerun.`
+      `Pages: ${project} serves production from "${production_branch}", not "${branch}", so this deploy is only a preview. Set it with PATCH /accounts/<account>/pages/projects/${project} {"production_branch":"${branch}"} and re-run failed jobs.`
     )
   }
   return subdomain
