@@ -45,7 +45,7 @@ it("links to the photo gallery instead of ticket sales when sales are closed", (
   for (const link of galleryLinks) {
     expect(link).toHaveAttribute(
       "href",
-      "https://www.flickr.com/photos/199545304@N04/"
+      "https://www.picdrop.com/kim-yennguyen/PtE1CyXcQm"
     )
     expect(link).toHaveAttribute("target", "_blank")
     expect(link).toHaveAttribute("rel", "noopener noreferrer")

@@ -327,7 +327,7 @@ const SchedulePage: React.FC = () => {
                 </Link>
               ))}
               <a
-                href="https://www.flickr.com/photos/199545304@N04/"
+                href="https://www.picdrop.com/kim-yennguyen/PtE1CyXcQm"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-background hover:bg-hover text-white text-l font-semibold py-3 px-6 rounded-full transition-colors duration-200"

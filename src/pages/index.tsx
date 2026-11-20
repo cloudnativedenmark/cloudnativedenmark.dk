@@ -69,7 +69,7 @@ const IndexPage: React.FC = () => {
               }
             : {
                 text: "📷 Photo gallery",
-                href: "https://www.flickr.com/photos/199545304@N04/",
+                href: "https://www.picdrop.com/kim-yennguyen/PtE1CyXcQm",
                 isExternal: true,
               },
           ...(features.scheduleAndSpeakers
@@ -178,7 +178,7 @@ const IndexPage: React.FC = () => {
                 </a>
               ) : (
                 <a
-                  href="https://www.flickr.com/photos/199545304@N04/"
+                  href="https://www.picdrop.com/kim-yennguyen/PtE1CyXcQm"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

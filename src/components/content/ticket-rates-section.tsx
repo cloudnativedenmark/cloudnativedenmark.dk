@@ -246,7 +246,7 @@ const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({
             </a>
           ) : (
             <a
-              href="https://www.flickr.com/photos/199545304@N04/"
+              href="https://www.picdrop.com/kim-yennguyen/PtE1CyXcQm"
               target="_blank"
               rel="noopener noreferrer"
             >
