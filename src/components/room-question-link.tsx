@@ -24,6 +24,7 @@ const RoomQuestionLink = ({
       aria-label={`Show track Q&A for ${session.room}`}
       onClick={(event) => event.stopPropagation()}
     >
+      {variant === "button" && <span aria-hidden="true">💬 </span>}
       Show track Q&amp;A
     </ExternalLink>
   )
