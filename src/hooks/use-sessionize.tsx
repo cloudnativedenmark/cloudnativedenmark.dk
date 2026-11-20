@@ -241,6 +241,7 @@ export const useSessionizeSchedule = (sessionId: string = MainSessionizeId) => {
       setSchedule([])
       return
     }
+    const slideQuestionId = sessionId === MainSessionizeId ? 115164 : 99194
     // Same enrichment as useSessionizeSpeakers (deduced talk type,
     // admin-only sessions dropped) so a speaker's bio modal looks identical
     // whether it was opened from the schedule or from /speakers.
@@ -262,10 +263,10 @@ export const useSessionizeSchedule = (sessionId: string = MainSessionizeId) => {
             (s) => room.session.id === s.id
           )
           if (session !== undefined) {
-            const slides = session.questionAnswers.find((q) => q.id === 99194)
-            if (slides !== undefined) {
-              room.session.slideDeck = slides.answer
-            }
+            const slides = session.questionAnswers.find(
+              (q) => q.id === slideQuestionId
+            )
+            room.session.slideDeck = slides?.answer?.trim() ?? ""
             const rate = session.questionAnswers.find((q) => q.id === 112538)
             if (rate !== undefined) {
               room.session.rate = rate.answer
@@ -288,7 +289,7 @@ export const useSessionizeSchedule = (sessionId: string = MainSessionizeId) => {
       }
     })
     setSchedule(schedule)
-  }, [grid, speakers, sessions])
+  }, [grid, speakers, sessions, sessionId])
 
   const isLoading = !(loaded.grid && loaded.speakers && loaded.sessions)
 
