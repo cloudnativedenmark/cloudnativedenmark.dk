@@ -7,12 +7,17 @@
 1. Go to Actions → **Deploy Release to CloudFlare** → **Run workflow**.
 2. Keep **main** selected and enter the four-digit year, e.g. `2026`.
 3. The workflow:
-   - stops if `release-2026` already exists at another commit,
+   - stops before building if `release-2026` already exists at another commit,
    - tests and builds `main`,
-   - deploys the build to the `cloudnative-denmark-2026` Pages project (created if needed),
+   - deploys the build to the `cloudnative-denmark-2026` Pages project (created if needed; an existing project must serve production from `release-2026`),
    - creates or updates the proxied `CNAME 2026 → <project>.pages.dev` record, refusing to change records that point anywhere other than Pages,
    - attaches `2026.cloudnativedenmark.dk` to the project and waits until it's active and the site answers,
-   - creates the `release-2026` branch at the deployed commit, only after everything above succeeded. A failed run leaves no branch, so fix `main` and run it again.
+   - creates the `release-2026` branch at the deployed commit, only after everything above succeeded.
+
+If the run fails:
+
+- **Tests or build:** fix `main` and run the workflow again.
+- **Deploy, DNS or domain:** fix the cause (token, DNS record), then use **Re-run failed jobs** on the same run. It reuses that run's build (kept for 7 days). A new dispatch would archive whatever `main` is by then.
 
 Each deploy is recorded in a GitHub environment named after the branch (`release-2026`). The repository's Environments page shows every edition's latest deploy status and URL.
 
@@ -63,5 +68,6 @@ Cloudflare Dashboard → `cloudnativedenmark.dk` → Overview → API → Zone I
 ## Troubleshooting
 
 - **HTTP 522 on `<year>.cloudnativedenmark.dk`**: the DNS record exists but the domain isn't attached to the Pages project. Push to the release branch to rerun the attach step.
-- **"already has A records" or "not a Pages project"**: another record owns that name. Remove or rename it in Cloudflare DNS and rerun.
+- **"already has A records" or "not a Pages project"**: another record owns that name. Remove or rename it in Cloudflare DNS, then re-run failed jobs.
+- **"serves production from …"**: the Pages project's production branch isn't `release-<year>`. Change it under Workers & Pages → the project → Settings → Builds, then re-run failed jobs.
 - **"Could not create release-<year>"**: the branch already exists at another commit. Push to it to redeploy instead.

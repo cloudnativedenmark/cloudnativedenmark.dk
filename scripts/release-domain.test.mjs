@@ -44,7 +44,7 @@ const pagesCname = (overrides = {}) => ({
 
 // An attached, active domain with a correct CNAME; tests override pieces.
 const settled = (routes = {}, subdomain = target) => ({
-  [`GET ${projectPath}`]: ok({ subdomain }),
+  [`GET ${projectPath}`]: ok({ subdomain, production_branch: "release-2026" }),
   [`GET ${domainsPath}`]: ok([
     { name: "other.example", status: "active" },
     { name: domain, status: "active" },
@@ -321,4 +321,58 @@ test("stops waiting when the domain is blocked", async () => {
 
   await assert.rejects(attach(fetchImpl), /is "blocked", not active/)
   assert.equal(reads, 1)
+})
+
+test("sends an explicit body when retrying validation", async () => {
+  const { calls, fetchImpl } = fakeCloudflare(
+    settled({
+      [`GET ${domainsPath}`]: ok([{ name: domain, status: "error" }]),
+      [`PATCH ${domainPath}`]: ok({ status: "pending" }),
+    })
+  )
+
+  await attach(fetchImpl)
+
+  assert.deepEqual(bodyOf(calls, `PATCH ${domainPath}`), {})
+})
+
+test("refuses a Pages project whose production branch is another branch", async () => {
+  const { calls, fetchImpl } = fakeCloudflare(
+    settled({
+      [`GET ${projectPath}`]: ok({
+        subdomain: target,
+        production_branch: "main",
+      }),
+    })
+  )
+
+  await assert.rejects(attach(fetchImpl), /serves production from "main"/)
+  assert.deepEqual(writes(calls), [])
+})
+
+test("keeps polling through network errors", async () => {
+  let reads = 0
+  const { fetchImpl } = fakeCloudflare(settled())
+  const flaky = async (url, init) => {
+    if (url.endsWith(domainPath) && init.method === "GET" && reads++ < 2) {
+      throw new Error("ECONNRESET")
+    }
+    return fetchImpl(url, init)
+  }
+
+  await attach(flaky)
+
+  assert.equal(reads, 3)
+})
+
+test("reports an unreachable API instead of an undefined status", async () => {
+  const { fetchImpl } = fakeCloudflare(settled())
+  const down = async (url, init) => {
+    if (url.endsWith(domainPath) && init.method === "GET") {
+      throw new Error("ECONNRESET")
+    }
+    return fetchImpl(url, init)
+  }
+
+  await assert.rejects(attach(down, { attempts: 2 }), /is "unreachable"/)
 })
