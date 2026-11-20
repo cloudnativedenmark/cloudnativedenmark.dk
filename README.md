@@ -297,6 +297,14 @@ Per-PR preview deployments to Cloudflare Pages, gated by a label (workflow: `.gi
 
 Requires repo secrets `CLOUDFLARE_API_TOKEN` (Pages:Edit scope) and `CLOUDFLARE_ACCOUNT_ID`.
 
+### Yearly archives
+
+Run **Deploy Release to CloudFlare** from `main` with a release name such as
+`2027`. It creates `release-2027`, deploys it, and serves it at
+`2027.cloudnativedenmark.dk`. Push hotfixes to `release-2027` to redeploy.
+Deploy status per edition shows under the `release-<name>` GitHub environments.
+Setup and token permissions: [`.github/CLOUDFLARE_SETUP.md`](.github/CLOUDFLARE_SETUP.md).
+
 ## 🤝 Contributing
 
 We welcome contributions! Please read our [Contributing Guide](./CONTRIBUTING.md) for details on:
