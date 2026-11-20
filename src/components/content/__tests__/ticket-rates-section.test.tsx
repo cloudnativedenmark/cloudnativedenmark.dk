@@ -39,8 +39,8 @@ describe("TicketRatesSection", () => {
       render(<TicketRatesSection sectionNumber={4} />)
 
       expect(screen.getByRole("heading", { name: "Sold out." })).toBeVisible()
-      expect(screen.getByRole("button", { name: "Sold out" })).toBeDisabled()
-      expect(screen.queryByRole("link")).toBeNull()
+      expect(screen.queryByRole("button", { name: "Sold out" })).toBeNull()
+      expect(screen.queryByRole("link", { name: "Buy tickets →" })).toBeNull()
       expect(screen.queryByText("ON SALE")).toBeNull()
       expect(screen.queryByText("SELLING OUT FAST")).toBeNull()
       expect(screen.getAllByText("SOLD OUT")).toHaveLength(4)

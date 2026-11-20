@@ -114,6 +114,8 @@ src/components/
 - 🔍 **Search**: Fuzzy search for sessions and speakers using Fuse.js
 - 📅 **Event Management**: Dynamic conference schedule and speaker profiles
 - 💼 **Sponsor Management**: Tiered sponsor system with dynamic logos
+- **Photo Gallery**: The schedule day navigation links to the [2026 photo gallery](https://www.picdrop.com/kim-yennguyen/PtE1CyXcQm). Front-page ticket buttons also link there when ticket sales are closed.
+- **Session Details**: Modal action buttons use emojis for feedback, track Q&A, talk links, slides, and return navigation.
 
 ### Schedule PDF
 

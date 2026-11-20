@@ -118,7 +118,7 @@ const SessionModal: React.FC<{
               <RoomQuestionLink session={session} variant="button" />
               <CopyLinkButton
                 path={talkPath(session)}
-                label="Copy talk link"
+                label="🔗 Copy talk link"
                 variant="muted"
                 className="btn-compact"
               />
@@ -128,7 +128,7 @@ const SessionModal: React.FC<{
                   className={`btn-pill btn-compact ${buttonVariants.muted}`}
                   onClick={(event) => event.stopPropagation()}
                 >
-                  Show slides
+                  <span aria-hidden="true">📑 </span>Show slides
                 </ExternalLink>
               )}
             </div>
@@ -174,7 +174,7 @@ const SessionModal: React.FC<{
           </div>
           <div className="hidden shrink-0 px-4 pb-6 pt-4 text-center md:block">
             <Button onClick={onClose} variant="primary" className="btn-compact">
-              Back to Schedule
+              <span aria-hidden="true">⬅️ </span>Back to Schedule
             </Button>
           </div>
         </div>

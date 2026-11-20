@@ -27,6 +27,7 @@ const SessionFeedbackLink = ({
       rel="noopener noreferrer nofollow"
       onClick={(event) => event.stopPropagation()}
     >
+      {variant === "button" && <span aria-hidden="true">📝 </span>}
       {variant === "button" ? "Give Feedback" : "Give feedback"}
     </ExternalLink>
   )

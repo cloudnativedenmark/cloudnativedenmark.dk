@@ -58,7 +58,7 @@ describe("SessionModal sharing", () => {
     })
 
     renderSessionModal("Talk")
-    fireEvent.click(screen.getByRole("button", { name: "Copy talk link" }))
+    fireEvent.click(screen.getByRole("button", { name: /Copy talk link/ }))
 
     await waitFor(() =>
       expect(writeText).toHaveBeenCalledWith(

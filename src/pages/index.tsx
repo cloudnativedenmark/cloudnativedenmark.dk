@@ -67,7 +67,11 @@ const IndexPage: React.FC = () => {
                 onClick: scrollToTicketRates,
                 variant: "primary",
               }
-            : { text: "Sold out", disabled: true },
+            : {
+                text: "📷 Photo gallery",
+                href: "https://www.picdrop.com/kim-yennguyen/PtE1CyXcQm",
+                isExternal: true,
+              },
           ...(features.scheduleAndSpeakers
             ? [
                 {
@@ -173,7 +177,13 @@ const IndexPage: React.FC = () => {
                   <Button>Get your ticket →</Button>
                 </a>
               ) : (
-                <Button disabled>Sold out</Button>
+                <a
+                  href="https://www.picdrop.com/kim-yennguyen/PtE1CyXcQm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button>📷 Photo gallery</Button>
+                </a>
               )}
               {features.scheduleAndSpeakers && (
                 <Link to="/schedule">
