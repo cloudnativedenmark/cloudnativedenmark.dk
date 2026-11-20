@@ -44,7 +44,7 @@ const pagesCname = (overrides = {}) => ({
 
 // An attached, active domain with a correct CNAME; tests override pieces.
 const settled = (routes = {}, subdomain = target) => ({
-  [`GET ${projectPath}`]: ok({ subdomain }),
+  [`GET ${projectPath}`]: ok({ subdomain, production_branch: "release-2026" }),
   [`GET ${domainsPath}`]: ok([
     { name: "other.example", status: "active" },
     { name: domain, status: "active" },
@@ -321,4 +321,112 @@ test("stops waiting when the domain is blocked", async () => {
 
   await assert.rejects(attach(fetchImpl), /is "blocked", not active/)
   assert.equal(reads, 1)
+})
+
+test("sends an explicit body when retrying validation", async () => {
+  const { calls, fetchImpl } = fakeCloudflare(
+    settled({
+      [`GET ${domainsPath}`]: ok([{ name: domain, status: "error" }]),
+      [`PATCH ${domainPath}`]: ok({ status: "pending" }),
+    })
+  )
+
+  await attach(fetchImpl)
+
+  assert.deepEqual(bodyOf(calls, `PATCH ${domainPath}`), {})
+})
+
+test("refuses a Pages project whose production branch is another branch", async () => {
+  const { calls, fetchImpl } = fakeCloudflare(
+    settled({
+      [`GET ${projectPath}`]: ok({
+        subdomain: target,
+        production_branch: "main",
+      }),
+    })
+  )
+
+  await assert.rejects(attach(fetchImpl), /serves production from "main"/)
+  assert.deepEqual(writes(calls), [])
+})
+
+test("keeps polling through network errors", async () => {
+  let reads = 0
+  const { fetchImpl } = fakeCloudflare(settled())
+  const flaky = async (url, init) => {
+    if (url.endsWith(domainPath) && init.method === "GET" && reads++ < 2) {
+      throw new Error("ECONNRESET")
+    }
+    return fetchImpl(url, init)
+  }
+
+  await attach(flaky)
+
+  assert.equal(reads, 3)
+})
+
+test("reports an unreachable API instead of an undefined status", async () => {
+  const { fetchImpl } = fakeCloudflare(settled())
+  const down = async (url, init) => {
+    if (url.endsWith(domainPath) && init.method === "GET") {
+      throw new Error("ECONNRESET")
+    }
+    return fetchImpl(url, init)
+  }
+
+  await assert.rejects(
+    attach(down, { attempts: 2 }),
+    /is "unreachable \(Cloudflare: GET .*domains\/2026\.cloudnativedenmark\.dk failed: ECONNRESET\)"/
+  )
+})
+
+test("gives every request a 30 second timeout", async (t) => {
+  const timeout = t.mock.method(AbortSignal, "timeout")
+  const { calls, fetchImpl } = fakeCloudflare(settled())
+
+  await attach(fetchImpl)
+
+  assert.equal(timeout.mock.callCount(), calls.length)
+  assert.ok(timeout.mock.calls.every(({ arguments: [ms] }) => ms === 30_000))
+})
+
+test("names the call and the underlying cause when a request fails", async () => {
+  const { fetchImpl } = fakeCloudflare(settled())
+  const offline = async (url, init) => {
+    if (url.endsWith("/pages/projects/cloudnative-denmark-2026")) {
+      throw new TypeError("fetch failed", {
+        cause: new Error("getaddrinfo ENOTFOUND api.cloudflare.com"),
+      })
+    }
+    return fetchImpl(url, init)
+  }
+
+  await assert.rejects(
+    attach(offline),
+    /Cloudflare: GET \/accounts\/acc\/pages\/projects\/cloudnative-denmark-2026 failed: getaddrinfo ENOTFOUND api.cloudflare.com/
+  )
+})
+
+test("retries a status poll whose body read timed out", async () => {
+  let reads = 0
+  const { fetchImpl } = fakeCloudflare(settled())
+  const slowBody = async (url, init) => {
+    if (url.endsWith(domainPath) && init.method === "GET" && reads++ === 0) {
+      return {
+        ok: true,
+        status: 200,
+        json: async () => {
+          throw new DOMException(
+            "The operation was aborted due to timeout",
+            "TimeoutError"
+          )
+        },
+      }
+    }
+    return fetchImpl(url, init)
+  }
+
+  await attach(slowBody)
+
+  assert.equal(reads, 2)
 })
