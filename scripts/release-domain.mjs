@@ -58,11 +58,18 @@ export const findZoneId = async (call) => {
   return zones[0].id
 }
 
-export const pagesSubdomain = async (call, accountId, { project }) =>
-  must(
+export const pagesSubdomain = async (call, accountId, { project, branch }) => {
+  const { subdomain, production_branch } = must(
     await call("GET", `/accounts/${accountId}/pages/projects/${project}`),
     `read Pages project ${project}`
-  ).subdomain
+  )
+  if (production_branch !== branch) {
+    throw new Error(
+      `Pages: ${project} serves production from "${production_branch}", not "${branch}", so this deploy is only a preview. Change its production branch and rerun.`
+    )
+  }
+  return subdomain
+}
 
 export const ensureCname = async (call, zoneId, { domain }, target) => {
   const records = must(
@@ -128,7 +135,7 @@ export const ensurePagesDomain = async (
   const { status } = existing
   if (retryableStatuses.includes(status)) {
     must(
-      await call("PATCH", `${path}/${domain}`),
+      await call("PATCH", `${path}/${domain}`, {}),
       `retry validation of ${domain}`
     )
     return `retried (was ${status})`
@@ -148,14 +155,17 @@ export const waitForActiveDomain = async (
   const path = `/accounts/${accountId}/pages/projects/${project}/domains/${domain}`
   let status
   for (let attempt = 1; attempt <= attempts; attempt++) {
-    const response = await call("GET", path)
-    const transient = response.status === 429 || response.status >= 500
+    const response = await call("GET", path).catch(() => ({ status: 0 }))
+    const transient =
+      response.status === 0 || response.status === 429 || response.status >= 500
     if (!transient) status = must(response, `read ${domain} status`).status
     if (status === "active") return status
     if (status === "blocked") break
     if (attempt < attempts) await sleep(15_000)
   }
-  throw new Error(`Pages: ${domain} is "${status}", not active`)
+  throw new Error(
+    `Pages: ${domain} is "${status ?? "unreachable"}", not active`
+  )
 }
 
 export const attachReleaseDomain = async (
