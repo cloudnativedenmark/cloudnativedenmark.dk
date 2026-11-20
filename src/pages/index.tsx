@@ -18,24 +18,28 @@ const actions = [
     detail: "Tell us how CND/2026 went.",
     href: feedbackUrl,
     external: true,
+    icon: "↗",
   },
   {
     label: "📷 Photo gallery",
     detail: "Find yourself in the photos.",
     href: photosUrl,
     external: true,
+    icon: "↗",
   },
   {
     label: "CND/2026 website",
     detail: "Schedule, speakers and slides.",
     href: siteConfig.previousEditionUrl,
     external: true,
+    icon: "↗",
   },
   {
     label: "Contact us",
     detail: "Sponsor 2027, join the organizers or volunteer.",
     href: `mailto:${contactEmail}`,
     external: false,
+    icon: "\u2709\uFE0E",
   },
 ]
 
@@ -48,7 +52,7 @@ const IndexPage: React.FC = () => {
     <>
       <SEOHead title="Thank you, CND/2026" pathname={location.pathname} />
       <section
-        className="cnd-hero relative w-full overflow-hidden bg-cnd-sand text-cnd-midnight"
+        className="cnd-hero relative flex min-h-[calc(100svh-var(--site-header-height,84px))] w-full flex-col justify-center overflow-hidden bg-cnd-sand text-cnd-midnight"
         aria-labelledby="thank-you"
       >
         <div className="cnd-top-rule" />
@@ -184,9 +188,9 @@ const IndexPage: React.FC = () => {
                   </span>
                   <span
                     aria-hidden="true"
-                    className="text-cnd-red transition-transform group-hover:translate-x-1"
+                    className="shrink-0 text-lg text-cnd-red transition-transform group-hover:-translate-y-0.5"
                   >
-                    →
+                    {action.icon}
                   </span>
                 </a>
               </li>
