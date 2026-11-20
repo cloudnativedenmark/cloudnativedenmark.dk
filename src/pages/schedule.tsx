@@ -326,6 +326,14 @@ const SchedulePage: React.FC = () => {
                   {formatDate(day.date)}
                 </Link>
               ))}
+              <a
+                href="https://www.flickr.com/photos/199545304@N04/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-background hover:bg-hover text-white text-l font-semibold py-3 px-6 rounded-full transition-colors duration-200"
+              >
+                📷 Photo gallery
+              </a>
             </div>
           )}
 
