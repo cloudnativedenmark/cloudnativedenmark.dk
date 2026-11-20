@@ -114,6 +114,7 @@ src/components/
 - 🔍 **Search**: Fuzzy search for sessions and speakers using Fuse.js
 - 📅 **Event Management**: Dynamic conference schedule and speaker profiles
 - 💼 **Sponsor Management**: Tiered sponsor system with dynamic logos
+- **Photo Gallery**: When ticket sales are closed, front-page ticket buttons link to the [Flickr gallery](https://www.flickr.com/photos/199545304@N04/).
 
 ### Schedule PDF
 

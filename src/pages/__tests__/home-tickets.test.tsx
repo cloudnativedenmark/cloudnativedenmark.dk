@@ -35,13 +35,20 @@ const view = () =>
     </HelmetProvider>
   )
 
-it("disables home page ticket actions when sales are closed", () => {
+it("links to the photo gallery instead of ticket sales when sales are closed", () => {
   Object.assign(features, { ticketSales: false })
   view()
 
-  expect(screen.getAllByRole("button", { name: "Sold out" })).toHaveLength(3)
-  for (const button of screen.getAllByRole("button", { name: "Sold out" })) {
-    expect(button).toBeDisabled()
+  expect(screen.queryByRole("button", { name: "Sold out" })).toBeNull()
+  const galleryLinks = screen.getAllByRole("link", { name: /Photo gallery/ })
+  expect(galleryLinks).toHaveLength(3)
+  for (const link of galleryLinks) {
+    expect(link).toHaveAttribute(
+      "href",
+      "https://www.flickr.com/photos/199545304@N04/"
+    )
+    expect(link).toHaveAttribute("target", "_blank")
+    expect(link).toHaveAttribute("rel", "noopener noreferrer")
   }
   expect(screen.queryByRole("button", { name: "Ticket rates →" })).toBeNull()
   expect(screen.queryByRole("link", { name: "Get your ticket →" })).toBeNull()

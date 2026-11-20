@@ -245,7 +245,13 @@ const TicketRatesSection: React.FC<TicketRatesSectionProps> = ({
               <Button>Buy tickets →</Button>
             </a>
           ) : (
-            <Button disabled>Sold out</Button>
+            <a
+              href="https://www.flickr.com/photos/199545304@N04/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button>📷 Photo gallery</Button>
+            </a>
           )}
         </div>
       </div>
