@@ -28,6 +28,8 @@ export const cloudflare =
       },
       body: body ? JSON.stringify(body) : undefined,
       signal: AbortSignal.timeout(30_000),
+    }).catch((error) => {
+      throw new Error(`Cloudflare: ${method} ${path} failed: ${error.message}`)
     })
     const json = await response.json().catch(() => ({}))
     return {

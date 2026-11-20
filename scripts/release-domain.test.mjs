@@ -376,3 +376,25 @@ test("reports an unreachable API instead of an undefined status", async () => {
 
   await assert.rejects(attach(down, { attempts: 2 }), /is "unreachable"/)
 })
+
+test("sends every request with a timeout and names failed calls", async () => {
+  const signals = []
+  const { fetchImpl } = fakeCloudflare(settled())
+  const hung = async (url, init) => {
+    signals.push(init.signal)
+    if (url.endsWith("/pages/projects/cloudnative-denmark-2026")) {
+      throw new DOMException(
+        "The operation was aborted due to timeout",
+        "TimeoutError"
+      )
+    }
+    return fetchImpl(url, init)
+  }
+
+  await assert.rejects(
+    attach(hung),
+    /Cloudflare: GET \/accounts\/acc\/pages\/projects\/cloudnative-denmark-2026 failed: The operation was aborted due to timeout/
+  )
+  assert.ok(signals.length > 0)
+  assert.ok(signals.every((signal) => signal instanceof AbortSignal))
+})
