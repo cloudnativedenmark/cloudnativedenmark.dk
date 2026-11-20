@@ -166,6 +166,7 @@ const IndexPage: React.FC = () => {
                   className={`btn-pill mt-6 self-start ${buttonVariants.primary}`}
                 >
                   Get Early Blind Bird →
+                  <span className="sr-only"> (opens in new tab)</span>
                 </a>
               ) : (
                 <p className="eyebrow mt-6 text-cnd-fog">SOLD OUT</p>
@@ -173,13 +174,13 @@ const IndexPage: React.FC = () => {
             </div>
           </div>
 
-          <ul className="cnd-rise cnd-rise-4 mt-8 grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-3 lg:mt-10">
+          <ul className="cnd-rise cnd-rise-4 mt-8 grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-3 sm:gap-2 md:gap-3 lg:mt-10">
             {actions.map((action) => (
               <li key={action.label} className="min-w-0">
                 <a
                   href={action.href}
                   {...externalProps}
-                  className="group flex h-full items-center justify-between gap-4 rounded-2xl border-[1.5px] border-cnd-midnight/15 bg-white px-5 py-4 transition-colors hover:border-cnd-red"
+                  className="group flex h-full items-center justify-between gap-4 rounded-2xl border-[1.5px] border-cnd-midnight/15 bg-white px-4 py-4 md:px-5 transition-colors hover:border-cnd-red"
                 >
                   <span className="min-w-0">
                     <span className="block font-semibold text-cnd-midnight">

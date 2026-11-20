@@ -54,7 +54,7 @@ it("thanks attendees and sells 2027 Early Blind Bird tickets", () => {
   expect(screen.getByText("LIMITED DROP")).toBeVisible()
   expect(document.body).not.toHaveTextContent(/NOV 2027|16–18|TBA/)
   expectExternal(
-    screen.getByRole("link", { name: "Get Early Blind Bird →" }),
+    screen.getByRole("link", { name: /^Get Early Blind Bird →/ }),
     "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-2027/"
   )
 })
@@ -66,7 +66,7 @@ it("marks Early Blind Bird sold out when ticket sales are off", () => {
   expect(screen.getByText("SOLD OUT")).toBeVisible()
   expect(screen.queryByText("LIMITED DROP")).toBeNull()
   expect(
-    screen.queryByRole("link", { name: "Get Early Blind Bird →" })
+    screen.queryByRole("link", { name: /^Get Early Blind Bird →/ })
   ).toBeNull()
 })
 
@@ -104,17 +104,20 @@ it("only offers the Team page in the menu", () => {
   expect(links).toEqual(["Team"])
 })
 
-it("tells screen readers which cards open a new tab", () => {
+it("tells screen readers which links open a new tab", () => {
   view()
 
-  expect(
-    screen.getByRole("link", {
-      name: "CND/2026 website (opens in new tab) Schedule, speakers and slides.",
+  for (const label of [
+    "Get Early Blind Bird →",
+    "CND/2026 website",
+    "Give feedback",
+    "Photo gallery",
+  ]) {
+    const link = screen.getByRole("link", {
+      name: new RegExp(`^${label} \\(opens in new tab\\)`),
     })
-  ).toBeInTheDocument()
-  expect(
-    screen.getByRole("link", { name: /^Photo gallery \(opens in new tab\)/ })
-  ).toBeInTheDocument()
+    expect(link).toHaveAttribute("target", "_blank")
+  }
 })
 
 it("lists the CND/2026 website first", () => {
