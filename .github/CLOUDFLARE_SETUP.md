@@ -31,7 +31,7 @@ Pushes run the workflow file on that branch. To bring an older branch onto this 
 
 ```bash
 git switch release-2025
-git checkout origin/main -- .github/workflows/release.yml scripts/release-domain.mjs scripts/check-release-branch.sh
+git checkout origin/main -- .github/workflows/release.yml scripts/release-domain.mjs scripts/release-domain.test.mjs scripts/check-release-branch.sh
 git commit -m "ci: Use the release workflow from main"
 git push
 ```
