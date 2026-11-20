@@ -62,24 +62,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           BRANCH: ${{ steps.release.outputs.branch }}
-        run: |
-          if out=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/$BRANCH" --jq .object.sha 2>&1); then
-            head="$out"
-          elif grep -q "HTTP 404" <<<"$out"; then
-            head=""
-          else
-            echo "::error::Could not look up $BRANCH: $out"
-            exit 1
-          fi
-          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
-            if [[ -n "$head" && "$head" != "$GITHUB_SHA" ]]; then
-              echo "::error::$BRANCH already exists at $head. Push to it to redeploy."
-              exit 1
-            fi
-          elif [[ "$head" != "$GITHUB_SHA" ]]; then
-            echo "::error::$BRANCH has moved on to ${head:-nothing}; not redeploying $GITHUB_SHA."
-            exit 1
-          fi
+        run: scripts/check-release-branch.sh "$BRANCH"
 
   build:
     needs: prepare
@@ -139,14 +122,22 @@ jobs:
       url: https://${{ needs.prepare.outputs.domain }}/
 
     steps:
-      # Only the domain script: without package.json and yarn.lock,
+      # Only the release scripts: without package.json and yarn.lock,
       # wrangler-action installs wrangler with npm instead of Yarn.
       - name: Checkout release script
         uses: actions/checkout@v5
         with:
           persist-credentials: false
-          sparse-checkout: scripts/release-domain.mjs
+          sparse-checkout: |
+            scripts/release-domain.mjs
+            scripts/check-release-branch.sh
           sparse-checkout-cone-mode: false
+
+      - name: Check release branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ needs.prepare.outputs.branch }}
+        run: scripts/check-release-branch.sh "$BRANCH"
 
       - name: Setup Node.js
         uses: actions/setup-node@v6

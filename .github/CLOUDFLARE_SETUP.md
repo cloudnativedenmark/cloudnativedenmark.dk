@@ -17,7 +17,7 @@
 If the run fails:
 
 - **Tests or build:** fix `main` and run the workflow again.
-- **Deploy, DNS or domain:** fix the cause (token, DNS record), then use **Re-run failed jobs** on the same run. It reuses that run's build (kept for 7 days). A new dispatch would archive whatever `main` is by then.
+- **Deploy, DNS or domain:** fix the cause (token, DNS record), then use **Re-run failed jobs** on the same run. It reuses that run's build (kept for 7 days) and still refuses to deploy if `release-<year>` has moved on since. A new dispatch would archive whatever `main` is by then.
 
 Each deploy is recorded in a GitHub environment named after the branch (`release-2026`). The repository's Environments page shows every edition's latest deploy status and URL.
 
@@ -69,5 +69,11 @@ Cloudflare Dashboard → `cloudnativedenmark.dk` → Overview → API → Zone I
 
 - **HTTP 522 on `<year>.cloudnativedenmark.dk`**: the DNS record exists but the domain isn't attached to the Pages project. Push to the release branch to rerun the attach step.
 - **"already has A records" or "not a Pages project"**: another record owns that name. Remove or rename it in Cloudflare DNS, then re-run failed jobs.
-- **"serves production from …"**: the Pages project's production branch isn't `release-<year>`. Change it under Workers & Pages → the project → Settings → Builds, then re-run failed jobs.
+- **"serves production from …"**: the Pages project's production branch isn't `release-<year>`. These are Direct Upload projects, so the dashboard can't change it. Use the API, then re-run failed jobs:
+
+  ```bash
+  curl -X PATCH "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/cloudnative-denmark-<year>" \
+    -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" -H "Content-Type: application/json" \
+    --data '{"production_branch":"release-<year>"}'
+  ```
 - **"Could not create release-<year>"**: the branch already exists at another commit. Push to it to redeploy instead.
