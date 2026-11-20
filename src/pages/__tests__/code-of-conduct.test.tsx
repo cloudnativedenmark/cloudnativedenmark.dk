@@ -96,7 +96,7 @@ it("spells out the contact address for sponsors and organizers in the footer", (
   )
 
   expect(container).toHaveTextContent(
-    "Want to sponsor CND/2027, or join the organizer team? Reach out at contact@cloudnativedenmark.dk"
+    "Help make CND/2027 happen as a sponsor, organizer or volunteer: contact@cloudnativedenmark.dk"
   )
   expect(container.querySelector('a[href^="mailto:"]')).toBeNull()
 })

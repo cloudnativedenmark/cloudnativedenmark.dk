@@ -11,7 +11,7 @@ const Footer = () => {
       />
       <div className="mx-auto flex max-w-[1280px] flex-col gap-4 px-6 pt-7 pb-6 md:flex-row md:items-center md:justify-between lg:px-12">
         <p className="text-sm text-cnd-fog">
-          Want to sponsor CND/2027, or join the organizer team? Reach out at{" "}
+          Help make CND/2027 happen as a sponsor, organizer or volunteer:{" "}
           <span className="font-semibold text-white select-all">
             contact@cloudnativedenmark.dk
           </span>
