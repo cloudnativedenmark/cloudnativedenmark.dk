@@ -1,53 +1,92 @@
 import React from "react"
-import { useLocation, Link } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import SEOHead from "../components/seo-head"
-import { useModalManagement } from "../hooks/use-modal-management"
-import { useSponsors } from "../hooks/use-sponsors"
-import HeroSection from "../components/layout/hero-section"
-import ConferenceInfo from "../components/content/conference-info"
-import TicketRatesSection from "../components/content/ticket-rates-section"
-import VenueSection from "../components/content/venue-section"
-import LastYearEventSection from "../components/content/last-year-event-section"
-import MissionSection from "../components/content/mission-section"
-import SponsorsSection from "../components/content/sponsors-section"
-import TalksCarouselSection from "../components/content/talks-carousel-section"
-import FeaturedSpeakersSection from "../components/content/featured-speakers-section"
-import SpeakerModal from "../components/speaker_modal"
-import Section from "../components/ui/section"
-import Button from "../components/ui/button"
+import CNDShape from "../components/ui/cnd-shape"
+import { buttonVariants } from "../components/ui/button"
+import { siteConfig } from "../config/site"
 import { features } from "../config/features"
+
+const earlyBlindBirdUrl =
+  "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-2027/"
+const feedbackUrl = "https://forms.gle/4XVnmNoEa5koLV238"
+const photosUrl = "https://www.picdrop.com/kim-yennguyen/PtE1CyXcQm"
+const contactEmail = "contact@cloudnativedenmark.dk"
+
+const actions = [
+  {
+    label: "Give feedback",
+    detail: "Two minutes that shape CND/2027.",
+    href: feedbackUrl,
+    external: true,
+  },
+  {
+    label: "📷 Photo gallery",
+    detail: "Find yourself in the CND/2026 photos.",
+    href: photosUrl,
+    external: true,
+  },
+  {
+    label: "CND/2026 website",
+    detail: "Schedule, speakers and slides, archived.",
+    href: siteConfig.previousEditionUrl,
+    external: true,
+  },
+  {
+    label: "Contact us",
+    detail: contactEmail,
+    href: `mailto:${contactEmail}`,
+    external: false,
+  },
+]
+
+const externalProps = { target: "_blank", rel: "noopener noreferrer" }
 
 const IndexPage: React.FC = () => {
   const location = useLocation()
-  const { sponsors } = useSponsors()
-  const { selectedSpeaker, handleSpeakerClick, handleCloseSpeakerModal } =
-    useModalManagement({ urlMode: "path" })
-
-  // Section numbering derives from call order — reorder JSX, numbers follow automatically
-  let _sec = 0
-  const sec = () => ++_sec
-  const pad = (n: number) => String(n).padStart(2, "0")
-
-  const scrollToTicketRates = () => {
-    const element = document.getElementById("ticket-rates")
-    if (element) {
-      const headerOffset = 70
-      const elementPosition = element.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.scrollY - headerOffset
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" })
-    }
-  }
 
   return (
     <>
-      <SEOHead title="Cloud Native Denmark 2026" pathname={location.pathname} />
-      <HeroSection
-        eyebrow={`${pad(sec())} · EDITION Nº 04 · NORDIC CLOUD NATIVE CONFERENCE`}
-        title={
-          <>
-            CLOUD
-            <br />
-            NATIVE
+      <SEOHead title="Thank you, CND/2026" pathname={location.pathname} />
+      <section
+        className="cnd-hero relative w-full overflow-hidden bg-cnd-sand text-cnd-midnight"
+        aria-labelledby="thank-you"
+      >
+        <div className="cnd-top-rule" />
+        <div
+          className="pointer-events-none absolute hidden sm:block"
+          style={{
+            top: "-22%",
+            right: "-26%",
+            width: "min(70vw, 880px)",
+            filter: "drop-shadow(0 30px 60px rgba(224,19,42,0.18))",
+          }}
+          aria-hidden="true"
+        >
+          <CNDShape
+            size={880}
+            fill="var(--color-cnd-red)"
+            style={{ width: "100%", height: "auto" }}
+          />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-[1280px] px-6 pt-14 pb-20 lg:px-12 lg:pt-20 lg:pb-24">
+          <div
+            className="eyebrow cnd-rise cnd-rise-1 mb-6 text-cnd-red"
+            style={{ letterSpacing: "0.18em" }}
+          >
+            CND/2026 · COPENHAGEN · 19–20 NOV
+          </div>
+          <h1
+            id="thank-you"
+            className="display cnd-rise cnd-rise-2 text-cnd-midnight"
+            style={{
+              fontSize: "clamp(56px, 12vw, 192px)",
+              lineHeight: 0.86,
+              letterSpacing: "-0.06em",
+              margin: 0,
+            }}
+          >
+            THANK
             <br />
             <span
               style={{
@@ -55,161 +94,100 @@ const IndexPage: React.FC = () => {
                 color: "transparent",
               }}
             >
-              DENMARK.
+              YOU.
             </span>
-          </>
-        }
-        description="Two days in Copenhagen with the platform engineers, SREs, and architects shipping the Nordics' most demanding cloud native systems to production."
-        actions={[
-          features.ticketSales
-            ? {
-                text: "Ticket rates →",
-                onClick: scrollToTicketRates,
-                variant: "primary",
-              }
-            : {
-                text: "📷 Photo gallery",
-                href: "https://www.picdrop.com/kim-yennguyen/PtE1CyXcQm",
-                isExternal: true,
-              },
-          ...(features.scheduleAndSpeakers
-            ? [
-                {
-                  text: "Schedule →",
-                  href: "/schedule",
-                  variant: "midnight" as const,
-                },
-              ]
-            : []),
-          ...(features.merchandise
-            ? [
-                {
-                  text: "Merch →",
-                  href: "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/?extras_flow=true",
-                  isExternal: true,
-                  variant: "secondary" as const,
-                },
-              ]
-            : []),
-        ]}
-        dateStamp={{
-          label: "COPENHAGEN · CND/2026",
-          dates: "19–20 NOV 2026",
-          venue: "Scandic Copenhagen",
-        }}
-      />
+          </h1>
+          <p
+            className="cnd-rise cnd-rise-3 mt-8 max-w-xl text-cnd-slate"
+            style={{
+              fontSize: "clamp(17px, 1.4vw, 20px)",
+              lineHeight: 1.55,
+              fontWeight: 500,
+            }}
+          >
+            To every attendee, speaker, sponsor and volunteer: thank you for
+            making Cloud Native Denmark 2026. Let&apos;s do it again.
+          </p>
 
-      <ConferenceInfo
-        title={`${pad(sec())} · WHY YOU'RE COMING`}
-        description="Join us in Copenhagen as the Kubernetes and Cloud Native community comes together for a technical conference packed with inspiring talks, hands-on insights, and great opportunities to connect and grow."
-        variant="dark"
-      />
-
-      <FeaturedSpeakersSection
-        sectionNumber={sec()}
-        onSpeakerClick={handleSpeakerClick}
-      />
-
-      <TicketRatesSection sectionNumber={sec()} id="ticket-rates" />
-
-      <VenueSection sectionNumber={sec()} />
-
-      <LastYearEventSection sectionNumber={sec()} />
-
-      <TalksCarouselSection sectionNumber={sec()} />
-
-      <MissionSection
-        sectionNumber={sec()}
-        description="Through our joint passion for Cloud Native Technologies, we help facilitate the vibrant community meetups and conferences around Denmark, that aim primarily at sharing knowledge and creating deep and diverse professional networks. We use generated profits to make generous donations to trusted charities."
-        partnerDescription="Over the last three years, we have proudly made cumulative donations valued over 840,000 DKK to charity. Help us reach well beyond 1,000,000 DKK in 2026! ⭐ We welcome inquiries from good cause organizations - particularly those supporting technological education and enablement!"
-      />
-
-      {/*<SpeakersSection
-        speakers={speakers}
-        onSpeakerClick={handleSpeakerClick}
-        initialSpeakersToShow={4}
-      />*/}
-
-      <SponsorsSection
-        sectionNumber={sec()}
-        platinum={sponsors.platinum}
-        gold={sponsors.gold}
-        bronze={sponsors.bronze}
-        afterparty={sponsors.afterparty}
-        community={sponsors.community}
-        partners={sponsors.partners}
-      />
-
-      {/* Final CTA */}
-      <Section className="bg-cnd-bone py-16 lg:py-20">
-        <div className="mx-auto max-w-3xl">
-          <div className="flex flex-col items-center gap-4 rounded-2xl bg-cnd-midnight p-10 text-center text-white shadow-[0_18px_40px_rgba(11,30,63,0.22)]">
-            <div
-              className="eyebrow"
-              style={{
-                color: "var(--color-cnd-coral)",
-                letterSpacing: "0.22em",
-              }}
-            >
-              NOVEMBER 19–20, 2026 · SCANDIC COPENHAGEN
-            </div>
-            <h3
-              className="display"
-              style={{ fontSize: 32, letterSpacing: "-0.03em" }}
-            >
-              See you in Copenhagen.
-            </h3>
-            <p
-              className="max-w-xl text-cnd-fog"
-              style={{ fontSize: 17, lineHeight: 1.55 }}
-            >
-              {features.ticketSales
-                ? "Two days of talks, workshops, and community — don't miss out."
-                : "Tickets are sold out. See you in Copenhagen."}
-            </p>
-            <div className="mt-2 flex flex-wrap justify-center gap-3">
+          <div className="cnd-rise cnd-rise-4 mt-12 grid max-w-5xl gap-6 lg:grid-cols-[1.1fr_1fr]">
+            <div className="relative flex flex-col rounded-2xl bg-cnd-midnight p-8 text-white shadow-[0_18px_40px_rgba(11,30,63,0.28)]">
+              <span
+                className="eyebrow absolute -top-3 left-8 flex items-center gap-2.5 rounded-full bg-cnd-red px-3.5 py-1.5 text-white shadow-[0_6px_16px_rgba(224,19,42,0.35)]"
+                style={{ fontSize: 10, letterSpacing: "0.2em" }}
+              >
+                <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-white motion-safe:animate-ping" />
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white" />
+                </span>
+                LIMITED DROP
+              </span>
+              <div
+                className="eyebrow mt-2"
+                style={{ color: "var(--color-cnd-coral)" }}
+              >
+                ANNOUNCING CND/2027 · 16–18 NOV 2027
+              </div>
+              <h2
+                className="display mt-3"
+                style={{ fontSize: 28, letterSpacing: "-0.02em" }}
+              >
+                Early Blind Bird tickets
+              </h2>
+              <div className="mt-4 flex items-baseline gap-2">
+                <span
+                  className="display"
+                  style={{ fontSize: 64, letterSpacing: "-0.03em" }}
+                >
+                  999
+                </span>
+                <span className="eyebrow text-cnd-fog">DKK</span>
+              </div>
+              <p className="mt-2 text-sm text-cnd-fog">
+                Venue and speakers to be announced. Includes 25% VAT;
+                Ticketbutler fee added at checkout.
+              </p>
               {features.ticketSales ? (
                 <a
-                  href="https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={earlyBlindBirdUrl}
+                  {...externalProps}
+                  className={`btn-pill mt-8 self-start ${buttonVariants.primary}`}
                 >
-                  <Button>Get your ticket →</Button>
+                  Get Early Blind Bird →
                 </a>
               ) : (
-                <a
-                  href="https://www.picdrop.com/kim-yennguyen/PtE1CyXcQm"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button>📷 Photo gallery</Button>
-                </a>
-              )}
-              {features.scheduleAndSpeakers && (
-                <Link to="/schedule">
-                  <Button variant="ghost">Schedule →</Button>
-                </Link>
-              )}
-              {features.merchandise && (
-                <a
-                  href="https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/?extras_flow=true"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="ghost">Merch →</Button>
-                </a>
+                <p className="eyebrow mt-8 text-cnd-fog">SOLD OUT</p>
               )}
             </div>
+
+            <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+              {actions.map((action) => (
+                <li key={action.label}>
+                  <a
+                    href={action.href}
+                    {...(action.external ? externalProps : {})}
+                    className="group flex h-full items-center justify-between gap-4 rounded-2xl border-[1.5px] border-cnd-midnight/15 bg-white/80 px-5 py-4 transition-colors hover:border-cnd-red"
+                  >
+                    <span>
+                      <span className="block font-semibold text-cnd-midnight">
+                        {action.label}
+                      </span>
+                      <span className="block text-sm text-cnd-ash">
+                        {action.detail}
+                      </span>
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      className="text-cnd-red transition-transform group-hover:translate-x-1"
+                    >
+                      →
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
-      </Section>
-
-      {selectedSpeaker && (
-        <SpeakerModal
-          speaker={selectedSpeaker}
-          onClose={handleCloseSpeakerModal}
-        />
-      )}
+      </section>
     </>
   )
 }

@@ -18,22 +18,6 @@ const allMenuLinks = [
     link: "/speakers",
   },
   {
-    name: "Venue",
-    link: "/venue",
-  },
-  {
-    name: "Conference Map",
-    link: "/conference-map",
-  },
-  {
-    name: "Become a Sponsor",
-    link: "/become-a-sponsor",
-  },
-  {
-    name: "Convince Your Boss",
-    link: "/convince-your-boss",
-  },
-  {
     name: "Team",
     link: "/team",
   },

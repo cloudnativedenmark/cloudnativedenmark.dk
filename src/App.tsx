@@ -16,6 +16,7 @@ import BecomeASponsor from "./pages/become-a-sponsor"
 import SponsorInfo from "./pages/sponsor-info"
 import SpeakersGuide from "./pages/speakers-guide"
 import NotFound from "./pages/404"
+import ArchiveRedirect from "./components/archive-redirect"
 import { features } from "./config/features"
 
 const TrackOverview = React.lazy(() => import("./pages/track-overview"))
@@ -26,11 +27,15 @@ function App() {
       <Route
         path="/schedule/track-overview"
         element={
-          <React.Suspense
-            fallback={<p role="status">Loading track overview…</p>}
-          >
-            <TrackOverview />
-          </React.Suspense>
+          features.scheduleAndSpeakers ? (
+            <React.Suspense
+              fallback={<p role="status">Loading track overview…</p>}
+            >
+              <TrackOverview />
+            </React.Suspense>
+          ) : (
+            <ArchiveRedirect />
+          )
         }
       />
       <Route path="/" element={<Layout />}>
@@ -39,12 +44,17 @@ function App() {
         <Route path="convince-your-boss" element={<ConvinceYourBoss />} />
         <Route path="mission" element={<Mission />} />
         <Route path="privacy" element={<Privacy />} />
-        {features.scheduleAndSpeakers && (
+        {features.scheduleAndSpeakers ? (
           <>
             <Route path="schedule" element={<Schedule />} />
             <Route path="schedule/talk/:talkId" element={<Schedule />} />
             <Route path="speakers" element={<Speakers />} />
             <Route path="speakers/:speakerId" element={<Speakers />} />
+          </>
+        ) : (
+          <>
+            <Route path="schedule/*" element={<ArchiveRedirect />} />
+            <Route path="speakers/*" element={<ArchiveRedirect />} />
           </>
         )}
         <Route path="talk-archive" element={<TalkArchive />} />

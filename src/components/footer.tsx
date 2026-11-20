@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import SocialLinks from "./content/social-links"
 import ExternalLink from "./ui/external-link"
 import CNDShape from "./ui/cnd-shape"
+import { siteConfig } from "../config/site"
 
 const Footer = () => {
   return (
@@ -29,7 +30,7 @@ const Footer = () => {
               className="eyebrow mb-3"
               style={{ color: "var(--color-cnd-coral)" }}
             >
-              CND/2026 · COPENHAGEN
+              CND/2027 · 16–18 NOV
             </div>
             <div
               className="display text-white"
@@ -52,10 +53,10 @@ const Footer = () => {
             </p>
             <p className="mt-2 text-sm text-cnd-fog">
               <ExternalLink
-                href="https://2025.cloudnativedenmark.dk/"
+                href={siteConfig.previousEditionUrl}
                 className="font-semibold text-white underline decoration-cnd-coral decoration-2 underline-offset-4 hover:text-cnd-coral"
               >
-                See last year's event (CND/2025) →
+                Visit the CND/2026 website →
               </ExternalLink>
             </p>
           </div>
@@ -135,7 +136,7 @@ const Footer = () => {
             className="eyebrow text-cnd-fog"
             style={{ letterSpacing: "0.2em" }}
           >
-            EDITION Nº 04 · NOVEMBER 19–20 · SCANDIC COPENHAGEN
+            EDITION Nº 05 · NOVEMBER 16–18, 2027 · VENUE TBA
           </span>
           <span
             className="eyebrow text-cnd-fog"

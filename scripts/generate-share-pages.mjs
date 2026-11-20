@@ -5,14 +5,21 @@ import { generateSchedulePdf } from "./generate-schedule-pdf.mjs"
 
 const distDirectory = "dist"
 const siteUrl = "https://cloudnativedenmark.dk"
-const imageUrl = `${siteUrl}/images/social-card.png`
+const defaultCard = {
+  url: `${siteUrl}/images/social-card.png`,
+  alt: "Cloud Native Denmark 2026",
+}
 
 const pages = [
   {
     pathname: "/",
-    title: "Cloud Native Denmark 2026",
+    title: "Thank you, CND/2026 | Cloud Native Denmark",
     description:
-      "Two days in Copenhagen with the platform engineers, SREs, and architects shipping the Nordics' most demanding cloud native systems to production.",
+      "Thank you for Cloud Native Denmark 2026! CND/2027 is on: Early Blind Bird tickets are a limited drop at 999 DKK.",
+    card: {
+      url: `${siteUrl}/images/social-card-2027.png`,
+      alt: "Cloud Native Denmark 2027",
+    },
   },
   {
     pathname: "/schedule",
@@ -48,11 +55,17 @@ const escapeHtml = (value) =>
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
 
-const createShareTags = ({ pathname, title, description, image }) => {
+const createShareTags = ({
+  pathname,
+  title,
+  description,
+  image,
+  card = defaultCard,
+}) => {
   const url = `${siteUrl}${pathname}`
   const escapedTitle = escapeHtml(title)
   const escapedDescription = escapeHtml(description)
-  const escapedImage = escapeHtml(image || imageUrl)
+  const escapedImage = escapeHtml(image || card.url)
 
   return `
     <meta property="og:type" content="website" data-rh="true" />
@@ -63,7 +76,7 @@ const createShareTags = ({ pathname, title, description, image }) => {
     <meta property="og:image" content="${escapedImage}" data-rh="true" />
     ${image ? "" : '<meta property="og:image:width" content="1200" data-rh="true" />'}
     ${image ? "" : '<meta property="og:image:height" content="630" data-rh="true" />'}
-    <meta property="og:image:alt" content="${image ? escapedTitle : "Cloud Native Denmark 2026"}" data-rh="true" />
+    <meta property="og:image:alt" content="${image ? escapedTitle : escapeHtml(card.alt)}" data-rh="true" />
     <meta name="twitter:card" content="summary_large_image" data-rh="true" />
     <meta name="twitter:title" content="${escapedTitle}" data-rh="true" />
     <meta name="twitter:description" content="${escapedDescription}" data-rh="true" />
