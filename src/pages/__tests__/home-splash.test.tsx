@@ -52,6 +52,7 @@ it("thanks attendees and sells 2027 Early Blind Bird tickets", () => {
   ).toBeVisible()
   expect(screen.getByText("999")).toBeVisible()
   expect(screen.getByText("LIMITED DROP")).toBeVisible()
+  expect(document.body).not.toHaveTextContent(/NOV 2027|16–18|TBA/)
   expectExternal(
     screen.getByRole("link", { name: "Get Early Blind Bird →" }),
     "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-2027/"
@@ -90,6 +91,9 @@ it("links to feedback, photos, the 2026 archive and contact", () => {
     "mailto:contact@cloudnativedenmark.dk"
   )
   expect(contact).not.toHaveAttribute("target")
+  expect(contact).toHaveTextContent(
+    "Sponsor 2027, join the organizers or volunteer."
+  )
   expect(container.querySelector('a[href^="/schedule"]')).toBeNull()
 })
 

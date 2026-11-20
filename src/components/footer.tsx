@@ -30,7 +30,7 @@ const Footer = () => {
               className="eyebrow mb-3"
               style={{ color: "var(--color-cnd-coral)" }}
             >
-              CND/2027 · 16–18 NOV
+              CND/2027
             </div>
             <div
               className="display text-white"
@@ -136,7 +136,7 @@ const Footer = () => {
             className="eyebrow text-cnd-fog"
             style={{ letterSpacing: "0.2em" }}
           >
-            EDITION Nº 05 · NOVEMBER 16–18, 2027 · VENUE TBA
+            EDITION Nº 05 · SEE YOU IN 2027
           </span>
           <span
             className="eyebrow text-cnd-fog"

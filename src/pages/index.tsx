@@ -21,19 +21,19 @@ const actions = [
   },
   {
     label: "📷 Photo gallery",
-    detail: "Find yourself in the CND/2026 photos.",
+    detail: "Find yourself in the photos.",
     href: photosUrl,
     external: true,
   },
   {
     label: "CND/2026 website",
-    detail: "Schedule, speakers and slides, archived.",
+    detail: "Schedule, speakers and slides.",
     href: siteConfig.previousEditionUrl,
     external: true,
   },
   {
     label: "Contact us",
-    detail: contactEmail,
+    detail: "Sponsor 2027, join the organizers or volunteer.",
     href: `mailto:${contactEmail}`,
     external: false,
   },
@@ -53,67 +53,69 @@ const IndexPage: React.FC = () => {
       >
         <div className="cnd-top-rule" />
         <div
-          className="pointer-events-none absolute hidden sm:block"
+          className="pointer-events-none absolute hidden lg:block"
           style={{
-            top: "-22%",
-            right: "-26%",
-            width: "min(70vw, 880px)",
+            top: "-30%",
+            right: "-22%",
+            width: "min(60vw, 820px)",
             filter: "drop-shadow(0 30px 60px rgba(224,19,42,0.18))",
           }}
           aria-hidden="true"
         >
           <CNDShape
-            size={880}
+            size={820}
             fill="var(--color-cnd-red)"
             style={{ width: "100%", height: "auto" }}
           />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-[1280px] px-6 pt-14 pb-20 lg:px-12 lg:pt-20 lg:pb-24">
-          <div
-            className="eyebrow cnd-rise cnd-rise-1 mb-6 text-cnd-red"
-            style={{ letterSpacing: "0.18em" }}
-          >
-            CND/2026 · COPENHAGEN · 19–20 NOV
-          </div>
-          <h1
-            id="thank-you"
-            className="display cnd-rise cnd-rise-2 text-cnd-midnight"
-            style={{
-              fontSize: "clamp(56px, 12vw, 192px)",
-              lineHeight: 0.86,
-              letterSpacing: "-0.06em",
-              margin: 0,
-            }}
-          >
-            THANK
-            <br />
-            <span
-              style={{
-                WebkitTextStroke: "3px var(--color-cnd-midnight)",
-                color: "transparent",
-              }}
-            >
-              YOU.
-            </span>
-          </h1>
-          <p
-            className="cnd-rise cnd-rise-3 mt-8 max-w-xl text-cnd-slate"
-            style={{
-              fontSize: "clamp(17px, 1.4vw, 20px)",
-              lineHeight: 1.55,
-              fontWeight: 500,
-            }}
-          >
-            To every attendee, speaker, sponsor and volunteer: thank you for
-            making Cloud Native Denmark 2026. Let&apos;s do it again.
-          </p>
+        <div className="relative z-10 mx-auto max-w-[1280px] px-6 pt-8 pb-12 lg:px-12 lg:pt-14 lg:pb-16">
+          <div className="grid grid-cols-[minmax(0,1fr)] items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-12">
+            <div>
+              <div
+                className="eyebrow cnd-rise cnd-rise-1 mb-4 text-cnd-red"
+                style={{ letterSpacing: "0.18em" }}
+              >
+                CND/2026 · COPENHAGEN · 19–20 NOV
+              </div>
+              <h1
+                id="thank-you"
+                className="display cnd-rise cnd-rise-2 text-cnd-midnight"
+                style={{
+                  fontSize: "clamp(52px, 9vw, 136px)",
+                  lineHeight: 0.88,
+                  letterSpacing: "-0.06em",
+                  margin: 0,
+                }}
+              >
+                THANK{" "}
+                <span
+                  style={{
+                    WebkitTextStroke: "3px var(--color-cnd-midnight)",
+                    color: "transparent",
+                  }}
+                >
+                  YOU.
+                </span>
+              </h1>
+              <p
+                className="cnd-rise cnd-rise-3 mt-5 max-w-xl text-cnd-slate"
+                style={{
+                  fontSize: "clamp(16px, 1.3vw, 19px)",
+                  lineHeight: 1.5,
+                  fontWeight: 500,
+                }}
+              >
+                To every attendee, speaker, sponsor and volunteer: thank you for
+                making Cloud Native Denmark 2026. Let&apos;s do it again in
+                2027.
+              </p>
+            </div>
 
-          <div className="cnd-rise cnd-rise-4 mt-12 grid max-w-5xl grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
-            <div className="relative flex flex-col rounded-2xl bg-cnd-midnight p-8 text-white shadow-[0_18px_40px_rgba(11,30,63,0.28)]">
+            <div className="cnd-rise cnd-rise-3 relative flex flex-col rounded-2xl bg-cnd-midnight p-6 text-white shadow-[0_18px_40px_rgba(11,30,63,0.28)] lg:p-8">
               {features.ticketSales && (
                 <span
-                  className="eyebrow absolute -top-3 left-8 flex items-center gap-2.5 rounded-full bg-cnd-red px-3.5 py-1.5 text-white shadow-[0_6px_16px_rgba(224,19,42,0.35)]"
+                  className="eyebrow absolute -top-3 left-6 flex items-center gap-2.5 rounded-full bg-cnd-red px-3.5 py-1.5 text-white shadow-[0_6px_16px_rgba(224,19,42,0.35)] lg:left-8"
                   style={{ fontSize: 10, letterSpacing: "0.2em" }}
                 >
                   <span
@@ -130,67 +132,66 @@ const IndexPage: React.FC = () => {
                 className="eyebrow mt-2"
                 style={{ color: "var(--color-cnd-coral)" }}
               >
-                ANNOUNCING CND/2027 · 16–18 NOV 2027
+                ANNOUNCING CND/2027
               </div>
               <h2
-                className="display mt-3"
-                style={{ fontSize: 28, letterSpacing: "-0.02em" }}
+                className="display mt-2"
+                style={{ fontSize: 26, letterSpacing: "-0.02em" }}
               >
                 Early Blind Bird tickets
               </h2>
-              <div className="mt-4 flex items-baseline gap-2">
+              <div className="mt-2 flex items-baseline gap-2">
                 <span
                   className="display"
-                  style={{ fontSize: 64, letterSpacing: "-0.03em" }}
+                  style={{ fontSize: 56, letterSpacing: "-0.03em" }}
                 >
                   999
                 </span>
                 <span className="eyebrow text-cnd-fog">DKK</span>
               </div>
-              <p className="mt-2 text-sm text-cnd-fog">
-                Venue and speakers to be announced. Includes 25% VAT;
-                Ticketbutler fee added at checkout.
+              <p className="mt-1 text-sm text-cnd-fog">
+                Includes 25% VAT; Ticketbutler fee added at checkout.
               </p>
               {features.ticketSales ? (
                 <a
                   href={earlyBlindBirdUrl}
                   {...externalProps}
-                  className={`btn-pill mt-8 self-start ${buttonVariants.primary}`}
+                  className={`btn-pill mt-6 self-start ${buttonVariants.primary}`}
                 >
                   Get Early Blind Bird →
                 </a>
               ) : (
-                <p className="eyebrow mt-8 text-cnd-fog">SOLD OUT</p>
+                <p className="eyebrow mt-6 text-cnd-fog">SOLD OUT</p>
               )}
             </div>
-
-            <ul className="grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)]">
-              {actions.map((action) => (
-                <li key={action.label} className="min-w-0">
-                  <a
-                    href={action.href}
-                    {...(action.external ? externalProps : {})}
-                    className="group flex h-full items-center justify-between gap-4 rounded-2xl border-[1.5px] border-cnd-midnight/15 bg-white px-5 py-4 transition-colors hover:border-cnd-red"
-                  >
-                    <span className="min-w-0">
-                      <span className="block font-semibold text-cnd-midnight">
-                        {action.label}
-                      </span>
-                      <span className="block break-words text-sm text-cnd-slate">
-                        {action.detail}
-                      </span>
-                    </span>
-                    <span
-                      aria-hidden="true"
-                      className="text-cnd-red transition-transform group-hover:translate-x-1"
-                    >
-                      →
-                    </span>
-                  </a>
-                </li>
-              ))}
-            </ul>
           </div>
+
+          <ul className="cnd-rise cnd-rise-4 mt-8 grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2 lg:mt-10 lg:grid-cols-4">
+            {actions.map((action) => (
+              <li key={action.label} className="min-w-0">
+                <a
+                  href={action.href}
+                  {...(action.external ? externalProps : {})}
+                  className="group flex h-full items-center justify-between gap-4 rounded-2xl border-[1.5px] border-cnd-midnight/15 bg-white px-5 py-4 transition-colors hover:border-cnd-red"
+                >
+                  <span className="min-w-0">
+                    <span className="block font-semibold text-cnd-midnight">
+                      {action.label}
+                    </span>
+                    <span className="block break-words text-sm text-cnd-slate">
+                      {action.detail}
+                    </span>
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="text-cnd-red transition-transform group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
     </>
