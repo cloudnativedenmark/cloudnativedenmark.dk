@@ -87,3 +87,16 @@ it("links to the code of conduct from the footer", () => {
     "/code-of-conduct"
   )
 })
+
+it("spells out the contact address for sponsors and organizers in the footer", () => {
+  const { container } = render(
+    <MemoryRouter>
+      <Footer />
+    </MemoryRouter>
+  )
+
+  expect(container).toHaveTextContent(
+    "Help make CND/2027 happen as a sponsor, organizer or volunteer: contact@cloudnativedenmark.dk"
+  )
+  expect(container.querySelector('a[href^="mailto:"]')).toBeNull()
+})

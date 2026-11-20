@@ -13,7 +13,7 @@ interface HeaderProps {
 }
 
 const ticketUrl =
-  "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-26/"
+  "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-2027/"
 
 const Header = ({ menuLinks }: HeaderProps) => {
   const [isMenuOpen, setMenuOpen] = useState(false)

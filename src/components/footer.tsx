@@ -1,148 +1,57 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import SocialLinks from "./content/social-links"
-import ExternalLink from "./ui/external-link"
-import CNDShape from "./ui/cnd-shape"
 
 const Footer = () => {
   return (
-    <footer className="safe-paddings relative mt-auto overflow-hidden bg-cnd-ink text-white hex-bg">
-      {/* Top red rule echoing the hero */}
+    <footer className="safe-paddings relative mt-auto bg-cnd-ink text-white">
       <div
         aria-hidden="true"
         className="absolute top-0 left-0 right-0 h-1.5 bg-cnd-red"
       />
-
-      {/* Decorative shape */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute hidden md:block"
-        style={{ bottom: 30, right: 40, opacity: 0.14 }}
-      >
-        <CNDShape size={140} fill="var(--color-cnd-electric)" />
-      </div>
-
-      <div className="relative mx-auto max-w-6xl px-6 py-16">
-        <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
-          <div>
-            <div
-              className="eyebrow mb-3"
-              style={{ color: "var(--color-cnd-coral)" }}
+      <div className="mx-auto flex max-w-[1280px] flex-col gap-4 px-6 pt-7 pb-6 md:flex-row md:items-center md:justify-between lg:px-12">
+        <p className="text-sm text-cnd-fog">
+          Help make CND/2027 happen as a sponsor, organizer or volunteer:{" "}
+          <span className="font-semibold text-white select-all">
+            contact@cloudnativedenmark.dk
+          </span>
+        </p>
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+          <nav aria-label="Legal" className="flex gap-5">
+            <Link
+              to="/code-of-conduct"
+              className="text-sm font-semibold text-white hover:text-cnd-coral"
             >
-              CND/2026 · COPENHAGEN
-            </div>
-            <div
-              className="display text-white"
-              style={{
-                fontSize: 32,
-                letterSpacing: "-0.025em",
-                lineHeight: 0.95,
-              }}
+              Code of Conduct
+            </Link>
+            <Link
+              to="/privacy"
+              className="text-sm font-semibold text-white hover:text-cnd-coral"
             >
-              CLOUD NATIVE
-              <br />
-              DENMARK.
-            </div>
-            <p className="mt-4 max-w-sm text-sm text-cnd-fog">
-              A community-driven cloud native conference, organized by
-              practitioners for practitioners.
-            </p>
-            <p className="mt-4 max-w-sm text-sm text-cnd-fog">
-              Thank you to our sponsors for making CND/2026 possible.
-            </p>
-            <p className="mt-2 text-sm text-cnd-fog">
-              <ExternalLink
-                href="https://2025.cloudnativedenmark.dk/"
-                className="font-semibold text-white underline decoration-cnd-coral decoration-2 underline-offset-4 hover:text-cnd-coral"
-              >
-                See last year's event (CND/2025) →
-              </ExternalLink>
-            </p>
-          </div>
-
-          <nav>
-            <div
-              className="eyebrow mb-4 text-cnd-sky"
-              style={{ letterSpacing: "0.2em" }}
-            >
-              LEGAL
-            </div>
-            <ul className="grid grid-cols-1 gap-3">
-              <li>
-                <Link
-                  to="/code-of-conduct"
-                  className="text-sm font-semibold text-white hover:text-cnd-coral"
-                >
-                  Code of Conduct
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/privacy"
-                  className="text-sm font-semibold text-white hover:text-cnd-coral"
-                >
-                  Privacy Policy
-                </Link>
-              </li>
-            </ul>
+              Privacy Policy
+            </Link>
           </nav>
-
-          <div>
-            <div
-              className="eyebrow mb-4 text-cnd-sky"
-              style={{ letterSpacing: "0.2em" }}
-            >
-              CONTACT
-            </div>
-            <ExternalLink
-              href="mailto:contact@cloudnativedenmark.dk"
-              openInNewTab={false}
-              className="text-sm font-semibold text-white underline decoration-cnd-coral decoration-2 underline-offset-4 hover:text-cnd-coral"
-            >
-              contact@cloudnativedenmark.dk
-            </ExternalLink>
-            <div className="mt-6">
-              <SocialLinks
-                links={[
-                  {
-                    type: "linkedin",
-                    url: "https://www.linkedin.com/company/cloud-native-denmark",
-                    label: "LinkedIn",
-                  },
-                  {
-                    type: "youtube",
-                    url: "https://www.youtube.com/@CloudNativeNordics/videos",
-                    label: "YouTube",
-                  },
-                  {
-                    type: "flickr",
-                    url: "https://www.flickr.com/photos/199545304@N04/",
-                    label: "Flickr",
-                  },
-                ]}
-                size="medium"
-                spacing="normal"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div
-          className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-6 md:flex-row md:items-center md:justify-between"
-          style={{ fontFamily: "var(--font-mono)" }}
-        >
-          <span
-            className="eyebrow text-cnd-fog"
-            style={{ letterSpacing: "0.2em" }}
-          >
-            EDITION Nº 04 · NOVEMBER 19–20 · SCANDIC COPENHAGEN
-          </span>
-          <span
-            className="eyebrow text-cnd-fog"
-            style={{ letterSpacing: "0.2em" }}
-          >
-            cloudnativedenmark.dk
-          </span>
+          <SocialLinks
+            links={[
+              {
+                type: "linkedin",
+                url: "https://www.linkedin.com/company/cloud-native-denmark",
+                label: "LinkedIn",
+              },
+              {
+                type: "youtube",
+                url: "https://www.youtube.com/@CloudNativeNordics/videos",
+                label: "YouTube",
+              },
+              {
+                type: "flickr",
+                url: "https://www.flickr.com/photos/199545304@N04/",
+                label: "Flickr",
+              },
+            ]}
+            size="small"
+            spacing="normal"
+          />
         </div>
       </div>
     </footer>

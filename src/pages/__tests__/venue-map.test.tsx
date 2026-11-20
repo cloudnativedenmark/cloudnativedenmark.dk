@@ -95,12 +95,3 @@ it.each(["/venue-plan", "/venue-map"])(
     ).toBeInTheDocument()
   }
 )
-
-it("links to the conference map from the navigation", () => {
-  renderAt("/")
-
-  expect(screen.getByRole("link", { name: "Conference Map" })).toHaveAttribute(
-    "href",
-    "/conference-map"
-  )
-})

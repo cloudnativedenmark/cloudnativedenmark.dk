@@ -2,6 +2,7 @@ export interface SiteConfig {
   title: string
   description: string
   siteUrl: string
+  previousEditionUrl: string
   venueAnnouncementMode: boolean
   menuLinks: Array<{
     name: string
@@ -20,6 +21,7 @@ export const siteConfig: SiteConfig = {
   description:
     "Cloud Native Denmark shares knowledge about Cloud Native Technologies and creates community networks in Denmark within this area.",
   siteUrl: "https://cloudnativedenmark.dk",
+  previousEditionUrl: "https://2026.cloudnativedenmark.dk",
   venueAnnouncementMode: false,
   menuLinks: [
     {

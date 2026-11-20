@@ -27,7 +27,10 @@ it("shows the ticket action in desktop and mobile navigation", () => {
     </MemoryRouter>
   )
 
-  expect(screen.getAllByRole("link", { name: "Buy tickets →" })).toHaveLength(1)
+  expect(screen.getByRole("link", { name: "Buy tickets →" })).toHaveAttribute(
+    "href",
+    "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-2027/"
+  )
 
   fireEvent.click(screen.getByRole("button", { name: "Toggle navigation" }))
 
