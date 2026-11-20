@@ -15,10 +15,10 @@ const recordsPath = `/zones/${zone}/dns_records`
 const listRecords = `GET ${recordsPath}?name=${domain}`
 
 const ok = (result) => ({ json: { success: true, result } })
-const notFound = {
-  status: 404,
-  json: { success: false, errors: [{ code: 8000007, message: "not found" }] },
-}
+const failure = (status, code, message) => ({
+  status,
+  json: { success: false, errors: [{ code, message }] },
+})
 
 const fakeCloudflare = (routes) => {
   const calls = []
@@ -27,14 +27,30 @@ const fakeCloudflare = (routes) => {
     calls.push({ key, body: body && JSON.parse(body) })
     const route = routes[key]
     const { status = 200, json } =
-      (typeof route === "function" ? route() : route) ?? notFound
+      (typeof route === "function" ? route() : route) ??
+      failure(404, 7003, "no route")
     return { ok: status < 300, status, json: async () => json }
   }
   return { calls, fetchImpl }
 }
 
-const withProject = (routes, subdomain = target) => ({
+const pagesCname = (overrides = {}) => ({
+  id: "r1",
+  type: "CNAME",
+  content: target,
+  proxied: true,
+  ...overrides,
+})
+
+// An attached, active domain with a correct CNAME; tests override pieces.
+const settled = (routes = {}, subdomain = target) => ({
   [`GET ${projectPath}`]: ok({ subdomain }),
+  [`GET ${domainsPath}`]: ok([
+    { name: "other.example", status: "active" },
+    { name: domain, status: "active" },
+  ]),
+  [`GET ${domainPath}`]: ok({ name: domain, status: "active" }),
+  [listRecords]: ok([pagesCname()]),
   ...routes,
 })
 
@@ -53,15 +69,7 @@ const writes = (calls) =>
   calls.filter(({ key }) => !key.startsWith("GET ")).map(({ key }) => key)
 const bodyOf = (calls, key) => calls.find((call) => call.key === key).body
 
-const pagesCname = (overrides = {}) => ({
-  id: "r1",
-  type: "CNAME",
-  content: target,
-  proxied: true,
-  ...overrides,
-})
-
-test("derives branch, Pages project and domain from the release name", () => {
+test("derives branch, Pages project and domain from the year", () => {
   assert.deepEqual(releaseTargets("2026"), {
     name: "2026",
     branch: "release-2026",
@@ -70,11 +78,10 @@ test("derives branch, Pages project and domain from the release name", () => {
   })
 })
 
-test("rejects names that can't be a Pages project or DNS label", () => {
-  for (const name of ["", "2026_x", "Prod", "-2026", "2026-", "release-2026"]) {
+test("only accepts four-digit years", () => {
+  for (const name of ["", "www", "api", "2026x", "20261", "release-2026"]) {
     assert.throws(() => releaseTargets(name), /Invalid release name/, name)
   }
-  assert.throws(() => releaseTargets("a".repeat(39)), /Invalid release name/)
 })
 
 test("prints workflow outputs and fails on invalid names", () => {
@@ -95,14 +102,12 @@ test("prints workflow outputs and fails on invalid names", () => {
 test("creates a proxied CNAME to the project's Pages address, then attaches the domain", async () => {
   let reads = 0
   const { calls, fetchImpl } = fakeCloudflare(
-    withProject(
+    settled(
       {
-        [`GET ${domainPath}`]: () => {
-          reads++
-          if (reads === 1) return notFound
-          return ok({ status: reads > 2 ? "active" : "pending" })
-        },
-        [`POST ${domainsPath}`]: ok({ status: "initializing" }),
+        [`GET ${domainsPath}`]: ok([]),
+        [`POST ${domainsPath}`]: ok({ name: domain, status: "initializing" }),
+        [`GET ${domainPath}`]: () =>
+          ok({ status: ++reads > 1 ? "active" : "pending" }),
         [listRecords]: ok([]),
         [`POST ${recordsPath}`]: ok({ id: "r1" }),
       },
@@ -112,7 +117,7 @@ test("creates a proxied CNAME to the project's Pages address, then attaches the 
 
   await attach(fetchImpl)
 
-  assert.equal(reads, 3)
+  assert.equal(reads, 2)
   assert.deepEqual(writes(calls), [
     `POST ${recordsPath}`,
     `POST ${domainsPath}`,
@@ -129,12 +134,7 @@ test("creates a proxied CNAME to the project's Pages address, then attaches the 
 })
 
 test("changes nothing when the domain and CNAME are already in place", async () => {
-  const { calls, fetchImpl } = fakeCloudflare(
-    withProject({
-      [`GET ${domainPath}`]: ok({ status: "active" }),
-      [listRecords]: ok([pagesCname()]),
-    })
-  )
+  const { calls, fetchImpl } = fakeCloudflare(settled())
 
   await attach(fetchImpl)
 
@@ -143,8 +143,7 @@ test("changes nothing when the domain and CNAME are already in place", async () 
 
 test("repoints a CNAME that targets another Pages project", async () => {
   const { calls, fetchImpl } = fakeCloudflare(
-    withProject({
-      [`GET ${domainPath}`]: ok({ status: "active" }),
+    settled({
       [listRecords]: ok([pagesCname({ content: "old.pages.dev" })]),
       [`PATCH ${recordsPath}/r1`]: ok({ id: "r1" }),
     })
@@ -161,8 +160,7 @@ test("repoints a CNAME that targets another Pages project", async () => {
 
 test("turns on the proxy for a DNS-only CNAME", async () => {
   const { calls, fetchImpl } = fakeCloudflare(
-    withProject({
-      [`GET ${domainPath}`]: ok({ status: "active" }),
+    settled({
       [listRecords]: ok([pagesCname({ proxied: false })]),
       [`PATCH ${recordsPath}/r1`]: ok({ id: "r1" }),
     })
@@ -175,7 +173,7 @@ test("turns on the proxy for a DNS-only CNAME", async () => {
 
 test("refuses to repoint a CNAME that isn't a Pages project", async () => {
   const { calls, fetchImpl } = fakeCloudflare(
-    withProject({
+    settled({
       [listRecords]: ok([
         pagesCname({ content: "cloudnativedenmark.github.io", proxied: false }),
       ]),
@@ -188,7 +186,7 @@ test("refuses to repoint a CNAME that isn't a Pages project", async () => {
 
 test("refuses to touch a name that has other record types", async () => {
   const { calls, fetchImpl } = fakeCloudflare(
-    withProject({
+    settled({
       [listRecords]: ok([{ id: "r1", type: "A", content: "192.0.2.1" }]),
     })
   )
@@ -199,11 +197,7 @@ test("refuses to touch a name that has other record types", async () => {
 
 test("looks up the zone by name when no zone id is given", async () => {
   const { calls, fetchImpl } = fakeCloudflare(
-    withProject({
-      [`GET ${domainPath}`]: ok({ status: "active" }),
-      "GET /zones?name=cloudnativedenmark.dk": ok([{ id: zone }]),
-      [listRecords]: ok([pagesCname()]),
-    })
+    settled({ "GET /zones?name=cloudnativedenmark.dk": ok([{ id: zone }]) })
   )
 
   await attach(fetchImpl, { zoneId: "" })
@@ -213,31 +207,35 @@ test("looks up the zone by name when no zone id is given", async () => {
   )
 })
 
-test("retries validation of a domain in an error state", async () => {
-  let reads = 0
-  const { calls, fetchImpl } = fakeCloudflare(
-    withProject({
-      [`GET ${domainPath}`]: () =>
-        ok({ status: reads++ === 0 ? "error" : "active" }),
-      [`PATCH ${domainPath}`]: ok({ status: "pending" }),
-      [listRecords]: ok([pagesCname()]),
+for (const status of ["error", "deactivated"]) {
+  test(`retries validation of a domain that is ${status}`, async () => {
+    const { calls, fetchImpl } = fakeCloudflare(
+      settled({
+        [`GET ${domainsPath}`]: ok([{ name: domain, status }]),
+        [`PATCH ${domainPath}`]: ok({ status: "pending" }),
+      })
+    )
+
+    await attach(fetchImpl)
+
+    assert.deepEqual(writes(calls), [`PATCH ${domainPath}`])
+  })
+}
+
+test("fails when Cloudflare refuses to retry validation", async () => {
+  const { fetchImpl } = fakeCloudflare(
+    settled({
+      [`GET ${domainsPath}`]: ok([{ name: domain, status: "error" }]),
+      [`PATCH ${domainPath}`]: failure(400, 8000000, "cannot retry"),
     })
   )
 
-  await attach(fetchImpl)
-
-  assert.deepEqual(writes(calls), [`PATCH ${domainPath}`])
+  await assert.rejects(attach(fetchImpl), /8000000: cannot retry/)
 })
 
-test("fails without attaching when the domain lookup errors", async () => {
+test("fails without attaching when listing domains errors", async () => {
   const { calls, fetchImpl } = fakeCloudflare(
-    withProject({
-      [`GET ${domainPath}`]: {
-        status: 403,
-        json: { success: false, errors: [{ code: 10000, message: "denied" }] },
-      },
-      [listRecords]: ok([pagesCname()]),
-    })
+    settled({ [`GET ${domainsPath}`]: failure(403, 10000, "denied") })
   )
 
   await assert.rejects(attach(fetchImpl), /HTTP 403\) 10000: denied/)
@@ -246,7 +244,7 @@ test("fails without attaching when the domain lookup errors", async () => {
 
 test("treats HTTP 200 with success: false as a failure", async () => {
   const { fetchImpl } = fakeCloudflare(
-    withProject({
+    settled({
       [listRecords]: {
         json: {
           success: false,
@@ -261,17 +259,13 @@ test("treats HTTP 200 with success: false as a failure", async () => {
 
 test("fails when Cloudflare rejects the domain", async () => {
   const { fetchImpl } = fakeCloudflare(
-    withProject({
-      [listRecords]: ok([pagesCname()]),
-      [`POST ${domainsPath}`]: {
-        status: 409,
-        json: {
-          success: false,
-          errors: [
-            { code: 8000018, message: "already added to another project" },
-          ],
-        },
-      },
+    settled({
+      [`GET ${domainsPath}`]: ok([]),
+      [`POST ${domainsPath}`]: failure(
+        409,
+        8000018,
+        "already added to another project"
+      ),
     })
   )
 
@@ -281,15 +275,29 @@ test("fails when Cloudflare rejects the domain", async () => {
   )
 })
 
+test("keeps polling through rate limits and server errors", async () => {
+  const replies = [
+    failure(429, 10429, "rate limited"),
+    failure(503, 10503, "unavailable"),
+    ok({ status: "active" }),
+  ]
+  const { fetchImpl } = fakeCloudflare(
+    settled({ [`GET ${domainPath}`]: () => replies.shift() })
+  )
+
+  await attach(fetchImpl)
+
+  assert.equal(replies.length, 0)
+})
+
 test("gives up when the domain never becomes active", async () => {
   let reads = 0
   const { fetchImpl } = fakeCloudflare(
-    withProject({
+    settled({
       [`GET ${domainPath}`]: () => {
         reads++
         return ok({ status: "pending" })
       },
-      [listRecords]: ok([pagesCname()]),
     })
   )
 
@@ -297,21 +305,20 @@ test("gives up when the domain never becomes active", async () => {
     attach(fetchImpl, { attempts: 3 }),
     /is "pending", not active/
   )
-  assert.equal(reads, 4)
+  assert.equal(reads, 3)
 })
 
 test("stops waiting when the domain is blocked", async () => {
   let reads = 0
   const { fetchImpl } = fakeCloudflare(
-    withProject({
+    settled({
       [`GET ${domainPath}`]: () => {
         reads++
         return ok({ status: "blocked" })
       },
-      [listRecords]: ok([pagesCname()]),
     })
   )
 
   await assert.rejects(attach(fetchImpl), /is "blocked", not active/)
-  assert.equal(reads, 2)
+  assert.equal(reads, 1)
 })

@@ -5,13 +5,14 @@
 ## Archiving an edition
 
 1. Go to Actions → **Deploy Release to CloudFlare** → **Run workflow**.
-2. Keep **main** selected and enter the year, e.g. `2026`.
+2. Keep **main** selected and enter the four-digit year, e.g. `2026`.
 3. The workflow:
+   - stops if `release-2026` already exists at another commit,
    - tests and builds `main`,
-   - creates the `release-2026` branch at that commit (it fails if the branch already exists at another commit),
    - deploys the build to the `cloudnative-denmark-2026` Pages project (created if needed),
    - creates or updates the proxied `CNAME 2026 → <project>.pages.dev` record, refusing to change records that point anywhere other than Pages,
-   - attaches `2026.cloudnativedenmark.dk` to the project and waits until it's active and the site answers.
+   - attaches `2026.cloudnativedenmark.dk` to the project and waits until it's active and the site answers,
+   - creates the `release-2026` branch at the deployed commit, only after everything above succeeded. A failed run leaves no branch, so fix `main` and run it again.
 
 Each deploy is recorded in a GitHub environment named after the branch (`release-2026`). The repository's Environments page shows every edition's latest deploy status and URL.
 
@@ -19,13 +20,20 @@ Archive the edition before `main` moves on to the next one.
 
 ## Hotfixes
 
-Push to `release-<year>`. The same workflow redeploys it into the same environment and re-checks the DNS record and domain.
+Push to `release-<year>` (admins and maintainers only, see the ruleset below). The same workflow redeploys it into the same environment and re-checks the DNS record and domain. Re-running an older run after a newer push fails instead of rolling the site back.
 
-Pushes run the workflow file on that branch. To bring an older branch (e.g. `release-2025`) onto this workflow, cherry-pick the commit that adds `.github/workflows/release.yml` changes and `scripts/release-domain.mjs`. Don't merge `main` into it, because that would replace the archived site.
+Pushes run the workflow file on that branch. To bring an older branch onto this workflow, copy just these files from `main`. Don't merge `main` into it, because that would replace the archived site.
+
+```bash
+git switch release-2025
+git checkout origin/main -- .github/workflows/release.yml scripts/release-domain.mjs
+git commit -m "ci: Use the release workflow from main"
+git push
+```
 
 ## Branch ruleset
 
-The `release` ruleset protects `refs/heads/release-*` (no deletion, no force pushes, linear history, and creation and updates restricted to bypass actors). The workflow's `GITHUB_TOKEN` creates the branch, so GitHub Actions must be on that ruleset's bypass list.
+The `release` ruleset protects `refs/heads/release-*`: no deletion, no force pushes, linear history, and only admins and maintainers can push updates. Branch creation is deliberately not restricted, because the workflow creates the branch with `GITHUB_TOKEN` and GitHub Actions can't be added to a ruleset's bypass list.
 
 ## Repository secrets
 
@@ -56,4 +64,4 @@ Cloudflare Dashboard → `cloudnativedenmark.dk` → Overview → API → Zone I
 
 - **HTTP 522 on `<year>.cloudnativedenmark.dk`**: the DNS record exists but the domain isn't attached to the Pages project. Push to the release branch to rerun the attach step.
 - **"already has A records" or "not a Pages project"**: another record owns that name. Remove or rename it in Cloudflare DNS and rerun.
-- **"Could not create release-<year>"**: the branch already exists at another commit, or the ruleset rejected the push. Check the bypass list above.
+- **"Could not create release-<year>"**: the branch already exists at another commit. Push to it to redeploy instead.

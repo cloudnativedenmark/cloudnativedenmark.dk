@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       release:
-        description: "Year of the edition to archive, e.g. 2026. Freezes main as release-<year> and serves it at <year>.cloudnativedenmark.dk."
+        description: "Year of the edition to archive, e.g. 2026. Deploys main as release-<year> at <year>.cloudnativedenmark.dk."
         required: true
         type: string
 
@@ -116,28 +116,33 @@ jobs:
       url: https://${{ needs.prepare.outputs.domain }}/
 
     steps:
-      - name: Create release branch
-        if: github.event_name == 'workflow_dispatch'
+      - name: Check release branch
         env:
           GH_TOKEN: ${{ github.token }}
           BRANCH: ${{ needs.prepare.outputs.branch }}
         run: |
-          if gh api "repos/$GITHUB_REPOSITORY/git/refs" \
-            -f "ref=refs/heads/$BRANCH" -f "sha=$GITHUB_SHA" >/dev/null; then
-            echo "Created $BRANCH from main at $GITHUB_SHA"
-            exit 0
+          head=""
+          if ref=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/$BRANCH" --jq .object.sha 2>/dev/null); then
+            head="$ref"
           fi
-          existing=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/$BRANCH" --jq .object.sha || true)
-          if [[ "$existing" != "$GITHUB_SHA" ]]; then
-            echo "::error::Could not create $BRANCH at $GITHUB_SHA (it is at '${existing:-missing}'). Push to an existing release branch to redeploy it."
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            if [[ -n "$head" && "$head" != "$GITHUB_SHA" ]]; then
+              echo "::error::$BRANCH already exists at $head. Push to it to redeploy."
+              exit 1
+            fi
+          elif [[ "$head" != "$GITHUB_SHA" ]]; then
+            echo "::error::$BRANCH has moved on to ${head:-nothing}; not redeploying $GITHUB_SHA."
             exit 1
           fi
-          echo "$BRANCH already at $GITHUB_SHA; continuing"
 
-      - name: Checkout
+      # Only the domain script: without package.json and yarn.lock,
+      # wrangler-action installs wrangler with npm instead of Yarn.
+      - name: Checkout release script
         uses: actions/checkout@v5
         with:
           persist-credentials: false
+          sparse-checkout: scripts/release-domain.mjs
+          sparse-checkout-cone-mode: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -156,6 +161,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: npm
           command: pages project create ${{ needs.prepare.outputs.project }} --production-branch=${{ needs.prepare.outputs.branch }}
 
       - name: Deploy to CloudFlare Pages
@@ -163,6 +169,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: npm
           command: pages deploy dist --project-name=${{ needs.prepare.outputs.project }} --branch=${{ needs.prepare.outputs.branch }}
 
       - name: Attach custom domain and DNS record
@@ -177,6 +184,22 @@ jobs:
         env:
           DOMAIN: ${{ needs.prepare.outputs.domain }}
         run: |
-          curl --fail --silent --show-error --output /dev/null \
+          curl --fail --silent --show-error --output /dev/null --max-time 30 \
             --retry 20 --retry-delay 15 --retry-all-errors "https://$DOMAIN/"
           echo "Live at https://$DOMAIN/"
+
+      - name: Create release branch
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ needs.prepare.outputs.branch }}
+        run: |
+          if gh api "repos/$GITHUB_REPOSITORY/git/refs" \
+            -f "ref=refs/heads/$BRANCH" -f "sha=$GITHUB_SHA" >/dev/null; then
+            echo "Created $BRANCH from main at $GITHUB_SHA"
+          elif [[ "$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/$BRANCH" --jq .object.sha 2>/dev/null)" == "$GITHUB_SHA" ]]; then
+            echo "$BRANCH already at $GITHUB_SHA"
+          else
+            echo "::error::Could not create $BRANCH at $GITHUB_SHA."
+            exit 1
+          fi

@@ -3,11 +3,8 @@ import { pathToFileURL } from "node:url"
 const api = "https://api.cloudflare.com/client/v4"
 export const zoneName = "cloudnativedenmark.dk"
 
-// Pages project names are capped at 58 characters; "cloudnative-denmark-" uses 20.
-const releaseName = /^[a-z0-9](?:[a-z0-9-]{0,36}[a-z0-9])?$/
-
 export const releaseTargets = (name) => {
-  if (!releaseName.test(name) || name.startsWith("release-")) {
+  if (!/^\d{4}$/.test(name)) {
     throw new Error(
       `Invalid release name "${name}". Use the conference year, e.g. 2026.`
     )
@@ -117,18 +114,18 @@ export const ensurePagesDomain = async (
   { project, domain }
 ) => {
   const path = `/accounts/${accountId}/pages/projects/${project}/domains`
-  const existing = await call("GET", `${path}/${domain}`)
-  if (existing.status === 404) {
+  const existing = must(
+    await call("GET", path),
+    `list domains of Pages project ${project}`
+  ).find(({ name }) => name === domain)
+  if (!existing) {
     must(
       await call("POST", path, { name: domain }),
       `attach ${domain} to Pages project ${project}`
     )
     return "created"
   }
-  const { status } = must(
-    existing,
-    `read ${domain} on Pages project ${project}`
-  )
+  const { status } = existing
   if (retryableStatuses.includes(status)) {
     must(
       await call("PATCH", `${path}/${domain}`),
@@ -151,7 +148,9 @@ export const waitForActiveDomain = async (
   const path = `/accounts/${accountId}/pages/projects/${project}/domains/${domain}`
   let status
   for (let attempt = 1; attempt <= attempts; attempt++) {
-    status = must(await call("GET", path), `read ${domain} status`).status
+    const response = await call("GET", path)
+    const transient = response.status === 429 || response.status >= 500
+    if (!transient) status = must(response, `read ${domain} status`).status
     if (status === "active") return status
     if (status === "blocked") break
     if (attempt < attempts) await sleep(15_000)
