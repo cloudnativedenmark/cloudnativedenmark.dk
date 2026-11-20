@@ -5,59 +5,71 @@ on:
     branches:
       - "release-*"
   workflow_dispatch:
+    inputs:
+      release:
+        description: "Year of the edition to archive, e.g. 2026. Deploys main as release-<year> at <year>.cloudnativedenmark.dk."
+        required: true
+        type: string
 
 concurrency:
-  group: "${{ github.ref_name }}"
+  group: ${{ github.event_name == 'workflow_dispatch' && format('release-{0}', inputs.release) || github.ref_name }}
   cancel-in-progress: false
 
 defaults:
   run:
     shell: bash
 
+permissions:
+  contents: read
+
 jobs:
-  deploy:
+  prepare:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
+    outputs:
+      name: ${{ steps.release.outputs.name }}
+      branch: ${{ steps.release.outputs.branch }}
+      project: ${{ steps.release.outputs.project }}
+      domain: ${{ steps.release.outputs.domain }}
 
     steps:
-      - name: Validate branch name
+      - name: Require dispatch from main
+        if: github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main'
         run: |
-          if [[ ! "${{ github.ref_name }}" =~ ^release- ]]; then
-            echo "❌ Error: This workflow can only run on branches starting with 'release-'"
-            echo "Current branch: ${{ github.ref_name }}"
-            echo "Expected format: release-*"
-            exit 1
-          fi
-          echo "✅ Branch name is valid: ${{ github.ref_name }}"
+          echo "::error::Run this workflow from main, not $GITHUB_REF."
+          exit 1
 
-      - name: Extract release name from branch
-        id: extract-release
-        run: |
-          BRANCH_NAME="${{ github.ref_name }}"
-          RELEASE_NAME=$(echo "$BRANCH_NAME" | sed 's/^release-//')
-          if [ -z "$RELEASE_NAME" ]; then
-            echo "Error: Invalid branch name format. Expected 'release-<name>', got '$BRANCH_NAME'"
-            exit 1
-          fi
-          # Validate URL-safe characters (alphanumeric, hyphens, underscores)
-          if [[ ! "$RELEASE_NAME" =~ ^[a-zA-Z0-9_-]+$ ]]; then
-            echo "Error: Release name contains invalid characters. Only alphanumeric, hyphens, and underscores are allowed."
-            echo "Release name: '$RELEASE_NAME'"
-            exit 1
-          fi
-          echo "release_name=$RELEASE_NAME" >> $GITHUB_OUTPUT
-          echo "subdomain=${RELEASE_NAME}.cloudnativedenmark.dk" >> $GITHUB_OUTPUT
-          echo "Deploying to: ${RELEASE_NAME}.cloudnativedenmark.dk"
+      - name: Checkout
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: "24"
 
+      - name: Resolve release
+        id: release
+        env:
+          RELEASE_INPUT: ${{ inputs.release }}
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            name="$RELEASE_INPUT"
+          else
+            name="${GITHUB_REF_NAME#release-}"
+          fi
+          node scripts/release-domain.mjs targets "$name" | tee -a "$GITHUB_OUTPUT"
+
+  build:
+    needs: prepare
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Checkout
         uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
 
       - name: Enable Corepack
         run: corepack enable
@@ -81,10 +93,67 @@ jobs:
         run: yarn test
 
       - name: Install Chromium for schedule PDF
+        if: hashFiles('scripts/generate-schedule-pdf.mjs') != ''
         run: yarn playwright install --with-deps --only-shell chromium
 
       - name: Build website
         run: yarn build
+
+      - name: Upload site
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: dist
+          retention-days: 7
+
+  deploy:
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    environment:
+      name: ${{ needs.prepare.outputs.branch }}
+      url: https://${{ needs.prepare.outputs.domain }}/
+
+    steps:
+      - name: Check release branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ needs.prepare.outputs.branch }}
+        run: |
+          head=""
+          if ref=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/$BRANCH" --jq .object.sha 2>/dev/null); then
+            head="$ref"
+          fi
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            if [[ -n "$head" && "$head" != "$GITHUB_SHA" ]]; then
+              echo "::error::$BRANCH already exists at $head. Push to it to redeploy."
+              exit 1
+            fi
+          elif [[ "$head" != "$GITHUB_SHA" ]]; then
+            echo "::error::$BRANCH has moved on to ${head:-nothing}; not redeploying $GITHUB_SHA."
+            exit 1
+          fi
+
+      # Only the domain script: without package.json and yarn.lock,
+      # wrangler-action installs wrangler with npm instead of Yarn.
+      - name: Checkout release script
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts/release-domain.mjs
+          sparse-checkout-cone-mode: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Download site
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: dist
 
       - name: Create Pages project (if needed)
         continue-on-error: true
@@ -92,12 +161,45 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages project create cloudnative-denmark-${{ steps.extract-release.outputs.release_name }} --production-branch=${{ github.ref_name }}
+          packageManager: npm
+          command: pages project create ${{ needs.prepare.outputs.project }} --production-branch=${{ needs.prepare.outputs.branch }}
 
       - name: Deploy to CloudFlare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          command: pages deploy dist --project-name=cloudnative-denmark-${{ steps.extract-release.outputs.release_name }}
+          packageManager: npm
+          command: pages deploy dist --project-name=${{ needs.prepare.outputs.project }} --branch=${{ needs.prepare.outputs.branch }}
+
+      - name: Attach custom domain and DNS record
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          RELEASE_NAME: ${{ needs.prepare.outputs.name }}
+        run: node scripts/release-domain.mjs attach "$RELEASE_NAME"
+
+      - name: Check the release site responds
+        env:
+          DOMAIN: ${{ needs.prepare.outputs.domain }}
+        run: |
+          curl --fail --silent --show-error --output /dev/null --max-time 30 \
+            --retry 20 --retry-delay 15 --retry-all-errors "https://$DOMAIN/"
+          echo "Live at https://$DOMAIN/"
+
+      - name: Create release branch
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ needs.prepare.outputs.branch }}
+        run: |
+          if gh api "repos/$GITHUB_REPOSITORY/git/refs" \
+            -f "ref=refs/heads/$BRANCH" -f "sha=$GITHUB_SHA" >/dev/null; then
+            echo "Created $BRANCH from main at $GITHUB_SHA"
+          elif [[ "$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/$BRANCH" --jq .object.sha 2>/dev/null)" == "$GITHUB_SHA" ]]; then
+            echo "$BRANCH already at $GITHUB_SHA"
+          else
+            echo "::error::Could not create $BRANCH at $GITHUB_SHA."
+            exit 1
+          fi
