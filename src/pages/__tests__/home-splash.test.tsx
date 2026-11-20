@@ -70,7 +70,7 @@ it("marks Early Blind Bird sold out when ticket sales are off", () => {
   ).toBeNull()
 })
 
-it("links to feedback, photos, the 2026 archive and contact", () => {
+it("links to the 2026 archive, feedback and photos only", () => {
   const { container } = view()
 
   expectExternal(
@@ -85,13 +85,8 @@ it("links to feedback, photos, the 2026 archive and contact", () => {
     screen.getByRole("link", { name: /CND\/2026 website/ }),
     "https://2026.cloudnativedenmark.dk"
   )
-  const contact = screen.getByRole("link", { name: /Contact us/ })
-  expect(contact).toHaveAttribute(
-    "href",
-    "mailto:contact@cloudnativedenmark.dk"
-  )
-  expect(contact).not.toHaveAttribute("target")
-  expect(contact).toHaveTextContent("Sponsor or volunteer at CND/2027.")
+  expect(screen.getAllByRole("listitem")).toHaveLength(3)
+  expect(container.querySelector('a[href^="mailto:"]')).toBeNull()
   expect(container.querySelector('a[href^="/schedule"]')).toBeNull()
 })
 
@@ -107,6 +102,19 @@ it("only offers the Team page in the menu", () => {
     .getAllByRole("link")
     .map((link) => link.textContent)
   expect(links).toEqual(["Team"])
+})
+
+it("tells screen readers which cards open a new tab", () => {
+  view()
+
+  expect(
+    screen.getByRole("link", {
+      name: "CND/2026 website (opens in new tab) Schedule, speakers and slides.",
+    })
+  ).toBeInTheDocument()
+  expect(
+    screen.getByRole("link", { name: /^Photo gallery \(opens in new tab\)/ })
+  ).toBeInTheDocument()
 })
 
 it("lists the CND/2026 website first", () => {

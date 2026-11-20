@@ -88,17 +88,15 @@ it("links to the code of conduct from the footer", () => {
   )
 })
 
-it("invites people to join the organizer team from the footer", () => {
-  render(
+it("spells out the contact address for sponsors and organizers in the footer", () => {
+  const { container } = render(
     <MemoryRouter>
       <Footer />
     </MemoryRouter>
   )
 
-  expect(
-    screen.getByRole("link", { name: "Join the organizer team" })
-  ).toHaveAttribute(
-    "href",
-    "mailto:contact@cloudnativedenmark.dk?subject=Joining%20the%20CND%20organizer%20team"
+  expect(container).toHaveTextContent(
+    "Want to sponsor CND/2027, or join the organizer team? Reach out at contact@cloudnativedenmark.dk"
   )
+  expect(container.querySelector('a[href^="mailto:"]')).toBeNull()
 })

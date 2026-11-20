@@ -10,40 +10,43 @@ const earlyBlindBirdUrl =
   "https://cloudnativedenmark.ticketbutler.io/en/e/cloud-native-denmark-2027/"
 const feedbackUrl = "https://forms.gle/4XVnmNoEa5koLV238"
 const photosUrl = "https://www.picdrop.com/kim-yennguyen/PtE1CyXcQm"
-const contactEmail = "contact@cloudnativedenmark.dk"
 
 const actions = [
   {
     label: "CND/2026 website",
     detail: "Schedule, speakers and slides.",
     href: siteConfig.previousEditionUrl,
-    external: true,
-    icon: "↗",
   },
   {
     label: "Give feedback",
     detail: "Tell us how CND/2026 went.",
     href: feedbackUrl,
-    external: true,
-    icon: "↗",
   },
   {
-    label: "📷 Photo gallery",
+    label: "Photo gallery",
+    emoji: "📷",
     detail: "Find yourself in the photos.",
     href: photosUrl,
-    external: true,
-    icon: "↗",
-  },
-  {
-    label: "Contact us",
-    detail: "Sponsor or volunteer at CND/2027.",
-    href: `mailto:${contactEmail}`,
-    external: false,
-    icon: "\u2709\uFE0E",
   },
 ]
 
 const externalProps = { target: "_blank", rel: "noopener noreferrer" }
+
+const ExternalIcon = () => (
+  <svg
+    width={20}
+    height={20}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M7 17 17 7M8 7h9v9" />
+  </svg>
+)
 
 const IndexPage: React.FC = () => {
   const location = useLocation()
@@ -73,7 +76,7 @@ const IndexPage: React.FC = () => {
           />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-[1280px] px-6 pt-8 pb-12 lg:px-12 lg:pt-14 lg:pb-16">
+        <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 pt-8 pb-12 lg:px-12 lg:pt-14 lg:pb-16">
           <div className="grid grid-cols-[minmax(0,1fr)] items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-12">
             <div>
               <div
@@ -170,27 +173,28 @@ const IndexPage: React.FC = () => {
             </div>
           </div>
 
-          <ul className="cnd-rise cnd-rise-4 mt-8 grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2 lg:mt-10 lg:grid-cols-4">
+          <ul className="cnd-rise cnd-rise-4 mt-8 grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-3 lg:mt-10">
             {actions.map((action) => (
               <li key={action.label} className="min-w-0">
                 <a
                   href={action.href}
-                  {...(action.external ? externalProps : {})}
+                  {...externalProps}
                   className="group flex h-full items-center justify-between gap-4 rounded-2xl border-[1.5px] border-cnd-midnight/15 bg-white px-5 py-4 transition-colors hover:border-cnd-red"
                 >
                   <span className="min-w-0">
                     <span className="block font-semibold text-cnd-midnight">
+                      {action.emoji && (
+                        <span aria-hidden="true">{action.emoji} </span>
+                      )}
                       {action.label}
+                      <span className="sr-only"> (opens in new tab)</span>
                     </span>
                     <span className="block break-words text-sm text-cnd-slate">
                       {action.detail}
                     </span>
                   </span>
-                  <span
-                    aria-hidden="true"
-                    className="shrink-0 text-lg text-cnd-red transition-transform group-hover:-translate-y-0.5"
-                  >
-                    {action.icon}
+                  <span className="shrink-0 text-cnd-red transition-transform group-hover:-translate-y-0.5">
+                    <ExternalIcon />
                   </span>
                 </a>
               </li>
