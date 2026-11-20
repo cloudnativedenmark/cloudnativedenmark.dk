@@ -14,6 +14,13 @@ const contactEmail = "contact@cloudnativedenmark.dk"
 
 const actions = [
   {
+    label: "CND/2026 website",
+    detail: "Schedule, speakers and slides.",
+    href: siteConfig.previousEditionUrl,
+    external: true,
+    icon: "↗",
+  },
+  {
     label: "Give feedback",
     detail: "Tell us how CND/2026 went.",
     href: feedbackUrl,
@@ -24,13 +31,6 @@ const actions = [
     label: "📷 Photo gallery",
     detail: "Find yourself in the photos.",
     href: photosUrl,
-    external: true,
-    icon: "↗",
-  },
-  {
-    label: "CND/2026 website",
-    detail: "Schedule, speakers and slides.",
-    href: siteConfig.previousEditionUrl,
     external: true,
     icon: "↗",
   },

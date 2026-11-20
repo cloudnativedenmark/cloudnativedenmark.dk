@@ -108,3 +108,12 @@ it("only offers the Team page in the menu", () => {
     .map((link) => link.textContent)
   expect(links).toEqual(["Team"])
 })
+
+it("lists the CND/2026 website first", () => {
+  view()
+
+  const cards = screen
+    .getAllByRole("listitem")
+    .map((item) => item.querySelector("a")?.getAttribute("href"))
+  expect(cards[0]).toBe("https://2026.cloudnativedenmark.dk")
+})
