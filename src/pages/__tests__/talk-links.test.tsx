@@ -82,18 +82,14 @@ describe("talk links", () => {
   it("opens a linked talk modal", async () => {
     view("/schedule/talk/session-a-talk-talk-1/")
     await waitFor(() =>
-      expect(
-        screen.getByRole("button", { name: "Copy talk link" })
-      ).toBeInTheDocument()
+      expect(screen.getByRole("dialog", { name: "A talk" })).toBeInTheDocument()
     )
   })
 
   it("opens an old ID-only link", async () => {
     view("/schedule/talk/talk-1/")
     await waitFor(() =>
-      expect(
-        screen.getByRole("button", { name: "Copy talk link" })
-      ).toBeInTheDocument()
+      expect(screen.getByRole("dialog", { name: "A talk" })).toBeInTheDocument()
     )
   })
 
@@ -105,7 +101,7 @@ describe("talk links", () => {
 
     await waitFor(() =>
       expect(
-        screen.queryByRole("button", { name: "Copy talk link" })
+        screen.queryByRole("dialog", { name: "A talk" })
       ).not.toBeInTheDocument()
     )
     expect(
@@ -141,13 +137,13 @@ describe("talk links", () => {
       scrollIntoView.mockClear()
       fireEvent.click(screen.getAllByText("A talk")[0])
       expect(
-        await screen.findByRole("button", { name: "Copy talk link" })
+        await screen.findByRole("dialog", { name: "A talk" })
       ).toBeInTheDocument()
 
       fireEvent.click(screen.getByRole("button", { name: "Browser back" }))
       await waitFor(() =>
         expect(
-          screen.queryByRole("button", { name: "Copy talk link" })
+          screen.queryByRole("dialog", { name: "A talk" })
         ).not.toBeInTheDocument()
       )
       expect(
