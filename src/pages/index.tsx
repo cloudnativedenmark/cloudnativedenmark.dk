@@ -36,7 +36,7 @@ const actions = [
   },
   {
     label: "Contact us",
-    detail: "Sponsor 2027, join the organizers or volunteer.",
+    detail: "Sponsor or volunteer at CND/2027.",
     href: `mailto:${contactEmail}`,
     external: false,
     icon: "\u2709\uFE0E",

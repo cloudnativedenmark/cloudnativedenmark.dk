@@ -87,3 +87,18 @@ it("links to the code of conduct from the footer", () => {
     "/code-of-conduct"
   )
 })
+
+it("invites people to join the organizer team from the footer", () => {
+  render(
+    <MemoryRouter>
+      <Footer />
+    </MemoryRouter>
+  )
+
+  expect(
+    screen.getByRole("link", { name: "Join the organizer team" })
+  ).toHaveAttribute(
+    "href",
+    "mailto:contact@cloudnativedenmark.dk?subject=Joining%20the%20CND%20organizer%20team"
+  )
+})

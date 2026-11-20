@@ -11,7 +11,13 @@ const Footer = () => {
       />
       <div className="mx-auto flex max-w-[1280px] flex-col gap-4 px-6 pt-7 pb-6 md:flex-row md:items-center md:justify-between lg:px-12">
         <p className="text-sm text-cnd-fog">
-          Thank you to our sponsors for making CND/2026 possible.
+          Want to help run CND/2027?{" "}
+          <a
+            href="mailto:contact@cloudnativedenmark.dk?subject=Joining%20the%20CND%20organizer%20team"
+            className="font-semibold text-white underline decoration-cnd-coral decoration-2 underline-offset-4 hover:text-cnd-coral"
+          >
+            Join the organizer team
+          </a>
         </p>
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
           <nav aria-label="Legal" className="flex gap-5">

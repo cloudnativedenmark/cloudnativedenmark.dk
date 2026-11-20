@@ -91,9 +91,7 @@ it("links to feedback, photos, the 2026 archive and contact", () => {
     "mailto:contact@cloudnativedenmark.dk"
   )
   expect(contact).not.toHaveAttribute("target")
-  expect(contact).toHaveTextContent(
-    "Sponsor 2027, join the organizers or volunteer."
-  )
+  expect(contact).toHaveTextContent("Sponsor or volunteer at CND/2027.")
   expect(container.querySelector('a[href^="/schedule"]')).toBeNull()
 })
 
