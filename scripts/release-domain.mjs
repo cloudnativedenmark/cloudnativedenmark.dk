@@ -17,9 +17,17 @@ export const releaseTargets = (name) => {
   }
 }
 
+const isAbort = (error) =>
+  error?.name === "TimeoutError" || error?.name === "AbortError"
+
 export const cloudflare =
   (token, fetchImpl = fetch) =>
   async (method, path, body) => {
+    const failed = (error) =>
+      new Error(
+        `Cloudflare: ${method} ${path} failed: ${error.cause?.message ?? error.message}`,
+        { cause: error }
+      )
     const response = await fetchImpl(`${api}${path}`, {
       method,
       headers: {
@@ -29,9 +37,12 @@ export const cloudflare =
       body: body ? JSON.stringify(body) : undefined,
       signal: AbortSignal.timeout(30_000),
     }).catch((error) => {
-      throw new Error(`Cloudflare: ${method} ${path} failed: ${error.message}`)
+      throw failed(error)
     })
-    const json = await response.json().catch(() => ({}))
+    const json = await response.json().catch((error) => {
+      if (isAbort(error)) throw failed(error)
+      return {}
+    })
     return {
       ok: response.ok && json.success === true,
       status: response.status,
@@ -157,8 +168,12 @@ export const waitForActiveDomain = async (
 ) => {
   const path = `/accounts/${accountId}/pages/projects/${project}/domains/${domain}`
   let status
+  let lastError
   for (let attempt = 1; attempt <= attempts; attempt++) {
-    const response = await call("GET", path).catch(() => ({ status: 0 }))
+    const response = await call("GET", path).catch((error) => {
+      lastError = error
+      return { status: 0 }
+    })
     const transient =
       response.status === 0 || response.status === 429 || response.status >= 500
     if (!transient) status = must(response, `read ${domain} status`).status
@@ -166,9 +181,8 @@ export const waitForActiveDomain = async (
     if (status === "blocked") break
     if (attempt < attempts) await sleep(15_000)
   }
-  throw new Error(
-    `Pages: ${domain} is "${status ?? "unreachable"}", not active`
-  )
+  const reason = status ?? `unreachable (${lastError?.message})`
+  throw new Error(`Pages: ${domain} is "${reason}", not active`)
 }
 
 export const attachReleaseDomain = async (
