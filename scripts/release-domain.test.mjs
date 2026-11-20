@@ -374,5 +374,59 @@ test("reports an unreachable API instead of an undefined status", async () => {
     return fetchImpl(url, init)
   }
 
-  await assert.rejects(attach(down, { attempts: 2 }), /is "unreachable"/)
+  await assert.rejects(
+    attach(down, { attempts: 2 }),
+    /is "unreachable \(Cloudflare: GET .*domains\/2026\.cloudnativedenmark\.dk failed: ECONNRESET\)"/
+  )
+})
+
+test("gives every request a 30 second timeout", async (t) => {
+  const timeout = t.mock.method(AbortSignal, "timeout")
+  const { calls, fetchImpl } = fakeCloudflare(settled())
+
+  await attach(fetchImpl)
+
+  assert.equal(timeout.mock.callCount(), calls.length)
+  assert.ok(timeout.mock.calls.every(({ arguments: [ms] }) => ms === 30_000))
+})
+
+test("names the call and the underlying cause when a request fails", async () => {
+  const { fetchImpl } = fakeCloudflare(settled())
+  const offline = async (url, init) => {
+    if (url.endsWith("/pages/projects/cloudnative-denmark-2026")) {
+      throw new TypeError("fetch failed", {
+        cause: new Error("getaddrinfo ENOTFOUND api.cloudflare.com"),
+      })
+    }
+    return fetchImpl(url, init)
+  }
+
+  await assert.rejects(
+    attach(offline),
+    /Cloudflare: GET \/accounts\/acc\/pages\/projects\/cloudnative-denmark-2026 failed: getaddrinfo ENOTFOUND api.cloudflare.com/
+  )
+})
+
+test("retries a status poll whose body read timed out", async () => {
+  let reads = 0
+  const { fetchImpl } = fakeCloudflare(settled())
+  const slowBody = async (url, init) => {
+    if (url.endsWith(domainPath) && init.method === "GET" && reads++ === 0) {
+      return {
+        ok: true,
+        status: 200,
+        json: async () => {
+          throw new DOMException(
+            "The operation was aborted due to timeout",
+            "TimeoutError"
+          )
+        },
+      }
+    }
+    return fetchImpl(url, init)
+  }
+
+  await attach(slowBody)
+
+  assert.equal(reads, 2)
 })
