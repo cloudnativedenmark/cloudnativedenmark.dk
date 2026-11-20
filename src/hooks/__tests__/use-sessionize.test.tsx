@@ -3,6 +3,8 @@ import {
   type GridEntry,
   type Session,
   type Speaker,
+  MainSessionizeId,
+  useSessionizeSchedule,
   useSessionizeSpeakers,
 } from "../use-sessionize"
 
@@ -128,5 +130,77 @@ describe("useSessionizeSpeakers", () => {
       result.current.speakers.find((speaker) => speaker.fullName === "Jane Doe")
         ?.sessions
     ).toEqual([{ ...regularSession, type: "Session" }])
+  })
+})
+
+describe("useSessionizeSchedule slides", () => {
+  const currentUrl = "https://example.org/current-slides.pdf"
+  const archiveUrl = "https://example.org/archive-slides.pdf"
+
+  const mockSchedule = (answer: string | null = currentUrl) => {
+    const talk = createGridSession(
+      "2",
+      "2026-11-19T10:00:00",
+      "2026-11-19T10:35:00",
+      speakers.slice(3)
+    )
+    talk.slideDeck = "https://example.org/stale-slides.pdf"
+    const responses: Record<string, unknown> = {
+      Grid: [
+        {
+          date: "2026-11-19",
+          rooms: [{ id: 1, name: "Main stage", sessions: [talk] }],
+          timeSlots: [
+            {
+              slotStart: talk.startsAt,
+              rooms: [{ id: 1, name: "Main stage", session: talk }],
+            },
+          ],
+        },
+      ],
+      Speakers: speakers,
+      Sessions: [
+        {
+          sessions: [
+            {
+              ...talk,
+              questionAnswers: [
+                { id: 99194, answer: archiveUrl },
+                { id: 115164, answer },
+              ],
+            },
+          ],
+        },
+      ],
+    }
+    global.fetch = jest.fn(async (input) => ({
+      ok: true,
+      json: async () => responses[String(input).split("/").pop()!],
+    })) as jest.Mock
+  }
+
+  it.each([
+    [MainSessionizeId, currentUrl],
+    ["archive-event", archiveUrl],
+  ])("uses the slide field for event %s", async (eventId, expected) => {
+    mockSchedule()
+    const { result } = renderHook(() => useSessionizeSchedule(eventId))
+
+    await waitFor(() =>
+      expect(
+        result.current.schedule[0]?.timeSlots[0].rooms[0].session.slideDeck
+      ).toBe(expected)
+    )
+  })
+
+  it("clears stale slides when the current event's answer is empty", async () => {
+    mockSchedule(null)
+    const { result } = renderHook(() => useSessionizeSchedule())
+
+    await waitFor(() =>
+      expect(
+        result.current.schedule[0]?.timeSlots[0].rooms[0].session.slideDeck
+      ).toBe("")
+    )
   })
 })

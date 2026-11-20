@@ -68,6 +68,40 @@ describe("SessionModal sharing", () => {
   })
 })
 
+describe("SessionModal slides", () => {
+  it("opens Show slides without closing the talk", () => {
+    const onClose = jest.fn()
+    render(
+      <SessionModal
+        session={{
+          ...session,
+          description: "Talk details",
+          slideDeck: "https://drive.google.com/file/d/public-pdf/view",
+        }}
+        onClose={onClose}
+        onSpeakerClick={() => {}}
+      />
+    )
+
+    const link = screen.getByRole("link", { name: "Show slides" })
+    expect(link).toHaveAttribute(
+      "href",
+      "https://drive.google.com/file/d/public-pdf/view"
+    )
+    expect(link).toHaveAttribute("target", "_blank")
+    fireEvent.click(link)
+    expect(onClose).not.toHaveBeenCalled()
+  })
+
+  it("has no slide link when no URL is available", () => {
+    renderSessionModal("Talk details")
+
+    expect(
+      screen.queryByRole("link", { name: "Show slides" })
+    ).not.toBeInTheDocument()
+  })
+})
+
 describe("SessionModal description", () => {
   it("renders CRLF-separated descriptions as two paragraphs", () => {
     renderSessionModal("First paragraph.\r\n\r\nSecond paragraph.")

@@ -157,6 +157,14 @@ The site integrates with Sessionize API to fetch:
 
 Configuration is managed in `src/hooks/use-sessionize.tsx`.
 
+For 2026, save each talk's public slide URL in Sessionize's **Presentation**
+question (`115164`). The hook maps it to `slideDeck`. The 2025 archive retains
+question `99194`. Talk dialogs show **Show slides** next to **Copy talk link**
+when a URL is present. It opens in a new tab. Empty answers have no slide action.
+
+Use a link to the individual file, not its folder. Preparation and publication
+records are in the sibling `../slides/` directory.
+
 The schedule cards and talk details link to each session's feedback form.
 Feedback URLs are not included in the public Sessionize API, so the 2026
 links are stored by session ID in `src/config/session-feedback.ts`. They
@@ -165,8 +173,8 @@ come from the same QR codes used in the conference decks:
 Update this mapping when feedback codes change or a new event is configured.
 Sessions without a mapped URL and service sessions have no feedback link.
 
-Talk modals group **Give Feedback**, **Show track Q&A**, and **Copy talk link** as muted
-red buttons below the time and room.
+Talk modals group **Give Feedback**, **Show track Q&A**, **Copy talk link**, and
+**Show slides** (when available) as muted red buttons below the time and room.
 These buttons are 44px high.
 The dialog fits the small viewport height, including mobile browser controls.
 The top-right close button stays visible on all screen sizes. At 768px and

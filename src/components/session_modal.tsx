@@ -9,11 +9,12 @@ import { formatPlainTextToHtml } from "../utils/text-formatting"
 import { deduceSessionType, getSessionTags } from "../utils/session-type"
 import SpeakerList from "./speaker-list"
 import SessionTypeBadge from "./session-type-badge"
-import Button from "./ui/button"
+import Button, { buttonVariants } from "./ui/button"
 import CopyLinkButton from "./copy-link-button"
 import { talkPath } from "../utils/talk-link"
 import SessionFeedbackLink from "./session-feedback-link"
 import RoomQuestionLink from "./room-question-link"
+import ExternalLink from "./ui/external-link"
 
 const SessionModal: React.FC<{
   session: Session
@@ -31,6 +32,7 @@ const SessionModal: React.FC<{
   })
   const tags = getSessionTags(session.categories)
   const formattedDescription = formatPlainTextToHtml(session.description)
+  const slideUrl = session.slideDeck?.trim()
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -120,6 +122,15 @@ const SessionModal: React.FC<{
                 variant="muted"
                 className="btn-compact"
               />
+              {slideUrl && (
+                <ExternalLink
+                  href={slideUrl}
+                  className={`btn-pill btn-compact ${buttonVariants.muted}`}
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  Show slides
+                </ExternalLink>
+              )}
             </div>
 
             {tags.length > 0 && (
