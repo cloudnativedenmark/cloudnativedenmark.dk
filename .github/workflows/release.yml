@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       release:
-        description: "Release name, e.g. 2027. Creates release-<name> from main and serves it at <name>.cloudnativedenmark.dk."
+        description: "Year of the edition to archive, e.g. 2026. Freezes main as release-<year> and serves it at <year>.cloudnativedenmark.dk."
         required: true
         type: string
 
@@ -19,11 +19,12 @@ defaults:
   run:
     shell: bash
 
+permissions:
+  contents: read
+
 jobs:
   prepare:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     outputs:
       name: ${{ steps.release.outputs.name }}
       branch: ${{ steps.release.outputs.branch }}
@@ -57,26 +58,9 @@ jobs:
           fi
           node scripts/release-domain.mjs targets "$name" | tee -a "$GITHUB_OUTPUT"
 
-      - name: Create release branch
-        if: github.event_name == 'workflow_dispatch'
-        env:
-          BRANCH: ${{ steps.release.outputs.branch }}
-        run: |
-          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null; then
-            echo "::error::$BRANCH already exists. Push to it to redeploy."
-            exit 1
-          fi
-          git push origin "HEAD:refs/heads/$BRANCH"
-          echo "Created $BRANCH from main at $GITHUB_SHA"
-
-  deploy:
+  build:
     needs: prepare
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    environment:
-      name: ${{ needs.prepare.outputs.branch }}
-      url: https://${{ needs.prepare.outputs.domain }}/
 
     steps:
       - name: Checkout
@@ -114,6 +98,57 @@ jobs:
 
       - name: Build website
         run: yarn build
+
+      - name: Upload site
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: dist
+          retention-days: 7
+
+  deploy:
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    environment:
+      name: ${{ needs.prepare.outputs.branch }}
+      url: https://${{ needs.prepare.outputs.domain }}/
+
+    steps:
+      - name: Create release branch
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ needs.prepare.outputs.branch }}
+        run: |
+          if gh api "repos/$GITHUB_REPOSITORY/git/refs" \
+            -f "ref=refs/heads/$BRANCH" -f "sha=$GITHUB_SHA" >/dev/null; then
+            echo "Created $BRANCH from main at $GITHUB_SHA"
+            exit 0
+          fi
+          existing=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/$BRANCH" --jq .object.sha || true)
+          if [[ "$existing" != "$GITHUB_SHA" ]]; then
+            echo "::error::Could not create $BRANCH at $GITHUB_SHA (it is at '${existing:-missing}'). Push to an existing release branch to redeploy it."
+            exit 1
+          fi
+          echo "$BRANCH already at $GITHUB_SHA; continuing"
+
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Download site
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: dist
 
       - name: Create Pages project (if needed)
         continue-on-error: true

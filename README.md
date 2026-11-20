@@ -299,10 +299,11 @@ Requires repo secrets `CLOUDFLARE_API_TOKEN` (Pages:Edit scope) and `CLOUDFLARE_
 
 ### Yearly archives
 
-Run **Deploy Release to CloudFlare** from `main` with a release name such as
-`2027`. It creates `release-2027`, deploys it, and serves it at
-`2027.cloudnativedenmark.dk`. Push hotfixes to `release-2027` to redeploy.
-Deploy status per edition shows under the `release-<name>` GitHub environments.
+`main` is the current site. When a conference ends, run **Deploy Release to
+CloudFlare** from `main` with its year, e.g. `2026`. It freezes `main` as
+`release-2026` and serves it at `2026.cloudnativedenmark.dk`. Push hotfixes to
+`release-2026` to redeploy. Deploy status per edition shows under the
+`release-<year>` GitHub environments.
 Setup and token permissions: [`.github/CLOUDFLARE_SETUP.md`](.github/CLOUDFLARE_SETUP.md).
 
 ## 🤝 Contributing

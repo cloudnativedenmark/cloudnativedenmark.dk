@@ -9,7 +9,7 @@ const releaseName = /^[a-z0-9](?:[a-z0-9-]{0,36}[a-z0-9])?$/
 export const releaseTargets = (name) => {
   if (!releaseName.test(name) || name.startsWith("release-")) {
     throw new Error(
-      `Invalid release name "${name}". Use lowercase letters, digits and hyphens, e.g. 2027.`
+      `Invalid release name "${name}". Use the conference year, e.g. 2026.`
     )
   }
   return {
@@ -33,7 +33,7 @@ export const cloudflare =
     })
     const json = await response.json().catch(() => ({}))
     return {
-      ok: response.ok && json.success !== false,
+      ok: response.ok && json.success === true,
       status: response.status,
       result: json.result,
       errors: json.errors ?? [],
@@ -61,25 +61,13 @@ export const findZoneId = async (call) => {
   return zones[0].id
 }
 
-export const ensurePagesDomain = async (
-  call,
-  accountId,
-  { project, domain }
-) => {
-  const path = `/accounts/${accountId}/pages/projects/${project}/domains`
-  const existing = await call("GET", `${path}/${domain}`)
-  if (existing.ok) return { action: "unchanged", domain: existing.result }
-  return {
-    action: "created",
-    domain: must(
-      await call("POST", path, { name: domain }),
-      `attach ${domain} to Pages project ${project}`
-    ),
-  }
-}
+export const pagesSubdomain = async (call, accountId, { project }) =>
+  must(
+    await call("GET", `/accounts/${accountId}/pages/projects/${project}`),
+    `read Pages project ${project}`
+  ).subdomain
 
-export const ensureCname = async (call, zoneId, { project, domain }) => {
-  const target = `${project}.pages.dev`
+export const ensureCname = async (call, zoneId, { domain }, target) => {
   const records = must(
     await call("GET", `/zones/${zoneId}/dns_records?name=${domain}`),
     `list DNS records for ${domain}`
@@ -92,6 +80,11 @@ export const ensureCname = async (call, zoneId, { project, domain }) => {
   }
   const [cname] = records
   if (cname?.content === target && cname.proxied) return "unchanged"
+  if (cname && !cname.content.endsWith(".pages.dev")) {
+    throw new Error(
+      `DNS: ${domain} points at ${cname.content}, not a Pages project. Refusing to change it.`
+    )
+  }
   if (cname) {
     must(
       await call("PATCH", `/zones/${zoneId}/dns_records/${cname.id}`, {
@@ -116,6 +109,36 @@ export const ensureCname = async (call, zoneId, { project, domain }) => {
   return "created"
 }
 
+const retryableStatuses = ["error", "deactivated"]
+
+export const ensurePagesDomain = async (
+  call,
+  accountId,
+  { project, domain }
+) => {
+  const path = `/accounts/${accountId}/pages/projects/${project}/domains`
+  const existing = await call("GET", `${path}/${domain}`)
+  if (existing.status === 404) {
+    must(
+      await call("POST", path, { name: domain }),
+      `attach ${domain} to Pages project ${project}`
+    )
+    return "created"
+  }
+  const { status } = must(
+    existing,
+    `read ${domain} on Pages project ${project}`
+  )
+  if (retryableStatuses.includes(status)) {
+    must(
+      await call("PATCH", `${path}/${domain}`),
+      `retry validation of ${domain}`
+    )
+    return `retried (was ${status})`
+  }
+  return "unchanged"
+}
+
 export const waitForActiveDomain = async (
   call,
   accountId,
@@ -127,30 +150,28 @@ export const waitForActiveDomain = async (
 ) => {
   const path = `/accounts/${accountId}/pages/projects/${project}/domains/${domain}`
   let status
-  for (let attempt = 0; attempt < attempts; attempt++) {
+  for (let attempt = 1; attempt <= attempts; attempt++) {
     status = must(await call("GET", path), `read ${domain} status`).status
     if (status === "active") return status
-    if (["error", "blocked", "deactivated"].includes(status)) break
-    await sleep(15_000)
+    if (status === "blocked") break
+    if (attempt < attempts) await sleep(15_000)
   }
   throw new Error(`Pages: ${domain} is "${status}", not active`)
 }
 
 export const attachReleaseDomain = async (
   name,
-  { token, accountId, zoneId, fetchImpl, sleep, log = console.log }
+  { token, accountId, zoneId, fetchImpl, sleep, attempts, log = console.log }
 ) => {
   const targets = releaseTargets(name)
   const call = cloudflare(token, fetchImpl)
+  const target = await pagesSubdomain(call, accountId, targets)
+  const zone = zoneId || (await findZoneId(call))
+  const dns = await ensureCname(call, zone, targets, target)
+  log(`CNAME ${targets.domain} -> ${target}: ${dns}`)
   const pages = await ensurePagesDomain(call, accountId, targets)
-  log(`Pages domain ${targets.domain}: ${pages.action}`)
-  const dns = await ensureCname(
-    call,
-    zoneId || (await findZoneId(call)),
-    targets
-  )
-  log(`CNAME ${targets.domain} -> ${targets.project}.pages.dev: ${dns}`)
-  await waitForActiveDomain(call, accountId, targets, { sleep })
+  log(`Pages domain ${targets.domain}: ${pages}`)
+  await waitForActiveDomain(call, accountId, targets, { sleep, attempts })
   log(`Pages domain ${targets.domain}: active`)
 }
 
