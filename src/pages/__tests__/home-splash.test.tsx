@@ -63,6 +63,7 @@ it("marks Early Blind Bird sold out when ticket sales are off", () => {
   view()
 
   expect(screen.getByText("SOLD OUT")).toBeVisible()
+  expect(screen.queryByText("LIMITED DROP")).toBeNull()
   expect(
     screen.queryByRole("link", { name: "Get Early Blind Bird →" })
   ).toBeNull()

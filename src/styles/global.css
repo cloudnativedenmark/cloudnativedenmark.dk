@@ -2,84 +2,75 @@
 
 /* Cloud Native Denmark — Design System Tokens */
 @theme {
-    --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-    --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif,
-        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-        "Noto Color Emoji";
-    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    "Manrope", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-    /* Core palette */
-    --color-cnd-ink: #061531;
-    --color-cnd-midnight: #0b1e3f;
-    --color-cnd-harbor: #13347c;
-    --color-cnd-electric: #1e4dd8;
-    --color-cnd-sky: #7fb8c9;
-    --color-cnd-fog: #b9c4d4;
+  /* Core palette */
+  --color-cnd-ink: #061531;
+  --color-cnd-midnight: #0b1e3f;
+  --color-cnd-harbor: #13347c;
+  --color-cnd-electric: #1e4dd8;
+  --color-cnd-sky: #7fb8c9;
+  --color-cnd-fog: #b9c4d4;
 
-    --color-cnd-red: #e0132a;
-    --color-cnd-coral: #ff6b4a;
-    --color-cnd-amber: #f4b942;
-    --color-cnd-sand: #f5e6d3;
-    --color-cnd-bone: #f7f5f0;
-    --color-cnd-ash: #6b7689;
-    --color-cnd-slate: #3a4558;
+  --color-cnd-red: #e0132a;
+  --color-cnd-coral: #ff6b4a;
+  --color-cnd-amber: #f4b942;
+  --color-cnd-sand: #f5e6d3;
+  --color-cnd-bone: #f7f5f0;
+  --color-cnd-ash: #6b7689;
+  --color-cnd-slate: #3a4558;
 
-    /* Backwards-compat aliases for legacy class usage */
-    --color-primary: #0b1e3f;
-    --color-background: #0b1e3f;
-    --color-background-dark: #061531;
-    --color-background-light: #f7f5f0;
-    --color-hover: #13347c;
+  /* Backwards-compat aliases for legacy class usage */
+  --color-primary: #0b1e3f;
+  --color-background: #0b1e3f;
+  --color-background-dark: #061531;
+  --color-background-light: #f7f5f0;
+  --color-hover: #13347c;
 }
 
 @layer components {
-/* The official heptagon clip path — same silhouette as the CND/Kubernetes logo */
-.cnd-clip {
-    clip-path: polygon(
-        50% 2%,
-        93% 24%,
-        93% 76%,
-        50% 98%,
-        7% 76%,
-        7% 24%
-    );
-}
+  /* The official heptagon clip path — same silhouette as the CND/Kubernetes logo */
+  .cnd-clip {
+    clip-path: polygon(50% 2%, 93% 24%, 93% 76%, 50% 98%, 7% 76%, 7% 24%);
+  }
 
-/* Subtle hex-grid atmosphere for dark sections */
-.hex-bg {
+  /* Subtle hex-grid atmosphere for dark sections */
+  .hex-bg {
     background-image:
-        radial-gradient(
-            circle at 50% 50%,
-            rgba(127, 184, 201, 0.08) 1px,
-            transparent 1.5px
-        ),
-        linear-gradient(
-            135deg,
-            rgba(30, 77, 216, 0.06) 0%,
-            transparent 60%
-        );
-    background-size: 28px 28px, 100% 100%;
-}
+      radial-gradient(
+        circle at 50% 50%,
+        rgba(127, 184, 201, 0.08) 1px,
+        transparent 1.5px
+      ),
+      linear-gradient(135deg, rgba(30, 77, 216, 0.06) 0%, transparent 60%);
+    background-size:
+      28px 28px,
+      100% 100%;
+  }
 
-/* Mono uppercase eyebrow label — used everywhere in the design system */
-.eyebrow {
+  /* Mono uppercase eyebrow label — used everywhere in the design system */
+  .eyebrow {
     font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-}
+  }
 
-/* Display font helper — tight tracking, near-1 line-height */
-.display {
+  /* Display font helper — tight tracking, near-1 line-height */
+  .display {
     font-family: var(--font-display);
     font-weight: 700;
     letter-spacing: -0.035em;
     line-height: 0.92;
-}
+  }
 
-/* Pill button base — variants composed via Tailwind utilities */
-.btn-pill {
+  /* Pill button base — variants composed via Tailwind utilities */
+  .btn-pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -93,28 +84,28 @@
     cursor: pointer;
     border: 0 solid transparent;
     transition:
-        transform 0.18s ease,
-        box-shadow 0.18s ease,
-        background-color 0.18s ease,
-        color 0.18s ease;
-}
-.btn-pill:hover {
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      background-color 0.18s ease,
+      color 0.18s ease;
+  }
+  .btn-pill:hover {
     transform: translateY(-1px);
     box-shadow: 0 8px 22px rgba(11, 30, 63, 0.18);
-}
-.btn-pill:active {
+  }
+  .btn-pill:active {
     transform: translateY(0);
-}
+  }
 
-.btn-pill.btn-compact {
+  .btn-pill.btn-compact {
     min-height: 44px;
     padding: 10px 14px;
     font-size: 14px;
     line-height: 24px;
-}
+  }
 
-/* Hero red diagonal accent line */
-.cnd-top-rule {
+  /* Hero red diagonal accent line */
+  .cnd-top-rule {
     position: absolute;
     top: 0;
     left: 0;
@@ -122,44 +113,44 @@
     height: 6px;
     background: var(--color-cnd-red);
     z-index: 5;
-}
+  }
 
-/* Animations for hero load */
-@keyframes cnd-rise {
+  /* Animations for hero load */
+  @keyframes cnd-rise {
     from {
-        opacity: 0;
-        transform: translateY(18px);
+      opacity: 0;
+      transform: translateY(18px);
     }
     to {
-        opacity: 1;
-        transform: translateY(0);
+      opacity: 1;
+      transform: translateY(0);
     }
-}
-.cnd-rise {
+  }
+  .cnd-rise {
     animation: cnd-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-.cnd-rise-1 {
+  }
+  .cnd-rise-1 {
     animation-delay: 0.05s;
-}
-.cnd-rise-2 {
+  }
+  .cnd-rise-2 {
     animation-delay: 0.18s;
-}
-.cnd-rise-3 {
+  }
+  .cnd-rise-3 {
     animation-delay: 0.32s;
-}
-.cnd-rise-4 {
+  }
+  .cnd-rise-4 {
     animation-delay: 0.46s;
-}
+  }
 
-@media (prefers-reduced-motion: reduce) {
+  @media (prefers-reduced-motion: reduce) {
     .cnd-rise,
     .cnd-rise-1,
     .cnd-rise-2,
     .cnd-rise-3,
     .cnd-rise-4 {
-        animation: none !important;
-        opacity: 1 !important;
-        transform: none !important;
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
     }
-}
+  }
 } /* end @layer components */

@@ -15,7 +15,7 @@ const contactEmail = "contact@cloudnativedenmark.dk"
 const actions = [
   {
     label: "Give feedback",
-    detail: "Two minutes that shape CND/2027.",
+    detail: "Tell us how CND/2026 went.",
     href: feedbackUrl,
     external: true,
   },
@@ -109,18 +109,23 @@ const IndexPage: React.FC = () => {
             making Cloud Native Denmark 2026. Let&apos;s do it again.
           </p>
 
-          <div className="cnd-rise cnd-rise-4 mt-12 grid max-w-5xl gap-6 lg:grid-cols-[1.1fr_1fr]">
+          <div className="cnd-rise cnd-rise-4 mt-12 grid max-w-5xl grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
             <div className="relative flex flex-col rounded-2xl bg-cnd-midnight p-8 text-white shadow-[0_18px_40px_rgba(11,30,63,0.28)]">
-              <span
-                className="eyebrow absolute -top-3 left-8 flex items-center gap-2.5 rounded-full bg-cnd-red px-3.5 py-1.5 text-white shadow-[0_6px_16px_rgba(224,19,42,0.35)]"
-                style={{ fontSize: 10, letterSpacing: "0.2em" }}
-              >
-                <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-white motion-safe:animate-ping" />
-                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white" />
+              {features.ticketSales && (
+                <span
+                  className="eyebrow absolute -top-3 left-8 flex items-center gap-2.5 rounded-full bg-cnd-red px-3.5 py-1.5 text-white shadow-[0_6px_16px_rgba(224,19,42,0.35)]"
+                  style={{ fontSize: 10, letterSpacing: "0.2em" }}
+                >
+                  <span
+                    className="relative flex h-2.5 w-2.5"
+                    aria-hidden="true"
+                  >
+                    <span className="absolute inline-flex h-full w-full rounded-full bg-white motion-safe:animate-ping" />
+                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white" />
+                  </span>
+                  LIMITED DROP
                 </span>
-                LIMITED DROP
-              </span>
+              )}
               <div
                 className="eyebrow mt-2"
                 style={{ color: "var(--color-cnd-coral)" }}
@@ -159,19 +164,19 @@ const IndexPage: React.FC = () => {
               )}
             </div>
 
-            <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            <ul className="grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)]">
               {actions.map((action) => (
-                <li key={action.label}>
+                <li key={action.label} className="min-w-0">
                   <a
                     href={action.href}
                     {...(action.external ? externalProps : {})}
-                    className="group flex h-full items-center justify-between gap-4 rounded-2xl border-[1.5px] border-cnd-midnight/15 bg-white/80 px-5 py-4 transition-colors hover:border-cnd-red"
+                    className="group flex h-full items-center justify-between gap-4 rounded-2xl border-[1.5px] border-cnd-midnight/15 bg-white px-5 py-4 transition-colors hover:border-cnd-red"
                   >
-                    <span>
+                    <span className="min-w-0">
                       <span className="block font-semibold text-cnd-midnight">
                         {action.label}
                       </span>
-                      <span className="block text-sm text-cnd-ash">
+                      <span className="block break-words text-sm text-cnd-slate">
                         {action.detail}
                       </span>
                     </span>
