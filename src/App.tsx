@@ -57,7 +57,14 @@ function App() {
             <Route path="speakers/*" element={<ArchiveRedirect />} />
           </>
         )}
-        <Route path="talk-archive" element={<TalkArchive />} />
+        <Route
+          path="archive"
+          element={features.talkArchive ? <TalkArchive /> : <ArchiveRedirect />}
+        />
+        <Route
+          path="talk-archive"
+          element={<Navigate to="/archive" replace />}
+        />
         <Route path="team" element={<Team />} />
         <Route path="venue" element={<Venue />} />
         <Route path="conference-map" element={<VenueMap />} />

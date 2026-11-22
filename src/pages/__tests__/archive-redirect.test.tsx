@@ -77,6 +77,20 @@ it.each([
   expect(navigated()).toBe(true)
 })
 
+it.each(["/archive", "/talk-archive"])(
+  "sends %s to the 2026 archive when the talk archive is off",
+  (path) => {
+    Object.assign(features, { talkArchive: false })
+    renderAt(path)
+
+    expect(screen.getByRole("link")).toHaveAttribute(
+      "href",
+      "https://2026.cloudnativedenmark.dk/archive"
+    )
+    expect(navigated()).toBe(true)
+  }
+)
+
 it("keeps the schedule on the current site when schedule pages are on", () => {
   Object.assign(features, { scheduleAndSpeakers: true })
   renderAt("/schedule")

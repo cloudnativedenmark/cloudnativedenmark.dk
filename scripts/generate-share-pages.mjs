@@ -28,6 +28,12 @@ const pages = [
       "Plan your conference experience. Here’s the full schedule of talks and events.",
   },
   {
+    pathname: "/archive",
+    title: "Talk Archive | Cloud Native Denmark",
+    description:
+      "Browse the sessions from this edition of Cloud Native Denmark, with slides and recordings.",
+  },
+  {
     pathname: "/speakers",
     title: "Speakers | Cloud Native Denmark",
     description:

@@ -7,8 +7,6 @@ import Button from "./ui/button"
 interface ArchiveSessionProps {
   session: Session & {
     event?: string
-    year?: string
-    location?: string
     room?: string
   }
   onSpeakerClick: (speaker: Speaker) => void
@@ -61,9 +59,7 @@ const ArchiveSession: React.FC<ArchiveSessionProps> = ({
         )}
 
         {session.slideDeck ? (
-          <ExternalLink
-            href={`https://docs.google.com/gview?url=${session.slideDeck}`}
-          >
+          <ExternalLink href={session.slideDeck}>
             <Button variant="primary">Slides</Button>
           </ExternalLink>
         ) : (
