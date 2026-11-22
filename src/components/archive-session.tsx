@@ -2,7 +2,9 @@ import React from "react"
 import { type Session, type Speaker } from "../hooks/use-sessionize"
 import { formatDateTimeDetailed } from "../utils/time-formatting"
 import ExternalLink from "./ui/external-link"
-import Button from "./ui/button"
+import Button, { buttonVariants } from "./ui/button"
+
+const linkClass = `btn-pill ${buttonVariants.primary}`
 
 interface ArchiveSessionProps {
   session: Session & {
@@ -18,23 +20,24 @@ const ArchiveSession: React.FC<ArchiveSessionProps> = ({
 }) => {
   return (
     <div className="p-6 border border-gray-200 rounded-lg text-left bg-white hover:shadow-md transition-shadow duration-200">
-      <h3 className="text-2xl font-bold">{session.title}</h3>
+      <h2 className="text-2xl font-bold">{session.title}</h2>
 
       {session.speakers && session.speakers.length > 0 && (
         <div className="flex flex-wrap items-center gap-4 mt-3">
           {session.speakers.map((speaker) => (
-            <div
+            <button
+              type="button"
               key={speaker.id}
               className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
               onClick={() => onSpeakerClick(speaker)}
             >
               <img
                 src={speaker.profilePicture || "/default-avatar.jpg"}
-                alt={speaker.fullName}
+                alt=""
                 className="w-8 h-8 rounded-full object-cover"
               />
-              <p className="text-md font-semibold">{speaker.fullName}</p>
-            </div>
+              <span className="text-md font-semibold">{speaker.fullName}</span>
+            </button>
           ))}
         </div>
       )}
@@ -49,8 +52,8 @@ const ArchiveSession: React.FC<ArchiveSessionProps> = ({
 
       <div className="mt-6 flex gap-4">
         {session.video ? (
-          <ExternalLink href={session.video}>
-            <Button variant="primary">Video</Button>
+          <ExternalLink href={session.video} className={linkClass}>
+            Video
           </ExternalLink>
         ) : (
           <Button variant="primary" disabled>
@@ -59,8 +62,8 @@ const ArchiveSession: React.FC<ArchiveSessionProps> = ({
         )}
 
         {session.slideDeck ? (
-          <ExternalLink href={session.slideDeck}>
-            <Button variant="primary">Slides</Button>
+          <ExternalLink href={session.slideDeck} className={linkClass}>
+            Slides
           </ExternalLink>
         ) : (
           <Button variant="primary" disabled>

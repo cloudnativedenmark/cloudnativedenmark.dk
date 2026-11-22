@@ -85,13 +85,15 @@ const ArchivePage: React.FC = () => {
           </div>
           <div className="space-y-8">
             {!archivedSessions.length ? (
-              <p className="text-center">
+              <p role="status" className="text-center">
                 {isLoading
                   ? "Loading talks..."
                   : "Talks are unavailable right now. Please try again later."}
               </p>
             ) : !filteredSessions.length ? (
-              <p className="text-center">No talks match your search.</p>
+              <p role="status" className="text-center">
+                No talks match your search.
+              </p>
             ) : (
               filteredSessions.map((session) => (
                 <ArchiveSession

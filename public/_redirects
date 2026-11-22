@@ -1,4 +1,4 @@
 /schedule/print /schedule.pdf 302
 /schedule/print/ /schedule.pdf 302
-/talk-archive /archive 301
-/talk-archive/ /archive 301
+/talk-archive /archive/ 301
+/talk-archive/ /archive/ 301
