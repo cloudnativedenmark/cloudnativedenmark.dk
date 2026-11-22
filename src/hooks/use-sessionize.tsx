@@ -291,7 +291,11 @@ export const useSessionizeSchedule = (sessionId: string = MainSessionizeId) => {
     setSchedule(schedule)
   }, [grid, speakers, sessions, sessionId])
 
-  const isLoading = !(loaded.grid && loaded.speakers && loaded.sessions)
+  const fetched = loaded.grid && loaded.speakers && loaded.sessions
+  const hasData = grid.length > 0 && speakers.length > 0 && sessions.length > 0
+  // The schedule is assembled in an effect, one render after the last fetch
+  // lands; without this, consumers briefly see "loaded but empty".
+  const isLoading = !fetched || (hasData && schedule.length === 0)
 
   return { schedule, isLoading }
 }

@@ -203,4 +203,31 @@ describe("useSessionizeSchedule slides", () => {
       ).toBe("")
     )
   })
+
+  it("never reports loaded-but-empty while the schedule is assembled", async () => {
+    mockSchedule()
+    const renders: Array<[boolean, number]> = []
+    const { result } = renderHook(() => {
+      const value = useSessionizeSchedule()
+      renders.push([value.isLoading, value.schedule.length])
+      return value
+    })
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false))
+
+    expect(result.current.schedule).toHaveLength(1)
+    expect(renders).not.toContainEqual([false, 0])
+  })
+
+  it("stops loading when Sessionize returns nothing", async () => {
+    global.fetch = jest.fn(async () => ({
+      ok: true,
+      json: async () => [],
+    })) as jest.Mock
+    const { result } = renderHook(() => useSessionizeSchedule())
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false))
+
+    expect(result.current.schedule).toEqual([])
+  })
 })
