@@ -12,7 +12,7 @@ import SpeakerModal from "../components/speaker_modal"
 
 const ArchivePage: React.FC = () => {
   const location = useLocation()
-  const { schedule } = useSessionizeSchedule()
+  const { schedule, isLoading } = useSessionizeSchedule()
   const [searchQuery, setSearchQuery] = useState("")
   const { selectedSpeaker, handleSpeakerClick, handleCloseSpeakerModal } =
     useModalManagement()
@@ -85,7 +85,11 @@ const ArchivePage: React.FC = () => {
           </div>
           <div className="space-y-8">
             {!archivedSessions.length ? (
-              <p className="text-center">Loading talks...</p>
+              <p className="text-center">
+                {isLoading
+                  ? "Loading talks..."
+                  : "Talks are unavailable right now. Please try again later."}
+              </p>
             ) : !filteredSessions.length ? (
               <p className="text-center">No talks match your search.</p>
             ) : (

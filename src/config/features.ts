@@ -19,7 +19,7 @@ export interface FeatureFlags {
    * Post-conference mode: the menu's Schedule entry becomes Talk Archive,
    * and /archive lists this edition's talks with slides and recordings.
    * When disabled /archive is not registered.
-   * /schedule keeps working either way, so shared talk links stay valid.
+   * Needs `scheduleAndSpeakers`, which keeps shared /schedule links valid.
    */
   talkArchive: boolean
 

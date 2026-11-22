@@ -55,7 +55,10 @@ const schedule = [
   },
 ]
 
-const mockUseSessionizeSchedule = jest.fn((_id?: string) => ({ schedule }))
+const mockUseSessionizeSchedule = jest.fn((_id?: string) => ({
+  schedule,
+  isLoading: false,
+}))
 
 jest.mock("../../hooks/use-sessionize", () => ({
   useSessionizeSpeakers: jest.fn(() => ({ speakers: [] })),
@@ -180,4 +183,23 @@ it("keeps the schedule in the menu while the talk archive is off", () => {
     "/schedule"
   )
   expect(screen.queryByRole("link", { name: "Talk Archive" })).toBeNull()
+})
+
+it.each([
+  [true, "Loading talks..."],
+  [false, "Talks are unavailable right now. Please try again later."],
+])("explains an empty archive (loading: %s)", (isLoading, message) => {
+  mockUseSessionizeSchedule.mockReturnValue({ schedule: [], isLoading })
+  renderAt("/archive")
+
+  expect(screen.getByText(message)).toBeVisible()
+  mockUseSessionizeSchedule.mockReturnValue({ schedule, isLoading: false })
+})
+
+it("has no archive page while the talk archive is off", () => {
+  Object.assign(features, { talkArchive: false })
+  renderAt("/archive")
+
+  expect(screen.getByRole("heading", { level: 1, name: "404." })).toBeVisible()
+  expect(screen.queryByRole("heading", { name: "Kyverno" })).toBeNull()
 })
