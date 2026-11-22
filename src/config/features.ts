@@ -15,6 +15,14 @@ export interface FeatureFlags {
    */
   scheduleAndSpeakers: boolean
 
+  /**
+   * Post-conference mode: the menu's Schedule entry becomes Talk Archive,
+   * and /archive lists this edition's talks with slides and recordings.
+   * When disabled /archive is not registered.
+   * /schedule keeps working either way, so shared talk links stay valid.
+   */
+  talkArchive: boolean
+
   /** Controls ticket sales links and sold-out messages, including both menus.
    * Does not control merchandise or sponsorship sales. Rebuild after a change.
    */
@@ -26,6 +34,7 @@ export interface FeatureFlags {
 
 export const features: FeatureFlags = {
   scheduleAndSpeakers: true,
+  talkArchive: true,
   ticketSales: false,
   merchandise: false,
 }

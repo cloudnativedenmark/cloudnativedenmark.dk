@@ -55,8 +55,25 @@ it("links to the photo gallery instead of ticket sales when sales are closed", (
   expect(
     screen.getByText("Tickets are sold out. See you in Copenhagen.")
   ).toBeVisible()
-  expect(screen.getAllByRole("link", { name: "Schedule →" })).toHaveLength(2)
 })
+
+it.each([
+  [true, "Talk archive →", "/archive", "Schedule →"],
+  [false, "Schedule →", "/schedule", "Talk archive →"],
+])(
+  "points the schedule actions at the talk archive when it is on (%s)",
+  (talkArchive, name, href, absent) => {
+    Object.assign(features, { talkArchive })
+    view()
+
+    const links = screen.getAllByRole("link", { name })
+    expect(links).toHaveLength(2)
+    for (const link of links) {
+      expect(link).toHaveAttribute("href", href)
+    }
+    expect(screen.queryByRole("link", { name: absent })).toBeNull()
+  }
+)
 
 it.each([false, true])(
   "controls merchandise links independently of ticket sales (%s)",

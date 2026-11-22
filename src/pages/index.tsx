@@ -18,6 +18,9 @@ import Button from "../components/ui/button"
 import { features } from "../config/features"
 
 const IndexPage: React.FC = () => {
+  const scheduleAction = features.talkArchive
+    ? { text: "Talk archive →", href: "/archive" }
+    : { text: "Schedule →", href: "/schedule" }
   const location = useLocation()
   const { sponsors } = useSponsors()
   const { selectedSpeaker, handleSpeakerClick, handleCloseSpeakerModal } =
@@ -75,8 +78,7 @@ const IndexPage: React.FC = () => {
           ...(features.scheduleAndSpeakers
             ? [
                 {
-                  text: "Schedule →",
-                  href: "/schedule",
+                  ...scheduleAction,
                   variant: "midnight" as const,
                 },
               ]
@@ -186,8 +188,8 @@ const IndexPage: React.FC = () => {
                 </a>
               )}
               {features.scheduleAndSpeakers && (
-                <Link to="/schedule">
-                  <Button variant="ghost">Schedule →</Button>
+                <Link to={scheduleAction.href}>
+                  <Button variant="ghost">{scheduleAction.text}</Button>
                 </Link>
               )}
               {features.merchandise && (
