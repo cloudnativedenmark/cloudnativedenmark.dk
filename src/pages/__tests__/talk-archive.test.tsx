@@ -106,7 +106,10 @@ const original = { ...features }
 beforeEach(() =>
   Object.assign(features, { scheduleAndSpeakers: true, talkArchive: true })
 )
-afterEach(() => Object.assign(features, original))
+afterEach(() => {
+  Object.assign(features, original)
+  mockUseSessionizeSchedule.mockReturnValue({ schedule, isLoading: false })
+})
 
 const renderAt = (path: string) =>
   render(
@@ -192,6 +195,15 @@ it.each([
   mockUseSessionizeSchedule.mockReturnValue({ schedule: [], isLoading })
   renderAt("/archive")
 
-  expect(screen.getByText(message)).toBeVisible()
-  mockUseSessionizeSchedule.mockReturnValue({ schedule, isLoading: false })
+  expect(screen.getByRole("status")).toHaveTextContent(message)
+})
+
+it("opens a speaker from the keyboard-reachable speaker button", () => {
+  renderAt("/archive")
+
+  fireEvent.click(screen.getByRole("button", { name: "Speaker 1" }))
+
+  expect(
+    screen.getByRole("heading", { level: 2, name: "Speaker 1" })
+  ).toBeVisible()
 })
