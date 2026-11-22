@@ -4,30 +4,33 @@ import Header from "./header"
 import Footer from "./footer"
 import { features } from "../config/features"
 
-const allMenuLinks = [
-  // {
-  //   name: "Talk Archive",
-  //   link: "/talk-archive",
-  // },
-  {
-    name: "Schedule",
-    link: "/schedule",
-  },
-  {
-    name: "Speakers",
-    link: "/speakers",
-  },
-  {
-    name: "Team",
-    link: "/team",
-  },
-]
+const menuLinks = () => {
+  const allMenuLinks = [
+    features.talkArchive
+      ? {
+          name: "Talk Archive",
+          link: "/archive",
+        }
+      : {
+          name: "Schedule",
+          link: "/schedule",
+        },
+    {
+      name: "Speakers",
+      link: "/speakers",
+    },
+    {
+      name: "Team",
+      link: "/team",
+    },
+  ]
 
-const hiddenLinks = features.scheduleAndSpeakers
-  ? []
-  : ["/schedule", "/speakers"]
+  const hiddenLinks = features.scheduleAndSpeakers
+    ? []
+    : ["/schedule", "/speakers"]
 
-const menuLinks = allMenuLinks.filter(({ link }) => !hiddenLinks.includes(link))
+  return allMenuLinks.filter(({ link }) => !hiddenLinks.includes(link))
+}
 
 const Layout = () => {
   const { pathname } = useLocation()
@@ -42,7 +45,7 @@ const Layout = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-cnd-bone font-sans text-cnd-slate antialiased">
-      <Header menuLinks={menuLinks} />
+      <Header menuLinks={menuLinks()} />
       <main className="relative isolate grow">
         <Outlet />
       </main>

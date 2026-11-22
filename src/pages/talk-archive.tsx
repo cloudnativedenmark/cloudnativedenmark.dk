@@ -1,20 +1,18 @@
 import React, { useState, useMemo } from "react"
 import { useLocation } from "react-router-dom"
 import SEOHead from "../components/seo-head"
+import PageHeader from "../components/layout/page-header"
+import Section from "../components/ui/section"
 import { useSessionizeSchedule } from "../hooks/use-sessionize"
+import { isAdminOnlySession } from "../utils/session-type"
 import { useModalManagement } from "../hooks/use-modal-management"
 import Fuse from "fuse.js"
 import ArchiveSession from "../components/archive-session"
 import SpeakerModal from "../components/speaker_modal"
 
-const sessionizeEvents = {
-  "2025": { id: "ri9gml9f", name: "CND 2025 Aarhus", location: "Aarhus" },
-}
-
 const ArchivePage: React.FC = () => {
   const location = useLocation()
-  const selectedYear = "2025"
-  const { schedule } = useSessionizeSchedule(sessionizeEvents[selectedYear].id)
+  const { schedule, isLoading } = useSessionizeSchedule()
   const [searchQuery, setSearchQuery] = useState("")
   const { selectedSpeaker, handleSpeakerClick, handleCloseSpeakerModal } =
     useModalManagement()
@@ -33,22 +31,18 @@ const ArchivePage: React.FC = () => {
         (session) =>
           !session.isServiceSession &&
           session.speakers &&
-          session.speakers.length > 0
+          session.speakers.length > 0 &&
+          !isAdminOnlySession(session.speakers)
       )
   }, [schedule])
 
   const archivedSessions = useMemo(() => {
     if (!sessions.length) return []
-    const eventInfo = sessionizeEvents[selectedYear]
-    return sessions.map((session) => {
-      return {
-        ...session,
-        event: eventInfo.name,
-        year: selectedYear,
-        location: eventInfo.location,
-      }
-    })
-  }, [sessions, selectedYear])
+    return sessions.map((session) => ({
+      ...session,
+      event: `CND ${session.startsAt.slice(0, 4)}`,
+    }))
+  }, [sessions])
 
   const fuse = useMemo(
     () =>
@@ -70,23 +64,34 @@ const ArchivePage: React.FC = () => {
   return (
     <>
       <SEOHead title="Talk Archive" pathname={location.pathname} />
-      <section className="py-16 bg-white">
-        <div className="mx-auto max-w-6xl px-6">
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-12 text-center">
-            Talk Archive
-          </h2>
+      <PageHeader
+        eyebrow="TALK ARCHIVE"
+        title="Catch up on every talk."
+        description="Browse the sessions from this edition of Cloud Native Denmark. Slides and recordings are added as they become available."
+        variant="dark"
+        size="large"
+      />
+      <Section className="bg-cnd-bone pb-32 pt-16 lg:pt-20 lg:pb-40">
+        <div className="mx-auto max-w-6xl">
           <div className="mb-8 max-w-lg mx-auto">
             <input
-              type="text"
+              type="search"
+              aria-label="Search talks"
               placeholder="Search talks by title, speaker, description..."
-              className="w-full p-4 border border-gray-300 rounded-lg"
+              className="w-full rounded-lg border border-cnd-midnight/15 bg-white p-4"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
           <div className="space-y-8">
             {!archivedSessions.length ? (
-              <p className="text-center">Loading talks...</p>
+              <p className="text-center">
+                {isLoading
+                  ? "Loading talks..."
+                  : "Talks are unavailable right now. Please try again later."}
+              </p>
+            ) : !filteredSessions.length ? (
+              <p className="text-center">No talks match your search.</p>
             ) : (
               filteredSessions.map((session) => (
                 <ArchiveSession
@@ -98,7 +103,7 @@ const ArchivePage: React.FC = () => {
             )}
           </div>
         </div>
-      </section>
+      </Section>
       {selectedSpeaker && (
         <SpeakerModal
           speaker={selectedSpeaker}
